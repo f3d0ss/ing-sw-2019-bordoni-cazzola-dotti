@@ -27,3 +27,6 @@ hs_err_pid*
 
 # output file
 target/
+
+# others
+.directory
