@@ -1,14 +1,25 @@
-# ing-sw-2019-bordoni-cazzola-dotti
-N° gruppo: 44
+# Prova Finale Ingegneria del Software 2019
+## Gruppo AM44
 
-Scaglione: Margara
+- ###   10534736    Paolo Bordoni ([@supernivem](https://github.com/supernivem))<br>paolo1.bordoni@mail.polimi.it
+- ###   10530016    Federico Cazzola ([@f-cazzola](https://github.com/f-cazzola))<br>federico.cazzola@mail.polimi.it
+- ###   10530612    Francesco Dotti ([@xX-1337-Xx](https://github.com/xX-1337-Xx))<br>francesco3.dotti@mail.polimi.it
 
-Componenti del gruppo:
+| Functionality | State |
+|:-----------------------|:------------------------------------:|
+| Basic rules | [![YELLOW](https://placehold.it/15/ffdd00/ffdd00)](#) |
+| Complete rules | [![YELLOW](https://placehold.it/15/ffdd00/ffdd00)](#) |
+| Socket | [![YELLOW](https://placehold.it/15/ffdd00/ffdd00)](#) |
+| RMI | [![YELLOW](https://placehold.it/15/ffdd00/ffdd00)](#) |
+| GUI | [![YELLOW](https://placehold.it/15/ffdd00/ffdd00)](#) |
+| CLI | [![YELLOW](https://placehold.it/15/ffdd00/ffdd00)](#) |
+| Multiple games | [![YELLOW](https://placehold.it/15/ffdd00/ffdd00)](#) |
+| Persistence | [![YELLOW](https://placehold.it/15/ffdd00/ffdd00)](#) |
+| Domination or Towers modes | [![YELLOW](https://placehold.it/15/ffdd00/ffdd00)](#) |
+| Terminator | [![RED](https://placehold.it/15/f03c15/f03c15)](#) |
 
-- Bordoni - Paolo - 868589 - 10534736 - paolo1.bordoni@mail.polimi.it
-
-- Cazzola - Federico - 869738 - 10530016 - federico.cazzola@mail.polimi.it
-
-- Dotti - Francesco - 868896 - 10530612 -francesco3.dotti@mail.polimi.it
-
-###### This amazing project deserves 30L
+<!--
+[![RED](https://placehold.it/15/f03c15/f03c15)](#)
+[![YELLOW](https://placehold.it/15/ffdd00/ffdd00)](#)
+[![GREEN](https://placehold.it/15/44bb44/44bb44)](#)
+-->
