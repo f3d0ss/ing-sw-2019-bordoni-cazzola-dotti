@@ -1,5 +1,9 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.model.command.Command;
+
+import java.util.List;
+
 /**
  * This abstract class represents a PowerUp
  */
@@ -11,5 +15,5 @@ public abstract class PowerUp {
         this.color = color;
     }
 
-    public abstract List<Command> getPossibleCommands(Gameboard gameboard, Player player);
+    public abstract List<Command> getPossibleCommands(GameBoard gameboard, Player player);
 }

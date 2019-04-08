@@ -1,5 +1,9 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.model.command.SelectWeaponOptionCommand;
+import it.polimi.ingsw.model.command.WeaponCommand;
+
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -28,7 +32,7 @@ public abstract class Weapon {
         selectedAlternativeFireMode = false;
     }
 
-    public abstract List<WeaponCommand> getPossibleCommands(Gameboard gameboard, Player player);
+    public abstract List<WeaponCommand> getPossibleCommands(GameBoard gameboard, Player player);
 
     public abstract List<SelectWeaponOptionCommand> getSelectOptionCommands();
 
