@@ -17,5 +17,5 @@ public class WeaponDeck implements Deck {
 
     public Weapon drawWeapon() {
         return weapons.isEmpty() ? null : weapons.remove(0);
-    }
+   }
 }
