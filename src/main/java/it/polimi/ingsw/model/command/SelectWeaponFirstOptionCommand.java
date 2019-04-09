@@ -4,8 +4,8 @@ import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.playerstate.ChoosingWeaponOptionState;
 import it.polimi.ingsw.model.playerstate.PendingPaymentWeaponOptionState;
 
-public class SelectWeaponFirtsOptionCommand extends SelectWeaponOptionCommand {
-    public SelectWeaponFirtsOptionCommand(Player player, ChoosingWeaponOptionState currentState) {
+public class SelectWeaponFirstOptionCommand extends SelectWeaponOptionCommand {
+    public SelectWeaponFirstOptionCommand(Player player, ChoosingWeaponOptionState currentState) {
         super(player, currentState);
     }
 
