@@ -17,9 +17,9 @@ public abstract class Weapon {
     private Map<Color, Integer> secondOptionalModeCost;
     private Map<Color, Integer> alternativeFireModeCost;
     private boolean loaded = true;
-    private boolean selectedFirstOptionalFireMode;
-    private boolean selectedSecondOptionalFireMode;
-    private boolean selectedAlternativeFireMode;
+    private boolean selectedFirstOptionalFireMode = false;
+    private boolean selectedSecondOptionalFireMode = false;
+    private boolean selectedAlternativeFireMode = false;
     private int extraMove = 0;
 
     public Weapon(String name, Map<Color, Integer> reloadingCost, Map<Color, Integer> firstOptionalModeCost, Map<Color, Integer> secondOptionalModeCost, Map<Color, Integer> alternativeFireModeCost) {
@@ -28,10 +28,6 @@ public abstract class Weapon {
         this.firstOptionalModeCost = firstOptionalModeCost;
         this.secondOptionalModeCost = secondOptionalModeCost;
         this.alternativeFireModeCost = alternativeFireModeCost;
-        this.loaded = true;
-        this.selectedFirstOptionalFireMode = false;
-        this.selectedSecondOptionalFireMode = false;
-        this.selectedAlternativeFireMode = false;
     }
 
     public Weapon() {
