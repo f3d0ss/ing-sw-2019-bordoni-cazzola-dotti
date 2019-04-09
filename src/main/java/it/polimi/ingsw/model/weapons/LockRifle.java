@@ -12,7 +12,8 @@ import java.util.List;
 import java.util.Map;
 
 public class LockRifle extends Weapon {
-
+    private Player firstTarget;
+    private Player secondTarget;
     /**
      * Hardcoded constructor
      */
@@ -46,7 +47,5 @@ public class LockRifle extends Weapon {
     }
 
     @Override
-    public void addTargetSquare(Square targetSquare) {
-
-    }
+    public void addTargetSquare(Square targetSquare) {}
 }
