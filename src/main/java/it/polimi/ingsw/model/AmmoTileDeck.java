@@ -14,4 +14,8 @@ public class AmmoTileDeck implements Deck {
     public void shuffle() {
         Collections.shuffle(ammoTiles);
     }
+
+    public AmmoTile drawAmmoTile(){
+        return ammoTiles.remove(0);
+    }
 }

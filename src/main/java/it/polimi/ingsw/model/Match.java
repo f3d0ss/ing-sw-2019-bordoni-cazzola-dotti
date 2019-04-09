@@ -7,10 +7,9 @@ public class Match {
 //    private ArrayList<PlayerId> killShootTrack;
     private PowerUpDeck currentPowerUpDeck;
     private PowerUpDeck usedPowerUpDeck;
-//    private AmmoTileDeck currentAmmoTileDeck;
-//    private AmmoTileDeck usedAmmoTileDeck;
-//    private WeaponDeck currentWeaponDeck;
-//    private ArrayList<Player> deadPlayers;
+    private AmmoTileDeck currentAmmoTileDeck;
+    private AmmoTileDeck usedAmmoTileDeck;
+    private WeaponDeck currentWeaponDeck;
 //    private int deathsCounter;
 //    private PlayerId currentPlayer;
     private ArrayList<Player> currentPlayers;
@@ -40,15 +39,20 @@ public class Match {
 
     public AmmoTile drawAmmoTileCard(){
         AmmoTile tmp;
-        AmmoTile emptyDeck;
+        AmmoTileDeck emptyDeck;
         tmp = currentAmmoTileDeck.drawAmmoTile();
         if (tmp == null){
             emptyDeck = currentAmmoTileDeck;
             currentAmmoTileDeck = usedAmmoTileDeck;
             usedAmmoTileDeck = emptyDeck;
+            currentAmmoTileDeck.shuffle();
             tmp = currentAmmoTileDeck.drawAmmoTile();
         }
         return tmp;
+    }
+
+    public Weapon drawWeaponCard(){
+        return currentWeaponDeck.drawWeapon();
     }
 
     public PowerUp drawPowerUpCard(){
@@ -59,6 +63,7 @@ public class Match {
             emptyDeck = currentPowerUpDeck;
             currentPowerUpDeck = usedPowerUpDeck;
             usedPowerUpDeck = emptyDeck;
+            currentPowerUpDeck.shuffle();
             tmp = currentPowerUpDeck.drawPowerUp();
         }
         return tmp;

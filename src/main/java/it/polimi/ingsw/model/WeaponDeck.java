@@ -14,4 +14,8 @@ public class WeaponDeck implements Deck {
     public void shuffle() {
         Collections.shuffle(weapons);
     }
+
+    public Weapon drawWeapon(){
+        return weapons.remove(0);
+    }
 }
