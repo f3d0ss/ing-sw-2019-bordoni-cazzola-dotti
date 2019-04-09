@@ -19,4 +19,28 @@ public class MatchTest {
         }
     }
 
+//verify the correct deaths count
+
+    @Test
+    public void testDecreaseDeaths() {
+        Match match = new Match();
+        for(int k = 0; k < 8; k++) {
+            assertEquals(match.decreaseDeathsCounter(), true);
+        }
+        assertEquals(match.decreaseDeathsCounter(), false);
+    }
+
+//verify the correct count of killshots
+
+    @Test
+    public void testAddKillshot() {
+        Match match = new Match();
+        int total = 1;
+        for(PlayerId id : PlayerId.values()) {
+            for(int i=0; i<total; i++)
+                match.addKillshot(id);
+            assertEquals(match.getPlayerKillshots(id), total);
+            total++;
+        }
+    }
 }

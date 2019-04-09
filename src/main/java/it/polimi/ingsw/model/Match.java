@@ -4,22 +4,15 @@ import java.util.ArrayList;
 
 public class Match {
 
-//    private ArrayList<PlayerId> killShootTrack;
+    private ArrayList<PlayerId> killshotTrack = new ArrayList();
     private PowerUpDeck currentPowerUpDeck;
     private PowerUpDeck usedPowerUpDeck;
     private AmmoTileDeck currentAmmoTileDeck;
     private AmmoTileDeck usedAmmoTileDeck;
     private WeaponDeck currentWeaponDeck;
-//    private int deathsCounter;
-//    private PlayerId currentPlayer;
-    private ArrayList<Player> currentPlayers;
+    private int deathsCounter = 8;
+    private ArrayList<Player> currentPlayers = new ArrayList();
     private GameBoard board;
-
-    public Match(PowerUpDeck currentPowerUpDeck, PowerUpDeck usedPowerUpDeck, ArrayList<Player> currentPlayers) {
-        this.currentPowerUpDeck = currentPowerUpDeck;
-        this.usedPowerUpDeck = usedPowerUpDeck;
-        this.currentPlayers = currentPlayers;
-    }
 
     public Player getPlayer(PlayerId id){
         for(Player tmp : currentPlayers)
@@ -29,12 +22,36 @@ public class Match {
         return null;
     }
 
+    public int getPlayerKillshots(PlayerId id) {
+        int count = 0;
+        for(PlayerId tmp : killshotTrack)
+            if(id.equals(tmp))
+                count++;
+        return count;
+    }
+
+    public int getDeathsCounter() {
+        return deathsCounter;
+    }
+
+    public boolean decreaseDeathsCounter() {
+        if(deathsCounter==0){
+            return false;
+        }
+        this.deathsCounter--;
+        return true;
+    }
+
     public GameBoard getBoard() {
         return board;
     }
 
     public void addPlayer(Player player){
         currentPlayers.add(player);
+    }
+
+    public void addKillshot(PlayerId player){
+        killshotTrack.add(player);
     }
 
     public AmmoTile drawAmmoTileCard(){

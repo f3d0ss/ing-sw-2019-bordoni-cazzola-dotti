@@ -8,7 +8,7 @@ import java.util.Map;
 public class Player {
 
     private PlayerId id;
-    private ArrayList<PlayerId> health = new ArrayList<PlayerId>();
+    private ArrayList<PlayerId> health;
     private int deaths;
     private ArrayList<PlayerId> marks;
     private int points;
