@@ -7,8 +7,8 @@ import it.polimi.ingsw.model.playerstate.SelectedAggregateActionState;
 public class BuyCommand extends GrabCommand {
     private Weapon weapon;
 
-    public BuyCommand(Player player, SelectedAggregateActionState currentState, Weapon weapon) {
-        super(player, currentState);
+    public BuyCommand(Player player, Weapon weapon) {
+        super(player);
         this.weapon = weapon;
     }
 

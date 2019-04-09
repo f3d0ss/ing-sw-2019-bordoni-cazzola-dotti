@@ -1,6 +1,9 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.model.command.GrabCommand;
+
 import java.util.ArrayList;
+import java.util.List;
 
 abstract public class Square {
     private Connection northConnection;
@@ -9,7 +12,17 @@ abstract public class Square {
     private Connection westConnection;
     private int row;
     private int col;
-    private ArrayList<Player> hostedPlayers = new ArrayList<Player>();
+    private ArrayList<Player> hostedPlayers;
+
+    public Square(Connection northConnection, Connection eastConnection, Connection southConnection, Connection westConnection, int row, int col, ArrayList<Player> hostedPlayers) {
+        this.northConnection = northConnection;
+        this.eastConnection = eastConnection;
+        this.southConnection = southConnection;
+        this.westConnection = westConnection;
+        this.row = row;
+        this.col = col;
+        this.hostedPlayers = hostedPlayers;
+    }
 
     public Connection getNorthConnection() {
         return northConnection;
@@ -59,6 +72,5 @@ abstract public class Square {
         this.col = col;
     }
 
-//    public List<GrabCommand> getGrabCommands(player Player){
-//  }
+    public abstract List<GrabCommand> getGrabCommands(Player player);
 }

@@ -15,7 +15,7 @@ public class PowerUpDeck implements Deck {
         Collections.shuffle(powerUps);
     }
 
-    public PowerUp drawPowerUp(){
-        return powerUps.remove(0);
+    public PowerUp drawPowerUp() {
+        return powerUps.isEmpty() ? null : powerUps.remove(0);
     }
 }

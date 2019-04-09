@@ -7,8 +7,8 @@ import it.polimi.ingsw.model.playerstate.SelectedAggregateActionState;
 public class GrabTileCommand extends GrabCommand {
     private AmmoTile ammoTile;
 
-    public GrabTileCommand(Player player, SelectedAggregateActionState currentState, AmmoTile ammoTile) {
-        super(player, currentState);
+    public GrabTileCommand(Player player, AmmoTile ammoTile) {
+        super(player);
         this.ammoTile = ammoTile;
     }
 
