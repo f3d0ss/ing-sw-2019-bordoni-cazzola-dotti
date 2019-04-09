@@ -14,4 +14,12 @@ public class AmmoTile {
         this.powerUp = powerUp;
         this.ammo = ammo;
     }
+
+    public int getPowerUp() {
+        return powerUp;
+    }
+
+    public Map<Color, Integer> getAmmo() {
+        return ammo;
+    }
 }

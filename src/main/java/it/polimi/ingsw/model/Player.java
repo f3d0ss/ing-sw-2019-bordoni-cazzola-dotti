@@ -1,24 +1,39 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.model.command.MoveCommand;
+import it.polimi.ingsw.model.exception.IllegalMoveException;
+import it.polimi.ingsw.model.playerstate.AfterSelectedAggregateActionState;
+import it.polimi.ingsw.model.playerstate.IdleState;
 import it.polimi.ingsw.model.playerstate.PendingPaymentWeaponOptionState;
+import it.polimi.ingsw.model.playerstate.PlayerState;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Player {
 
+    private Match match;
     private PlayerId id;
-    private ArrayList<PlayerId> health = new ArrayList<PlayerId>();
-    private int deaths;
-    private ArrayList<PlayerId> marks;
-    private int points;
+    private ArrayList<PlayerId> health = new ArrayList<>();
+    private int deaths = 0;
+    private ArrayList<PlayerId> marks = new ArrayList<>();
+    private int points = 0;
     private String Nickname;
-//    private ArrayList<Weapon> weapons;
-//    private ArrayList<PowerUp> powerUps;
-    private Map<Color, Integer> ammo;
-    private boolean disconnetted;
-    private int availableAggregateActionCounter;
-//    private PlayerState playerState;
+    private ArrayList<Weapon> weapons = new ArrayList<>();
+    private ArrayList<PowerUp> powerUps = new ArrayList<>();
+    private Map<Color, Integer> ammo = new HashMap<>();
+    private boolean disconnetted = false;
+    private int availableAggregateActionCounter = 2;
+    private PlayerState playerState = new IdleState();
+    private Square position;
+
+    public Player(Match match, PlayerId id, String nickname) {
+        this.match = match;
+        this.id = id;
+        Nickname = nickname;
+    }
 
     public PlayerId getId() {
         return id;
@@ -28,9 +43,50 @@ public class Player {
         this.id = id;
     }
 
-    public void changeState(PendingPaymentWeaponOptionState pendingPaymentWeaponOptionState) {
+    public void changeState(PlayerState playerState) {
+        this.playerState = playerState;
     }
 
     public void move(CardinalDirection direction) {
+        switch (direction) {
+            case NORTH:
+                if (position.getNorthConnection() == Connection.MAP_BORDER || position.getNorthConnection() == Connection.WALL)
+                    throw new IllegalMoveException();
+                match.getBoard().getSquare(position.getRow() - 1, position.getCol());
+                break;
+            case SOUTH:
+                if (position.getSouthConnection() == Connection.MAP_BORDER || position.getSouthConnection() == Connection.WALL)
+                    throw new IllegalMoveException();
+                match.getBoard().getSquare(position.getRow() + 1, position.getCol());
+                break;
+            case EAST:
+                if (position.getEastConnection() == Connection.MAP_BORDER || position.getEastConnection() == Connection.WALL)
+                    throw new IllegalMoveException();
+                match.getBoard().getSquare(position.getRow(), position.getCol() + 1);
+                break;
+            case WEST:
+                if (position.getWestConnection() == Connection.MAP_BORDER || position.getWestConnection() == Connection.WALL)
+                    throw new IllegalMoveException();
+                match.getBoard().getSquare(position.getRow(), position.getCol() - 1);
+                break;
+        }
+    }
+
+    private void addAmmo(Color color, Integer number){
+        Integer newAmmoNumber = this.ammo.get(color) + number;
+        this.ammo.put(color, newAmmoNumber < 3 ? newAmmoNumber : 3);
+    }
+
+    private void addPowerUp(int number) {
+        while (number > 0) {
+            if (this.powerUps.size() >= 3)
+                return;
+            this.powerUps.add(match.drawPowerUpCard());
+        }
+    }
+
+    public void addAmmoTile(AmmoTile ammoTile) {
+        ammoTile.getAmmo().forEach(this::addAmmo);
+        addPowerUp(ammoTile.getPowerUp());
     }
 }
