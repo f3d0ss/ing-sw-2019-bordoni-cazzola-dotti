@@ -29,10 +29,16 @@ public class Player {
     private PlayerState playerState = new IdleState();
     private Square position;
 
+
+
     public Player(Match match, PlayerId id, String nickname) {
         this.match = match;
         this.id = id;
         Nickname = nickname;
+    }
+
+    public Map<Color, Integer> getAmmo() {
+        return ammo;
     }
 
     public PlayerId getId() {
@@ -88,5 +94,12 @@ public class Player {
     public void addAmmoTile(AmmoTile ammoTile) {
         ammoTile.getAmmo().forEach(this::addAmmo);
         addPowerUp(ammoTile.getPowerUp());
+    }
+
+    public void addDamage(int damage, PlayerId color){
+
+    }
+    public void addMarks(int marks, PlayerId color){
+
     }
 }
