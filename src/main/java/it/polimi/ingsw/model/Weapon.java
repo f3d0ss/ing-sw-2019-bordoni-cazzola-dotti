@@ -121,7 +121,7 @@ public abstract class Weapon {
         return extraMove;
     }
 
-    protected setExtraMove(int extraMove) {
+    protected void setExtraMove(int extraMove) {
         this.extraMove = extraMove;
     }
 }

@@ -28,15 +28,16 @@ public class LockRifle extends Weapon {
 
     @Override
     public List<WeaponCommand> getPossibleCommands(GameBoard gameboard, Player player) {
-        return null;
+        List<WeaponCommand> possibleCommands = new ArrayList<>();
+        return possibleCommands;
     }
 
     @Override
     public List<SelectWeaponOptionCommand> getSelectOptionCommands(Player player, ChoosingWeaponOptionState state) {
-       List<SelectWeaponOptionCommand> selectWeaponOptionCommandList = new ArrayList<>();
-       if(!isSelectedFirstOptionalFireMode())
-           selectWeaponOptionCommandList.add(new SelectWeaponFirstOptionCommand(player,state));
-       return selectWeaponOptionCommandList;
+        List<SelectWeaponOptionCommand> selectWeaponOptionCommandList = new ArrayList<>();
+        if (!isSelectedFirstOptionalFireMode())
+            selectWeaponOptionCommandList.add(new SelectWeaponFirstOptionCommand(player, state));
+        return selectWeaponOptionCommandList;
     }
 
     @Override
