@@ -14,17 +14,23 @@ import java.util.Map;
 
 public class Player {
 
+    private final static int MAX_AMMO = 3;
+    private final static int MAX_POWERUP = 3;
+    private final static int MAX_HEALTH = 3;
+    private static final int MAX_MARKS = 3;
+
     private Match match;
     private PlayerId id;
     private ArrayList<PlayerId> health = new ArrayList<>();
     private int deaths = 0;
-    private ArrayList<PlayerId> marks = new ArrayList<>();
+    private Map<PlayerId, Integer> marks = new HashMap<>();
     private int points = 0;
     private String Nickname;
     private ArrayList<Weapon> weapons = new ArrayList<>();
     private ArrayList<PowerUp> powerUps = new ArrayList<>();
     private Map<Color, Integer> ammo = new HashMap<>();
     private boolean disconnetted = false;
+    private boolean dead = false;
     private int availableAggregateActionCounter = 2;
     private PlayerState playerState = new IdleState();
     private Square position;
@@ -80,12 +86,12 @@ public class Player {
 
     private void addAmmo(Color color, Integer number){
         Integer newAmmoNumber = this.ammo.get(color) + number;
-        this.ammo.put(color, newAmmoNumber < 3 ? newAmmoNumber : 3);
+        this.ammo.put(color, newAmmoNumber < MAX_AMMO ? newAmmoNumber : MAX_AMMO);
     }
 
     private void addPowerUp(int number) {
         while (number > 0) {
-            if (this.powerUps.size() >= 3)
+            if (this.powerUps.size() >= MAX_POWERUP)
                 return;
             this.powerUps.add(match.drawPowerUpCard());
         }
@@ -97,9 +103,33 @@ public class Player {
     }
 
     public void addDamage(int damage, PlayerId color){
+        int possibleDamage = MAX_HEALTH - health.size();
+        for (int i = damage; i > 0; i--){
+            if(possibleDamage <= 0)
+                break;
+            this.health.add(color);
+            possibleDamage--;
+        }
+        for (int i = this.marks.getOrDefault(color, 0); i > 0; i--){
+            if(possibleDamage <= 0)
+                break;
+            this.health.add(color);
+            possibleDamage--;
+        }
+        this.marks.put(color, 0);
+
+        if (health.size() >= MAX_HEALTH - 1)
+            dead = true;
 
     }
     public void addMarks(int marks, PlayerId color){
+        int possibleMarks = MAX_MARKS - this.marks.getOrDefault(color, 0);
+        for (int i = marks; i > 0; i--){
+            if(possibleMarks <= 0)
+                return;
+            this.marks.put(color, this.marks.getOrDefault(color, 0) + 1);
+            possibleMarks--;
+        }
 
     }
 }
