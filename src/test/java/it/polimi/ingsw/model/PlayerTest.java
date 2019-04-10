@@ -13,6 +13,9 @@ public class PlayerTest {
     private final static int MAX_POWERUP = 3;
     private final static int MAX_MARK = 3;
     private final static int MAX_DAMAGE = 12;
+    final int ROWS = 3;
+    final int COLUMNS = 4;
+
     //verify the correct insertion of ammos and powerups
 
     @Test
@@ -35,16 +38,18 @@ public class PlayerTest {
             }
         }
 
-//        //bisogna istanziare i powerup prima
-//        AmmoTile tile = new AmmoTile(1, ammo);
-//        int addingpowerup = 5;
-//        for (int i=1; i<addingpoewrup; i++){
-//            player.addAmmoTile(tile);
-//            if (i < MAX_POWERUP)
-//                assertEquals(player.getPowerUps().size(), i);
-//            else
-//                assertEquals(player.getPowerUps().size(), MAX_POWERUP);
-//        }
+        //bisogna istanziare i powerup prima
+        /*
+        AmmoTile tile = new AmmoTile(1, ammo);
+        int addingpowerup = 5;
+        for (int i=1; i<addingpowerup; i++){
+            player.addAmmoTile(tile);
+            if (i < MAX_POWERUP)
+               assertEquals(player.getPowerUps().size(), i);
+            else
+                assertEquals(player.getPowerUps().size(), MAX_POWERUP);
+        }
+        */
     }
 
     //verify the correct insertion of damages
@@ -97,26 +102,25 @@ public class PlayerTest {
     public void testMove() {
         Match match = new Match();
         GameBoard board = match.getBoard();
-        Player player = new Player(match, null, null, board.getSquare(0, 0));
-        player.move(CardinalDirection.SOUTH);
-        assertEquals(player.getPosition(), board.getSquare(1, 0));
-        player.move(CardinalDirection.EAST);
-        assertEquals(player.getPosition(), board.getSquare(1, 1));
-        player.move(CardinalDirection.SOUTH);
-        assertEquals(player.getPosition(), board.getSquare(2, 1));
-        player.move(CardinalDirection.EAST);
-        assertEquals(player.getPosition(), board.getSquare(2, 2));
-        player.move(CardinalDirection.EAST);
-        assertEquals(player.getPosition(), board.getSquare(2, 3));
-        player.move(CardinalDirection.NORTH);
-        assertEquals(player.getPosition(), board.getSquare(1, 3));
-        player.move(CardinalDirection.WEST);
-        assertEquals(player.getPosition(), board.getSquare(1, 2));
-        player.move(CardinalDirection.NORTH);
-        assertEquals(player.getPosition(), board.getSquare(0, 2));
-        player.move(CardinalDirection.WEST);
-        assertEquals(player.getPosition(), board.getSquare(0, 1));
-        player.move(CardinalDirection.WEST);
-        assertEquals(player.getPosition(), board.getSquare(0, 0));
+        CardinalDirection dir;
+        for(int i=0; i<ROWS; i++)
+            for(int j=0; j<COLUMNS; j++)
+                if(board.getSquare(i,j)!=null) {
+                    Player player = new Player(match, null, null, board.getSquare(i, j));
+                    for (CardinalDirection c : CardinalDirection.values()) {
+                        dir = c;
+                        if (board.getSquare(i, j).getConnection(dir) != Connection.MAP_BORDER && board.getSquare(i, j).getConnection(dir) != Connection.WALL) {
+                            player.move(dir);
+                        /*    switch (dir) {
+                                //case NORTH: assertEquals(player.getPosition(), board.getSquare(i - 1, j));
+                                case EAST: assertEquals(player.getPosition(), board.getSquare(i, j + 1));
+                                case SOUTH: assertEquals(player.getPosition(), board.getSquare(i + 1, j));
+                                //case WEST: assertEquals(player.getPosition(), board.getSquare(i, j-1));
+                            }*/
+                            player.move(dir.getOpposite());
+                            assertEquals(player.getPosition(), board.getSquare(i, j));
+                        }
+                    }
+                }
     }
 }

@@ -73,25 +73,19 @@ public class Player {
     }
 
     public void move(CardinalDirection direction) {
+        if (position.getConnection(direction) == Connection.MAP_BORDER || position.getConnection(direction) == Connection.WALL)
+            throw new IllegalMoveException();
         switch (direction) {
             case NORTH:
-                if (position.getNorthConnection() == Connection.MAP_BORDER || position.getNorthConnection() == Connection.WALL)
-                    throw new IllegalMoveException();
                 position = match.getBoard().getSquare(position.getRow() - 1, position.getCol());
                 break;
             case SOUTH:
-                if (position.getSouthConnection() == Connection.MAP_BORDER || position.getSouthConnection() == Connection.WALL)
-                    throw new IllegalMoveException();
                 position = match.getBoard().getSquare(position.getRow() + 1, position.getCol());
                 break;
             case EAST:
-                if (position.getEastConnection() == Connection.MAP_BORDER || position.getEastConnection() == Connection.WALL)
-                    throw new IllegalMoveException();
                 position = match.getBoard().getSquare(position.getRow(), position.getCol() + 1);
                 break;
             case WEST:
-                if (position.getWestConnection() == Connection.MAP_BORDER || position.getWestConnection() == Connection.WALL)
-                    throw new IllegalMoveException();
                 position = match.getBoard().getSquare(position.getRow(), position.getCol() - 1);
                 break;
         }

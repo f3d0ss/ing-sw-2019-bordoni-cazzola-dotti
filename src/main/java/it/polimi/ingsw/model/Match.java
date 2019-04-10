@@ -4,18 +4,20 @@ import java.util.ArrayList;
 
 public class Match {
 
-    private ArrayList<PlayerId> killshotTrack = new ArrayList();
+    private ArrayList<PlayerId> killshotTrack;
     private PowerUpDeck currentPowerUpDeck;
     private PowerUpDeck usedPowerUpDeck;
     private AmmoTileDeck currentAmmoTileDeck;
     private AmmoTileDeck usedAmmoTileDeck;
     private WeaponDeck currentWeaponDeck;
     private int deathsCounter = 8;
-    private ArrayList<Player> currentPlayers = new ArrayList();
+    private ArrayList<Player> currentPlayers;
     private GameBoard board;
 
     public Match() {
         board = new GameBoard(1);
+        killshotTrack = new ArrayList();
+        currentPlayers = new ArrayList();
     }
 
     public Player getPlayer(PlayerId id){

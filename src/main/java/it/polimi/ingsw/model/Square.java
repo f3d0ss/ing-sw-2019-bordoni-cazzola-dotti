@@ -24,52 +24,26 @@ abstract public class Square {
         this.hostedPlayers = new ArrayList<>();
     }
 
-    public Connection getNorthConnection() {
-        return northConnection;
-    }
-
-    public void setNorthConnection(Connection northConnection) {
-        this.northConnection = northConnection;
-    }
-
-    public Connection getEastConnection() {
-        return eastConnection;
-    }
-
-    public void setEastConnection(Connection eastConnection) {
-        this.eastConnection = eastConnection;
-    }
-
-    public Connection getSouthConnection() {
-        return southConnection;
-    }
-
-    public void setSouthConnection(Connection southConnection) {
-        this.southConnection = southConnection;
-    }
-
-    public Connection getWestConnection() {
-        return westConnection;
-    }
-
-    public void setWestConnection(Connection westConnection) {
-        this.westConnection = westConnection;
+    public Connection getConnection(CardinalDirection direction) {
+        switch (direction) {
+            case NORTH:
+                return northConnection;
+            case EAST:
+                return eastConnection;
+            case SOUTH:
+                return southConnection;
+            case WEST:
+                return westConnection;
+        }
+        return null;
     }
 
     public int getRow() {
         return row;
     }
 
-    public void setRow(int row) {
-        this.row = row;
-    }
-
     public int getCol() {
         return col;
-    }
-
-    public void setCol(int col) {
-        this.col = col;
     }
 
     public void addPlayer(Player player){
