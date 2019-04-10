@@ -72,5 +72,13 @@ abstract public class Square {
         this.col = col;
     }
 
+    public void addPlayer(Player player){
+        this.hostedPlayers.add(player);
+    }
+
+    public boolean removePlayer(Player player){
+        return this.hostedPlayers.remove(player);
+    }
+
     public abstract List<GrabCommand> getGrabCommands(Player player);
 }

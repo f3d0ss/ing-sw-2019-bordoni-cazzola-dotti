@@ -144,4 +144,8 @@ public class Player {
         }
 
     }
+
+    public Square getPosition() {
+        return position;
+    }
 }
