@@ -17,7 +17,9 @@ public class MoveCommand implements Command {
 
     @Override
     public void execute() {
+        player.getPosition().removePlayer(player);
         player.move(direction);
+        player.getPosition().addPlayer(player);
     }
 
     @Override

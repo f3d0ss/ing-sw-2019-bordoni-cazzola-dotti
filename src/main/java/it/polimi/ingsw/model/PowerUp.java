@@ -9,10 +9,12 @@ import java.util.List;
  */
 public abstract class PowerUp {
 
+    private String name;
     private Color color;
 
-    public PowerUp(Color color) {
+    public PowerUp(String name, Color color) {
         this.color = color;
+        this.name = name;
     }
 
     public abstract List<Command> getPossibleCommands(GameBoard gameboard, Player player);
