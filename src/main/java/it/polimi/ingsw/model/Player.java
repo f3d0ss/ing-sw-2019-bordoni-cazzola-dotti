@@ -41,10 +41,11 @@ public class Player {
 
 
 
-    public Player(Match match, PlayerId id, String nickname) {
+    public Player(Match match, PlayerId id, String nickname, Square position) {
         this.match = match;
         this.id = id;
         Nickname = nickname;
+        this.position=position;
     }
 
     public Map<Color, Integer> getAmmo() {

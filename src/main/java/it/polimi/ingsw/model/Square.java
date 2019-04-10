@@ -14,14 +14,14 @@ abstract public class Square {
     private int col;
     private ArrayList<Player> hostedPlayers;
 
-    public Square(Connection northConnection, Connection eastConnection, Connection southConnection, Connection westConnection, int row, int col, ArrayList<Player> hostedPlayers) {
+    public Square(Connection northConnection, Connection eastConnection, Connection southConnection, Connection westConnection, int row, int col) {
         this.northConnection = northConnection;
         this.eastConnection = eastConnection;
         this.southConnection = southConnection;
         this.westConnection = westConnection;
         this.row = row;
         this.col = col;
-        this.hostedPlayers = hostedPlayers;
+        this.hostedPlayers = new ArrayList<>();
     }
 
     public Connection getNorthConnection() {

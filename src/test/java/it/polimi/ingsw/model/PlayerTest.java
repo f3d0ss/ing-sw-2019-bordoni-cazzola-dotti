@@ -21,7 +21,7 @@ public class PlayerTest {
         int colorcubes;
         int addingammo = 5;
 //        Map<Color,Integer> resources;
-        Player player = new Player(null, null, null);
+        Player player = new Player(null, null, null, null);
         for (Color c : Color.values()) {
             ammo.put(c, 1);
             AmmoTile tile = new AmmoTile(0, ammo);
@@ -51,7 +51,7 @@ public class PlayerTest {
 
     @Test
     public void testAddDamage() {
-        Player player = new Player(null, null, null);
+        Player player = new Player(null, null, null,null);
         assertEquals(player.isDead(), false);
         for (int i=1; i<MAX_DAMAGE-1; i++) {
             player.addDamage(1, PlayerId.RED);
@@ -69,7 +69,7 @@ public class PlayerTest {
         int marks;
 
         for(marks=1; marks<=MAX_MARK; marks++) {
-            Player player = new Player(null, null, null);
+            Player player = new Player(null, null, null,null);
             player.addMarks(marks, PlayerId.VIOLET);
             assertEquals(player.isDead(), false);
             for (int i = 1; i < MAX_DAMAGE - 1 - marks; i++) {
@@ -80,7 +80,7 @@ public class PlayerTest {
             assertEquals(player.isDead(), true);
         }
 
-        Player player = new Player(null, null, null);
+        Player player = new Player(null, null, null, null);
         player.addMarks(marks, PlayerId.VIOLET);
         assertEquals(player.isDead(), false);
         for (int i = 1; i < MAX_DAMAGE -1 - MAX_MARK; i++) {
@@ -89,6 +89,34 @@ public class PlayerTest {
         }
         player.addDamage(1, PlayerId.RED);
         assertEquals(player.isDead(), true);
+    }
 
+    //verify the correct movements
+
+    @Test
+    public void testMove() {
+        Match match = new Match();
+        GameBoard board = match.getBoard();
+        Player player = new Player(match, null, null, board.getSquare(0, 0));
+        player.move(CardinalDirection.SOUTH);
+        assertEquals(player.getPosition(), board.getSquare(1, 0));
+        player.move(CardinalDirection.EAST);
+        assertEquals(player.getPosition(), board.getSquare(1, 1));
+        player.move(CardinalDirection.SOUTH);
+        assertEquals(player.getPosition(), board.getSquare(2, 1));
+        player.move(CardinalDirection.EAST);
+        assertEquals(player.getPosition(), board.getSquare(2, 2));
+        player.move(CardinalDirection.EAST);
+        assertEquals(player.getPosition(), board.getSquare(2, 3));
+        player.move(CardinalDirection.NORTH);
+        assertEquals(player.getPosition(), board.getSquare(1, 3));
+        player.move(CardinalDirection.WEST);
+        assertEquals(player.getPosition(), board.getSquare(1, 2));
+        player.move(CardinalDirection.NORTH);
+        assertEquals(player.getPosition(), board.getSquare(0, 2));
+        player.move(CardinalDirection.WEST);
+        assertEquals(player.getPosition(), board.getSquare(0, 1));
+        player.move(CardinalDirection.WEST);
+        assertEquals(player.getPosition(), board.getSquare(0, 0));
     }
 }

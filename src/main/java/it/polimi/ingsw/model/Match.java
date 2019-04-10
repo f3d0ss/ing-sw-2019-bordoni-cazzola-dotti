@@ -14,6 +14,10 @@ public class Match {
     private ArrayList<Player> currentPlayers = new ArrayList();
     private GameBoard board;
 
+    public Match() {
+        board = new GameBoard(1);
+    }
+
     public Player getPlayer(PlayerId id){
         for(Player tmp : currentPlayers)
             if (id.equals(tmp.getId())) {

@@ -11,7 +11,7 @@ public class MatchTest {
     @Test
     public void testAddPlayer() {
         Match match = new Match();
-        Player tmp = new Player(match, PlayerId.BLUE, "Paolino");
+        Player tmp = new Player(match, PlayerId.BLUE, "Paolino", null);
         for (PlayerId id : PlayerId.values()) {
             tmp.setId(id);
             match.addPlayer(tmp);
