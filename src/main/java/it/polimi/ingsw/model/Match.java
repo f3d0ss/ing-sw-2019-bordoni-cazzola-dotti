@@ -73,16 +73,16 @@ public class Match {
     }
 
     public PowerUp drawPowerUpCard(){
-        PowerUp tmp;
+        PowerUp powerup;
         PowerUpDeck emptyDeck;
-        tmp = currentPowerUpDeck.drawPowerUp();
-        if (tmp == null){
+        powerup = currentPowerUpDeck.drawPowerUp();
+        if (powerup == null){
             emptyDeck = currentPowerUpDeck;
             currentPowerUpDeck = usedPowerUpDeck;
             usedPowerUpDeck = emptyDeck;
             currentPowerUpDeck.shuffle();
-            tmp = currentPowerUpDeck.drawPowerUp();
+            powerup = currentPowerUpDeck.drawPowerUp();
         }
-        return tmp;
+        return powerup;
     }
 }

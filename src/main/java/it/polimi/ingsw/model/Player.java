@@ -16,7 +16,7 @@ public class Player {
 
     private final static int MAX_AMMO = 3;
     private final static int MAX_POWERUP = 3;
-    private final static int MAX_HEALTH = 3;
+    private final static int MAX_DAMAGE = 12;
     private static final int MAX_MARKS = 3;
 
     private Match match;
@@ -28,7 +28,11 @@ public class Player {
     private String Nickname;
     private ArrayList<Weapon> weapons = new ArrayList<>();
     private ArrayList<PowerUp> powerUps = new ArrayList<>();
-    private Map<Color, Integer> ammo = new HashMap<>();
+    private Map<Color, Integer> ammo = new HashMap<Color, Integer>() {{
+        put(Color.BLUE, 0);
+        put(Color.YELLOW, 0);
+        put(Color.RED, 0);
+    }};
     private boolean disconnetted = false;
     private boolean dead = false;
     private int availableAggregateActionCounter = 2;
@@ -47,8 +51,16 @@ public class Player {
         return ammo;
     }
 
+    public ArrayList<PowerUp> getPowerUps(){
+        return powerUps;
+    }
+
     public PlayerId getId() {
         return id;
+    }
+
+    public boolean isDead(){
+        return dead;
     }
 
     public void setId(PlayerId id) {
@@ -103,7 +115,7 @@ public class Player {
     }
 
     public void addDamage(int damage, PlayerId color){
-        int possibleDamage = MAX_HEALTH - health.size();
+        int possibleDamage = MAX_DAMAGE - health.size();
         for (int i = damage; i > 0; i--){
             if(possibleDamage <= 0)
                 break;
@@ -118,7 +130,7 @@ public class Player {
         }
         this.marks.put(color, 0);
 
-        if (health.size() >= MAX_HEALTH - 1)
+        if (health.size() >= MAX_DAMAGE - 1)
             dead = true;
 
     }
