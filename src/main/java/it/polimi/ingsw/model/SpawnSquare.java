@@ -12,10 +12,10 @@ public class SpawnSquare extends Square {
     private Weapon[] weapons = new Weapon[MAX_WEAPON];
     private ArrayList<PlayerId> spawnPointTrack;
 
-    public SpawnSquare(Connection northConnection, Connection eastConnection, Connection southConnection, Connection westConnection, int row, int col, ArrayList<Player> hostedPlayers, Weapon[] weapons, ArrayList<PlayerId> spawnPointTrack) {
-        super(northConnection, eastConnection, southConnection, westConnection, row, col, hostedPlayers);
+    public SpawnSquare(Connection northConnection, Connection eastConnection, Connection southConnection, Connection westConnection, int row, int col, Weapon[] weapons) {
+        super(northConnection, eastConnection, southConnection, westConnection, row, col);
         this.weapons = weapons;
-        this.spawnPointTrack = spawnPointTrack;
+        this.spawnPointTrack = new ArrayList<>();
     }
 
     public ArrayList<PlayerId> getSpawnPointTrack() {

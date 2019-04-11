@@ -14,62 +14,36 @@ abstract public class Square {
     private int col;
     private ArrayList<Player> hostedPlayers;
 
-    public Square(Connection northConnection, Connection eastConnection, Connection southConnection, Connection westConnection, int row, int col, ArrayList<Player> hostedPlayers) {
+    public Square(Connection northConnection, Connection eastConnection, Connection southConnection, Connection westConnection, int row, int col) {
         this.northConnection = northConnection;
         this.eastConnection = eastConnection;
         this.southConnection = southConnection;
         this.westConnection = westConnection;
         this.row = row;
         this.col = col;
-        this.hostedPlayers = hostedPlayers;
+        this.hostedPlayers = new ArrayList<>();
     }
 
-    public Connection getNorthConnection() {
-        return northConnection;
-    }
-
-    public void setNorthConnection(Connection northConnection) {
-        this.northConnection = northConnection;
-    }
-
-    public Connection getEastConnection() {
-        return eastConnection;
-    }
-
-    public void setEastConnection(Connection eastConnection) {
-        this.eastConnection = eastConnection;
-    }
-
-    public Connection getSouthConnection() {
-        return southConnection;
-    }
-
-    public void setSouthConnection(Connection southConnection) {
-        this.southConnection = southConnection;
-    }
-
-    public Connection getWestConnection() {
-        return westConnection;
-    }
-
-    public void setWestConnection(Connection westConnection) {
-        this.westConnection = westConnection;
+    public Connection getConnection(CardinalDirection direction) {
+        switch (direction) {
+            case NORTH:
+                return northConnection;
+            case EAST:
+                return eastConnection;
+            case SOUTH:
+                return southConnection;
+            case WEST:
+                return westConnection;
+        }
+        return null;
     }
 
     public int getRow() {
         return row;
     }
 
-    public void setRow(int row) {
-        this.row = row;
-    }
-
     public int getCol() {
         return col;
-    }
-
-    public void setCol(int col) {
-        this.col = col;
     }
 
     public void addPlayer(Player player){

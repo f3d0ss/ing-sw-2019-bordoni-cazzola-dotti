@@ -6,12 +6,14 @@ import static org.junit.Assert.*;
 
 public class MatchTest {
 
+    private final static int SKULLS = 8;
+
 //verify the correct insertion of players
 
     @Test
     public void testAddPlayer() {
         Match match = new Match();
-        Player tmp = new Player(match, PlayerId.BLUE, "Paolino");
+        Player tmp = new Player(match, PlayerId.BLUE, "Paolino", null);
         for (PlayerId id : PlayerId.values()) {
             tmp.setId(id);
             match.addPlayer(tmp);
@@ -24,10 +26,9 @@ public class MatchTest {
     @Test
     public void testDecreaseDeaths() {
         Match match = new Match();
-        for (int k = 0; k < 8; k++) {
-            assertEquals(match.decreaseDeathsCounter(), true);
-        }
-        assertEquals(match.decreaseDeathsCounter(), false);
+        int attempts = 10;
+        for (int k = 0; k < attempts; k++)
+            assertEquals(match.decreaseDeathsCounter(), k < SKULLS);
     }
 
 //verify the correct count of killshots
@@ -42,5 +43,14 @@ public class MatchTest {
             assertEquals(match.getPlayerKillshots(id), total);
             total++;
         }
+    }
+
+    //verify the correct drawing of PowerUp
+    //da riverificare una volta inserite le powerup
+
+    @Test
+    public void testDrawPowerUpCard() {
+        Match match = new Match();
+        assertEquals(match.drawPowerUpCard(),null);
     }
 }

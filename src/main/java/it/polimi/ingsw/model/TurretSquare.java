@@ -9,8 +9,8 @@ import java.util.List;
 public class TurretSquare extends Square {
     private AmmoTile ammoTile;
 
-    public TurretSquare(Connection northConnection, Connection eastConnection, Connection southConnection, Connection westConnection, int row, int col, ArrayList<Player> hostedPlayers, AmmoTile ammoTile) {
-        super(northConnection, eastConnection, southConnection, westConnection, row, col, hostedPlayers);
+    public TurretSquare(Connection northConnection, Connection eastConnection, Connection southConnection, Connection westConnection, int row, int col, AmmoTile ammoTile) {
+        super(northConnection, eastConnection, southConnection, westConnection, row, col);
         this.ammoTile = ammoTile;
     }
 
