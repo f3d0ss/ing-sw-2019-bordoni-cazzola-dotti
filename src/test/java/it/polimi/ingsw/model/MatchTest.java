@@ -6,6 +6,8 @@ import static org.junit.Assert.*;
 
 public class MatchTest {
 
+    private final static int SKULLS = 8;
+
 //verify the correct insertion of players
 
     @Test
@@ -24,10 +26,9 @@ public class MatchTest {
     @Test
     public void testDecreaseDeaths() {
         Match match = new Match();
-        for (int k = 0; k < 8; k++) {
-            assertEquals(match.decreaseDeathsCounter(), true);
-        }
-        assertEquals(match.decreaseDeathsCounter(), false);
+        int attempts = 10;
+        for (int k = 0; k < attempts; k++)
+            assertEquals(match.decreaseDeathsCounter(), k < SKULLS);
     }
 
 //verify the correct count of killshots

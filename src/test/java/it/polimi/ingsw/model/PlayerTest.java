@@ -96,31 +96,44 @@ public class PlayerTest {
         assertEquals(player.isDead(), true);
     }
 
-    //verify the correct movements
+    //verify the correct movements from all position in game board
 
     @Test
     public void testMove() {
         Match match = new Match();
-        GameBoard board = match.getBoard();
+        Square square;
         CardinalDirection dir;
-        for(int i=0; i<ROWS; i++)
-            for(int j=0; j<COLUMNS; j++)
-                if(board.getSquare(i,j)!=null) {
-                    Player player = new Player(match, null, null, board.getSquare(i, j));
+        Player player;
+        for(int i = 0; i < ROWS; i++) {
+            for (int j = 0; j < COLUMNS; j++) {
+                square = match.getBoard().getSquare(i, j);
+                if (square != null) {
+                    player = new Player(match, null, null, square);
+                    assertEquals(player.getPosition(), square);
                     for (CardinalDirection c : CardinalDirection.values()) {
                         dir = c;
-                        if (board.getSquare(i, j).getConnection(dir) != Connection.MAP_BORDER && board.getSquare(i, j).getConnection(dir) != Connection.WALL) {
+                        if (square.getConnection(dir) != Connection.MAP_BORDER && square.getConnection(dir) != Connection.WALL) {
                             player.move(dir);
-                        /*    switch (dir) {
-                                //case NORTH: assertEquals(player.getPosition(), board.getSquare(i - 1, j));
-                                case EAST: assertEquals(player.getPosition(), board.getSquare(i, j + 1));
-                                case SOUTH: assertEquals(player.getPosition(), board.getSquare(i + 1, j));
-                                //case WEST: assertEquals(player.getPosition(), board.getSquare(i, j-1));
-                            }*/
+                            switch (dir) {
+                                case NORTH:
+                                    assertEquals(player.getPosition(), match.getBoard().getSquare(i - 1, j));
+                                    break;
+                                case EAST:
+                                    assertEquals(player.getPosition(), match.getBoard().getSquare(i, j + 1));
+                                    break;
+                                case SOUTH:
+                                    assertEquals(player.getPosition(), match.getBoard().getSquare(i + 1, j));
+                                    break;
+                                case WEST:
+                                    assertEquals(player.getPosition(), match.getBoard().getSquare(i, j - 1));
+                                    break;
+                            }
                             player.move(dir.getOpposite());
-                            assertEquals(player.getPosition(), board.getSquare(i, j));
+                            assertEquals(player.getPosition(), square);
                         }
                     }
                 }
+            }
+        }
     }
 }
