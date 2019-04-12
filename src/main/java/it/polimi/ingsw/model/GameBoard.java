@@ -53,6 +53,10 @@ public class GameBoard {
         return board[row][col];
     }
 
+    public Square getSpawn(Color color){
+        return spawn.get(color);
+    }
+
     private Square getAdjacentSquare(Square current, CardinalDirection dir){
         switch (dir){
             case NORTH: return this.getSquare(current.getRow() - 1, current.getCol());
@@ -87,5 +91,13 @@ public class GameBoard {
                 }
             }
         return list;
+    }
+
+    public ArrayList<CardinalDirection> getAccessibleDirection(Square position){
+        ArrayList<CardinalDirection> dir = new ArrayList<>();
+        for(CardinalDirection c : CardinalDirection.values())
+            if(position.getConnection(c)==Connection.DOOR || position.getConnection(c)==Connection.SAME_ROOM)
+                dir.add(c);
+        return dir;
     }
 }

@@ -54,5 +54,9 @@ abstract public class Square {
         return this.hostedPlayers.remove(player);
     }
 
+    public ArrayList<Player> getHostedPlayers() {
+        return hostedPlayers;
+    }
+
     public abstract List<GrabCommand> getGrabCommands(Player player);
 }
