@@ -7,6 +7,10 @@ public class DoneCommand implements Command {
     private PlayerState currentState;
     private Player player;
 
+    public DoneCommand(Player player, PlayerState currentState) {
+        this.currentState = currentState;
+        this.player = player;
+    }
     /*create one constructor for each possible done in chart*/
 
     @Override

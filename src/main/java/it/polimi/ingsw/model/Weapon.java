@@ -73,7 +73,7 @@ public abstract class Weapon {
         this.name = name;
     }
 
-    protected Map<Color, Integer> getReloadingCost() {
+    public Map<Color, Integer> getReloadingCost() {
         return reloadingCost;
     }
 
@@ -93,7 +93,7 @@ public abstract class Weapon {
         this.alternativeFireModeCost = alternativeFireModeCost;
     }
 
-    protected boolean isLoaded() {
+    public boolean isLoaded() {
         return loaded;
     }
 
@@ -113,7 +113,7 @@ public abstract class Weapon {
         return selectedAlternativeFireMode;
     }
 
-    protected int getExtraMove() {
+    public int getExtraMove() {
         return extraMove;
     }
 

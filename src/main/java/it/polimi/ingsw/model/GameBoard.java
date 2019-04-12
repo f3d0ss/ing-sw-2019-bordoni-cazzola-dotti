@@ -53,4 +53,8 @@ public class GameBoard {
     public Square getSquare(int row, int col){
         return board[row][col];
     }
+
+    public SpawnSquare getSpawn(Color color){
+        return null;
+    }
 }

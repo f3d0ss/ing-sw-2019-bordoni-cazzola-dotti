@@ -1,4 +1,13 @@
 package it.polimi.ingsw.model.playerstate;
 
-public class SelectedPowerUpState {
+import it.polimi.ingsw.model.Player;
+import it.polimi.ingsw.model.command.Command;
+
+import java.util.List;
+
+public class SelectedPowerUpState implements PlayerState{
+    @Override
+    public List<Command> getPossibleCommands(Player player) {
+        return null;
+    }
 }
