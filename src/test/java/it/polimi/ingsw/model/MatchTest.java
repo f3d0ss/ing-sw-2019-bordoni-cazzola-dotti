@@ -46,11 +46,11 @@ public class MatchTest {
     }
 
     //verify the correct drawing of PowerUp
-    //da riverificare una volta inserite le powerup
+    /*da riverificare una volta inserite le powerup
 
     @Test
     public void testDrawPowerUpCard() {
         Match match = new Match();
         assertEquals(match.drawPowerUpCard(),null);
-    }
+    }*/
 }
