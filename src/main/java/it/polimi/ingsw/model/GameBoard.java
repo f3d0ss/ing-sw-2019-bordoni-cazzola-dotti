@@ -93,6 +93,16 @@ public class GameBoard {
         return list;
     }
 
+    public ArrayList<Player> getVisibleTarget(Square origin){
+        ArrayList<Player> targets = new ArrayList<>();
+        ArrayList<Square> visibles = this.getVisibleSquares(origin);
+        for(Square s : visibles) {
+            for (Player p : s.getHostedPlayers())
+                targets.add(p);
+        }
+        return targets;
+    }
+
     public ArrayList<CardinalDirection> getAccessibleDirection(Square position){
         ArrayList<CardinalDirection> dir = new ArrayList<>();
         for(CardinalDirection c : CardinalDirection.values())
