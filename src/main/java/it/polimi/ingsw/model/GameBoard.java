@@ -1,7 +1,6 @@
 package it.polimi.ingsw.model;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class GameBoard {
 
@@ -52,5 +51,41 @@ public class GameBoard {
 
     public Square getSquare(int row, int col){
         return board[row][col];
+    }
+
+    private Square getAdjacentSquare(Square current, CardinalDirection dir){
+        switch (dir){
+            case NORTH: return this.getSquare(current.getRow() - 1, current.getCol());
+            case EAST: return this.getSquare(current.getRow(), current.getCol() + 1);
+            case SOUTH: return this.getSquare(current.getRow() + 1, current.getCol());
+            case WEST: return this.getSquare(current.getRow(), current.getCol() - 1);
+        }
+        return null;
+    }
+
+    private void getSameRoomSquares(ArrayList<Square> list, Square position){
+        Square adjacent;
+        for(CardinalDirection dir : CardinalDirection.values())
+            if(position.getConnection(dir)==Connection.SAME_ROOM) {
+                adjacent = this.getAdjacentSquare(position, dir);
+                if(!list.contains(adjacent)) {
+                    list.add(adjacent);
+                    this.getSameRoomSquares(list, adjacent);
+                }
+            }
+    }
+
+    public ArrayList<Square> getVisibleSquares(Square position){
+        Square adjacent;
+        ArrayList<Square> list = new ArrayList<>();
+        for(CardinalDirection dir : CardinalDirection.values())
+            if(position.getConnection(dir)==Connection.SAME_ROOM || position.getConnection(dir)==Connection.DOOR) {
+                adjacent = this.getAdjacentSquare(position, dir);
+                if(!list.contains(adjacent)) {
+                    list.add(adjacent);
+                    this.getSameRoomSquares(list, adjacent);
+                }
+            }
+        return list;
     }
 }
