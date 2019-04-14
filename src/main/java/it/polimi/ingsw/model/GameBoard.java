@@ -53,7 +53,7 @@ public class GameBoard {
         return board[row][col];
     }
 
-    public Square getSpawn(Color color){
+    public SpawnSquare getSpawn(Color color){
         return spawn.get(color);
     }
 
