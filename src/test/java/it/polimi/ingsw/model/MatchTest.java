@@ -46,7 +46,8 @@ public class MatchTest {
     }
 
     //verify the correct drawing of PowerUp
-    /*da riverificare una volta inserite le powerup
+
+    /*to be verified once powerups are added
 
     @Test
     public void testDrawPowerUpCard() {

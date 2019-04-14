@@ -172,4 +172,15 @@ public class Player {
     public Match getMatch() {
         return this.match;
     }
+
+    public ArrayList<Player> getPossibleTarget() {
+        ArrayList<Player> targets = new ArrayList<>();
+        ArrayList<Square> visibles = match.getBoard().getVisibleSquares(position);
+        for (Square s : visibles) {
+            for (Player p : s.getHostedPlayers())
+                targets.add(p);
+        }
+        return targets;
+    }
+
 }
