@@ -1,7 +1,6 @@
 package it.polimi.ingsw.model;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class GameBoard {
 
@@ -52,5 +51,63 @@ public class GameBoard {
 
     public Square getSquare(int row, int col){
         return board[row][col];
+    }
+
+    public SpawnSquare getSpawn(Color color){
+        return spawn.get(color);
+    }
+
+    private Square getAdjacentSquare(Square current, CardinalDirection dir){
+        switch (dir){
+            case NORTH: return this.getSquare(current.getRow() - 1, current.getCol());
+            case EAST: return this.getSquare(current.getRow(), current.getCol() + 1);
+            case SOUTH: return this.getSquare(current.getRow() + 1, current.getCol());
+            case WEST: return this.getSquare(current.getRow(), current.getCol() - 1);
+        }
+        return null;
+    }
+
+    private void getSameRoomSquares(ArrayList<Square> list, Square position){
+        Square adjacent;
+        for(CardinalDirection dir : CardinalDirection.values())
+            if(position.getConnection(dir)==Connection.SAME_ROOM) {
+                adjacent = this.getAdjacentSquare(position, dir);
+                if(!list.contains(adjacent)) {
+                    list.add(adjacent);
+                    this.getSameRoomSquares(list, adjacent);
+                }
+            }
+    }
+
+    public ArrayList<Square> getVisibleSquares(Square position){
+        Square adjacent;
+        ArrayList<Square> list = new ArrayList<>();
+        for(CardinalDirection dir : CardinalDirection.values())
+            if(position.getConnection(dir)==Connection.SAME_ROOM || position.getConnection(dir)==Connection.DOOR) {
+                adjacent = this.getAdjacentSquare(position, dir);
+                if(!list.contains(adjacent)) {
+                    list.add(adjacent);
+                    this.getSameRoomSquares(list, adjacent);
+                }
+            }
+        return list;
+    }
+
+    public ArrayList<Player> getVisibleTarget(Square origin){
+        ArrayList<Player> targets = new ArrayList<>();
+        ArrayList<Square> visibles = this.getVisibleSquares(origin);
+        for(Square s : visibles) {
+            for (Player p : s.getHostedPlayers())
+                targets.add(p);
+        }
+        return targets;
+    }
+
+    public ArrayList<CardinalDirection> getAccessibleDirection(Square position){
+        ArrayList<CardinalDirection> dir = new ArrayList<>();
+        for(CardinalDirection c : CardinalDirection.values())
+            if(position.getConnection(c)==Connection.DOOR || position.getConnection(c)==Connection.SAME_ROOM)
+                dir.add(c);
+        return dir;
     }
 }
