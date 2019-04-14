@@ -21,6 +21,7 @@ public abstract class Weapon {
     private boolean selectedSecondOptionalFireMode = false;
     private boolean selectedAlternativeFireMode = false;
     private int extraMove = 0;
+    private Color color;
 
     public Weapon(String name, Map<Color, Integer> reloadingCost, Map<Color, Integer> firstOptionalModeCost, Map<Color, Integer> secondOptionalModeCost, Map<Color, Integer> alternativeFireModeCost) {
         this.name = name;
@@ -40,6 +41,8 @@ public abstract class Weapon {
     public abstract void addTargetPlayer(Player targetPlayer);
 
     public abstract void addTargetSquare(Square targetSquare);
+
+    public abstract Map<Color, Integer> getWeaponBuyCost();
 
     public void setSelectedFirstOptionalFireMode(boolean selectedFirstOptionalFireMode) {
         this.selectedFirstOptionalFireMode = selectedFirstOptionalFireMode;
@@ -121,5 +124,7 @@ public abstract class Weapon {
         this.extraMove = extraMove;
     }
 
-    public abstract Map<Color, Integer> getWeaponBuyCost();
+    protected Color getColor() {
+        return color;
+    }
 }

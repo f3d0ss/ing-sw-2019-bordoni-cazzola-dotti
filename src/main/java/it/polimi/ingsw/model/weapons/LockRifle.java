@@ -48,4 +48,11 @@ public class LockRifle extends Weapon {
 
     @Override
     public void addTargetSquare(Square targetSquare) {}
+
+    @Override
+    public Map<Color, Integer> getWeaponBuyCost() {
+        Map<Color, Integer> weaponBuyCost = new HashMap<>(getReloadingCost());
+        weaponBuyCost.put(getColor(), weaponBuyCost.get(getColor()) - 1);
+        return weaponBuyCost;
+    }
 }
