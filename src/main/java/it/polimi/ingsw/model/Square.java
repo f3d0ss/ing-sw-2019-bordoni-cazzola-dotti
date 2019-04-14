@@ -46,11 +46,11 @@ abstract public class Square {
         return col;
     }
 
-    public void addPlayer(Player player){
+    public void addPlayer(Player player) {
         this.hostedPlayers.add(player);
     }
 
-    public boolean removePlayer(Player player){
+    public boolean removePlayer(Player player) {
         return this.hostedPlayers.remove(player);
     }
 

@@ -17,5 +17,13 @@ public abstract class PowerUp {
         this.name = name;
     }
 
+    public Color getColor(){
+        return this.color;
+    };
+
     public abstract List<Command> getPossibleCommands(GameBoard gameboard, Player player);
+
+    public abstract boolean isScope();
+
+    public abstract boolean isTagBackGrenade();
 }

@@ -46,6 +46,7 @@ public class MatchTest {
     }
 
     //verify the correct drawing of PowerUp
+
     /*to be verified once powerups are added
 
     @Test
