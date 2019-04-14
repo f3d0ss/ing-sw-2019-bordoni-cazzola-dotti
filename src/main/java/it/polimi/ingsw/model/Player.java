@@ -168,4 +168,8 @@ public class Player {
         //this.match.getAccessibleSquare(position);
         return null;
     }
+
+    public Match getMatch() {
+        return this.match;
+    }
 }

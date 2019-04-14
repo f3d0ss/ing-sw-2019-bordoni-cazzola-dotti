@@ -8,15 +8,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class PendingPaymentReloadWeaponState extends SelectedWeaponState implements PendingPaymentState{
+public class PendingPaymentReloadWeaponState implements PendingPaymentState, PlayerState{
 
     private Map<Color, Integer> pendingAmmo;
     private List<PowerUp> pendingCardPayment;
+    private Weapon selectedReloadingWeapon;
 
-    public PendingPaymentReloadWeaponState(AggregateAction selectedAggregateAction, Weapon selectedWeapon) {
-        super(selectedAggregateAction, selectedWeapon);
+    public PendingPaymentReloadWeaponState(Weapon selectedWeapon) {
         pendingCardPayment = new ArrayList<>();
         pendingAmmo = new HashMap<>();
+        this.selectedReloadingWeapon = selectedWeapon;
     }
 
     @Override
@@ -33,8 +34,8 @@ public class PendingPaymentReloadWeaponState extends SelectedWeaponState impleme
     public List<Command> getPossibleCommands(Player player) {
         List<Command> commands = new ArrayList<>();
         Map<Color, Integer> totalPending = new HashMap<>();
-        pendingCardPayment.forEach(powerUp -> totalPending.put(powerUp.getColor(), totalPending.getOrDefault(powerUp.getColor(), 0)));
-        getSelectedWeapon().getReloadingCost().forEach((color, cost) -> {
+        pendingCardPayment.forEach(powerUp -> totalPending.put(powerUp.getColor(), totalPending.getOrDefault(powerUp.getColor(), 0) + 1));
+        selectedReloadingWeapon.getReloadingCost().forEach((color, cost) -> {
             if (cost > pendingAmmo.getOrDefault(color, 0) + totalPending.getOrDefault(color, 0)) {
                 if (player.getAmmo().getOrDefault(color, 0) > 0) {
                     commands.add(new SelectAmmoPaymentCommand(player, this, color));
@@ -45,7 +46,7 @@ public class PendingPaymentReloadWeaponState extends SelectedWeaponState impleme
                 });
             }
         });
-        if (commands.size() == 0) {
+        if (commands.isEmpty()) {
             commands.add(new PayReloadWeaponCommand(player, this));
         }
         return commands;

@@ -22,4 +22,8 @@ public abstract class PowerUp {
     };
 
     public abstract List<Command> getPossibleCommands(GameBoard gameboard, Player player);
+
+    public abstract boolean isScope();
+
+    public abstract boolean isTagBackGrenade();
 }

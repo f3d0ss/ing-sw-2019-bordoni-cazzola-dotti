@@ -120,4 +120,6 @@ public abstract class Weapon {
     protected void setExtraMove(int extraMove) {
         this.extraMove = extraMove;
     }
+
+    public abstract Map<Color, Integer> getWeaponBuyCost();
 }

@@ -36,7 +36,7 @@ public class PendingPaymentReloadBeforeShotState extends SelectedWeaponState imp
     public List<Command> getPossibleCommands(Player player) {
         List<Command> commands = new ArrayList<>();
         Map<Color, Integer> totalPending = new HashMap<>();
-        pendingCardPayment.forEach(powerUp -> totalPending.put(powerUp.getColor(), totalPending.getOrDefault(powerUp.getColor(), 0)));
+        pendingCardPayment.forEach(powerUp -> totalPending.put(powerUp.getColor(), totalPending.getOrDefault(powerUp.getColor(), 0) + 1 ));
         getSelectedWeapon().getReloadingCost().forEach((color, cost) -> {
             if (cost > pendingAmmo.getOrDefault(color, 0) + totalPending.getOrDefault(color, 0)) {
                 if (player.getAmmo().getOrDefault(color, 0) > 0) {
@@ -48,7 +48,7 @@ public class PendingPaymentReloadBeforeShotState extends SelectedWeaponState imp
                 });
             }
         });
-        if (commands.size() == 0) {
+        if (commands.isEmpty()) {
             commands.add(new PayReloadBeforeShotCommand(player, this));
         }
         return commands;
