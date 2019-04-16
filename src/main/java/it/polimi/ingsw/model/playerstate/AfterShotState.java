@@ -10,7 +10,7 @@ import it.polimi.ingsw.model.command.MoveCommand;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AfterShotState extends SelectedWeaponState {
+public class AfterShotState extends SelectedWeaponState implements MovableState{
     public AfterShotState(AggregateAction selectedAggregateAction, Weapon selectedWeapon) {
         super(selectedAggregateAction, selectedWeapon);
     }
@@ -22,5 +22,15 @@ public class AfterShotState extends SelectedWeaponState {
             player.getAccessibleSquare(getSelectedWeapon().getExtraMove()).forEach(direction -> commands.add(new MoveCommand(player, direction, this)));
         commands.add(new DoneCommand(player, this));
         return commands;
+    }
+
+    @Override
+    public void useMoves() {
+        getSelectedWeapon().useExtraMoves();
+    }
+
+    @Override
+    public void resetMoves() {
+        getSelectedWeapon().resetMoves();
     }
 }

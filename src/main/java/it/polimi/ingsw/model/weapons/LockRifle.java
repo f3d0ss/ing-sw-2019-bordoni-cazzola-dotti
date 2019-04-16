@@ -60,4 +60,14 @@ public class LockRifle extends Weapon {
     public boolean hasExtraMove() {
         return false;
     }
+
+    @Override
+    public void useExtraMoves() {
+
+    }
+
+    @Override
+    public void resetMoves() {
+
+    }
 }

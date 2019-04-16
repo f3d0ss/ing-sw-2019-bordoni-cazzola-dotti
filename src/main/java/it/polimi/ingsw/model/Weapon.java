@@ -129,4 +129,8 @@ public abstract class Weapon {
     }
 
     public abstract boolean hasExtraMove();
+
+    public abstract void useExtraMoves();
+
+    public abstract void resetMoves();
 }
