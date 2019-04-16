@@ -2,6 +2,7 @@ package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.command.GrabCommand;
 import it.polimi.ingsw.model.command.GrabTileCommand;
+import it.polimi.ingsw.model.playerstate.SelectedAggregateActionState;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,10 +16,13 @@ public class TurretSquare extends Square {
     }
 
     @Override
-    public List<GrabCommand> getGrabCommands(Player player) {
-        ArrayList<GrabCommand> temp = new ArrayList<>();
-        temp.add(new GrabTileCommand(player, ammoTile));
-        return temp;
+    public List<GrabCommand> getGrabCommands(Player player, SelectedAggregateActionState state) {
+        ArrayList<GrabCommand> commands = new ArrayList<>();
+        commands.add(new GrabTileCommand(player, ammoTile, this));
+        return commands;
     }
 
+    public void setAmmoTile(AmmoTile ammoTile) {
+        this.ammoTile = ammoTile;
+    }
 }

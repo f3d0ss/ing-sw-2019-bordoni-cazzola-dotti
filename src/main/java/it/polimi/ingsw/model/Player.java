@@ -15,11 +15,11 @@ import java.util.Map;
 
 public class Player {
 
-    private final static int MAX_AMMO = 3;
-    private final static int MAX_POWERUP = 3;
-    private final static int MAX_DAMAGE = 12;
-    private final static int MAX_MARKS = 3;
-    public final static int MAX_WEAPONS = 3;
+    public static final int MAX_AMMO = 3;
+    public static final int MAX_POWERUP = 3;
+    public static final int MAX_DAMAGE = 12;
+    public static final int MAX_MARKS = 3;
+    public static final int MAX_WEAPONS = 3;
 
     private Match match;
     private PlayerId id;
@@ -73,23 +73,8 @@ public class Player {
         this.playerState = playerState;
     }
 
-    public void move(CardinalDirection direction) {
-        if (position.getConnection(direction) == Connection.MAP_BORDER || position.getConnection(direction) == Connection.WALL)
-            throw new IllegalMoveException();
-        switch (direction) {
-            case NORTH:
-                position = match.getBoard().getSquare(position.getRow() - 1, position.getCol());
-                break;
-            case SOUTH:
-                position = match.getBoard().getSquare(position.getRow() + 1, position.getCol());
-                break;
-            case EAST:
-                position = match.getBoard().getSquare(position.getRow(), position.getCol() + 1);
-                break;
-            case WEST:
-                position = match.getBoard().getSquare(position.getRow(), position.getCol() - 1);
-                break;
-        }
+    public void move(Square square) {
+        position = square;
     }
 
     private void addAmmo(Color color, Integer number) {
@@ -164,23 +149,13 @@ public class Player {
         return null;
     }
 
-    public List<CardinalDirection> getAccessibleSquare() {
+    public List<Square> getAccessibleSquare(int maxDistance) {
         //this.match.getAccessibleSquare(position);
         return null;
     }
 
     public Match getMatch() {
         return this.match;
-    }
-
-    public ArrayList<Player> getPossibleTarget() {
-        ArrayList<Player> targets = new ArrayList<>();
-        ArrayList<Square> visibles = match.getBoard().getVisibleSquares(position);
-        for (Square s : visibles) {
-            for (Player p : s.getHostedPlayers())
-                targets.add(p);
-        }
-        return targets;
     }
 
 }

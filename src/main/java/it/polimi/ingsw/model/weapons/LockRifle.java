@@ -55,4 +55,9 @@ public class LockRifle extends Weapon {
         weaponBuyCost.put(getColor(), weaponBuyCost.get(getColor()) - 1);
         return weaponBuyCost;
     }
+
+    @Override
+    public boolean hasExtraMove() {
+        return false;
+    }
 }

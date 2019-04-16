@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.command.GrabCommand;
+import it.polimi.ingsw.model.playerstate.SelectedAggregateActionState;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,5 +59,5 @@ abstract public class Square {
         return hostedPlayers;
     }
 
-    public abstract List<GrabCommand> getGrabCommands(Player player);
+    public abstract List<GrabCommand> getGrabCommands(Player player, SelectedAggregateActionState state);
 }

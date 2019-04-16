@@ -1,7 +1,8 @@
 package it.polimi.ingsw.model;
 
-import it.polimi.ingsw.model.command.BuyCommand;
+import it.polimi.ingsw.model.command.SelectBuyingWeaponCommand;
 import it.polimi.ingsw.model.command.GrabCommand;
+import it.polimi.ingsw.model.playerstate.SelectedAggregateActionState;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,11 +24,11 @@ public class SpawnSquare extends Square {
     }
 
     @Override
-    public List<GrabCommand> getGrabCommands(Player player) {
+    public List<GrabCommand> getGrabCommands(Player player, SelectedAggregateActionState state) {
         ArrayList<GrabCommand> temp = new ArrayList<>();
         for (int i = 0; i < MAX_WEAPON; i++)
             if (weapons[i] != null)
-                temp.add(new BuyCommand(player, weapons[i]));
+                temp.add(new SelectBuyingWeaponCommand(player, state, weapons[i]));
         return temp;
 
     }

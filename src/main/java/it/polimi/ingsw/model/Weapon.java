@@ -127,4 +127,6 @@ public abstract class Weapon {
     protected Color getColor() {
         return color;
     }
+
+    public abstract boolean hasExtraMove();
 }

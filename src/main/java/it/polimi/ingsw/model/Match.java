@@ -64,12 +64,10 @@ public class Match {
 
     public AmmoTile drawAmmoTileCard(){
         AmmoTile tmp;
-        AmmoTileDeck emptyDeck;
         tmp = currentAmmoTileDeck.drawAmmoTile();
         if (tmp == null){
-            emptyDeck = currentAmmoTileDeck;
             currentAmmoTileDeck = usedAmmoTileDeck;
-            usedAmmoTileDeck = emptyDeck;
+            usedAmmoTileDeck = new AmmoTileDeck(new ArrayList<>());
             currentAmmoTileDeck.shuffle();
             tmp = currentAmmoTileDeck.drawAmmoTile();
         }
@@ -82,15 +80,22 @@ public class Match {
 
     public PowerUp drawPowerUpCard(){
         PowerUp powerup;
-        PowerUpDeck emptyDeck;
         powerup = currentPowerUpDeck.drawPowerUp();
         if (powerup == null){
-            emptyDeck = currentPowerUpDeck;
             currentPowerUpDeck = usedPowerUpDeck;
-            usedPowerUpDeck = emptyDeck;
+            usedPowerUpDeck = new PowerUpDeck(new ArrayList<>());
             currentPowerUpDeck.shuffle();
             powerup = currentPowerUpDeck.drawPowerUp();
         }
         return powerup;
     }
+
+    public void discard(AmmoTile ammoTile){
+        usedAmmoTileDeck.add(ammoTile);
+    }
+
+    public void discard(PowerUp powerUp){
+        usedPowerUpDeck.add(powerUp);
+    }
+
 }

@@ -18,8 +18,9 @@ public class ExtraMoveState extends SelectedWeaponState {
     @Override
     public List<Command> getPossibleCommands(Player player) {
         List<Command> commands = new ArrayList<>();
-        if (getSelectedWeapon().getExtraMove() > 0)
-            player.getAccessibleSquare().forEach((direction) -> commands.add(new MoveCommand(player, direction, this)));
+        if(!getSelectedWeapon().hasExtraMove())
+            throw new IllegalStateException();
+        player.getAccessibleSquare(getSelectedWeapon().getExtraMove()).forEach(square -> commands.add(new MoveCommand(player, square, this)));
         commands.add(new DoneCommand(player, this));
         return commands;
     }
