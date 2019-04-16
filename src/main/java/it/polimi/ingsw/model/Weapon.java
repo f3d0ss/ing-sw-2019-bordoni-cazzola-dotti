@@ -133,4 +133,8 @@ public abstract class Weapon {
     public abstract void useExtraMoves();
 
     public abstract void resetMoves();
+
+    public abstract void reload();
+
+    public abstract void unload();
 }

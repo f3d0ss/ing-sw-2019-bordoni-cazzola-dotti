@@ -158,4 +158,24 @@ public class Player {
         return this.match;
     }
 
+    public void pay(Color color, int amount) {
+        if(ammo.getOrDefault(color, 0) < amount)
+            throw new IllegalStateException();
+        ammo.put(color, ammo.get(color) - amount);
+    }
+
+    public void pay(PowerUp powerUp) {
+        match.discard(powerUp);
+        powerUps.remove(powerUp);
+    }
+
+    public void refund(Color color, Integer amount) {
+        addAmmo(color, amount);
+    }
+
+    public void refund(PowerUp powerUp) {
+        if (powerUps.size() >= MAX_POWERUP)
+            throw new IllegalStateException();
+        powerUps.add(powerUp);
+    }
 }

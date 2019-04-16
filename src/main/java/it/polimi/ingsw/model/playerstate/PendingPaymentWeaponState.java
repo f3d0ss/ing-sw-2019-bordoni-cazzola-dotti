@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class PendingPaymentWeaponState extends SelectedWeaponState implements PendingPaymentState{
+public class PendingPaymentWeaponState extends SelectedWeaponState implements PendingPaymentState {
     private Map<Color, Integer> pendingAmmo;
     private List<PowerUp> pendingCardPayment;
 
@@ -26,6 +26,16 @@ public class PendingPaymentWeaponState extends SelectedWeaponState implements Pe
     @Override
     public void addPendingCard(PowerUp powerUp) {
         pendingCardPayment.add(powerUp);
+    }
+
+    @Override
+    public Map<Color, Integer> getPendingAmmoPayment() {
+        return pendingAmmo;
+    }
+
+    @Override
+    public List<PowerUp> getPendingCardPayment() {
+        return pendingCardPayment;
     }
 
     @Override
