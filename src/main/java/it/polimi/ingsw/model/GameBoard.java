@@ -83,20 +83,78 @@ public class GameBoard {
             }
     }
 
-    public ArrayList<Square> getVisibleSquares(Square position) {
+    public ArrayList<Square> getVisibleSquares(Square position, int maxRange, int minRange, boolean onlyWithPlayer) {
         Square adjacent;
         ArrayList<Square> list = new ArrayList<>();
-        for (CardinalDirection dir : CardinalDirection.values())
-            if (position.getConnection(dir) == Connection.SAME_ROOM || position.getConnection(dir) == Connection.DOOR) {
-                adjacent = this.getAdjacentSquare(position, dir);
-                if (!list.contains(adjacent)) {
-                    list.add(adjacent);
-                    this.getSameRoomSquares(list, adjacent);
+        ArrayList<Square> out = new ArrayList<>();
+        list.add(position);
+        if (maxRange > 0) {
+            for (CardinalDirection dir : CardinalDirection.values())
+                if (position.getConnection(dir).isAccessible(false)) {
+                    adjacent = this.getAdjacentSquare(position, dir);
+                    if (!list.contains(adjacent)) {
+                        list.add(adjacent);
+                        if (maxRange > 1)
+                            this.getSameRoomSquares(list, adjacent);
+                    }
                 }
-            }
+        }
+        if (minRange > 0) {
+            list.remove(position);
+            if (minRange > 1)
+                for (CardinalDirection dir : CardinalDirection.values())
+                    if (position.getConnection(dir).isAccessible(false))
+                        list.remove(getAdjacentSquare(position, dir));
+        }
+        if (!onlyWithPlayer)
+            return list;
+        for (Square s : list)
+            if (s.getHostedPlayers().size() != 0)
+                out.add(s);
+        return out;
+    }
+
+    public ArrayList<Square> getCardinalDirectionSquares(Square position, int maxRange, int minRange, boolean ignoreWalls) {
+        Square adjacent;
+        ArrayList<Square> list = new ArrayList<>();
+        if (minRange == 0)
+            list.add(position);
+        if (maxRange > 0) {
+            for (CardinalDirection dir : CardinalDirection.values())
+                if (position.getConnection(dir).isAccessible(ignoreWalls)) {
+                    adjacent = this.getAdjacentSquare(position, dir);
+                    list.add(adjacent);
+                    if (maxRange > 1)
+                        getStraightSquares(list, adjacent, maxRange--, ignoreWalls, dir);
+                }
+        }
         return list;
     }
 
+    private void getStraightSquares(ArrayList<Square> list, Square position, int maxRange, boolean ignoreWalls, CardinalDirection dir) {
+        Square next;
+        if (maxRange > 0 && position.getConnection(dir).isAccessible(ignoreWalls)) {
+            next = this.getAdjacentSquare(position, dir);
+            list.add(next);
+            getStraightSquares(list, next, maxRange--, ignoreWalls, dir);
+        }
+    }
+
+    public void getReachableSquare(Square position, ArrayList<Square> list, int maxMoves) {
+        Square adjacent;
+        int furtherMove = maxMoves - 1;
+        if (!list.contains(position))
+            list.add(position);
+        if (maxMoves > 0) {
+            for (CardinalDirection dir : CardinalDirection.values())
+                if (position.getConnection(dir).isAccessible(false)) {
+                    adjacent = this.getAdjacentSquare(position, dir);
+                    this.getReachableSquare(adjacent, list, furtherMove);
+                }
+        }
+    }
+
+/* to be implemented in weapon
     public ArrayList<Player> getVisibleTarget(Square origin) {
         ArrayList<Player> targets = new ArrayList<>();
         ArrayList<Square> visibles = this.getVisibleSquares(origin);
@@ -105,12 +163,12 @@ public class GameBoard {
                 targets.add(p);
         }
         return targets;
-    }
+    }*/
 
     public ArrayList<CardinalDirection> getAccessibleDirection(Square position) {
         ArrayList<CardinalDirection> dir = new ArrayList<>();
         for (CardinalDirection c : CardinalDirection.values())
-            if (position.getConnection(c) == Connection.DOOR || position.getConnection(c) == Connection.SAME_ROOM)
+            if (position.getConnection(c).isAccessible(false))
                 dir.add(c);
         return dir;
     }
