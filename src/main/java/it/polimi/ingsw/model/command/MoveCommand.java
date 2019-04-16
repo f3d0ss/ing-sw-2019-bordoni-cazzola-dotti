@@ -42,6 +42,7 @@ public class MoveCommand implements Command {
         player.move(newPosition);
         player.getPosition().addPlayer(player);
         currentState.useMoves();
+        player.changeState(nextState);
     }
 
     @Override
@@ -50,5 +51,6 @@ public class MoveCommand implements Command {
         player.move(oldSquare);
         player.getPosition().addPlayer(player);
         currentState.resetMoves();
+        player.changeState(currentState);
     }
 }
