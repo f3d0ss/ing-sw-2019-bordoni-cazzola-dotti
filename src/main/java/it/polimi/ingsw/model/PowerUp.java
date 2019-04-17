@@ -26,4 +26,12 @@ public abstract class PowerUp {
     public abstract boolean isScope();
 
     public abstract boolean isTagBackGrenade();
+
+    public abstract void addTargetPlayer(Player targetPlayer);
+
+    public abstract void removeTargetPlayer(Player targetPlayer);
+
+    public abstract void addTargetSquare(Square targetSquare);
+
+    public abstract void removeTargetSquare(Square targetSquare);
 }

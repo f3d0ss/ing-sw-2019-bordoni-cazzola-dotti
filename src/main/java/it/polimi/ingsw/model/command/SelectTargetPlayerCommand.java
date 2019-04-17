@@ -14,11 +14,11 @@ public class SelectTargetPlayerCommand extends WeaponCommand {
 
     @Override
     public void execute() {
-        currentState.getSelectedWeapon().addTargetPlayer(targetPlayer);
+        currentState.addTargetPlayer(targetPlayer);
     }
 
     @Override
     public void undo() {
-        currentState.getSelectedWeapon().removeTargetPlayer(targetPlayer);
+        currentState.removeTargetPlayer(targetPlayer);
     }
 }

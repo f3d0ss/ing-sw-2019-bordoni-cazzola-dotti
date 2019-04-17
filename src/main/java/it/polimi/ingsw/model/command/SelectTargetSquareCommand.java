@@ -14,11 +14,11 @@ public class SelectTargetSquareCommand extends WeaponCommand {
 
     @Override
     public void execute() {
-        currentState.getSelectedWeapon().addTargetSquare(targetSquare);
+        currentState.addTargetSquare(targetSquare);
     }
 
     @Override
     public void undo() {
-        currentState.getSelectedWeapon().removeTargetSquare(targetSquare);
+        currentState.removeTargetSquare(targetSquare);
     }
 }
