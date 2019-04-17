@@ -17,6 +17,7 @@ public class SelectWeaponAlternativeFireModeCommand extends SelectWeaponOptionCo
 
     @Override
     public void undo() {
-
+        currentState.getSelectedWeapon().setSelectedAlternativeFireMode(false);
+        player.changeState(currentState);
     }
 }

@@ -17,6 +17,7 @@ public class SelectWeaponFirstOptionCommand extends SelectWeaponOptionCommand {
 
     @Override
     public void undo() {
-
+        currentState.getSelectedWeapon().setSelectedFirstOptionalFireMode(false);
+        player.changeState(currentState);
     }
 }
