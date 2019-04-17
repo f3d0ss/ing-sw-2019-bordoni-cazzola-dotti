@@ -25,4 +25,8 @@ public class TurretSquare extends Square {
     public void setAmmoTile(AmmoTile ammoTile) {
         this.ammoTile = ammoTile;
     }
+
+    public void remove(AmmoTile ammoTile){
+        ammoTile = null;
+    }
 }

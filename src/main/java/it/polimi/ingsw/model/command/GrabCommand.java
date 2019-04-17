@@ -5,7 +5,6 @@ import it.polimi.ingsw.model.playerstate.SelectedAggregateActionState;
 
 public abstract class GrabCommand implements Command {
     protected Player player;
-    protected SelectedAggregateActionState currentState;
 
     public GrabCommand(Player player) {
         this.player = player;

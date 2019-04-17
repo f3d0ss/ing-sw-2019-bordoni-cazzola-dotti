@@ -16,13 +16,19 @@ public class GrabTileCommand extends GrabCommand {
         this.square = square;
     }
 
+    /**
+     * This method actualize the grab action giving the ammo tile to the player and removing it from the board
+     */
     @Override
     public void execute() {
         player.addAmmoTile(ammoTile);
+        square.remove(ammoTile);
         player.getMatch().discard(ammoTile);
-        square.setAmmoTile(player.getMatch().drawAmmoTileCard());
     }
 
+    /**
+     * This throw an exception because the aggregate action is finished and the player can't go back
+     */
     @Override
     public void undo() {
         throw new IllegalUndoException();
