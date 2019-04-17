@@ -26,4 +26,12 @@ public class EffectCommand implements Command {
     public void undo() {
 
     }
+
+    public Player getPlayer() {
+        return player;
+    }
+
+    public boolean hasDamage() {
+        return damage > 0;
+    }
 }

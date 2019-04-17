@@ -7,18 +7,18 @@ import it.polimi.ingsw.model.playerstate.ReadyToShootState;
 public class SelectTargetSquareCommand extends WeaponCommand {
     private Square targetSquare;
 
-    public SelectTargetSquareCommand(Weapon weapon, ReadyToShootState currentState, Square targetSquare) {
-        super(weapon, currentState);
+    public SelectTargetSquareCommand(ReadyToShootState currentState, Square targetSquare) {
+        super(currentState);
         this.targetSquare = targetSquare;
     }
 
     @Override
     public void execute() {
-
+        currentState.getSelectedWeapon().addTargetSquare(targetSquare);
     }
 
     @Override
     public void undo() {
-
+        currentState.getSelectedWeapon().removeTargetSquare(targetSquare);
     }
 }

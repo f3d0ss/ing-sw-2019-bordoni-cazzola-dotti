@@ -189,4 +189,9 @@ public class Player {
     public void removeWeapon(Weapon selectedWeapon) {
         weapons.remove(selectedWeapon);
     }
+
+    public boolean hasScope() {
+        //TODO: implement this method
+        return false;
+    }
 }

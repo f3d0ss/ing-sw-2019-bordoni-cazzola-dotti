@@ -72,56 +72,16 @@ public abstract class Weapon {
         return name;
     }
 
-    protected void setName(String name) {
-        this.name = name;
-    }
-
     public Map<Color, Integer> getReloadingCost() {
         return reloadingCost;
-    }
-
-    protected void setReloadingCost(Map<Color, Integer> reloadingCost) {
-        this.reloadingCost = reloadingCost;
-    }
-
-    protected void setFirstOptionalModeCost(Map<Color, Integer> firstOptionalModeCost) {
-        this.firstOptionalModeCost = firstOptionalModeCost;
-    }
-
-    protected void setSecondOptionalModeCost(Map<Color, Integer> secondOptionalModeCost) {
-        this.secondOptionalModeCost = secondOptionalModeCost;
-    }
-
-    protected void setAlternativeFireModeCost(Map<Color, Integer> alternativeFireModeCost) {
-        this.alternativeFireModeCost = alternativeFireModeCost;
     }
 
     public boolean isLoaded() {
         return loaded;
     }
 
-    protected void setLoaded(boolean loaded) {
-        this.loaded = loaded;
-    }
-
-    protected boolean isSelectedFirstOptionalFireMode() {
-        return selectedFirstOptionalFireMode;
-    }
-
-    protected boolean isSelectedSecondOptionalFireMode() {
-        return selectedSecondOptionalFireMode;
-    }
-
-    protected boolean isSelectedAlternativeFireMode() {
-        return selectedAlternativeFireMode;
-    }
-
     public int getExtraMove() {
         return extraMove;
-    }
-
-    protected void setExtraMove(int extraMove) {
-        this.extraMove = extraMove;
     }
 
     protected Color getColor() {
@@ -137,4 +97,8 @@ public abstract class Weapon {
     public abstract void reload();
 
     public abstract void unload();
+
+    public abstract void removeTargetPlayer(Player targetPlayer);
+
+    public abstract void removeTargetSquare(Square targetSquare);
 }
