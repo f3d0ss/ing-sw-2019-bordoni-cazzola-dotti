@@ -57,6 +57,14 @@ public class GameBoard {
         return spawn.get(color);
     }
 
+    public int getHeight() {
+        return ROWS;
+    }
+
+    public int getWidth() {
+        return COLUMNS;
+    }
+
     private Square getAdjacentSquare(Square current, CardinalDirection dir) {
         switch (dir) {
             case NORTH:
