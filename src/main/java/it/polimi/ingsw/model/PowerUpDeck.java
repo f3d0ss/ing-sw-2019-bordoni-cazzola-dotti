@@ -22,4 +22,8 @@ public class PowerUpDeck implements Deck {
     public void add(PowerUp powerUp) {
         powerUps.add(powerUp);
     }
+
+    public void remove(PowerUp powerUp) {
+        powerUps.remove(powerUp);
+    }
 }

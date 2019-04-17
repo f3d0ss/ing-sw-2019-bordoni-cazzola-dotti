@@ -20,6 +20,10 @@ public class PendingPaymentReloadWeaponState implements PendingPaymentState, Pla
         this.selectedReloadingWeapon = selectedWeapon;
     }
 
+    public Weapon getSelectedReloadingWeapon() {
+        return selectedReloadingWeapon;
+    }
+
     @Override
     public void addPendingAmmo(Color color) {
         pendingAmmo.put(color, pendingAmmo.getOrDefault(color, 0));
@@ -28,6 +32,16 @@ public class PendingPaymentReloadWeaponState implements PendingPaymentState, Pla
     @Override
     public void addPendingCard(PowerUp powerUp) {
         pendingCardPayment.add(powerUp);
+    }
+
+    @Override
+    public Map<Color, Integer> getPendingAmmoPayment() {
+        return pendingAmmo;
+    }
+
+    @Override
+    public List<PowerUp> getPendingCardPayment() {
+        return pendingCardPayment;
     }
 
     @Override

@@ -174,6 +174,7 @@ public class Player {
     }
 
     public void refund(PowerUp powerUp) {
+        match.undiscard(powerUp);
         if (powerUps.size() >= MAX_POWERUP)
             throw new IllegalStateException();
         powerUps.add(powerUp);

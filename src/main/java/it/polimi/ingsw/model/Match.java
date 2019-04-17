@@ -98,4 +98,7 @@ public class Match {
         usedPowerUpDeck.add(powerUp);
     }
 
+    public void undiscard(PowerUp powerUp) {
+        usedPowerUpDeck.remove(powerUp);
+    }
 }
