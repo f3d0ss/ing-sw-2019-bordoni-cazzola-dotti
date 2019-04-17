@@ -14,11 +14,11 @@ public class SelectAmmoPaymentCommand extends SelectPaymentCommand {
 
     @Override
     public void execute() {
-
+        currentState.addPendingAmmo(color);
     }
 
     @Override
     public void undo() {
-
+        currentState.removePendingAmmo(color);
     }
 }

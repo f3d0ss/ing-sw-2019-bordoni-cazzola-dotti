@@ -14,11 +14,11 @@ public class SelectPowerUpPaymentCommand extends SelectPaymentCommand {
 
     @Override
     public void execute() {
-
+        currentState.addPendingCard(powerUp);
     }
 
     @Override
     public void undo() {
-
+        currentState.removePendingCard(powerUp);
     }
 }
