@@ -2,6 +2,7 @@ package it.polimi.ingsw.model.command;
 
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.Weapon;
+import it.polimi.ingsw.model.playerstate.ChoosingWeaponOptionState;
 import it.polimi.ingsw.model.playerstate.ChoosingWeaponState;
 
 public class SelectWeaponCommand implements Command{
@@ -17,11 +18,11 @@ public class SelectWeaponCommand implements Command{
 
     @Override
     public void execute() {
-
+        player.changeState(new ChoosingWeaponOptionState(currentState.getSelectedAggregateAction(), weapon));
     }
 
     @Override
     public void undo() {
-
+        player.changeState(currentState);
     }
 }
