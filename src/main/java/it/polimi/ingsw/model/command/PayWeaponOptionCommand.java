@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model.command;
 
 import it.polimi.ingsw.model.Player;
+import it.polimi.ingsw.model.playerstate.ChoosingWeaponOptionState;
 import it.polimi.ingsw.model.playerstate.PendingPaymentWeaponOptionState;
 
 public class PayWeaponOptionCommand implements Command {
@@ -14,11 +15,15 @@ public class PayWeaponOptionCommand implements Command {
 
     @Override
     public void execute() {
-
+        currentState.getPendingAmmoPayment().forEach((color, amount) -> player.pay(color, amount));
+        currentState.getPendingCardPayment().forEach(powerUp -> player.pay(powerUp));
+        player.changeState(new ChoosingWeaponOptionState(currentState.getSelectedAggregateAction(),currentState.getSelectedWeapon()));
     }
 
     @Override
     public void undo() {
-
+        currentState.getPendingAmmoPayment().forEach((color, amount) -> player.refund(color, amount));
+        currentState.getPendingCardPayment().forEach(powerUp -> player.refund(powerUp));
+        player.changeState(currentState);
     }
 }
