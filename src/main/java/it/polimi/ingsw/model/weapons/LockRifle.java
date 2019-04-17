@@ -70,4 +70,14 @@ public class LockRifle extends Weapon {
     public void resetMoves() {
 
     }
+
+    @Override
+    public void reload() {
+
+    }
+
+    @Override
+    public void unload() {
+
+    }
 }

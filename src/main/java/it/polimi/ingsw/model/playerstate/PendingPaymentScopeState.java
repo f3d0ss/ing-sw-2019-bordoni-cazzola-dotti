@@ -31,6 +31,16 @@ public class PendingPaymentScopeState extends SelectedWeaponState implements Pen
     }
 
     @Override
+    public Map<Color, Integer> getPendingAmmoPayment() {
+        return pendingAmmo;
+    }
+
+    @Override
+    public List<PowerUp> getPendingCardPayment() {
+        return pendingCardPayment;
+    }
+
+    @Override
     public List<Command> getPossibleCommands(Player player) {
 
         List<Command> commands = new ArrayList<>();

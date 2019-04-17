@@ -179,4 +179,14 @@ public class Player {
             throw new IllegalStateException();
         powerUps.add(powerUp);
     }
+
+    public void addWeapon(Weapon weapon){
+        if (weapons.size() >= MAX_WEAPONS)
+            throw new IllegalStateException();
+        weapons.add(weapon);
+    }
+
+    public void removeWeapon(Weapon selectedWeapon) {
+        weapons.remove(selectedWeapon);
+    }
 }

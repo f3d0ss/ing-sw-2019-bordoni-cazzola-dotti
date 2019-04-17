@@ -33,6 +33,16 @@ public class PendingPaymentWeaponOptionState extends SelectedWeaponState impleme
     }
 
     @Override
+    public Map<Color, Integer> getPendingAmmoPayment() {
+        return pendingAmmo;
+    }
+
+    @Override
+    public List<PowerUp> getPendingCardPayment() {
+        return pendingCardPayment;
+    }
+
+    @Override
     public List<Command> getPossibleCommands(Player player) {
         List<Command> commands = new ArrayList<>();
         Map<Color, Integer> totalPending = new HashMap<>();
