@@ -6,20 +6,17 @@ import it.polimi.ingsw.model.playerstate.*;
 
 public class SelectReloadingWeaponCommand implements Command{
     private Player player;
-    private Weapon weapon;
     private PlayerState currentState;
     private PlayerState nextState;
 
     public SelectReloadingWeaponCommand(Player player, Weapon weapon, ChoosingWeaponState currentState) {
         this.player = player;
-        this.weapon = weapon;
         this.currentState = currentState;
         nextState = new PendingPaymentReloadBeforeShotState(currentState.getSelectedAggregateAction(),weapon);
     }
 
     public SelectReloadingWeaponCommand(Player player, Weapon weapon, ManageTurnState currentState) {
         this.player = player;
-        this.weapon = weapon;
         this.currentState = currentState;
         nextState = new PendingPaymentReloadWeaponState(weapon);
     }

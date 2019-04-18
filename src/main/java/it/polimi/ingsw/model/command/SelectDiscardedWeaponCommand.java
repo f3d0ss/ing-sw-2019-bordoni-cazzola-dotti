@@ -19,7 +19,7 @@ public class SelectDiscardedWeaponCommand implements Command {
     }
 
     /**
-     * This method discard a weapon
+     * This method discard a weapon and put it in the spawn
      */
     @Override
     public void execute() {

@@ -13,6 +13,9 @@ public class PayReloadWeaponCommand implements Command {
         this.currentState = currentState;
     }
 
+    /**
+     * This method actualize the payment and reload the weapon
+     */
     @Override
     public void execute() {
         currentState.getPendingAmmoPayment().forEach((color, amount) -> player.pay(color, amount));
@@ -21,6 +24,9 @@ public class PayReloadWeaponCommand implements Command {
         player.changeState(new ManageTurnState());
     }
 
+    /**
+     * This method refund the player
+     */
     @Override
     public void undo() {
         currentState.getPendingAmmoPayment().forEach((color, amount) -> player.refund(color, amount));

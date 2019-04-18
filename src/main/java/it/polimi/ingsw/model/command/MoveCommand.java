@@ -35,6 +35,9 @@ public class MoveCommand implements Command {
         nextState = new ManageTurnState();
     }
 
+    /**
+     * This method move the player
+     */
     @Override
     public void execute() {
         oldSquare = player.getPosition();
@@ -45,6 +48,9 @@ public class MoveCommand implements Command {
         player.changeState(nextState);
     }
 
+    /**
+     * This method move the player in the old position
+     */
     @Override
     public void undo() {
         player.getPosition().removePlayer(player);

@@ -12,7 +12,7 @@ public class EffectCommand implements Command {
     private int marks;
     private MoveCommand move;
     private PlayerId shooter;
-    
+
     public EffectCommand(Player player, int damage, int marks, MoveCommand move, PlayerId shooter) {
         this.player = player;
         this.damage = damage;
