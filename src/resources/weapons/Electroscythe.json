@@ -1,0 +1,77 @@
+{
+  "name": "Electroscythe",
+  "description": null,
+  "reloadingCost": {
+    "BLUE": 1
+  },
+  "buyCost": null,
+  "weaponModes": [
+    {
+      "name": "basic mode",
+      "description": "Deal 1 damage to every other player on your square.",
+      "cost": null,
+      "maxNumberOfTargetPlayers": 4,
+      "targetPlayers": false,
+      "targetSquare": true,
+      "targetRoom": false,
+      "eachTargetInTheSameRoom": false,
+      "eachTargetOnTheSameSquare": true,
+      "eachTargetOnDifferentSquares": false,
+      "damageEveryone": true,
+      "targetVisibleByOtherTarget": false,
+      "targetVisibleByShooter": true,
+      "cardinalDirectionMode": false,
+      "maxTargetDistance": 0,
+      "minTargetDistance": 0,
+      "marks": 0,
+      "damage": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "additionalDamageAvailable": 0,
+      "maxAdditionalDamagePerPlayer": 0,
+      "moveTargetBeforeShoot": false,
+      "moveTargetAfterShoot": false,
+      "moveShooter": false,
+      "maxTargetMove": 0,
+      "maxShooterMove": 0
+    },
+    {
+      "name": "reaper mode",
+      "description": "Deal 2 damage to every other player on your square.",
+      "cost": {
+        "BLUE": 1,
+        "RED": 1
+      },
+      "maxNumberOfTargetPlayers": 4,
+      "targetPlayers": false,
+      "targetSquare": true,
+      "targetRoom": false,
+      "eachTargetInTheSameRoom": false,
+      "eachTargetOnTheSameSquare": true,
+      "eachTargetOnDifferentSquares": false,
+      "damageEveryone": true,
+      "targetVisibleByOtherTarget": false,
+      "targetVisibleByShooter": true,
+      "cardinalDirectionMode": false,
+      "maxTargetDistance": 0,
+      "minTargetDistance": 0,
+      "marks": 0,
+      "damage": [
+        2,
+        2,
+        2,
+        2
+      ],
+      "additionalDamageAvailable": 0,
+      "maxAdditionalDamagePerPlayer": 0,
+      "moveTargetBeforeShoot": false,
+      "moveTargetAfterShoot": false,
+      "moveShooter": false,
+      "maxTargetMove": 0,
+      "maxShooterMove": 0
+    }
+  ]
+}

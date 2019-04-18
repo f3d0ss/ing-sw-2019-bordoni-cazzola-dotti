@@ -110,7 +110,7 @@ public class GameBoard {
     }
 
     /**
-     * @author Bordoni
+     * @author supernivem
      * @param position starting position
      * @param maxRange maximum distance of returned squares
      * @param minRange minimum distance of returned squares
@@ -149,7 +149,7 @@ public class GameBoard {
         return out;
     }
 
-    /** @author Bordoni
+    /** @author supernivem
      * @param position is the position from where get straight direction squares
      * @param maxRange maximum distance of gotten squares
      * @param minRange minimum distance of gotten squares
@@ -173,7 +173,7 @@ public class GameBoard {
         return list;
     }
 
-    /** @author Bordoni
+    /** @author supernivem
      * @param list is a list passed by caller, needed to allow recursion
      * @param position is the position from where get straight direction squares
      * @param maxRange maximum distance of got squares
@@ -193,7 +193,7 @@ public class GameBoard {
     //TODO: update player
 
     /**
-     * @author Bordoni
+     * @author supernivem
      * @param position starting position
      * @param maxMoves number of steps allowed
      * @return the list of squares reachable in at most maxMoves steps
@@ -206,13 +206,13 @@ public class GameBoard {
     }
 
     /**
-     * @author Bordoni
+     * @author supernivem
      * @param position starting position
      * @param maxMoves number of steps allowed
      * @param list is a list passed by caller, needed to allow recursion
      */
 
-    private void getReachableSquare(Square position, ArrayList<Square> list, int maxMoves) {
+    public void getReachableSquare(Square position, ArrayList<Square> list, int maxMoves) {
         Square adjacent;
         int furtherMove = maxMoves - 1;
         if (!list.contains(position))
@@ -238,7 +238,7 @@ public class GameBoard {
     }*/
 
     /**
-     * @author Bordoni
+     * @author supernivem
      * @param position current position
      * @return a list of accessible direction
      */

@@ -1,0 +1,75 @@
+{
+  "name": "Shockwave",
+  "description": null,
+  "reloadingCost": {
+    "YELLOW": 1
+  },
+  "buyCost": null,
+  "weaponModes": [
+    {
+      "name": "basic mode",
+      "description": "Choose up to 3 targets on different squares, each exactly 1 move away.Deal 1 damage to each target.",
+      "cost": null,
+      "maxNumberOfTargetPlayers": 3,
+      "targetPlayers": true,
+      "targetSquare": false,
+      "targetRoom": false,
+      "eachTargetInTheSameRoom": false,
+      "eachTargetOnTheSameSquare": false,
+      "eachTargetOnDifferentSquares": true,
+      "damageEveryone": false,
+      "targetVisibleByOtherTarget": false,
+      "targetVisibleByShooter": true,
+      "cardinalDirectionMode": false,
+      "maxTargetDistance": 1,
+      "minTargetDistance": 1,
+      "marks": 0,
+      "damage": [
+        1,
+        1,
+        1
+      ],
+      "additionalDamageAvailable": 0,
+      "maxAdditionalDamagePerPlayer": 0,
+      "moveTargetBeforeShoot": false,
+      "moveTargetAfterShoot": false,
+      "moveShooter": false,
+      "maxTargetMove": 0,
+      "maxShooterMove": 0
+    },
+    {
+      "name": "tsunami mode",
+      "description": "Deal 1 damage to all targets that are exactly 1 move away.",
+      "cost": {
+        "YELLOW": 1
+      },
+      "maxNumberOfTargetPlayers": 4,
+      "targetPlayers": true,
+      "targetSquare": false,
+      "targetRoom": false,
+      "eachTargetInTheSameRoom": false,
+      "eachTargetOnTheSameSquare": false,
+      "eachTargetOnDifferentSquares": false,
+      "damageEveryone": true,
+      "targetVisibleByOtherTarget": false,
+      "targetVisibleByShooter": true,
+      "cardinalDirectionMode": false,
+      "maxTargetDistance": 1,
+      "minTargetDistance": 1,
+      "marks": 0,
+      "damage": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "additionalDamageAvailable": 0,
+      "maxAdditionalDamagePerPlayer": 0,
+      "moveTargetBeforeShoot": false,
+      "moveTargetAfterShoot": false,
+      "moveShooter": false,
+      "maxTargetMove": 0,
+      "maxShooterMove": 0
+    }
+  ]
+}

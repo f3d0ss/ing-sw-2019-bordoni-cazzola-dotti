@@ -1,0 +1,72 @@
+{
+  "name": "Flamethrower",
+  "description": null,
+  "reloadingCost": {
+    "RED": 1
+  },
+  "buyCost": null,
+  "weaponModes": [
+    {
+      "name": "basic mode",
+      "description": "Choose a square 1 move away and possibly a second square 1 more move away in the same direction. On each square, you may choose 1 target and give it 1 damage.",
+      "cost": null,
+      "maxNumberOfTargetPlayers": 2,
+      "targetPlayers": false,
+      "targetSquare": true,
+      "targetRoom": false,
+      "eachTargetInTheSameRoom": false,
+      "eachTargetOnTheSameSquare": false,
+      "eachTargetOnDifferentSquares": true,
+      "damageEveryone": true,
+      "targetVisibleByOtherTarget": true,
+      "targetVisibleByShooter": true,
+      "cardinalDirectionMode": true,
+      "maxTargetDistance": 2,
+      "minTargetDistance": 1,
+      "marks": 0,
+      "damage": [
+        1,
+        1
+      ],
+      "additionalDamageAvailable": 0,
+      "maxAdditionalDamagePerPlayer": 0,
+      "moveTargetBeforeShoot": false,
+      "moveTargetAfterShoot": false,
+      "moveShooter": false,
+      "maxTargetMove": 0,
+      "maxShooterMove": 0
+    },
+    {
+      "name": "barbecue mode",
+      "description": "Choose a square 1 move away and possibly a second square 1 more move away in the same direction. Deal 2 damage to everyone on the first square and 1 damage to everyone on the second square.",
+      "cost": {
+        "YELLOW": 2
+      },
+      "maxNumberOfTargetPlayers": 4,
+      "targetPlayers": false,
+      "targetSquare": true,
+      "targetRoom": false,
+      "eachTargetInTheSameRoom": false,
+      "eachTargetOnTheSameSquare": false,
+      "eachTargetOnDifferentSquares": true,
+      "damageEveryone": true,
+      "targetVisibleByOtherTarget": true,
+      "targetVisibleByShooter": true,
+      "cardinalDirectionMode": true,
+      "maxTargetDistance": 2,
+      "minTargetDistance": 1,
+      "marks": 0,
+      "damage": [
+        2,
+        1
+      ],
+      "additionalDamageAvailable": 0,
+      "maxAdditionalDamagePerPlayer": 0,
+      "moveTargetBeforeShoot": false,
+      "moveTargetAfterShoot": false,
+      "moveShooter": false,
+      "maxTargetMove": 0,
+      "maxShooterMove": 0
+    }
+  ]
+}

@@ -1,0 +1,74 @@
+{
+  "name": "Cyberblade",
+  "description": null,
+  "reloadingCost": {
+    "YELLOW": 1,
+    "RED": 1
+  },
+  "buyCost": {
+    "RED": 1
+  },
+  "weaponModes": [
+    {
+      "name": "basic effect + shadowstep",
+      "description": "Deal 2 damage to 1 target on your square. Move 1 square before or after the basic effect.",
+      "cost": null,
+      "maxNumberOfTargetPlayers": 1,
+      "targetPlayers": true,
+      "targetSquare": false,
+      "targetRoom": false,
+      "eachTargetInTheSameRoom": false,
+      "eachTargetOnTheSameSquare": false,
+      "eachTargetOnDifferentSquares": false,
+      "damageEveryone": true,
+      "targetVisibleByOtherTarget": false,
+      "targetVisibleByShooter": true,
+      "cardinalDirectionMode": false,
+      "maxTargetDistance": 0,
+      "minTargetDistance": 0,
+      "marks": 0,
+      "damage": [
+        2
+      ],
+      "additionalDamageAvailable": 0,
+      "maxAdditionalDamagePerPlayer": 0,
+      "moveTargetBeforeShoot": false,
+      "moveTargetAfterShoot": false,
+      "moveShooter": true,
+      "maxTargetMove": 0,
+      "maxShooterMove": 1
+    },
+    {
+      "name": "basic effect + shadowstep + slice and dice",
+      "description": "Deal 2 damage to 1 target on your square. Move 1 square before or after the basic effect. Deal 2 damage to a different target on your square. The shadowstep may be used before or after this effect.",
+      "cost": {
+        "YELLOW": 1
+      },
+      "maxNumberOfTargetPlayers": 2,
+      "targetPlayers": true,
+      "targetSquare": false,
+      "targetRoom": false,
+      "eachTargetInTheSameRoom": false,
+      "eachTargetOnTheSameSquare": false,
+      "eachTargetOnDifferentSquares": false,
+      "damageEveryone": true,
+      "targetVisibleByOtherTarget": true,
+      "targetVisibleByShooter": true,
+      "cardinalDirectionMode": false,
+      "maxTargetDistance": 0,
+      "minTargetDistance": 0,
+      "marks": 0,
+      "damage": [
+        2,
+        2
+      ],
+      "additionalDamageAvailable": 0,
+      "maxAdditionalDamagePerPlayer": 0,
+      "moveTargetBeforeShoot": false,
+      "moveTargetAfterShoot": false,
+      "moveShooter": true,
+      "maxTargetMove": 0,
+      "maxShooterMove": 1
+    }
+  ]
+}

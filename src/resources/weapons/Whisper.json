@@ -1,0 +1,43 @@
+{
+  "name": "Whisper",
+  "description": null,
+  "reloadingCost": {
+    "BLUE": 2,
+    "YELLOW": 1
+  },
+  "buyCost": {
+    "BLUE": 1,
+    "YELLOW": 1
+  },
+  "weaponModes": [
+    {
+      "name": "effect",
+      "description": "Deal 3 damage and 1 mark to 1 target you can see. Your target must be at least 2 moves away from you.",
+      "cost": null,
+      "maxNumberOfTargetPlayers": 1,
+      "targetPlayers": true,
+      "targetSquare": false,
+      "targetRoom": false,
+      "eachTargetInTheSameRoom": false,
+      "eachTargetOnTheSameSquare": false,
+      "eachTargetOnDifferentSquares": false,
+      "damageEveryone": true,
+      "targetVisibleByOtherTarget": false,
+      "targetVisibleByShooter": true,
+      "cardinalDirectionMode": false,
+      "maxTargetDistance": 2147483647,
+      "minTargetDistance": 2,
+      "marks": 1,
+      "damage": [
+        3
+      ],
+      "additionalDamageAvailable": 0,
+      "maxAdditionalDamagePerPlayer": 0,
+      "moveTargetBeforeShoot": false,
+      "moveTargetAfterShoot": false,
+      "moveShooter": false,
+      "maxTargetMove": 0,
+      "maxShooterMove": 0
+    }
+  ]
+}

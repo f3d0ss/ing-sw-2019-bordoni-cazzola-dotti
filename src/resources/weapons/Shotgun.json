@@ -1,0 +1,70 @@
+{
+  "name": "Shotgun",
+  "description": null,
+  "reloadingCost": {
+    "YELLOW": 2
+  },
+  "buyCost": {
+    "YELLOW": 1
+  },
+  "weaponModes": [
+    {
+      "name": "basic mode",
+      "description": "Deal 3 damage to 1 target on your square. If you want, you may then move the target 1 square.",
+      "cost": null,
+      "maxNumberOfTargetPlayers": 1,
+      "targetPlayers": true,
+      "targetSquare": false,
+      "targetRoom": false,
+      "eachTargetInTheSameRoom": false,
+      "eachTargetOnTheSameSquare": false,
+      "eachTargetOnDifferentSquares": false,
+      "damageEveryone": true,
+      "targetVisibleByOtherTarget": false,
+      "targetVisibleByShooter": true,
+      "cardinalDirectionMode": false,
+      "maxTargetDistance": 0,
+      "minTargetDistance": 0,
+      "marks": 0,
+      "damage": [
+        3
+      ],
+      "additionalDamageAvailable": 0,
+      "maxAdditionalDamagePerPlayer": 0,
+      "moveTargetBeforeShoot": false,
+      "moveTargetAfterShoot": true,
+      "moveShooter": false,
+      "maxTargetMove": 1,
+      "maxShooterMove": 0
+    },
+    {
+      "name": "long barrel mode",
+      "description": "Deal 2 damage to 1 target on any square exactly one move away.",
+      "cost": null,
+      "maxNumberOfTargetPlayers": 1,
+      "targetPlayers": true,
+      "targetSquare": false,
+      "targetRoom": false,
+      "eachTargetInTheSameRoom": false,
+      "eachTargetOnTheSameSquare": false,
+      "eachTargetOnDifferentSquares": false,
+      "damageEveryone": true,
+      "targetVisibleByOtherTarget": false,
+      "targetVisibleByShooter": true,
+      "cardinalDirectionMode": false,
+      "maxTargetDistance": 1,
+      "minTargetDistance": 1,
+      "marks": 0,
+      "damage": [
+        2
+      ],
+      "additionalDamageAvailable": 0,
+      "maxAdditionalDamagePerPlayer": 0,
+      "moveTargetBeforeShoot": false,
+      "moveTargetAfterShoot": false,
+      "moveShooter": false,
+      "maxTargetMove": 0,
+      "maxShooterMove": 0
+    }
+  ]
+}

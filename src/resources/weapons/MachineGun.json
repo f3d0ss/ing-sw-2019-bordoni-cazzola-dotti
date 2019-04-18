@@ -1,0 +1,142 @@
+{
+  "name": "Machine Gun",
+  "description": null,
+  "reloadingCost": {
+    "BLUE": 1,
+    "RED": 1
+  },
+  "buyCost": {
+    "RED": 1
+  },
+  "weaponModes": [
+    {
+      "name": "basic effect",
+      "description": "Choose 1 or 2 targets you can see and deal 1 damage to each.",
+      "cost": null,
+      "maxNumberOfTargetPlayers": 2,
+      "targetPlayers": true,
+      "targetSquare": false,
+      "targetRoom": false,
+      "eachTargetInTheSameRoom": false,
+      "eachTargetOnTheSameSquare": false,
+      "eachTargetOnDifferentSquares": false,
+      "damageEveryone": false,
+      "targetVisibleByOtherTarget": false,
+      "targetVisibleByShooter": true,
+      "cardinalDirectionMode": false,
+      "maxTargetDistance": 2147483647,
+      "minTargetDistance": 0,
+      "marks": 0,
+      "damage": [
+        1,
+        1
+      ],
+      "additionalDamageAvailable": 0,
+      "maxAdditionalDamagePerPlayer": 0,
+      "moveTargetBeforeShoot": false,
+      "moveTargetAfterShoot": false,
+      "moveShooter": false,
+      "maxTargetMove": 0,
+      "maxShooterMove": 0
+    },
+    {
+      "name": "basic effect + focus shot",
+      "description": "Choose 1 or 2 targets you can see and deal 1 damage to each. Deal 1 additional damage to one of those targets.",
+      "cost": {
+        "YELLOW": 1
+      },
+      "maxNumberOfTargetPlayers": 2,
+      "targetPlayers": true,
+      "targetSquare": false,
+      "targetRoom": false,
+      "eachTargetInTheSameRoom": false,
+      "eachTargetOnTheSameSquare": false,
+      "eachTargetOnDifferentSquares": false,
+      "damageEveryone": false,
+      "targetVisibleByOtherTarget": false,
+      "targetVisibleByShooter": true,
+      "cardinalDirectionMode": false,
+      "maxTargetDistance": 2147483647,
+      "minTargetDistance": 0,
+      "marks": 0,
+      "damage": [
+        1,
+        1
+      ],
+      "additionalDamageAvailable": 1,
+      "maxAdditionalDamagePerPlayer": 1,
+      "moveTargetBeforeShoot": false,
+      "moveTargetAfterShoot": false,
+      "moveShooter": false,
+      "maxTargetMove": 0,
+      "maxShooterMove": 0
+    },
+    {
+      "name": "basic effect + turret tripod",
+      "description": "Choose 1 or 2 targets you can see and deal 1 damage to each. Deal 1 additional damage to the other of those targets and/or deal 1 damage to a different target you can see.",
+      "cost": {
+        "BLUE": 1
+      },
+      "maxNumberOfTargetPlayers": 3,
+      "targetPlayers": true,
+      "targetSquare": false,
+      "targetRoom": false,
+      "eachTargetInTheSameRoom": false,
+      "eachTargetOnTheSameSquare": false,
+      "eachTargetOnDifferentSquares": false,
+      "damageEveryone": false,
+      "targetVisibleByOtherTarget": false,
+      "targetVisibleByShooter": true,
+      "cardinalDirectionMode": false,
+      "maxTargetDistance": 2147483647,
+      "minTargetDistance": 0,
+      "marks": 0,
+      "damage": [
+        1,
+        1,
+        0
+      ],
+      "additionalDamageAvailable": 1,
+      "maxAdditionalDamagePerPlayer": 1,
+      "moveTargetBeforeShoot": false,
+      "moveTargetAfterShoot": false,
+      "moveShooter": false,
+      "maxTargetMove": 0,
+      "maxShooterMove": 0
+    },
+    {
+      "name": "basic effect + focus shot + turret tripod",
+      "description": "Choose 1 or 2 targets you can see and deal 1 damage to each. Deal 1 additional damage to one of those targets. Deal 1 additional damage to the other of those targets and/or deal 1 damage to a different target you can see.",
+      "cost": {
+        "YELLOW": 1,
+        "BLUE": 1
+      },
+      "maxNumberOfTargetPlayers": 3,
+      "targetPlayers": true,
+      "targetSquare": false,
+      "targetRoom": false,
+      "eachTargetInTheSameRoom": false,
+      "eachTargetOnTheSameSquare": false,
+      "eachTargetOnDifferentSquares": false,
+      "damageEveryone": false,
+      "targetVisibleByOtherTarget": false,
+      "targetVisibleByShooter": true,
+      "cardinalDirectionMode": false,
+      "maxTargetDistance": 2147483647,
+      "minTargetDistance": 0,
+      "marks": 0,
+      "damage": [
+        1,
+        1,
+        0
+      ],
+      "additionalDamageAvailable": 2,
+      "maxAdditionalDamagePerPlayer": 1,
+      "moveTargetBeforeShoot": false,
+      "moveTargetAfterShoot": false,
+      "moveShooter": false,
+      "maxTargetMove": 0,
+      "maxShooterMove": 0
+    }
+  ]
+}
