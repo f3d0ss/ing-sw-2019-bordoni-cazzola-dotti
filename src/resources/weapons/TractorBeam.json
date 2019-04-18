@@ -1,0 +1,71 @@
+{
+  "name": "Tractor Beam",
+  "description": null,
+  "reloadingCost": {
+    "BLUE": 1
+  },
+  "buyCost": null,
+  "weaponModes": [
+    {
+      "name": "basic mode",
+      "description": "Move a target 0, 1, or 2 squares to a square you can see, and give it 1 damage.",
+      "cost": null,
+      "maxNumberOfTargetPlayers": 1,
+      "targetPlayers": false,
+      "targetSquare": true,
+      "targetRoom": false,
+      "eachTargetInTheSameRoom": false,
+      "eachTargetOnTheSameSquare": false,
+      "eachTargetOnDifferentSquares": false,
+      "damageEveryone": false,
+      "targetVisibleByOtherTarget": false,
+      "targetVisibleByShooter": true,
+      "cardinalDirectionMode": false,
+      "maxTargetDistance": 2147483647,
+      "minTargetDistance": 0,
+      "marks": 0,
+      "damage": [
+        1
+      ],
+      "additionalDamageAvailable": 0,
+      "maxAdditionalDamagePerPlayer": 0,
+      "moveTargetBeforeShoot": true,
+      "moveTargetAfterShoot": false,
+      "moveShooter": false,
+      "maxTargetMove": 2,
+      "maxShooterMove": 0
+    },
+    {
+      "name": "punisher mode",
+      "description": "Choose a target 0, 1, or 2 moves away from you. Move the target to your square and deal 3 damage to it.",
+      "cost": {
+        "RED": 1,
+        "YELLOW": 1
+      },
+      "maxNumberOfTargetPlayers": 1,
+      "targetPlayers": false,
+      "targetSquare": true,
+      "targetRoom": false,
+      "eachTargetInTheSameRoom": false,
+      "eachTargetOnTheSameSquare": false,
+      "eachTargetOnDifferentSquares": false,
+      "damageEveryone": false,
+      "targetVisibleByOtherTarget": false,
+      "targetVisibleByShooter": true,
+      "cardinalDirectionMode": false,
+      "maxTargetDistance": 2147483647,
+      "minTargetDistance": 0,
+      "marks": 0,
+      "damage": [
+        3
+      ],
+      "additionalDamageAvailable": 0,
+      "maxAdditionalDamagePerPlayer": 0,
+      "moveTargetBeforeShoot": true,
+      "moveTargetAfterShoot": false,
+      "moveShooter": false,
+      "maxTargetMove": 2,
+      "maxShooterMove": 0
+    }
+  ]
+}

@@ -1,0 +1,77 @@
+{
+  "name": "Hellion",
+  "description": null,
+  "reloadingCost": {
+    "RED": 1,
+    "YELLOW": 1
+  },
+  "buyCost": {
+    "YELLOW": 1
+  },
+  "weaponModes": [
+    {
+      "name": "basic mode",
+      "description": "Deal 1 damage to 1 target you can see at least 1 move away. Then give 1 mark to that target and everyone else on that square.",
+      "cost": null,
+      "maxNumberOfTargetPlayers": 4,
+      "targetPlayers": false,
+      "targetSquare": true,
+      "targetRoom": false,
+      "eachTargetInTheSameRoom": false,
+      "eachTargetOnTheSameSquare": true,
+      "eachTargetOnDifferentSquares": false,
+      "damageEveryone": true,
+      "targetVisibleByOtherTarget": false,
+      "targetVisibleByShooter": true,
+      "cardinalDirectionMode": false,
+      "maxTargetDistance": 2147483647,
+      "minTargetDistance": 1,
+      "marks": 1,
+      "damage": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "additionalDamageAvailable": 0,
+      "maxAdditionalDamagePerPlayer": 0,
+      "moveTargetBeforeShoot": false,
+      "moveTargetAfterShoot": false,
+      "moveShooter": false,
+      "maxTargetMove": 0,
+      "maxShooterMove": 0
+    },
+    {
+      "name": "basic mode",
+      "description": "Deal 1 damage to 1 target you can see at least 1 move away. Then give 2 mark to that target and everyone else on that square.",
+      "cost": null,
+      "maxNumberOfTargetPlayers": 4,
+      "targetPlayers": false,
+      "targetSquare": true,
+      "targetRoom": false,
+      "eachTargetInTheSameRoom": false,
+      "eachTargetOnTheSameSquare": true,
+      "eachTargetOnDifferentSquares": false,
+      "damageEveryone": true,
+      "targetVisibleByOtherTarget": false,
+      "targetVisibleByShooter": true,
+      "cardinalDirectionMode": false,
+      "maxTargetDistance": 2147483647,
+      "minTargetDistance": 1,
+      "marks": 2,
+      "damage": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "additionalDamageAvailable": 0,
+      "maxAdditionalDamagePerPlayer": 0,
+      "moveTargetBeforeShoot": false,
+      "moveTargetAfterShoot": false,
+      "moveShooter": false,
+      "maxTargetMove": 0,
+      "maxShooterMove": 0
+    }
+  ]
+}
