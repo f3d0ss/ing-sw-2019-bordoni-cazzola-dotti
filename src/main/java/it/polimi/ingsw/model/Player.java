@@ -37,6 +37,7 @@ public class Player {
     private PlayerState playerState = new IdleState();
     private Square position;
     private int usedAggregateAction;
+    private PlayerId lastShooter;
 
 
     public Player(Match match, PlayerId id, String nickname, Square position) {
@@ -201,5 +202,9 @@ public class Player {
 
     public void deselectAggregateAction() {
         usedAggregateAction--;
+    }
+
+    public Player getLastShooter() {
+        return match.getPlayer(lastShooter);
     }
 }
