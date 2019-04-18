@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * This abstract class represents a weapon
+ * This class represents a weapon
  */
 public class Weapon {
     private String name;
@@ -34,7 +34,6 @@ public class Weapon {
         return loaded;
     }
 
-
     public int getExtraMove() {
         return extraMove;
     }
@@ -53,6 +52,13 @@ public class Weapon {
         return possibleCommands;
     }
 
+    /**
+     * This method returns the commands to select which weapon mode to use.
+     *
+     * @param player
+     * @param state
+     * @return List of the commands
+     */
     public List<SelectWeaponModeCommand> getSelectOptionCommands(Player player, ChoosingWeaponOptionState state) {
         //TODO:
         List<SelectWeaponModeCommand> selectWeaponModeCommandList = new ArrayList<>();
@@ -86,7 +92,7 @@ public class Weapon {
     }
 
     public boolean hasExtraMove() {
-        return !extraMoveUsed && this.extraMove != 0;
+        return !extraMoveUsed && extraMove != 0;
     }
 
     public void useExtraMoves() {
