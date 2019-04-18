@@ -1,14 +1,17 @@
 package it.polimi.ingsw.model.command;
 
 import it.polimi.ingsw.model.Square;
+import it.polimi.ingsw.model.TargetingScope;
 import it.polimi.ingsw.model.Weapon;
 import it.polimi.ingsw.model.playerstate.ReadyToShootState;
+import it.polimi.ingsw.model.playerstate.TargetingSquareState;
 
-public class SelectTargetSquareCommand extends WeaponCommand {
+public class SelectTargetSquareCommand implements WeaponCommand {
     private Square targetSquare;
+    private TargetingSquareState currentState;
 
-    public SelectTargetSquareCommand(ReadyToShootState currentState, Square targetSquare) {
-        super(currentState);
+    public SelectTargetSquareCommand(TargetingSquareState currentState, Square targetSquare) {
+        this.currentState = currentState;
         this.targetSquare = targetSquare;
     }
 

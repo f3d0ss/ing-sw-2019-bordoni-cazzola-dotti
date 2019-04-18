@@ -12,12 +12,13 @@ import java.util.List;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
-public class ShootCommand extends WeaponCommand {
+public class ShootCommand implements WeaponCommand {
     private List<EffectCommand> effects;
     private Player player;
+    private ReadyToShootState currentState;
 
     public ShootCommand(ReadyToShootState currentState, List<EffectCommand> effects, Player player) {
-        super(currentState);
+        this.currentState = currentState;
         this.effects = effects;
         this.player = player;
     }
