@@ -1,20 +1,17 @@
 package it.polimi.ingsw.model;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * This class represents a weapon's mode
+ */
 public class WeaponMode {
     //general parameters
     //flamethrower,grenadelauncher?
     private String name;
     private String description;
     private Map<Color, Integer> cost;
-    //private boolean needOtherEffect;
     private int maxNumberOfTargetPlayers;
 
     //shooting parameters
@@ -24,7 +21,7 @@ public class WeaponMode {
     private boolean eachTargetInTheSameRoom;
     private boolean eachTargetOnTheSameSquare;
     private boolean eachTargetOnDifferentSquares;//shockwave
-    private boolean damageEveryone; //must damage every player that can be damaged.
+    private boolean damageEveryone; //The weapon must damage every target possible, the player can't decide not to shoot one target.
     private boolean targetVisibleByOtherTarget;//thor
     private boolean targetVisibleByShooter;
     private boolean cardinalDirectionMode;
@@ -58,4 +55,104 @@ public class WeaponMode {
                 lock.isLoaded());
         System.out.println(gson.toJson(lock));
     }*/
+
+    public String getName() {
+        return name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public Map<Color, Integer> getCost() {
+        return cost;
+    }
+
+    public int getMaxNumberOfTargetPlayers() {
+        return maxNumberOfTargetPlayers;
+    }
+
+    public boolean isTargetPlayers() {
+        return targetPlayers;
+    }
+
+    public boolean isTargetSquare() {
+        return targetSquare;
+    }
+
+    public boolean isTargetRoom() {
+        return targetRoom;
+    }
+
+    public boolean isEachTargetInTheSameRoom() {
+        return eachTargetInTheSameRoom;
+    }
+
+    public boolean isEachTargetOnTheSameSquare() {
+        return eachTargetOnTheSameSquare;
+    }
+
+    public boolean isEachTargetOnDifferentSquares() {
+        return eachTargetOnDifferentSquares;
+    }
+
+    public boolean isDamageEveryone() {
+        return damageEveryone;
+    }
+
+    public boolean isTargetVisibleByOtherTarget() {
+        return targetVisibleByOtherTarget;
+    }
+
+    public boolean isTargetVisibleByShooter() {
+        return targetVisibleByShooter;
+    }
+
+    public boolean isCardinalDirectionMode() {
+        return cardinalDirectionMode;
+    }
+
+    public int getMaxTargetDistance() {
+        return maxTargetDistance;
+    }
+
+    public int getMinTargetDistance() {
+        return minTargetDistance;
+    }
+
+    public int getMarks() {
+        return marks;
+    }
+
+    public List<Integer> getDamage() {
+        return damage;
+    }
+
+    public int getAdditionalDamageAvailable() {
+        return additionalDamageAvailable;
+    }
+
+    public int getMaxAdditionalDamagePerPlayer() {
+        return maxAdditionalDamagePerPlayer;
+    }
+
+    public boolean isMoveTargetBeforeShoot() {
+        return moveTargetBeforeShoot;
+    }
+
+    public boolean isMoveTargetAfterShoot() {
+        return moveTargetAfterShoot;
+    }
+
+    public boolean isMoveShooter() {
+        return moveShooter;
+    }
+
+    public int getMaxTargetMove() {
+        return maxTargetMove;
+    }
+
+    public int getMaxShooterMove() {
+        return maxShooterMove;
+    }
 }

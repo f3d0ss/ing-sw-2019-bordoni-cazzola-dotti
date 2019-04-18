@@ -5,12 +5,12 @@ import it.polimi.ingsw.model.WeaponMode;
 import it.polimi.ingsw.model.playerstate.ChoosingWeaponOptionState;
 import it.polimi.ingsw.model.playerstate.PendingPaymentWeaponOptionState;
 
-public class SelectWeaponOptionCommand implements Command{
+public class SelectWeaponModeCommand implements Command {
     protected Player player;
     protected ChoosingWeaponOptionState currentState;
     private WeaponMode weaponMode;
 
-    public SelectWeaponOptionCommand(Player player, ChoosingWeaponOptionState currentState, WeaponMode weaponMode) {
+    public SelectWeaponModeCommand(Player player, ChoosingWeaponOptionState currentState, WeaponMode weaponMode) {
         this.player = player;
         this.currentState = currentState;
         this.weaponMode = weaponMode;
