@@ -62,7 +62,7 @@ public class Player {
     }
 
     public boolean isDead() {
-        return dead;
+        return health.size() >= MAX_DAMAGE - 1;
     }
 
     public void setId(PlayerId id) {
@@ -110,10 +110,8 @@ public class Player {
             possibleDamage--;
         }
         this.marks.put(color, 0);
-
-        if (health.size() >= MAX_DAMAGE - 1)
-            dead = true;
-
+        //TODO: do something if is dead
+        //if (isDead()) ....
     }
 
     public void addMarks(int marks, PlayerId color) {

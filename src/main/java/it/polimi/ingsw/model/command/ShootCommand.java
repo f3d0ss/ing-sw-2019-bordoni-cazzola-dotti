@@ -2,6 +2,7 @@ package it.polimi.ingsw.model.command;
 
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.Weapon;
+import it.polimi.ingsw.model.exception.IllegalUndoException;
 import it.polimi.ingsw.model.playerstate.AfterShotState;
 import it.polimi.ingsw.model.playerstate.ManageTurnState;
 import it.polimi.ingsw.model.playerstate.ReadyToShootState;
@@ -39,9 +40,11 @@ public class ShootCommand extends WeaponCommand {
             player.changeState(new ManageTurnState());
     }
 
+    /**
+     * This method throw an exception because after a shoot you can't go back
+     */
     @Override
     public void undo() {
-        effects.forEach(EffectCommand::undo);
-        player.changeState(currentState);
+        throw new IllegalUndoException();
     }
 }
