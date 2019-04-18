@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.command.Command;
+import it.polimi.ingsw.model.playerstate.TargetingPlayerState;
 
 import java.util.List;
 
@@ -10,7 +11,7 @@ public class TagbackGrenade extends PowerUp {
     }
 
     @Override
-    public List<Command> getPossibleCommands(GameBoard gameboard, Player player) {
+    public List<Command> getPossibleCommands(GameBoard gameboard, Player player, TargetingPlayerState currentState) {
         return null;
     }
 

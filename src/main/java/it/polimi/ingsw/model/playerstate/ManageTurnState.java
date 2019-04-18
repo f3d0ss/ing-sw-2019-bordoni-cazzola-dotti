@@ -3,6 +3,7 @@ package it.polimi.ingsw.model.playerstate;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.command.Command;
 import it.polimi.ingsw.model.command.SelectAggregateActionCommand;
+import it.polimi.ingsw.model.command.SelectPowerUpCommand;
 import it.polimi.ingsw.model.command.SelectReloadingWeaponCommand;
 
 import java.util.ArrayList;
@@ -16,6 +17,10 @@ public class ManageTurnState implements PlayerState {
         player.getWeapons().forEach(weapon -> {
             if (!weapon.isLoaded())
                 commands.add(new SelectReloadingWeaponCommand(player, weapon, this));
+        });
+        player.getPowerUps().forEach(powerUp -> {
+            if (!powerUp.isScope() && !powerUp.isTagBackGrenade())
+                commands.add(new SelectPowerUpCommand(player, powerUp, this));
         });
         return commands;
     }

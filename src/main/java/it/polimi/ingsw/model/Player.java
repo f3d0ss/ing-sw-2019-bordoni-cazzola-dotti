@@ -36,6 +36,7 @@ public class Player {
     private int availableAggregateActionCounter = 2;
     private PlayerState playerState = new IdleState();
     private Square position;
+    private int usedAggregateAction;
 
 
     public Player(Match match, PlayerId id, String nickname, Square position) {
@@ -43,6 +44,7 @@ public class Player {
         this.id = id;
         Nickname = nickname;
         this.position = position;
+        usedAggregateAction = 0;
     }
 
     public Map<Color, Integer> getAmmo() {
@@ -191,5 +193,13 @@ public class Player {
     public boolean hasScope() {
         //TODO: implement this method
         return false;
+    }
+
+    public void selectAggregateAction() {
+        usedAggregateAction++;
+    }
+
+    public void deselectAggregateAction() {
+        usedAggregateAction--;
     }
 }

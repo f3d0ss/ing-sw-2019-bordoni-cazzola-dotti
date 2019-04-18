@@ -18,11 +18,13 @@ public class SelectAggregateActionCommand implements Command {
 
     @Override
     public void execute() {
+        player.selectAggregateAction();
         player.changeState(new SelectedAggregateActionState(aggregateAction));
     }
 
     @Override
     public void undo() {
+        player.deselectAggregateAction();
         player.changeState(currentState);
     }
 }
