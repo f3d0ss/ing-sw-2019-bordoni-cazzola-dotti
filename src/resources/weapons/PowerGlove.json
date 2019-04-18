@@ -1,0 +1,74 @@
+{
+  "name": "Power Glove",
+  "description": null,
+  "reloadingCost": {
+    "YELLOW": 1,
+    "BLUE": 1
+  },
+  "buyCost": {
+    "BLUE": 1
+  },
+  "weaponModes": [
+    {
+      "name": "basic mode",
+      "description": "Choose 1 target on any square exactly 1 move away. Move onto that square and give the target 1 damage and 2 marks.",
+      "cost": null,
+      "maxNumberOfTargetPlayers": 1,
+      "targetPlayers": true,
+      "targetSquare": false,
+      "targetRoom": false,
+      "eachTargetInTheSameRoom": false,
+      "eachTargetOnTheSameSquare": false,
+      "eachTargetOnDifferentSquares": false,
+      "damageEveryone": true,
+      "targetVisibleByOtherTarget": false,
+      "targetVisibleByShooter": true,
+      "cardinalDirectionMode": false,
+      "maxTargetDistance": 1,
+      "minTargetDistance": 1,
+      "marks": 2,
+      "damage": [
+        1
+      ],
+      "additionalDamageAvailable": 0,
+      "maxAdditionalDamagePerPlayer": 0,
+      "moveTargetBeforeShoot": false,
+      "moveTargetAfterShoot": false,
+      "moveShooter": true,
+      "maxTargetMove": 0,
+      "maxShooterMove": 1
+    },
+    {
+      "name": "rocket fist mode",
+      "description": "Choose a square exactly 1 move away. Move onto that square. You may deal 2 damage to 1 target there. If you want, you may move 1 more square in that same direction (but only if it is a legal move). You may deal 2 damage to 1 target there, as well.",
+      "cost": {
+        "BLUE": 1
+      },
+      "maxNumberOfTargetPlayers": 2,
+      "targetPlayers": true,
+      "targetSquare": true,
+      "targetRoom": false,
+      "eachTargetInTheSameRoom": false,
+      "eachTargetOnTheSameSquare": false,
+      "eachTargetOnDifferentSquares": true,
+      "damageEveryone": false,
+      "targetVisibleByOtherTarget": true,
+      "targetVisibleByShooter": true,
+      "cardinalDirectionMode": true,
+      "maxTargetDistance": 1,
+      "minTargetDistance": 1,
+      "marks": 0,
+      "damage": [
+        2,
+        2
+      ],
+      "additionalDamageAvailable": 0,
+      "maxAdditionalDamagePerPlayer": 0,
+      "moveTargetBeforeShoot": false,
+      "moveTargetAfterShoot": false,
+      "moveShooter": true,
+      "maxTargetMove": 0,
+      "maxShooterMove": 2
+    }
+  ]
+}
