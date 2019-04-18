@@ -27,11 +27,19 @@ public abstract class PowerUp {
 
     public abstract boolean isTagBackGrenade();
 
-    public abstract void addTargetPlayer(Player targetPlayer);
+    public  void addTargetPlayer(Player targetPlayer){
+        throw new IllegalStateException();
+    }
 
-    public abstract void removeTargetPlayer(Player targetPlayer);
+    public  void removeTargetPlayer(Player targetPlayer){
+        throw new IllegalStateException();
+    }
 
-    public abstract void addTargetSquare(Square targetSquare);
+    public  void addTargetSquare(Square targetSquare){
+        throw new IllegalStateException();
+    }
 
-    public abstract void removeTargetSquare(Square targetSquare);
+    public  void removeTargetSquare(Square targetSquare){
+        throw new IllegalStateException();
+    }
 }

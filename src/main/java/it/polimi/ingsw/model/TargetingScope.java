@@ -5,6 +5,8 @@ import it.polimi.ingsw.model.command.Command;
 import java.util.List;
 
 public class TargetingScope extends PowerUp {
+    private Player targetPlayer;
+
     public TargetingScope(String name, Color color) {
         super(name, color);
     }
@@ -23,4 +25,17 @@ public class TargetingScope extends PowerUp {
     public boolean isTagBackGrenade() {
         return false;
     }
+
+    @Override
+    public void addTargetPlayer(Player targetPlayer) {
+        if (this.targetPlayer == null)
+            throw new IllegalStateException();
+        this.targetPlayer = targetPlayer;
+    }
+
+    @Override
+    public void removeTargetPlayer(Player targetPlayer) {
+        this.targetPlayer = null;
+    }
+
 }
