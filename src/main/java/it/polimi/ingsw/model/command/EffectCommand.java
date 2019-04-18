@@ -10,14 +10,14 @@ public class EffectCommand implements Command {
     private Player player;
     private int damage;
     private int marks;
-    private List<MoveCommand> moves;
+    private MoveCommand move;
     private PlayerId shooter;
-
-    public EffectCommand(Player player, int damage, int marks, List<MoveCommand> moves, PlayerId shooter) {
+    
+    public EffectCommand(Player player, int damage, int marks, MoveCommand move, PlayerId shooter) {
         this.player = player;
         this.damage = damage;
         this.marks = marks;
-        this.moves = moves;
+        this.move = move;
         this.shooter = shooter;
     }
 
@@ -28,7 +28,7 @@ public class EffectCommand implements Command {
     public void execute() {
         player.addDamage(damage, shooter);
         player.addMarks(marks, shooter);
-        moves.forEach(MoveCommand::execute);
+        move.execute();
     }
 
     /**
