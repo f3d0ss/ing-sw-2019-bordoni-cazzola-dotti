@@ -18,8 +18,9 @@ public class AfterShotState extends SelectedWeaponState implements MovableState{
     @Override
     public List<Command> getPossibleCommands(Player player) {
         List<Command> commands = new ArrayList<>();
-        if (getSelectedWeapon().getExtraMove() > 0)
-            player.getAccessibleSquare(getSelectedWeapon().getExtraMove()).forEach(direction -> commands.add(new MoveCommand(player, direction, this)));
+        if(!getSelectedWeapon().hasExtraMove())
+            throw new IllegalStateException();
+        player.getAccessibleSquare(getSelectedWeapon().getExtraMove()).forEach(direction -> commands.add(new MoveCommand(player, direction, this)));
         commands.add(new DoneCommand(player, this));
         return commands;
     }
