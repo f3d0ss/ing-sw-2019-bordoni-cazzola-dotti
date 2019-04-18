@@ -1,0 +1,73 @@
+{
+  "name": "ZX-2",
+  "description": null,
+  "reloadingCost": {
+    "YELLOW": 1,
+    "RED": 1
+  },
+  "buyCost": {
+    "RED": 1
+  },
+  "weaponModes": [
+    {
+      "name": "basic mode",
+      "description": "Deal 1 damage and 2 marks to 1 target you can see.",
+      "cost": null,
+      "maxNumberOfTargetPlayers": 1,
+      "targetPlayers": true,
+      "targetSquare": false,
+      "targetRoom": false,
+      "eachTargetInTheSameRoom": false,
+      "eachTargetOnTheSameSquare": false,
+      "eachTargetOnDifferentSquares": false,
+      "damageEveryone": true,
+      "targetVisibleByOtherTarget": false,
+      "targetVisibleByShooter": true,
+      "cardinalDirectionMode": false,
+      "maxTargetDistance": 2147483647,
+      "minTargetDistance": 0,
+      "marks": 2,
+      "damage": [
+        1
+      ],
+      "additionalDamageAvailable": 0,
+      "maxAdditionalDamagePerPlayer": 0,
+      "moveTargetBeforeShoot": false,
+      "moveTargetAfterShoot": false,
+      "moveShooter": false,
+      "maxTargetMove": 0,
+      "maxShooterMove": 0
+    },
+    {
+      "name": "scanner mode",
+      "description": "Choose up to 3 targets you can see and deal 1 mark to each"
+      "cost": null,
+      "maxNumberOfTargetPlayers": 3,
+      "targetPlayers": true,
+      "targetSquare": false,
+      "targetRoom": false,
+      "eachTargetInTheSameRoom": false,
+      "eachTargetOnTheSameSquare": false,
+      "eachTargetOnDifferentSquares": false,
+      "damageEveryone": false,
+      "targetVisibleByOtherTarget": false,
+      "targetVisibleByShooter": false,
+      "cardinalDirectionMode": true,
+      "maxTargetDistance": 2147483647,
+      "minTargetDistance": 0,
+      "marks": 1,
+      "damage": [
+        0,
+        0,
+        0
+      ],
+      "additionalDamageAvailable": 0,
+      "maxAdditionalDamagePerPlayer": 0,
+      "moveTargetBeforeShoot": false,
+      "moveTargetAfterShoot": false,
+      "moveShooter": false,
+      "maxTargetMove": 0,
+      "maxShooterMove": 0
+    }
+  ]
+}

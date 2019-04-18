@@ -1,0 +1,77 @@
+{
+  "name": "Furnace",
+  "description": null,
+  "reloadingCost": {
+    "RED": 1,
+    "BLUE": 1
+  },
+  "buyCost": {
+    "BLUE": 1
+  },
+  "weaponModes": [
+    {
+      "name": "basic mode",
+      "description": "Choose a room you can see, but not the room you are in. Deal 1 damage to everyone in that room.",
+      "cost": null,
+      "maxNumberOfTargetPlayers": 4,
+      "targetPlayers": false,
+      "targetSquare": false,
+      "targetRoom": true,
+      "eachTargetInTheSameRoom": true,
+      "eachTargetOnTheSameSquare": false,
+      "eachTargetOnDifferentSquares": false,
+      "damageEveryone": true,
+      "targetVisibleByOtherTarget": false,
+      "targetVisibleByShooter": true,
+      "cardinalDirectionMode": false,
+      "maxTargetDistance": 2147483647,
+      "minTargetDistance": 1,
+      "marks": 0,
+      "damage": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "additionalDamageAvailable": 0,
+      "maxAdditionalDamagePerPlayer": 0,
+      "moveTargetBeforeShoot": false,
+      "moveTargetAfterShoot": false,
+      "moveShooter": false,
+      "maxTargetMove": 0,
+      "maxShooterMove": 0
+    },
+    {
+      "name": "cozy fire mode",
+      "description": "Choose a square exactly one move away. Deal 1 damage and 1 mark to everyone on that square.",
+      "cost": null,
+      "maxNumberOfTargetPlayers": 4,
+      "targetPlayers": false,
+      "targetSquare": true,
+      "targetRoom": false,
+      "eachTargetInTheSameRoom": false,
+      "eachTargetOnTheSameSquare": true,
+      "eachTargetOnDifferentSquares": false,
+      "damageEveryone": true,
+      "targetVisibleByOtherTarget": false,
+      "targetVisibleByShooter": true,
+      "cardinalDirectionMode": false,
+      "maxTargetDistance": 1,
+      "minTargetDistance": 1,
+      "marks": 1,
+      "damage": [
+        1,
+        1,
+        1,
+        1
+      ],
+      "additionalDamageAvailable": 0,
+      "maxAdditionalDamagePerPlayer": 0,
+      "moveTargetBeforeShoot": false,
+      "moveTargetAfterShoot": false,
+      "moveShooter": false,
+      "maxTargetMove": 0,
+      "maxShooterMove": 0
+    }
+  ]
+}

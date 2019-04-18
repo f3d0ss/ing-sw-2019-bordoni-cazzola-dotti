@@ -1,0 +1,73 @@
+{
+  "name": "Vortex Cannon",
+  "description": null,
+  "reloadingCost": {
+    "RED": 1,
+    "BLUE": 1
+  },
+  "buyCost": {
+    "BLUE": 1
+  },
+  "weaponModes": [
+    {
+      "name": "basic effect",
+      "description": "Choose a square you can see, but not your square. Call it the vortex. Choose a target on the vortex or 1 move away from it. Move it onto the vortex and give it 2 damage.",
+      "cost": null,
+      "maxNumberOfTargetPlayers": 1,
+      "targetPlayers": false,
+      "targetSquare": true,
+      "targetRoom": false,
+      "eachTargetInTheSameRoom": false,
+      "eachTargetOnTheSameSquare": false,
+      "eachTargetOnDifferentSquares": false,
+      "damageEveryone": true,
+      "targetVisibleByOtherTarget": false,
+      "targetVisibleByShooter": true,
+      "cardinalDirectionMode": false,
+      "maxTargetDistance": 2147483647,
+      "minTargetDistance": 1,
+      "marks": 0,
+      "damage": [
+        2
+      ],
+      "additionalDamageAvailable": 0,
+      "maxAdditionalDamagePerPlayer": 0,
+      "moveTargetBeforeShoot": true,
+      "moveTargetAfterShoot": false,
+      "moveShooter": false,
+      "maxTargetMove": 1,
+      "maxShooterMove": 0
+    },
+    {
+      "name": "basic effect + black hole",
+      "description": "Choose a square you can see, but not your square. Call it the vortex. Choose a target on the vortex or 1 move away from it. Move it onto the vortex and give it 2 damage. Choose up to 2 other targets on the vortex or 1 move away from it. Move them onto the vortex and give them each 1 damage.",
+      "cost": null,
+      "maxNumberOfTargetPlayers": 3,
+      "targetPlayers": false,
+      "targetSquare": true,
+      "targetRoom": false,
+      "eachTargetInTheSameRoom": false,
+      "eachTargetOnTheSameSquare": false,
+      "eachTargetOnDifferentSquares": false,
+      "damageEveryone": false,
+      "targetVisibleByOtherTarget": false,
+      "targetVisibleByShooter": true,
+      "cardinalDirectionMode": false,
+      "maxTargetDistance": 2147483647,
+      "minTargetDistance": 1,
+      "marks": 0,
+      "damage": [
+        2,
+        1,
+        1
+      ],
+      "additionalDamageAvailable": 0,
+      "maxAdditionalDamagePerPlayer": 0,
+      "moveTargetBeforeShoot": true,
+      "moveTargetAfterShoot": false,
+      "moveShooter": false,
+      "maxTargetMove": 1,
+      "maxShooterMove": 0
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "name": "Heatseeker",
+  "description": null,
+  "reloadingCost": {
+    "RED": 2,
+    "YELLOW": 1
+  },
+  "buyCost": {
+    "RED": 1,
+    "YELLOW": 1
+  },
+  "weaponModes": [
+    {
+      "name": "effect",
+      "description": "Choose 1 target you cannot see and deal 3 damage to it",
+      "cost": null,
+      "maxNumberOfTargetPlayers": 1,
+      "targetPlayers": true,
+      "targetSquare": false,
+      "targetRoom": false,
+      "eachTargetInTheSameRoom": false,
+      "eachTargetOnTheSameSquare": false,
+      "eachTargetOnDifferentSquares": false,
+      "damageEveryone": true,
+      "targetVisibleByOtherTarget": false,
+      "targetVisibleByShooter": false,
+      "cardinalDirectionMode": false,
+      "maxTargetDistance": 2147483647,
+      "minTargetDistance": 1,
+      "marks": 0,
+      "damage": [
+        3
+      ],
+      "additionalDamageAvailable": 0,
+      "maxAdditionalDamagePerPlayer": 0,
+      "moveTargetBeforeShoot": false,
+      "moveTargetAfterShoot": false,
+      "moveShooter": false,
+      "maxTargetMove": 0,
+      "maxShooterMove": 0
+    }
+  ]
+}
