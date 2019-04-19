@@ -1,7 +1,8 @@
 package it.polimi.ingsw.model;
 
-import it.polimi.ingsw.model.command.BuyCommand;
+import it.polimi.ingsw.model.command.SelectBuyingWeaponCommand;
 import it.polimi.ingsw.model.command.GrabCommand;
+import it.polimi.ingsw.model.playerstate.SelectedAggregateActionState;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,26 +10,34 @@ import java.util.List;
 public class SpawnSquare extends Square {
 
     static final int MAX_WEAPON = 3;
-    private Weapon[] weapons = new Weapon[MAX_WEAPON];
+    private List<Weapon> weapons = new ArrayList<>();
     private ArrayList<PlayerId> spawnPointTrack;
 
-    public SpawnSquare(Connection northConnection, Connection eastConnection, Connection southConnection, Connection westConnection, int row, int col, Weapon[] weapons) {
+    public SpawnSquare(Connection northConnection, Connection eastConnection, Connection southConnection, Connection westConnection, int row, int col, List<Weapon> weapons) {
         super(northConnection, eastConnection, southConnection, westConnection, row, col);
         this.weapons = weapons;
         this.spawnPointTrack = new ArrayList<>();
     }
 
-    public ArrayList<PlayerId> getSpawnPointTrack() {
+    public List<PlayerId> getSpawnPointTrack() {
         return spawnPointTrack;
     }
 
     @Override
-    public List<GrabCommand> getGrabCommands(Player player) {
-        ArrayList<GrabCommand> temp = new ArrayList<>();
-        for (int i = 0; i < MAX_WEAPON; i++)
-            if (weapons[i] != null)
-                temp.add(new BuyCommand(player, weapons[i]));
-        return temp;
-
+    public List<GrabCommand> getGrabCommands(Player player, SelectedAggregateActionState state) {
+        ArrayList<GrabCommand> commands = new ArrayList<>();
+        weapons.forEach(weapon -> commands.add(new SelectBuyingWeaponCommand(player, state, weapon, this)));
+        return commands;
     }
+
+    public void removeWeapon(Weapon weapon) {
+        weapons.remove(weapon);
+    }
+
+    public void addWeapon(Weapon weapon) {
+        if (weapons.size() >= MAX_WEAPON)
+            throw new IllegalStateException();
+        weapons.add(weapon);
+    }
+
 }

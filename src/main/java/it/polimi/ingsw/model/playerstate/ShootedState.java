@@ -9,17 +9,17 @@ import it.polimi.ingsw.model.command.UseTagbackGrenadeCommand;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ShootedState implements PlayerState{
+public class ShootedState implements PlayerState {
 
     @Override
     public List<Command> getPossibleCommands(Player player) {
         List<Command> commands = new ArrayList<>();
         player.getPowerUps().forEach(powerUp -> {
-            if (powerUp.isTagBackGrenade()){
-                commands.add(new UseTagbackGrenadeCommand(this, (TagbackGrenade)powerUp));
+            if (powerUp.isTagBackGrenade()) {
+                commands.add(new UseTagbackGrenadeCommand(player, (TagbackGrenade) powerUp));
             }
         });
         commands.add(new DoneCommand(player, this));
-        return  commands;
+        return commands;
     }
 }

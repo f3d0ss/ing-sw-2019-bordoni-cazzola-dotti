@@ -12,13 +12,19 @@ public class SelectPowerUpPaymentCommand extends SelectPaymentCommand {
         this.powerUp = powerUp;
     }
 
+    /**
+     * This method add a powerUp to the pending payment
+     */
     @Override
     public void execute() {
-
+        currentState.addPendingCard(powerUp);
     }
 
+    /**
+     * This method remove a powerUp from the pending payment
+     */
     @Override
     public void undo() {
-
+        currentState.removePendingCard(powerUp);
     }
 }

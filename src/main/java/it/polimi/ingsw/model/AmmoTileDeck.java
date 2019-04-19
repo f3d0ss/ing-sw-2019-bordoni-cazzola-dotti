@@ -18,4 +18,8 @@ public class AmmoTileDeck implements Deck {
     public AmmoTile drawAmmoTile() {
         return ammoTiles.isEmpty() ? null : ammoTiles.remove(0);
     }
+
+    public void add(AmmoTile ammoTile){
+        ammoTiles.add(ammoTile);
+    }
 }

@@ -221,7 +221,7 @@ public class GameBoard {
      * @param list is a list passed by caller, needed to allow recursion
      */
 
-    public void getReachableSquare(Square position, ArrayList<Square> list, int maxMoves) {
+    private void getReachableSquare(Square position, ArrayList<Square> list, int maxMoves) {
         Square adjacent;
         int furtherMove = maxMoves - 1;
         if (!list.contains(position))
