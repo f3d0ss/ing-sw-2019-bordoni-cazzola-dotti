@@ -15,6 +15,7 @@
       "description": "Choose 1 target you cannot see and deal 3 damage to it",
       "cost": null,
       "maxNumberOfTargetPlayers": 1,
+      "minNumberOfTargetPlayers": 1,
       "targetPlayers": true,
       "targetSquare": false,
       "targetRoom": false,

@@ -21,6 +21,8 @@ public class Weapon {
     private transient boolean extraMoveUsed = false;
     private transient boolean loaded = true;
     private transient WeaponMode selectedWeaponMode = null;
+    private transient List<Player> targetPlayers = new ArrayList<>();
+    private transient List<Square> targetSquares = new ArrayList<>();
 
     public Map<Color, Integer> getWeaponBuyCost() {
         return buyCost;
@@ -46,10 +48,60 @@ public class Weapon {
         this.selectedWeaponMode = new WeaponMode(selectedWeaponMode);
     }
 
-    public List<WeaponCommand> getPossibleCommands(GameBoard gameboard, Player player) {
+    public void deselectWeaponMode() {
+        selectedWeaponMode = null;
+    }
+
+    private List<WeaponCommand> getPossibleShootCommands(GameBoard gameboard, Player player) {
         //TODO:
         List<WeaponCommand> possibleCommands = new ArrayList<>();
         return possibleCommands;
+    }
+
+    private List<WeaponCommand> getPossibleSelectTargetCommands(GameBoard gameboard, Player shooter) {
+        //TODO:
+        List<WeaponCommand> possibleCommands = new ArrayList<>();
+
+        //check if mode can move targets before shoot
+        if (selectedWeaponMode.isMoveTargetBeforeShoot()) {
+            if (selectedWeaponMode.isTargetSquare()) { //select a square first
+                if (selectedWeaponMode.isTargetVisibleByShooter()) {//visible by shooter
+                    ArrayList<Square> visibleSquares = gameboard.getVisibleSquares(shooter.getPosition(), selectedWeaponMode.getMaxTargetDistance(), selectedWeaponMode.getMinTargetDistance(), false);
+                    for (Square square : visibleSquares){
+                       if( gameboard.get ){
+
+                       }
+
+                    }
+                }
+            }
+        }
+
+        return possibleCommands;
+    }
+
+
+    public List<WeaponCommand> getPossibleCommands(GameBoard gameboard, Player player) {
+        //TODO:
+        List<WeaponCommand> possibleCommands = new ArrayList<>();
+
+        if (!hasMaximumTargets())
+            possibleCommands.addAll(getPossibleSelectTargetCommands());
+        if (hasSufficientTargets())
+            possibleCommands.addAll(getPossibleShootCommands());
+
+        return possibleCommands;
+
+    }
+
+    private boolean hasMaximumTargets() {
+        //TODO:
+        return selectedWeaponMode.getMaxNumberOfTargetPlayers() == targetPlayers.size();
+    }
+
+    private boolean hasSufficientTargets() {
+        //TODO:
+        return selectedWeaponMode.getMinNumberOfTargetPlayers() <= targetPlayers.size();
     }
 
     /**
@@ -59,8 +111,7 @@ public class Weapon {
      * @param state
      * @return List of the commands
      */
-    public List<SelectWeaponModeCommand> getSelectOptionCommands(Player player, ChoosingWeaponOptionState state) {
-        //TODO:
+    public List<SelectWeaponModeCommand> getSelectWeaponModeCommands(Player player, ChoosingWeaponOptionState state) {
         List<SelectWeaponModeCommand> selectWeaponModeCommandList = new ArrayList<>();
         for (WeaponMode weaponMode : weaponModes)
             selectWeaponModeCommandList.add(new SelectWeaponModeCommand(player, state, weaponMode));
@@ -68,27 +119,29 @@ public class Weapon {
     }
 
     public void addTargetPlayer(Player targetPlayer) {
-        //TODO:
+        if (!targetPlayers.contains(targetPlayer))
+            targetPlayers.add(targetPlayer);
     }
 
     public void addTargetSquare(Square targetSquare) {
-        //TODO:
+        if (!targetSquares.contains(targetSquare))
+            targetSquares.add(targetSquare);
     }
 
     public void removeTargetPlayer(Player targetPlayer) {
-        //TODO:
+        targetPlayers.remove(targetPlayer);
     }
 
     public void removeTargetSquare(Square targetSquare) {
-        //TODO:
+        targetSquares.remove(targetSquare);
     }
 
     public void reload() {
-        //TODO:
+        loaded = true;
     }
 
     public void unload() {
-        //TODO:
+        loaded = false;
     }
 
     public boolean hasExtraMove() {
@@ -96,10 +149,10 @@ public class Weapon {
     }
 
     public void useExtraMoves() {
-        //TODO:
+        extraMoveUsed = true;
     }
 
     public void resetMoves() {
-        //TODO:
+        extraMoveUsed = false;
     }
 }

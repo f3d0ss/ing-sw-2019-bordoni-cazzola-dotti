@@ -14,6 +14,7 @@
       "description": "Choose 1 target on any square exactly 1 move away. Move onto that square and give the target 1 damage and 2 marks.",
       "cost": null,
       "maxNumberOfTargetPlayers": 1,
+      "minNumberOfTargetPlayers": 1,
       "targetPlayers": true,
       "targetSquare": false,
       "targetRoom": false,
@@ -45,6 +46,7 @@
         "BLUE": 1
       },
       "maxNumberOfTargetPlayers": 2,
+      "minNumberOfTargetPlayers": 1,
       "targetPlayers": true,
       "targetSquare": true,
       "targetRoom": false,

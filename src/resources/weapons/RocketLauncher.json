@@ -13,6 +13,7 @@
       "description": "Deal 2 damage to 1 target you can see that is not on your square. Then you may move the target 1 square.",
       "cost": null,
       "maxNumberOfTargetPlayers": 1,
+      "minNumberOfTargetPlayers": 1,
       "targetPlayers": true,
       "targetSquare": false,
       "targetRoom": false,
@@ -44,6 +45,7 @@
         "BLUE": 1
       },
       "maxNumberOfTargetPlayers": 1,
+      "minNumberOfTargetPlayers": 1,
       "targetPlayers": true,
       "targetSquare": false,
       "targetRoom": false,
@@ -75,6 +77,7 @@
         "YELLOW": "1"
       },
       "maxNumberOfTargetPlayers": 4,
+      "minNumberOfTargetPlayers": 1,
       "targetPlayers": true,
       "targetSquare": true,
       "targetRoom": false,
@@ -110,6 +113,7 @@
         "YELLOW": 1
       },
       "maxNumberOfTargetPlayers": 4,
+      "minNumberOfTargetPlayers": 1,
       "targetPlayers": true,
       "targetSquare": true,
       "targetRoom": false,

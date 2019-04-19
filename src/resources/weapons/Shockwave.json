@@ -11,6 +11,7 @@
       "description": "Choose up to 3 targets on different squares, each exactly 1 move away.Deal 1 damage to each target.",
       "cost": null,
       "maxNumberOfTargetPlayers": 3,
+      "minNumberOfTargetPlayers": 1,
       "targetPlayers": true,
       "targetSquare": false,
       "targetRoom": false,
@@ -44,6 +45,7 @@
         "YELLOW": 1
       },
       "maxNumberOfTargetPlayers": 4,
+      "minNumberOfTargetPlayers": 1,
       "targetPlayers": true,
       "targetSquare": false,
       "targetRoom": false,

@@ -15,6 +15,7 @@
       "description": "Deal 3 damage and 1 mark to 1 target you can see. Your target must be at least 2 moves away from you.",
       "cost": null,
       "maxNumberOfTargetPlayers": 1,
+      "minNumberOfTargetPlayers": 1,
       "targetPlayers": true,
       "targetSquare": false,
       "targetRoom": false,

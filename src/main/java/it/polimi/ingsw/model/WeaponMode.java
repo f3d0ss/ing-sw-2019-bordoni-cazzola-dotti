@@ -13,6 +13,7 @@ public class WeaponMode {
     private String description;
     private Map<Color, Integer> cost;
     private int maxNumberOfTargetPlayers;
+    private int minNumberOfTargetPlayers;
 
     //shooting parameters
     private boolean targetPlayers;
@@ -98,6 +99,10 @@ public class WeaponMode {
 
     public int getMaxNumberOfTargetPlayers() {
         return maxNumberOfTargetPlayers;
+    }
+
+    public int getMinNumberOfTargetPlayers() {
+        return minNumberOfTargetPlayers;
     }
 
     public boolean isTargetPlayers() {
@@ -190,4 +195,5 @@ MOVE
 
 SHOOT
 //add something to manage flamethrower 2 squares in cardinal direction diff damage
+//grenade launcher
 */
