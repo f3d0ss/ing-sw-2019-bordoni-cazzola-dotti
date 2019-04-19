@@ -10,16 +10,32 @@ public enum Color {
     /**
      * Blue color
      */
-    BLUE,
+    BLUE {
+        @Override
+        public String colorName() {
+            return "Blue";
+        }
+    },
 
     /**
      * Red color
      */
-    RED,
+    RED {
+        @Override
+        public String colorName() {
+            return "Red";
+        }
+    },
 
     /**
      * Yellow color
      */
-    YELLOW
+    YELLOW {
+        @Override
+        public String colorName() {
+            return "Yellow";
+        }
+    };
 
+    abstract public String colorName();
 }
