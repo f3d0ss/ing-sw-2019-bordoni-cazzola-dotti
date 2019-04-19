@@ -16,7 +16,7 @@ public class ShootedState implements PlayerState {
         List<Command> commands = new ArrayList<>();
         player.getPowerUps().forEach(powerUp -> {
             if (powerUp.isTagBackGrenade()) {
-                commands.add(new UseTagbackGrenadeCommand(player, this, (TagbackGrenade) powerUp));
+                commands.add(new UseTagbackGrenadeCommand(player, (TagbackGrenade) powerUp));
             }
         });
         commands.add(new DoneCommand(player, this));

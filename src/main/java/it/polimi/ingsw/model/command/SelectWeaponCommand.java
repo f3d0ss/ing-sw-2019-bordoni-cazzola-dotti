@@ -16,11 +16,17 @@ public class SelectWeaponCommand implements Command{
         this.currentState = currentState;
     }
 
+    /**
+     * This method select the weapon for the shoot
+     */
     @Override
     public void execute() {
         player.changeState(new ChoosingWeaponOptionState(currentState.getSelectedAggregateAction(), weapon));
     }
 
+    /**
+     * This method deselect the weapon
+     */
     @Override
     public void undo() {
         player.changeState(currentState);

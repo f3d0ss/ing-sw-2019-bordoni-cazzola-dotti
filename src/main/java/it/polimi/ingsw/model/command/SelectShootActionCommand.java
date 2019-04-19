@@ -1,7 +1,6 @@
 package it.polimi.ingsw.model.command;
 
 import it.polimi.ingsw.model.Player;
-import it.polimi.ingsw.model.playerstate.ChoosingWeaponOptionState;
 import it.polimi.ingsw.model.playerstate.ChoosingWeaponState;
 import it.polimi.ingsw.model.playerstate.SelectedAggregateActionState;
 

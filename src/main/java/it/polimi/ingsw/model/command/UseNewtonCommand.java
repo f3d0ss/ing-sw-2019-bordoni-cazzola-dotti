@@ -3,10 +3,7 @@ package it.polimi.ingsw.model.command;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.Square;
 import it.polimi.ingsw.model.playerstate.ManageTurnState;
-import it.polimi.ingsw.model.playerstate.SelectedPowerUpState;
 import it.polimi.ingsw.model.playerstate.TargetingPlayerState;
-
-import java.util.List;
 
 public class UseNewtonCommand implements Command {
     private Player player;
@@ -22,6 +19,9 @@ public class UseNewtonCommand implements Command {
         this.targetSquare = targetSquare;
     }
 
+    /**
+     * This method execute the effect of the Newton
+     */
     @Override
     public void execute() {
         oldSquare = targetPlayer.getPosition();
@@ -32,6 +32,9 @@ public class UseNewtonCommand implements Command {
 
     }
 
+    /**
+     * This method undo the effect of the Newton
+     */
     @Override
     public void undo() {
         targetPlayer.getPosition().removePlayer(targetPlayer);

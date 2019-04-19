@@ -1,9 +1,6 @@
 package it.polimi.ingsw.model.command;
 
 import it.polimi.ingsw.model.Square;
-import it.polimi.ingsw.model.TargetingScope;
-import it.polimi.ingsw.model.Weapon;
-import it.polimi.ingsw.model.playerstate.ReadyToShootState;
 import it.polimi.ingsw.model.playerstate.TargetingSquareState;
 
 public class SelectTargetSquareCommand implements WeaponCommand {
@@ -15,11 +12,17 @@ public class SelectTargetSquareCommand implements WeaponCommand {
         this.targetSquare = targetSquare;
     }
 
+    /**
+     * This method add the target to the current state
+     */
     @Override
     public void execute() {
         currentState.addTargetSquare(targetSquare);
     }
 
+    /**
+     * This method remove the target from the current state
+     */
     @Override
     public void undo() {
         currentState.removeTargetSquare(targetSquare);

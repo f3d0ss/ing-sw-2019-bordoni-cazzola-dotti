@@ -16,12 +16,18 @@ public class SelectScopeCommand implements Command {
         this.powerUp = powerUp;
     }
 
+    /**
+     * This method actualize the selection of the scope to use
+     */
     @Override
     public void execute() {
         player.pay(powerUp);
         player.changeState(new PendingPaymentScopeState(currentState.getSelectedAggregateAction(), currentState.getSelectedWeapon(), currentState.getShootedPlayer()));
     }
 
+    /**
+     * This method restore the powerUp and the state for the deselect
+     */
     @Override
     public void undo() {
         player.refund(powerUp);

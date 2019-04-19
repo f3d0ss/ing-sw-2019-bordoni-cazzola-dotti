@@ -55,7 +55,6 @@ public class DoneCommand implements Command {
         this.currentState = currentState;
         nextState = new ManageTurnState();
     }
-    /*create one constructor for each possible done in chart*/
 
     @Override
     public void execute() {

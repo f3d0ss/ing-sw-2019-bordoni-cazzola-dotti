@@ -4,8 +4,6 @@ import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.PlayerId;
 import it.polimi.ingsw.model.exception.IllegalUndoException;
 
-import java.util.List;
-
 public class EffectCommand implements Command {
     private Player player;
     private int damage;

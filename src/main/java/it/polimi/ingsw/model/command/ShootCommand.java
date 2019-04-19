@@ -1,7 +1,6 @@
 package it.polimi.ingsw.model.command;
 
 import it.polimi.ingsw.model.Player;
-import it.polimi.ingsw.model.Weapon;
 import it.polimi.ingsw.model.exception.IllegalUndoException;
 import it.polimi.ingsw.model.playerstate.AfterShotState;
 import it.polimi.ingsw.model.playerstate.ManageTurnState;
@@ -9,7 +8,6 @@ import it.polimi.ingsw.model.playerstate.ReadyToShootState;
 import it.polimi.ingsw.model.playerstate.ScopeState;
 
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 public class ShootCommand implements WeaponCommand {
@@ -23,6 +21,9 @@ public class ShootCommand implements WeaponCommand {
         this.player = player;
     }
 
+    /**
+     * This method execute the shoot
+     */
     @Override
     public void execute() {
         effects.forEach(EffectCommand::execute);

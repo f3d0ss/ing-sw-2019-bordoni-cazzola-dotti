@@ -19,7 +19,7 @@ public class SpawnSquare extends Square {
         this.spawnPointTrack = new ArrayList<>();
     }
 
-    public ArrayList<PlayerId> getSpawnPointTrack() {
+    public List<PlayerId> getSpawnPointTrack() {
         return spawnPointTrack;
     }
 
@@ -30,12 +30,12 @@ public class SpawnSquare extends Square {
         return commands;
     }
 
-    public void removeWeapon(Weapon weapon){
+    public void removeWeapon(Weapon weapon) {
         weapons.remove(weapon);
     }
 
-    public void addWeapon(Weapon weapon){
-        if(weapons.size() >= MAX_WEAPON)
+    public void addWeapon(Weapon weapon) {
+        if (weapons.size() >= MAX_WEAPON)
             throw new IllegalStateException();
         weapons.add(weapon);
     }

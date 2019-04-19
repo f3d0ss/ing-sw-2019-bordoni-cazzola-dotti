@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Match {
 
-    private final static int SKULLS = 8;
+    private static final int SKULLS = 8;
 
     private ArrayList<PlayerId> killshotTrack;
     private PowerUpDeck currentPowerUpDeck;
@@ -22,8 +22,8 @@ public class Match {
         currentPlayers = new ArrayList();
     }
 
-    public Player getPlayer(PlayerId id){
-        for(Player tmp : currentPlayers)
+    public Player getPlayer(PlayerId id) {
+        for (Player tmp : currentPlayers)
             if (id.equals(tmp.getId())) {
                 return tmp;
             }
@@ -32,8 +32,8 @@ public class Match {
 
     public int getPlayerKillshots(PlayerId id) {
         int count = 0;
-        for(PlayerId tmp : killshotTrack)
-            if(id.equals(tmp))
+        for (PlayerId tmp : killshotTrack)
+            if (id.equals(tmp))
                 count++;
         return count;
     }
@@ -43,7 +43,7 @@ public class Match {
     }
 
     public boolean decreaseDeathsCounter() {
-        if(deathsCounter==0){
+        if (deathsCounter == 0) {
             return false;
         }
         this.deathsCounter--;
@@ -54,18 +54,18 @@ public class Match {
         return board;
     }
 
-    public void addPlayer(Player player){
+    public void addPlayer(Player player) {
         currentPlayers.add(player);
     }
 
-    public void addKillshot(PlayerId player){
+    public void addKillshot(PlayerId player) {
         killshotTrack.add(player);
     }
 
-    public AmmoTile drawAmmoTileCard(){
+    public AmmoTile drawAmmoTileCard() {
         AmmoTile tmp;
         tmp = currentAmmoTileDeck.drawAmmoTile();
-        if (tmp == null){
+        if (tmp == null) {
             currentAmmoTileDeck = usedAmmoTileDeck;
             usedAmmoTileDeck = new AmmoTileDeck(new ArrayList<>());
             currentAmmoTileDeck.shuffle();
@@ -74,14 +74,14 @@ public class Match {
         return tmp;
     }
 
-    public Weapon drawWeaponCard(){
+    public Weapon drawWeaponCard() {
         return currentWeaponDeck.drawWeapon();
     }
 
-    public PowerUp drawPowerUpCard(){
+    public PowerUp drawPowerUpCard() {
         PowerUp powerup;
         powerup = currentPowerUpDeck.drawPowerUp();
-        if (powerup == null){
+        if (powerup == null) {
             currentPowerUpDeck = usedPowerUpDeck;
             usedPowerUpDeck = new PowerUpDeck(new ArrayList<>());
             currentPowerUpDeck.shuffle();
@@ -90,11 +90,11 @@ public class Match {
         return powerup;
     }
 
-    public void discard(AmmoTile ammoTile){
+    public void discard(AmmoTile ammoTile) {
         usedAmmoTileDeck.add(ammoTile);
     }
 
-    public void discard(PowerUp powerUp){
+    public void discard(PowerUp powerUp) {
         usedPowerUpDeck.add(powerUp);
     }
 

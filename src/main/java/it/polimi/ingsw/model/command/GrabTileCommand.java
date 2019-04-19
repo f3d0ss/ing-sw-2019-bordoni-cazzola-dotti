@@ -4,7 +4,6 @@ import it.polimi.ingsw.model.AmmoTile;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.TurretSquare;
 import it.polimi.ingsw.model.exception.IllegalUndoException;
-import it.polimi.ingsw.model.playerstate.SelectedAggregateActionState;
 
 public class GrabTileCommand extends GrabCommand {
     private AmmoTile ammoTile;

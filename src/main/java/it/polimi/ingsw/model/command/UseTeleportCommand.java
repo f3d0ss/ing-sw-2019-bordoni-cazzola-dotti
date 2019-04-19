@@ -3,7 +3,6 @@ package it.polimi.ingsw.model.command;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.Square;
 import it.polimi.ingsw.model.playerstate.ManageTurnState;
-import it.polimi.ingsw.model.playerstate.SelectedPowerUpState;
 import it.polimi.ingsw.model.playerstate.TargetingPlayerState;
 
 public class UseTeleportCommand implements Command{
@@ -18,6 +17,9 @@ public class UseTeleportCommand implements Command{
         this.newPosition = newPosition;
     }
 
+    /**
+     * This method execute the effect of the Teleport
+     */
     @Override
     public void execute() {
         oldSquare = player.getPosition();
@@ -27,6 +29,9 @@ public class UseTeleportCommand implements Command{
         player.changeState(new ManageTurnState());
     }
 
+    /**
+     * This method undo the effect of the Teleport
+     */
     @Override
     public void undo() {
         player.getPosition().removePlayer(player);
