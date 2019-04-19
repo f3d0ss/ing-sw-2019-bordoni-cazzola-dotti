@@ -28,9 +28,6 @@
       "minTargetDistance": 1,
       "marks": 0,
       "damage": [
-        1,
-        1,
-        1,
         1
       ],
       "additionalDamageAvailable": 0,
@@ -60,9 +57,6 @@
       "minTargetDistance": 1,
       "marks": 1,
       "damage": [
-        1,
-        1,
-        1,
         1
       ],
       "additionalDamageAvailable": 0,

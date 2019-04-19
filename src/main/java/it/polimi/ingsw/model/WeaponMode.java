@@ -56,6 +56,34 @@ public class WeaponMode {
         System.out.println(gson.toJson(lock));
     }*/
 
+    public WeaponMode(WeaponMode other) {
+        this.name = other.name;
+        this.description = other.description;
+        this.cost = other.cost;
+        this.maxNumberOfTargetPlayers = other.maxNumberOfTargetPlayers;
+        this.targetPlayers = other.targetPlayers;
+        this.targetSquare = other.targetSquare;
+        this.targetRoom = other.targetRoom;
+        this.eachTargetInTheSameRoom = other.eachTargetInTheSameRoom;
+        this.eachTargetOnTheSameSquare = other.eachTargetOnTheSameSquare;
+        this.eachTargetOnDifferentSquares = other.eachTargetOnDifferentSquares;
+        this.damageEveryone = other.damageEveryone;
+        this.targetVisibleByOtherTarget = other.targetVisibleByOtherTarget;
+        this.targetVisibleByShooter = other.targetVisibleByShooter;
+        this.cardinalDirectionMode = other.cardinalDirectionMode;
+        this.maxTargetDistance = other.maxTargetDistance;
+        this.minTargetDistance = other.minTargetDistance;
+        this.marks = other.marks;
+        this.damage = other.damage;
+        this.additionalDamageAvailable = other.additionalDamageAvailable;
+        this.maxAdditionalDamagePerPlayer = other.maxAdditionalDamagePerPlayer;
+        this.moveTargetBeforeShoot = other.moveTargetBeforeShoot;
+        this.moveTargetAfterShoot = other.moveTargetAfterShoot;
+        this.moveShooter = other.moveShooter;
+        this.maxTargetMove = other.maxTargetMove;
+        this.maxShooterMove = other.maxShooterMove;
+    }
+
     public String getName() {
         return name;
     }
@@ -156,3 +184,10 @@ public class WeaponMode {
         return maxShooterMove;
     }
 }
+/*//TODO:
+MOVE
+//add something to manage glove move effect (go to target square after)
+
+SHOOT
+//add something to manage flamethrower 2 squares in cardinal direction diff damage
+*/

@@ -43,7 +43,7 @@ public class Weapon {
     }
 
     public void setSelectedWeaponMode(WeaponMode selectedWeaponMode) {
-        this.selectedWeaponMode = selectedWeaponMode;
+        this.selectedWeaponMode = new WeaponMode(selectedWeaponMode);
     }
 
     public List<WeaponCommand> getPossibleCommands(GameBoard gameboard, Player player) {
