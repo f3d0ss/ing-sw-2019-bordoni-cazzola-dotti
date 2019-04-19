@@ -25,6 +25,7 @@ public class SelectWeaponModeCommand implements Command {
 
     @Override
     public void undo() {
-
+        currentState.getSelectedWeapon().deselectWeaponMode(weaponMode);
+        player.changeState(currentState);
     }
 }
