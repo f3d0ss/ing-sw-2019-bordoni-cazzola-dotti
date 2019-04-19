@@ -1,12 +1,9 @@
-package it.polimi.ingsw.model.View;
+package it.polimi.ingsw.view;
 
-import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.Match;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.PlayerId;
 import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 public class CliTest {
 
