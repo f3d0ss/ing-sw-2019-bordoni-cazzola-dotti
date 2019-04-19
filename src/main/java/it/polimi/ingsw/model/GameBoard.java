@@ -70,6 +70,15 @@ public class GameBoard {
         return spawn.get(color);
     }
 
+
+    public int getHeight() {
+        return ROWS;
+    }
+
+    public int getWidth() {
+        return COLUMNS;
+    }
+
     /**
      * @author Bordoni
      * @param current is the starting position

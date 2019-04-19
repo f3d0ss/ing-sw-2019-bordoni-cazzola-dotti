@@ -58,11 +58,11 @@ public class PlayerTest {
     public void testAddDamage() {
         Player player = new Player(null, null, null, null);
         assertEquals(player.isDead(), false);
-        for (int i = 1; i < MAX_DAMAGE - 1; i++) {
-            player.addDamage(1, PlayerId.RED);
+        for (int i=1; i<MAX_DAMAGE-1; i++) {
+            player.addDamage(1, PlayerId.GREEN);
             assertEquals(player.isDead(), false);
         }
-        player.addDamage(1, PlayerId.RED);
+        player.addDamage(1, PlayerId.GREEN);
         assertEquals(player.isDead(), true);
     }
 
@@ -81,7 +81,7 @@ public class PlayerTest {
                 player.addDamage(1, PlayerId.VIOLET);
                 assertEquals(player.isDead(), false);
             }
-            player.addDamage(1, PlayerId.RED);
+            player.addDamage(1, PlayerId.GREEN);
             assertEquals(player.isDead(), true);
         }
 
@@ -92,7 +92,7 @@ public class PlayerTest {
             player.addDamage(1, PlayerId.VIOLET);
             assertEquals(player.isDead(), false);
         }
-        player.addDamage(1, PlayerId.RED);
+        player.addDamage(1, PlayerId.GREEN);
         assertEquals(player.isDead(), true);
     }
 
