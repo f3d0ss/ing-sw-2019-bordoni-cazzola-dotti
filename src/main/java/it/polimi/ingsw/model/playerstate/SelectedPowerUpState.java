@@ -7,7 +7,7 @@ import it.polimi.ingsw.model.command.Command;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SelectedPowerUpState implements PlayerState{
+public class SelectedPowerUpState implements PlayerState, TargetingPlayerState{
     private PowerUp selectedPowerUp;
 
     public SelectedPowerUpState(PowerUp selectedPowerUp) {
@@ -16,6 +16,15 @@ public class SelectedPowerUpState implements PlayerState{
 
     @Override
     public List<Command> getPossibleCommands(Player player) {
-        return new ArrayList<>(selectedPowerUp.getPossibleCommands(player.getMatch().getBoard(), player));
+        return new ArrayList<>(selectedPowerUp.getPossibleCommands(player.getMatch().getBoard(), player, this));
     }
+
+    public void addTargetPlayer(Player targetPlayer) {
+        selectedPowerUp.addTargetPlayer(targetPlayer);
+    }
+
+    public void removeTargetPlayer(Player targetPlayer) {
+        selectedPowerUp.removeTargetPlayer(targetPlayer);
+    }
+
 }

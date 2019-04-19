@@ -155,4 +155,8 @@ public class Weapon {
     public void resetMoves() {
         extraMoveUsed = false;
     }
+
+    public void deselectWeaponMode(WeaponMode weaponMode) {
+        //TODO:
+    }
 }

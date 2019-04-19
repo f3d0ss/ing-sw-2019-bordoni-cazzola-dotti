@@ -1,24 +1,30 @@
-package it.polimi.ingsw.model;
 
+package it.polimi.ingsw.model;
 public class AggregateAction {
-    private int moveNumber;
+    private final int moveNumber;
     private boolean grab;
     private boolean shoot;
     private boolean reload;
+    private boolean moved;
 
     public AggregateAction(int moveNumber, boolean grab, boolean shoot, boolean reload) {
         this.moveNumber = moveNumber;
         this.grab = grab;
         this.shoot = shoot;
         this.reload = reload;
+        moved = false;
     }
 
     public int getMoveNumber() {
         return moveNumber;
     }
 
-    public void decrementMoveNumbers() {
-        this.moveNumber--;
+    public void useMovements() {
+        moved = true;
+    }
+
+    public void resetMoves() {
+        moved = false;
     }
 
     public boolean isGrab() {
@@ -33,4 +39,7 @@ public class AggregateAction {
         return reload;
     }
 
+    public boolean hasMoved() {
+        return moved;
+    }
 }

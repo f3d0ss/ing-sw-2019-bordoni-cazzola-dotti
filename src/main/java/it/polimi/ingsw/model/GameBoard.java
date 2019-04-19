@@ -49,13 +49,42 @@ public class GameBoard {
         }
     }
 
+    /**
+     * @author Bordoni
+     * @param row is the row's value, first is 0
+     * @param col is the column's value, first is 0
+     * @return the square placed in specified coordinates
+     */
+
     public Square getSquare(int row, int col) {
         return board[row][col];
     }
 
+    /**
+     * @author Bordoni
+     * @param color is the color of the spawn square requested
+     * @return the uniqe spawn square of that color
+     */
+
     public SpawnSquare getSpawn(Color color) {
         return spawn.get(color);
     }
+
+
+    public int getHeight() {
+        return ROWS;
+    }
+
+    public int getWidth() {
+        return COLUMNS;
+    }
+
+    /**
+     * @author Bordoni
+     * @param current is the starting position
+     * @param dir is the direction detected
+     * @return the square near to current in dir direction
+     */
 
     private Square getAdjacentSquare(Square current, CardinalDirection dir) {
         switch (dir) {
@@ -71,6 +100,12 @@ public class GameBoard {
         return null;
     }
 
+    /**
+     * @author Bordoni
+     * @param list is the list passed by caller, needed for recursion
+     * @param position the square which room is detected
+     */
+
     private void getSameRoomSquares(ArrayList<Square> list, Square position) {
         Square adjacent;
         for (CardinalDirection dir : CardinalDirection.values())
@@ -82,6 +117,15 @@ public class GameBoard {
                 }
             }
     }
+
+    /**
+     * @author supernivem
+     * @param position starting position
+     * @param maxRange maximum distance of returned squares
+     * @param minRange minimum distance of returned squares
+     * @param onlyWithPlayer excluded squares where there are no players
+     * @return give the list of visible squares according to input parameters
+     */
 
     public ArrayList<Square> getVisibleSquares(Square position, int maxRange, int minRange, boolean onlyWithPlayer) {
         Square adjacent;
@@ -114,6 +158,13 @@ public class GameBoard {
         return out;
     }
 
+    /** @author supernivem
+     * @param position is the position from where get straight direction squares
+     * @param maxRange maximum distance of gotten squares
+     * @param minRange minimum distance of gotten squares
+     * @param ignoreWalls specify if ignore or consider walls
+     */
+
     public ArrayList<Square> getCardinalDirectionSquares(Square position, int maxRange, int minRange, boolean ignoreWalls) {
         Square adjacent;
         ArrayList<Square> list = new ArrayList<>();
@@ -131,6 +182,14 @@ public class GameBoard {
         return list;
     }
 
+    /** @author supernivem
+     * @param list is a list passed by caller, needed to allow recursion
+     * @param position is the position from where get straight direction squares
+     * @param maxRange maximum distance of got squares
+     * @param ignoreWalls specify if ignore or consider walls
+     * @param dir is the direction in which get squares
+     */
+
     private void getStraightSquares(ArrayList<Square> list, Square position, int maxRange, boolean ignoreWalls, CardinalDirection dir) {
         Square next;
         if (maxRange > 0 && position.getConnection(dir).isAccessible(ignoreWalls)) {
@@ -140,7 +199,29 @@ public class GameBoard {
         }
     }
 
-    public void getReachableSquare(Square position, ArrayList<Square> list, int maxMoves) {
+    //TODO: update player
+
+    /**
+     * @author supernivem
+     * @param position starting position
+     * @param maxMoves number of steps allowed
+     * @return the list of squares reachable in at most maxMoves steps
+     */
+
+    public ArrayList<Square> getReachableSquare(Square position, int maxMoves){
+        ArrayList<Square> list = new ArrayList<>();
+        getReachableSquare(position, list, maxMoves);
+        return list;
+    }
+
+    /**
+     * @author supernivem
+     * @param position starting position
+     * @param maxMoves number of steps allowed
+     * @param list is a list passed by caller, needed to allow recursion
+     */
+
+    private void getReachableSquare(Square position, ArrayList<Square> list, int maxMoves) {
         Square adjacent;
         int furtherMove = maxMoves - 1;
         if (!list.contains(position))
@@ -164,6 +245,12 @@ public class GameBoard {
         }
         return targets;
     }*/
+
+    /**
+     * @author supernivem
+     * @param position current position
+     * @return a list of accessible direction
+     */
 
     public ArrayList<CardinalDirection> getAccessibleDirection(Square position) {
         ArrayList<CardinalDirection> dir = new ArrayList<>();

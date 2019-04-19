@@ -18,4 +18,12 @@ public class PowerUpDeck implements Deck {
     public PowerUp drawPowerUp() {
         return powerUps.isEmpty() ? null : powerUps.remove(0);
     }
+
+    public void add(PowerUp powerUp) {
+        powerUps.add(powerUp);
+    }
+
+    public void remove(PowerUp powerUp) {
+        powerUps.remove(powerUp);
+    }
 }
