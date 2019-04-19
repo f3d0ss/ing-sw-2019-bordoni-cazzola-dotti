@@ -15,11 +15,11 @@ import java.util.Map;
 
 public class Player {
 
-    private final static int MAX_AMMO = 3;
-    private final static int MAX_POWERUP = 3;
-    private final static int MAX_DAMAGE = 12;
-    private final static int MAX_MARKS = 3;
-    public final static int MAX_WEAPONS = 3;
+    public static final int MAX_AMMO = 3;
+    public static final int MAX_POWERUP = 3;
+    public static final int MAX_DAMAGE = 12;
+    public static final int MAX_MARKS = 3;
+    public static final int MAX_WEAPONS = 3;
 
     private Match match;
     private PlayerId id;
@@ -36,6 +36,8 @@ public class Player {
     private int availableAggregateActionCounter = 2;
     private PlayerState playerState = new IdleState();
     private Square position;
+    private int usedAggregateAction;
+    private PlayerId lastShooter;
 
 
     public Player(Match match, PlayerId id, String nickname, Square position) {
@@ -43,6 +45,7 @@ public class Player {
         this.id = id;
         Nickname = nickname;
         this.position = position;
+        usedAggregateAction = 0;
     }
 
     public Map<Color, Integer> getAmmo() {
@@ -62,7 +65,7 @@ public class Player {
     }
 
     public boolean isDead() {
-        return dead;
+        return health.size() >= MAX_DAMAGE - 1;
     }
 
     public void setId(PlayerId id) {
@@ -73,23 +76,8 @@ public class Player {
         this.playerState = playerState;
     }
 
-    public void move(CardinalDirection direction) {
-        if (position.getConnection(direction) == Connection.MAP_BORDER || position.getConnection(direction) == Connection.WALL)
-            throw new IllegalMoveException();
-        switch (direction) {
-            case NORTH:
-                position = match.getBoard().getSquare(position.getRow() - 1, position.getCol());
-                break;
-            case SOUTH:
-                position = match.getBoard().getSquare(position.getRow() + 1, position.getCol());
-                break;
-            case EAST:
-                position = match.getBoard().getSquare(position.getRow(), position.getCol() + 1);
-                break;
-            case WEST:
-                position = match.getBoard().getSquare(position.getRow(), position.getCol() - 1);
-                break;
-        }
+    public void move(Square square) {
+        position = square;
     }
 
     private void addAmmo(Color color, Integer number) {
@@ -125,10 +113,8 @@ public class Player {
             possibleDamage--;
         }
         this.marks.put(color, 0);
-
-        if (health.size() >= MAX_DAMAGE - 1)
-            dead = true;
-
+        //TODO: do something if is dead
+        //if (isDead()) ....
     }
 
     public void addMarks(int marks, PlayerId color) {
@@ -164,13 +150,60 @@ public class Player {
         return null;
     }
 
-    public List<CardinalDirection> getAccessibleSquare() {
-        //this.match.getAccessibleSquare(position);
-        return null;
+    public List<Square> getAccessibleSquare(int maxDistance) {
+        return this.match.getBoard().getReachableSquare(position, maxDistance);
     }
 
     public Match getMatch() {
         return this.match;
     }
 
+    public void pay(Color color, int amount) {
+        if(ammo.getOrDefault(color, 0) < amount)
+            throw new IllegalStateException();
+        ammo.put(color, ammo.get(color) - amount);
+    }
+
+    public void pay(PowerUp powerUp) {
+        match.discard(powerUp);
+        powerUps.remove(powerUp);
+    }
+
+    public void refund(Color color, Integer amount) {
+        addAmmo(color, amount);
+    }
+
+    public void refund(PowerUp powerUp) {
+        match.undiscard(powerUp);
+        if (powerUps.size() >= MAX_POWERUP)
+            throw new IllegalStateException();
+        powerUps.add(powerUp);
+    }
+
+    public void addWeapon(Weapon weapon){
+        if (weapons.size() >= MAX_WEAPONS)
+            throw new IllegalStateException();
+        weapons.add(weapon);
+    }
+
+    public void removeWeapon(Weapon selectedWeapon) {
+        weapons.remove(selectedWeapon);
+    }
+
+    public boolean hasScope() {
+        //TODO: implement this method
+        return false;
+    }
+
+    public void selectAggregateAction() {
+        usedAggregateAction++;
+    }
+
+    public void deselectAggregateAction() {
+        usedAggregateAction--;
+    }
+
+    public Player getLastShooter() {
+        return match.getPlayer(lastShooter);
+    }
 }

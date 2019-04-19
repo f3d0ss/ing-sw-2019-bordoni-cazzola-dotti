@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Match {
 
-    private final static int SKULLS = 8;
+    private static final int SKULLS = 8;
 
     private ArrayList<PlayerId> killshotTrack;
     private PowerUpDeck currentPowerUpDeck;
@@ -22,8 +22,8 @@ public class Match {
         currentPlayers = new ArrayList();
     }
 
-    public Player getPlayer(PlayerId id){
-        for(Player tmp : currentPlayers)
+    public Player getPlayer(PlayerId id) {
+        for (Player tmp : currentPlayers)
             if (id.equals(tmp.getId())) {
                 return tmp;
             }
@@ -32,8 +32,8 @@ public class Match {
 
     public int getPlayerKillshots(PlayerId id) {
         int count = 0;
-        for(PlayerId tmp : killshotTrack)
-            if(id.equals(tmp))
+        for (PlayerId tmp : killshotTrack)
+            if (id.equals(tmp))
                 count++;
         return count;
     }
@@ -43,7 +43,7 @@ public class Match {
     }
 
     public boolean decreaseDeathsCounter() {
-        if(deathsCounter==0){
+        if (deathsCounter == 0) {
             return false;
         }
         this.deathsCounter--;
@@ -54,43 +54,51 @@ public class Match {
         return board;
     }
 
-    public void addPlayer(Player player){
+    public void addPlayer(Player player) {
         currentPlayers.add(player);
     }
 
-    public void addKillshot(PlayerId player){
+    public void addKillshot(PlayerId player) {
         killshotTrack.add(player);
     }
 
-    public AmmoTile drawAmmoTileCard(){
+    public AmmoTile drawAmmoTileCard() {
         AmmoTile tmp;
-        AmmoTileDeck emptyDeck;
         tmp = currentAmmoTileDeck.drawAmmoTile();
-        if (tmp == null){
-            emptyDeck = currentAmmoTileDeck;
+        if (tmp == null) {
             currentAmmoTileDeck = usedAmmoTileDeck;
-            usedAmmoTileDeck = emptyDeck;
+            usedAmmoTileDeck = new AmmoTileDeck(new ArrayList<>());
             currentAmmoTileDeck.shuffle();
             tmp = currentAmmoTileDeck.drawAmmoTile();
         }
         return tmp;
     }
 
-    public Weapon drawWeaponCard(){
+    public Weapon drawWeaponCard() {
         return currentWeaponDeck.drawWeapon();
     }
 
-    public PowerUp drawPowerUpCard(){
+    public PowerUp drawPowerUpCard() {
         PowerUp powerup;
-        PowerUpDeck emptyDeck;
         powerup = currentPowerUpDeck.drawPowerUp();
-        if (powerup == null){
-            emptyDeck = currentPowerUpDeck;
+        if (powerup == null) {
             currentPowerUpDeck = usedPowerUpDeck;
-            usedPowerUpDeck = emptyDeck;
+            usedPowerUpDeck = new PowerUpDeck(new ArrayList<>());
             currentPowerUpDeck.shuffle();
             powerup = currentPowerUpDeck.drawPowerUp();
         }
         return powerup;
+    }
+
+    public void discard(AmmoTile ammoTile) {
+        usedAmmoTileDeck.add(ammoTile);
+    }
+
+    public void discard(PowerUp powerUp) {
+        usedPowerUpDeck.add(powerUp);
+    }
+
+    public void undiscard(PowerUp powerUp) {
+        usedPowerUpDeck.remove(powerUp);
     }
 }

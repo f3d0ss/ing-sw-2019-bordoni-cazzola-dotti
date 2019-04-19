@@ -12,13 +12,19 @@ public class SelectAmmoPaymentCommand extends SelectPaymentCommand {
         this.color = color;
     }
 
+    /**
+     * This method add an ammo to the pending payment
+     */
     @Override
     public void execute() {
-
+        currentState.addPendingAmmo(color);
     }
 
+    /**
+     * This method remove an ammo from the pending payment
+     */
     @Override
     public void undo() {
-
+        currentState.removePendingAmmo(color);
     }
 }

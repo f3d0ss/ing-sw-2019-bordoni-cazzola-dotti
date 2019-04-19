@@ -20,14 +20,42 @@ public class PendingPaymentReloadWeaponState implements PendingPaymentState, Pla
         this.selectedReloadingWeapon = selectedWeapon;
     }
 
+    public Weapon getSelectedReloadingWeapon() {
+        return selectedReloadingWeapon;
+    }
+
     @Override
     public void addPendingAmmo(Color color) {
-        pendingAmmo.put(color, pendingAmmo.getOrDefault(color, 0));
+        pendingAmmo.put(color, pendingAmmo.getOrDefault(color, 0) + 1);
     }
 
     @Override
     public void addPendingCard(PowerUp powerUp) {
         pendingCardPayment.add(powerUp);
+    }
+
+    @Override
+    public void removePendingAmmo(Color color) {
+        if(pendingAmmo.getOrDefault(color, 0) <= 0)
+            throw new IllegalStateException();
+        pendingAmmo.put(color, pendingAmmo.get(color) - 1);
+    }
+
+    @Override
+    public void removePendingCard(PowerUp powerUp) {
+        if(!pendingCardPayment.contains(powerUp))
+            throw new IllegalStateException();
+        pendingCardPayment.add(powerUp);
+    }
+
+    @Override
+    public Map<Color, Integer> getPendingAmmoPayment() {
+        return pendingAmmo;
+    }
+
+    @Override
+    public List<PowerUp> getPendingCardPayment() {
+        return pendingCardPayment;
     }
 
     @Override
