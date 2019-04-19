@@ -60,30 +60,18 @@ public class Weapon {
         return possibleCommands;
     }
 
-    private List<WeaponCommand> moveTargetBeforeShoot(GameBoard gameboard, Player shooter, ReadyToShootState state) {
+    private List<WeaponCommand> getPossibleCommandsTargetCanMoveBeforeShoot(GameBoard gameboard, Player shooter, ReadyToShootState state) {
+            //TODO:
         List<WeaponCommand> possibleCommands = new ArrayList<>();
-
-        //check if mode can move targets before shoot
-        if (selectedWeaponMode.isMoveTargetBeforeShoot()) {
+        if (selectedWeaponMode.isMoveTargetBeforeShoot()) { //check if mode can move targets before shoot
             if (selectedWeaponMode.isTargetSquare()) { //select a square first
                 List<Square> possibleTargetSquares = new ArrayList<>();
-                if (selectedWeaponMode.isTargetVisibleByShooter()) {//visible by shooter
-                    ArrayList<Square> visibleSquares = gameboard.getVisibleSquares(shooter.getPosition(), selectedWeaponMode.getMaxTargetDistance(), selectedWeaponMode.getMinTargetDistance(), false);
-                    for (Square square : visibleSquares) {
-                        ArrayList<Square> reachableSquares = gameboard.getReachableSquare(square, selectedWeaponMode.getMaxTargetMove());
-                        for (Square s : reachableSquares) {
-                            if (s.hasOtherPlayers(shooter)) {
-                                possibleTargetSquares.add(square);
-                                break;
-                            }
-                        }
-                    }
-                }
+                if (selectedWeaponMode.isTargetVisibleByShooter())
+                    possibleTargetSquares.addAll(gameboard.getReachableSquaresWithOtherPlayers(gameboard.getVisibleSquares(shooter.getPosition(), selectedWeaponMode.getMaxTargetDistance(), selectedWeaponMode.getMinTargetDistance(), false), selectedWeaponMode.getMaxTargetMove(), shooter));
                 for (Square possibleTarget : possibleTargetSquares)
                     possibleCommands.add(new SelectTargetSquareCommand(state, possibleTarget));
             }
         }
-
         return possibleCommands;
     }
 
@@ -92,8 +80,8 @@ public class Weapon {
         List<WeaponCommand> possibleCommands = new ArrayList<>();
 
         //check if mode can move targets before shoot
-
-        possibleCommands.addAll(moveTargetBeforeShoot(gameboard, shooter, state));
+        if (selectedWeaponMode.isMoveTargetBeforeShoot())
+            possibleCommands.addAll(getPossibleCommandsTargetCanMoveBeforeShoot(gameboard, shooter, state));
 
         return possibleCommands;
     }

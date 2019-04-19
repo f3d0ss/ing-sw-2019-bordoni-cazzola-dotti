@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class GameBoard {
 
@@ -50,10 +51,10 @@ public class GameBoard {
     }
 
     /**
-     * @author Bordoni
      * @param row is the row's value, first is 0
      * @param col is the column's value, first is 0
      * @return the square placed in specified coordinates
+     * @author Bordoni
      */
 
     public Square getSquare(int row, int col) {
@@ -61,9 +62,9 @@ public class GameBoard {
     }
 
     /**
-     * @author Bordoni
      * @param color is the color of the spawn square requested
      * @return the uniqe spawn square of that color
+     * @author Bordoni
      */
 
     public SpawnSquare getSpawn(Color color) {
@@ -80,10 +81,10 @@ public class GameBoard {
     }
 
     /**
-     * @author Bordoni
      * @param current is the starting position
-     * @param dir is the direction detected
+     * @param dir     is the direction detected
      * @return the square near to current in dir direction
+     * @author Bordoni
      */
 
     private Square getAdjacentSquare(Square current, CardinalDirection dir) {
@@ -101,12 +102,12 @@ public class GameBoard {
     }
 
     /**
-     * @author Bordoni
-     * @param list is the list passed by caller, needed for recursion
+     * @param list     is the list passed by caller, needed for recursion
      * @param position the square which room is detected
+     * @author Bordoni
      */
 
-    private void getSameRoomSquares(ArrayList<Square> list, Square position) {
+    private void getSameRoomSquares(List<Square> list, Square position) {
         Square adjacent;
         for (CardinalDirection dir : CardinalDirection.values())
             if (position.getConnection(dir) == Connection.SAME_ROOM) {
@@ -119,18 +120,18 @@ public class GameBoard {
     }
 
     /**
-     * @author supernivem
-     * @param position starting position
-     * @param maxRange maximum distance of returned squares
-     * @param minRange minimum distance of returned squares
+     * @param position       starting position
+     * @param maxRange       maximum distance of returned squares
+     * @param minRange       minimum distance of returned squares
      * @param onlyWithPlayer excluded squares where there are no players
      * @return give the list of visible squares according to input parameters
+     * @author supernivem
      */
 
-    public ArrayList<Square> getVisibleSquares(Square position, int maxRange, int minRange, boolean onlyWithPlayer) {
+    public List<Square> getVisibleSquares(Square position, int maxRange, int minRange, boolean onlyWithPlayer) {
         Square adjacent;
-        ArrayList<Square> list = new ArrayList<>();
-        ArrayList<Square> out = new ArrayList<>();
+        List<Square> list = new ArrayList<>();
+        List<Square> out = new ArrayList<>();
         list.add(position);
         if (maxRange > 0) {
             for (CardinalDirection dir : CardinalDirection.values())
@@ -153,21 +154,22 @@ public class GameBoard {
         if (!onlyWithPlayer)
             return list;
         for (Square s : list)
-            if (s.getHostedPlayers().size() != 0)
+            if (!s.getHostedPlayers().isEmpty())
                 out.add(s);
         return out;
     }
 
-    /** @author supernivem
-     * @param position is the position from where get straight direction squares
-     * @param maxRange maximum distance of gotten squares
-     * @param minRange minimum distance of gotten squares
+    /**
+     * @param position    is the position from where get straight direction squares
+     * @param maxRange    maximum distance of gotten squares
+     * @param minRange    minimum distance of gotten squares
      * @param ignoreWalls specify if ignore or consider walls
+     * @author supernivem
      */
 
-    public ArrayList<Square> getCardinalDirectionSquares(Square position, int maxRange, int minRange, boolean ignoreWalls) {
+    public List<Square> getCardinalDirectionSquares(Square position, int maxRange, int minRange, boolean ignoreWalls) {
         Square adjacent;
-        ArrayList<Square> list = new ArrayList<>();
+        List<Square> list = new ArrayList<>();
         if (minRange == 0)
             list.add(position);
         if (maxRange > 0) {
@@ -182,15 +184,16 @@ public class GameBoard {
         return list;
     }
 
-    /** @author supernivem
-     * @param list is a list passed by caller, needed to allow recursion
-     * @param position is the position from where get straight direction squares
-     * @param maxRange maximum distance of got squares
+    /**
+     * @param list        is a list passed by caller, needed to allow recursion
+     * @param position    is the position from where get straight direction squares
+     * @param maxRange    maximum distance of got squares
      * @param ignoreWalls specify if ignore or consider walls
-     * @param dir is the direction in which get squares
+     * @param dir         is the direction in which get squares
+     * @author supernivem
      */
 
-    private void getStraightSquares(ArrayList<Square> list, Square position, int maxRange, boolean ignoreWalls, CardinalDirection dir) {
+    private void getStraightSquares(List<Square> list, Square position, int maxRange, boolean ignoreWalls, CardinalDirection dir) {
         Square next;
         if (maxRange > 0 && position.getConnection(dir).isAccessible(ignoreWalls)) {
             next = this.getAdjacentSquare(position, dir);
@@ -202,26 +205,55 @@ public class GameBoard {
     //TODO: update player
 
     /**
-     * @author supernivem
      * @param position starting position
      * @param maxMoves number of steps allowed
      * @return the list of squares reachable in at most maxMoves steps
+     * @author supernivem
      */
 
-    public ArrayList<Square> getReachableSquare(Square position, int maxMoves){
-        ArrayList<Square> list = new ArrayList<>();
+    public List<Square> getReachableSquare(Square position, int maxMoves) {
+        List<Square> list = new ArrayList<>();
         getReachableSquare(position, list, maxMoves);
         return list;
     }
 
     /**
-     * @author supernivem
+     * @param position
+     * @param maxMoves
+     * @param player
+     * @return the list of squares reachable in at most maxMoves steps with at least another player on
+     */
+    public List<Square> getReachableSquaresWithOtherPlayers(Square position, int maxMoves, Player player) {
+        List<Square> reachableSquares = getReachableSquare(position, maxMoves);
+        List<Square> squaresWithOtherPlayers = new ArrayList<>();
+        for (Square square : reachableSquares)
+            if (square.hasOtherPlayers(player))
+                squaresWithOtherPlayers.add(square);
+        return squaresWithOtherPlayers;
+    }
+
+    /**
+     *
+     * @param squares
+     * @param maxMoves
+     * @param player
+     * @return
+     */
+    public List<Square> getReachableSquaresWithOtherPlayers(List<Square> squares, int maxMoves, Player player) {
+        List<Square> reachableSquares = new ArrayList<>();
+        for (Square square : squares)
+            reachableSquares.addAll(getReachableSquaresWithOtherPlayers(square, maxMoves, player));
+        return reachableSquares.stream().distinct().collect(Collectors.toList());
+    }
+
+    /**
      * @param position starting position
      * @param maxMoves number of steps allowed
-     * @param list is a list passed by caller, needed to allow recursion
+     * @param list     is a list passed by caller, needed to allow recursion
+     * @author supernivem
      */
 
-    private void getReachableSquare(Square position, ArrayList<Square> list, int maxMoves) {
+    private void getReachableSquare(Square position, List<Square> list, int maxMoves) {
         Square adjacent;
         int furtherMove = maxMoves - 1;
         if (!list.contains(position))
@@ -247,9 +279,9 @@ public class GameBoard {
     }*/
 
     /**
-     * @author supernivem
      * @param position current position
      * @return a list of accessible direction
+     * @author supernivem
      */
 
     public ArrayList<CardinalDirection> getAccessibleDirection(Square position) {
