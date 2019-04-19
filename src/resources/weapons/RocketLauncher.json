@@ -1,0 +1,141 @@
+{
+  "name": "Rocket Launcher",
+  "description": null,
+  "reloadingCost": {
+    "RED": 2
+  },
+  "buyCost": {
+    "RED": 1
+  },
+  "weaponModes": [
+    {
+      "name": "basic effect",
+      "description": "Deal 2 damage to 1 target you can see that is not on your square. Then you may move the target 1 square.",
+      "cost": null,
+      "maxNumberOfTargetPlayers": 1,
+      "targetPlayers": true,
+      "targetSquare": false,
+      "targetRoom": false,
+      "eachTargetInTheSameRoom": false,
+      "eachTargetOnTheSameSquare": false,
+      "eachTargetOnDifferentSquares": false,
+      "damageEveryone": true,
+      "targetVisibleByOtherTarget": false,
+      "targetVisibleByShooter": true,
+      "cardinalDirectionMode": false,
+      "maxTargetDistance": 2147483647,
+      "minTargetDistance": 1,
+      "marks": 0,
+      "damage": [
+        2
+      ],
+      "additionalDamageAvailable": 0,
+      "maxAdditionalDamagePerPlayer": 0,
+      "moveTargetBeforeShoot": false,
+      "moveTargetAfterShoot": true,
+      "moveShooter": false,
+      "maxTargetMove": 1,
+      "maxShooterMove": 0
+    },
+    {
+      "name": "basic effect + rocket jump",
+      "description": "Deal 2 damage to 1 target you can see that is not on your square. Then you may move the target 1 square. Move 1 or 2 squares. This effect can be used either before or after the basic effect.",
+      "cost": {
+        "BLUE": 1
+      },
+      "maxNumberOfTargetPlayers": 1,
+      "targetPlayers": true,
+      "targetSquare": false,
+      "targetRoom": false,
+      "eachTargetInTheSameRoom": false,
+      "eachTargetOnTheSameSquare": false,
+      "eachTargetOnDifferentSquares": false,
+      "damageEveryone": true,
+      "targetVisibleByOtherTarget": false,
+      "targetVisibleByShooter": true,
+      "cardinalDirectionMode": false,
+      "maxTargetDistance": 2147483647,
+      "minTargetDistance": 1,
+      "marks": 0,
+      "damage": [
+        2
+      ],
+      "additionalDamageAvailable": 0,
+      "maxAdditionalDamagePerPlayer": 0,
+      "moveTargetBeforeShoot": false,
+      "moveTargetAfterShoot": true,
+      "moveShooter": true,
+      "maxTargetMove": 1,
+      "maxShooterMove": 2
+    },
+    {
+      "name": "basic effect + fragmenting warhead",
+      "description": "Deal 2 damage to 1 target you can see that is not on your square. Then you may move the target 1 square. During the basic effect, deal 1 damage to every player on your target's original square – including the target, even if you move it.",
+      "cost": {
+        "YELLOW": "1"
+      },
+      "maxNumberOfTargetPlayers": 4,
+      "targetPlayers": true,
+      "targetSquare": true,
+      "targetRoom": false,
+      "eachTargetInTheSameRoom": false,
+      "eachTargetOnTheSameSquare": true,
+      "eachTargetOnDifferentSquares": false,
+      "damageEveryone": true,
+      "targetVisibleByOtherTarget": false,
+      "targetVisibleByShooter": true,
+      "cardinalDirectionMode": false,
+      "maxTargetDistance": 2147483647,
+      "minTargetDistance": 1,
+      "marks": 0,
+      "damage": [
+        2,
+        0,
+        0,
+        0
+      ],
+      "additionalDamageAvailable": 4,
+      "maxAdditionalDamagePerPlayer": 1,
+      "moveTargetBeforeShoot": false,
+      "moveTargetAfterShoot": true,
+      "moveShooter": false,
+      "maxTargetMove": 1,
+      "maxShooterMove": 0
+    },
+    {
+      "name": "basic effect + rocket jump + fragmenting warhead",
+      "description": "Deal 2 damage to 1 target you can see that is not on your square. Then you may move the target 1 square. Move 1 or 2 squares. This effect can be used either before or after the basic effect. During the basic effect, deal 1 damage to every player on your target's original square – including the target, even if you move it.",
+      "cost": {
+        "BLUE": 1,
+        "YELLOW": 1
+      },
+      "maxNumberOfTargetPlayers": 4,
+      "targetPlayers": true,
+      "targetSquare": true,
+      "targetRoom": false,
+      "eachTargetInTheSameRoom": false,
+      "eachTargetOnTheSameSquare": true,
+      "eachTargetOnDifferentSquares": false,
+      "damageEveryone": true,
+      "targetVisibleByOtherTarget": false,
+      "targetVisibleByShooter": true,
+      "cardinalDirectionMode": false,
+      "maxTargetDistance": 2147483647,
+      "minTargetDistance": 1,
+      "marks": 0,
+      "damage": [
+        2,
+        0,
+        0,
+        0
+      ],
+      "additionalDamageAvailable": 4,
+      "maxAdditionalDamagePerPlayer": 1,
+      "moveTargetBeforeShoot": false,
+      "moveTargetAfterShoot": true,
+      "moveShooter": true,
+      "maxTargetMove": 1,
+      "maxShooterMove": 2
+    }
+  ]
+}

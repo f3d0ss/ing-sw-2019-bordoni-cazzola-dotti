@@ -1,75 +1,29 @@
 package it.polimi.ingsw.model;
 
-import it.polimi.ingsw.model.command.SelectWeaponOptionCommand;
+import it.polimi.ingsw.model.command.SelectWeaponModeCommand;
 import it.polimi.ingsw.model.command.WeaponCommand;
 import it.polimi.ingsw.model.playerstate.ChoosingWeaponOptionState;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 /**
- * This abstract class represents a weapon
+ * This class represents a weapon
  */
-public abstract class Weapon {
+public class Weapon {
     private String name;
+    private String description;
     private Map<Color, Integer> reloadingCost;
-    private Map<Color, Integer> firstOptionalModeCost;
-    private Map<Color, Integer> secondOptionalModeCost;
-    private Map<Color, Integer> alternativeFireModeCost;
-    private boolean loaded = true;
-    private boolean selectedFirstOptionalFireMode = false;
-    private boolean selectedSecondOptionalFireMode = false;
-    private boolean selectedAlternativeFireMode = false;
-    private int extraMove = 0;
-    private Color color;
+    private Map<Color, Integer> buyCost;
+    private List<WeaponMode> weaponModes;
+    private transient int extraMove = 0;
+    private transient boolean extraMoveUsed = false;
+    private transient boolean loaded = true;
+    private transient WeaponMode selectedWeaponMode = null;
 
-    public Weapon(String name, Map<Color, Integer> reloadingCost, Map<Color, Integer> firstOptionalModeCost, Map<Color, Integer> secondOptionalModeCost, Map<Color, Integer> alternativeFireModeCost) {
-        this.name = name;
-        this.reloadingCost = reloadingCost;
-        this.firstOptionalModeCost = firstOptionalModeCost;
-        this.secondOptionalModeCost = secondOptionalModeCost;
-        this.alternativeFireModeCost = alternativeFireModeCost;
-    }
-
-    public Weapon() {
-    }
-
-    public abstract List<WeaponCommand> getPossibleCommands(GameBoard gameboard, Player player);
-
-    public abstract List<SelectWeaponOptionCommand> getSelectOptionCommands(Player player, ChoosingWeaponOptionState state);
-
-    public abstract void addTargetPlayer(Player targetPlayer);
-
-    public abstract void addTargetSquare(Square targetSquare);
-
-    public abstract Map<Color, Integer> getWeaponBuyCost();
-
-    public void setSelectedFirstOptionalFireMode(boolean selectedFirstOptionalFireMode) {
-        this.selectedFirstOptionalFireMode = selectedFirstOptionalFireMode;
-    }
-
-    public void setSelectedSecondOptionalFireMode(boolean selectedSecondOptionalFireMode) {
-        this.selectedSecondOptionalFireMode = selectedSecondOptionalFireMode;
-    }
-
-    public void setSelectedAlternativeFireMode(boolean selectedAlternativeFireMode) {
-        this.selectedAlternativeFireMode = selectedAlternativeFireMode;
-    }
-
-    public Map<Color, Integer> getFirstOptionalModeCost() {
-        return null;
-    }
-
-    public Map<Color, Integer> getSecondOptionalModeCost() {
-        return null;
-    }
-
-    public Map<Color, Integer> getAlternativeFireModeCost() {
-        return null;
-    }
-
-    protected String getName() {
-        return name;
+    public Map<Color, Integer> getWeaponBuyCost() {
+        return buyCost;
     }
 
     public Map<Color, Integer> getReloadingCost() {
@@ -84,21 +38,68 @@ public abstract class Weapon {
         return extraMove;
     }
 
-    protected Color getColor() {
-        return color;
+    public WeaponMode getSelectedWeaponMode() {
+        return selectedWeaponMode;
     }
 
-    public abstract boolean hasExtraMove();
+    public void setSelectedWeaponMode(WeaponMode selectedWeaponMode) {
+        this.selectedWeaponMode = selectedWeaponMode;
+    }
 
-    public abstract void useExtraMoves();
+    public List<WeaponCommand> getPossibleCommands(GameBoard gameboard, Player player) {
+        //TODO:
+        List<WeaponCommand> possibleCommands = new ArrayList<>();
+        return possibleCommands;
+    }
 
-    public abstract void resetMoves();
+    /**
+     * This method returns the commands to select which weapon mode to use.
+     *
+     * @param player
+     * @param state
+     * @return List of the commands
+     */
+    public List<SelectWeaponModeCommand> getSelectOptionCommands(Player player, ChoosingWeaponOptionState state) {
+        //TODO:
+        List<SelectWeaponModeCommand> selectWeaponModeCommandList = new ArrayList<>();
+        for (WeaponMode weaponMode : weaponModes)
+            selectWeaponModeCommandList.add(new SelectWeaponModeCommand(player, state, weaponMode));
+        return selectWeaponModeCommandList;
+    }
 
-    public abstract void reload();
+    public void addTargetPlayer(Player targetPlayer) {
+        //TODO:
+    }
 
-    public abstract void unload();
+    public void addTargetSquare(Square targetSquare) {
+        //TODO:
+    }
 
-    public abstract void removeTargetPlayer(Player targetPlayer);
+    public void removeTargetPlayer(Player targetPlayer) {
+        //TODO:
+    }
 
-    public abstract void removeTargetSquare(Square targetSquare);
+    public void removeTargetSquare(Square targetSquare) {
+        //TODO:
+    }
+
+    public void reload() {
+        //TODO:
+    }
+
+    public void unload() {
+        //TODO:
+    }
+
+    public boolean hasExtraMove() {
+        return !extraMoveUsed && extraMove != 0;
+    }
+
+    public void useExtraMoves() {
+        //TODO:
+    }
+
+    public void resetMoves() {
+        //TODO:
+    }
 }

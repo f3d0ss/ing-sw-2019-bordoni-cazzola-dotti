@@ -151,8 +151,7 @@ public class Player {
     }
 
     public List<Square> getAccessibleSquare(int maxDistance) {
-        //this.match.getAccessibleSquare(position);
-        return null;
+        return this.match.getBoard().getReachableSquare(position, maxDistance);
     }
 
     public Match getMatch() {

@@ -1,0 +1,73 @@
+{
+  "name": "Plasma Gun",
+  "description": null,
+  "reloadingCost": {
+    "BLUE": 1,
+    "YELLOW": 1
+  },
+  "buyCost": {
+    "YELLOW": 1
+  },
+  "weaponModes": [
+    {
+      "name": "basic effect + phase glide",
+      "description": "Deal 2 damage to 1 target you can see. You can also move up to 2 squares before or after shooting. You cannot use 1 move before shooting and 1 move after",
+      "cost": null,
+      "maxNumberOfTargetPlayers": 1,
+      "targetPlayers": true,
+      "targetSquare": false,
+      "targetRoom": false,
+      "eachTargetInTheSameRoom": false,
+      "eachTargetOnTheSameSquare": false,
+      "eachTargetOnDifferentSquares": false,
+      "damageEveryone": true,
+      "targetVisibleByOtherTarget": false,
+      "targetVisibleByShooter": true,
+      "cardinalDirectionMode": false,
+      "maxTargetDistance": 2147483647,
+      "minTargetDistance": 0,
+      "marks": 0,
+      "damage": [
+        2
+      ],
+      "additionalDamageAvailable": 0,
+      "maxAdditionalDamagePerPlayer": 0,
+      "moveTargetBeforeShoot": false,
+      "moveTargetAfterShoot": false,
+      "moveShooter": true,
+      "maxTargetMove": 0,
+      "maxShooterMove": 2
+    },
+    {
+      "name": "basic effect + charged shot + phase glide",
+      "description": "Deal 3 damage to 1 target you can see. You can also move up to 2 squares before or after shooting. You cannot use 1 move before shooting and 1 move after. ",
+      "cost": {
+        "BLUE": 1
+      },
+      "maxNumberOfTargetPlayers": 1,
+      "targetPlayers": true,
+      "targetSquare": false,
+      "targetRoom": false,
+      "eachTargetInTheSameRoom": false,
+      "eachTargetOnTheSameSquare": false,
+      "eachTargetOnDifferentSquares": false,
+      "damageEveryone": true,
+      "targetVisibleByOtherTarget": false,
+      "targetVisibleByShooter": true,
+      "cardinalDirectionMode": false,
+      "maxTargetDistance": 2147483647,
+      "minTargetDistance": 0,
+      "marks": 0,
+      "damage": [
+        3
+      ],
+      "additionalDamageAvailable": 0,
+      "maxAdditionalDamagePerPlayer": 0,
+      "moveTargetBeforeShoot": false,
+      "moveTargetAfterShoot": false,
+      "moveShooter": true,
+      "maxTargetMove": 0,
+      "maxShooterMove": 2
+    }
+  ]
+}
