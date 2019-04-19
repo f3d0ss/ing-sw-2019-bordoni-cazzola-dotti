@@ -60,4 +60,17 @@ abstract public class Square {
     }
 
     public abstract List<GrabCommand> getGrabCommands(Player player, SelectedAggregateActionState state);
+
+    /**
+     * This method returns true if the square hosts at least another player
+     *
+     * @param player player to exclude
+     * @return true if there is at least another player
+     */
+    public boolean hasOtherPlayers(Player player) {
+        ArrayList<Player> players = new ArrayList<>(hostedPlayers);
+        players.remove(player);
+        return !players.isEmpty();
+
+    }
 }

@@ -1,8 +1,10 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.model.command.SelectTargetSquareCommand;
 import it.polimi.ingsw.model.command.SelectWeaponModeCommand;
 import it.polimi.ingsw.model.command.WeaponCommand;
 import it.polimi.ingsw.model.playerstate.ChoosingWeaponOptionState;
+import it.polimi.ingsw.model.playerstate.ReadyToShootState;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,43 +54,66 @@ public class Weapon {
         selectedWeaponMode = null;
     }
 
-    private List<WeaponCommand> getPossibleShootCommands(GameBoard gameboard, Player player) {
+    private List<WeaponCommand> getPossibleShootCommands(GameBoard gameboard, Player player, ReadyToShootState state) {
         //TODO:
         List<WeaponCommand> possibleCommands = new ArrayList<>();
         return possibleCommands;
     }
 
-    private List<WeaponCommand> getPossibleSelectTargetCommands(GameBoard gameboard, Player shooter) {
-        //TODO:
+    private List<WeaponCommand> moveTargetBeforeShoot(GameBoard gameboard, Player shooter, ReadyToShootState state) {
         List<WeaponCommand> possibleCommands = new ArrayList<>();
 
         //check if mode can move targets before shoot
         if (selectedWeaponMode.isMoveTargetBeforeShoot()) {
             if (selectedWeaponMode.isTargetSquare()) { //select a square first
+                List<Square> possibleTargetSquares = new ArrayList<>();
                 if (selectedWeaponMode.isTargetVisibleByShooter()) {//visible by shooter
                     ArrayList<Square> visibleSquares = gameboard.getVisibleSquares(shooter.getPosition(), selectedWeaponMode.getMaxTargetDistance(), selectedWeaponMode.getMinTargetDistance(), false);
-                    for (Square square : visibleSquares){
-                       if( gameboard.get ){
-
-                       }
-
+                    for (Square square : visibleSquares) {
+                        ArrayList<Square> reachableSquares = gameboard.getReachableSquare(square, selectedWeaponMode.getMaxTargetMove());
+                        for (Square s : reachableSquares) {
+                            if (s.hasOtherPlayers(shooter)) {
+                                possibleTargetSquares.add(square);
+                                break;
+                            }
+                        }
                     }
                 }
+                for (Square possibleTarget : possibleTargetSquares)
+                    possibleCommands.add(new SelectTargetSquareCommand(state, possibleTarget));
             }
         }
 
         return possibleCommands;
     }
 
+    private List<WeaponCommand> getPossibleSelectTargetCommands(GameBoard gameboard, Player shooter, ReadyToShootState state) {
+        //TODO:
+        List<WeaponCommand> possibleCommands = new ArrayList<>();
 
-    public List<WeaponCommand> getPossibleCommands(GameBoard gameboard, Player player) {
+        //check if mode can move targets before shoot
+
+        possibleCommands.addAll(moveTargetBeforeShoot(gameboard, shooter, state));
+
+        return possibleCommands;
+    }
+
+    /**
+     * This method returns the possible commands to select targets or to shoot them
+     *
+     * @param gameboard
+     * @param shooter
+     * @param state
+     * @return
+     */
+    public List<WeaponCommand> getPossibleCommands(GameBoard gameboard, Player shooter, ReadyToShootState state) {
         //TODO:
         List<WeaponCommand> possibleCommands = new ArrayList<>();
 
         if (!hasMaximumTargets())
-            possibleCommands.addAll(getPossibleSelectTargetCommands());
+            possibleCommands.addAll(getPossibleSelectTargetCommands(gameboard, shooter, state));
         if (hasSufficientTargets())
-            possibleCommands.addAll(getPossibleShootCommands());
+            possibleCommands.addAll(getPossibleShootCommands(gameboard, shooter, state));
 
         return possibleCommands;
 
