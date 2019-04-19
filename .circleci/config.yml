@@ -1,4 +1,3 @@
-  
 # Java Maven CircleCI 2.0 configuration file
 #
 # Check https://circleci.com/docs/2.0/language-java/ for more details
@@ -15,7 +14,7 @@ jobs:
       # documented at https://circleci.com/docs/2.0/circleci-images/
       # - image: circleci/postgres:9.4
 
-    working_directory: ~/test-ci
+    working_directory: ~/ing-sw-2019-bordoni-cazzola-dotti
 
     environment:
       # Customize the JVM maximum heap limit
