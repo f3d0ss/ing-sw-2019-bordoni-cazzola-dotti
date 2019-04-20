@@ -1,7 +1,6 @@
 package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.command.Command;
-import it.polimi.ingsw.model.playerstate.SelectedPowerUpState;
 import it.polimi.ingsw.model.playerstate.TargetingPlayerState;
 
 import java.util.List;
@@ -21,7 +20,7 @@ public abstract class PowerUp {
 
     public Color getColor(){
         return this.color;
-    };
+    }
 
     public abstract List<Command> getPossibleCommands(GameBoard gameboard, Player player, TargetingPlayerState currentState);
 

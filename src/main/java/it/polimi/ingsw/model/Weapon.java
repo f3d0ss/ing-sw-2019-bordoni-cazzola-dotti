@@ -5,7 +5,6 @@ import it.polimi.ingsw.model.playerstate.ChoosingWeaponOptionState;
 import it.polimi.ingsw.model.playerstate.ReadyToShootState;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -59,13 +58,13 @@ public class Weapon {
 
         //check if mode can move targets before shoot
         if (selectedWeaponMode.isMoveTargetBeforeShoot())
-            possibleCommands.addAll(getPossibleShootCommandsTargetCanMoveBeforeShoot(gameboard, shooter, state));
+            possibleCommands.addAll(getPossibleShootCommandsTargetCanMoveBeforeShoot(shooter, state));
 
 
         return possibleCommands;
     }
 
-    private List<WeaponCommand> getPossibleShootCommandsTargetCanMoveBeforeShoot(GameBoard gameboard, Player shooter, ReadyToShootState state) {
+    private List<WeaponCommand> getPossibleShootCommandsTargetCanMoveBeforeShoot(Player shooter, ReadyToShootState state) {
         //TODO:
         List<WeaponCommand> possibleCommands = new ArrayList<>();
         List<EffectCommand> effectCommands = new ArrayList<>();

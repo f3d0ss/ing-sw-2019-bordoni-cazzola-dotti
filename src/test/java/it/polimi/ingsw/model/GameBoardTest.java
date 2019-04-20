@@ -95,7 +95,7 @@ public class GameBoardTest {
     public void testGetAccessibleDirections() {
         GameBoard board = new GameBoard(1);
         Square square;
-        ArrayList<CardinalDirection> list;
+        List<CardinalDirection> list;
         for (int i = 0; i < ROWS * COLUMNS; i++) {
             square = board.getSquare(i / COLUMNS, i % COLUMNS);
             if (square != null) {

@@ -1,17 +1,10 @@
 package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.command.Command;
-import it.polimi.ingsw.model.command.MoveCommand;
-import it.polimi.ingsw.model.exception.IllegalMoveException;
-import it.polimi.ingsw.model.playerstate.AfterSelectedAggregateActionState;
 import it.polimi.ingsw.model.playerstate.IdleState;
-import it.polimi.ingsw.model.playerstate.PendingPaymentWeaponOptionState;
 import it.polimi.ingsw.model.playerstate.PlayerState;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Player {
 
@@ -23,15 +16,15 @@ public class Player {
 
     private Match match;
     private PlayerId id;
-    private ArrayList<PlayerId> health = new ArrayList<>();
+    private List<PlayerId> health = new ArrayList<>();
     private int deaths = 0;
     private Map<PlayerId, Integer> marks = new HashMap<>();
     private int points = 0;
-    private String Nickname;
-    private ArrayList<Weapon> weapons = new ArrayList<>();
-    private ArrayList<PowerUp> powerUps = new ArrayList<>();
-    private Map<Color, Integer> ammo = new HashMap<Color, Integer>();
-    private boolean disconnetted = false;
+    private String nickname;
+    private List<Weapon> weapons = new ArrayList<>();
+    private List<PowerUp> powerUps = new ArrayList<>();
+    private Map<Color, Integer> ammo = new HashMap<>();
+    private boolean disconnected = false;
     private boolean dead = false;
     private int availableAggregateActionCounter = 2;
     private PlayerState playerState = new IdleState();
@@ -43,7 +36,7 @@ public class Player {
     public Player(Match match, PlayerId id, String nickname, Square position) {
         this.match = match;
         this.id = id;
-        Nickname = nickname;
+        nickname = nickname;
         this.position = position;
         usedAggregateAction = 0;
     }
@@ -52,7 +45,7 @@ public class Player {
         return ammo;
     }
 
-    public ArrayList<PowerUp> getPowerUps() {
+    public List<PowerUp> getPowerUps() {
         return powerUps;
     }
 
@@ -159,7 +152,7 @@ public class Player {
     }
 
     public void pay(Color color, int amount) {
-        if(ammo.getOrDefault(color, 0) < amount)
+        if (ammo.getOrDefault(color, 0) < amount)
             throw new IllegalStateException();
         ammo.put(color, ammo.get(color) - amount);
     }
@@ -180,7 +173,7 @@ public class Player {
         powerUps.add(powerUp);
     }
 
-    public void addWeapon(Weapon weapon){
+    public void addWeapon(Weapon weapon) {
         if (weapons.size() >= MAX_WEAPONS)
             throw new IllegalStateException();
         weapons.add(weapon);

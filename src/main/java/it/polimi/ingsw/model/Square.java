@@ -4,10 +4,9 @@ import it.polimi.ingsw.model.command.GrabCommand;
 import it.polimi.ingsw.model.playerstate.SelectedAggregateActionState;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
-abstract public class Square {
+public abstract class Square {
     private Connection northConnection;
     private Connection eastConnection;
     private Connection southConnection;
@@ -56,7 +55,7 @@ abstract public class Square {
         return this.hostedPlayers.remove(player);
     }
 
-    public ArrayList<Player> getHostedPlayers() {
+    public List<Player> getHostedPlayers() {
         return hostedPlayers;
     }
 

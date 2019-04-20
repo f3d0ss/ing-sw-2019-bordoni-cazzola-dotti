@@ -1,12 +1,12 @@
 package it.polimi.ingsw.model;
 
-import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 public class AmmoTileDeck implements Deck {
-    private ArrayList<AmmoTile> ammoTiles;
+    private List<AmmoTile> ammoTiles;
 
-    public AmmoTileDeck(ArrayList<AmmoTile> ammoTiles) {
+    public AmmoTileDeck(List<AmmoTile> ammoTiles) {
         this.ammoTiles = ammoTiles;
     }
 

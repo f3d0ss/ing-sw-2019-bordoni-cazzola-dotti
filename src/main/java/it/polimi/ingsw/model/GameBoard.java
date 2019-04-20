@@ -5,8 +5,8 @@ import java.util.stream.Collectors;
 
 public class GameBoard {
 
-    private final static int ROWS = 3;
-    private final static int COLUMNS = 4;
+    private static final int ROWS = 3;
+    private static final int COLUMNS = 4;
     private Square[][] board = new Square[ROWS][COLUMNS];
     private Map<Color, SpawnSquare> spawn;
 
@@ -283,8 +283,8 @@ public class GameBoard {
      * @author supernivem
      */
 
-    public ArrayList<CardinalDirection> getAccessibleDirection(Square position) {
-        ArrayList<CardinalDirection> dir = new ArrayList<>();
+    public List<CardinalDirection> getAccessibleDirection(Square position) {
+        List<CardinalDirection> dir = new ArrayList<>();
         for (CardinalDirection c : CardinalDirection.values())
             if (position.getConnection(c).isAccessible(false))
                 dir.add(c);

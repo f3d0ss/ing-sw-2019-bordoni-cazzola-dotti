@@ -1,12 +1,12 @@
 package it.polimi.ingsw.model;
 
-import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 public class WeaponDeck implements Deck {
-    private ArrayList<Weapon> weapons;
+    private List<Weapon> weapons;
 
-    public WeaponDeck(ArrayList<Weapon> weapons) {
+    public WeaponDeck(List<Weapon> weapons) {
         this.weapons = weapons;
     }
 
@@ -17,5 +17,5 @@ public class WeaponDeck implements Deck {
 
     public Weapon drawWeapon() {
         return weapons.isEmpty() ? null : weapons.remove(0);
-   }
+    }
 }
