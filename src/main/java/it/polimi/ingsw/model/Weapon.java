@@ -70,12 +70,10 @@ public class Weapon {
         List<EffectCommand> effectCommands = new ArrayList<>();
         if (selectedWeaponMode.isTargetSquare()) {
             for (int i = 0; i < targetPlayers.size(); i++) {
-                MoveCommand moveToTargetSquare = null;
-                //moveToTargetSquare = new MoveCommand(targetPlayers.get(i),targetSquares.get(0),????) MOVE COMMAND STATE???
                 if (selectedWeaponMode.getDamage().size() == 1)
-                    effectCommands.add(new EffectCommand(targetPlayers.get(i), selectedWeaponMode.getDamage(0), selectedWeaponMode.getMarks(), moveToTargetSquare, shooter.getId()));
+                    effectCommands.add(new EffectCommand(targetPlayers.get(i), selectedWeaponMode.getDamage(0), selectedWeaponMode.getMarks(), targetSquares.get(0), shooter.getId()));
                 if (selectedWeaponMode.getDamage().size() > 1)
-                    effectCommands.add(new EffectCommand(targetPlayers.get(i), selectedWeaponMode.getDamage(i), selectedWeaponMode.getMarks(), moveToTargetSquare, shooter.getId()));
+                    effectCommands.add(new EffectCommand(targetPlayers.get(i), selectedWeaponMode.getDamage(i), selectedWeaponMode.getMarks(), targetSquares.get(0), shooter.getId()));
             }
         }
         possibleCommands.add(new ShootCommand(state, effectCommands, shooter));

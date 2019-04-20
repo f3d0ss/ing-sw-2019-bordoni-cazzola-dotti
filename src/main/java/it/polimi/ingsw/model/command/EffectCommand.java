@@ -2,20 +2,21 @@ package it.polimi.ingsw.model.command;
 
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.PlayerId;
+import it.polimi.ingsw.model.Square;
 import it.polimi.ingsw.model.exception.IllegalUndoException;
 
 public class EffectCommand implements Command {
     private Player player;
     private int damage;
     private int marks;
-    private MoveCommand move;
+    private Square arrivalSquare;
     private PlayerId shooter;
 
-    public EffectCommand(Player player, int damage, int marks, MoveCommand move, PlayerId shooter) {
+    public EffectCommand(Player player, int damage, int marks, Square arrivalSquare, PlayerId shooter) {
         this.player = player;
         this.damage = damage;
         this.marks = marks;
-        this.move = move;
+        this.arrivalSquare = arrivalSquare;
         this.shooter = shooter;
     }
 
@@ -26,7 +27,9 @@ public class EffectCommand implements Command {
     public void execute() {
         player.addDamage(damage, shooter);
         player.addMarks(marks, shooter);
-        move.execute();
+        player.getPosition().removePlayer(player);
+        player.move(arrivalSquare);
+        player.getPosition().addPlayer(player);
     }
 
     /**
