@@ -233,7 +233,6 @@ public class GameBoard {
     }
 
     /**
-     *
      * @param squares
      * @param maxMoves
      * @param player
@@ -290,5 +289,22 @@ public class GameBoard {
             if (position.getConnection(c).isAccessible(false))
                 dir.add(c);
         return dir;
+    }
+
+    /**
+     * This method returns the players on reachable squares
+     *
+     * @param position
+     * @param maxMoves max distance of player
+     * @param player   player to exclude
+     * @return list of other players on reachable squares
+     */
+    public List<Player> getOtherPlayersOnReachableSquares(Square position, int maxMoves, Player player) {
+        List<Square> reachableSquares = getReachableSquare(position, maxMoves);
+        List<Player> players = new ArrayList<>();
+        for (Square square : reachableSquares)
+            if (square.hasOtherPlayers(player))
+                players.addAll(square.getHostedPlayers(player));
+        return players.stream().distinct().collect(Collectors.toList());
     }
 }

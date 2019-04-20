@@ -161,6 +161,10 @@ public class WeaponMode {
         return damage;
     }
 
+    public int getDamage(int index){
+        return damage.get(index);
+    }
+
     public int getAdditionalDamageAvailable() {
         return additionalDamageAvailable;
     }

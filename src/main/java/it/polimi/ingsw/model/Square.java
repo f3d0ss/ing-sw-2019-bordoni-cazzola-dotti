@@ -4,6 +4,7 @@ import it.polimi.ingsw.model.command.GrabCommand;
 import it.polimi.ingsw.model.playerstate.SelectedAggregateActionState;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 abstract public class Square {
@@ -72,5 +73,17 @@ abstract public class Square {
         players.remove(player);
         return !players.isEmpty();
 
+    }
+
+    /**
+     * This method returns all players on the square but
+     *
+     * @param player player not to return
+     * @return list of other players
+     */
+    public List<Player> getHostedPlayers(Player player) {
+        List<Player> players = new ArrayList<>(hostedPlayers);
+        if (getHostedPlayers().contains(player)) players.remove(player);
+        return players;
     }
 }
