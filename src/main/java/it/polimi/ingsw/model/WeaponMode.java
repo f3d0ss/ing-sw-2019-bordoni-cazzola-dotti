@@ -1,5 +1,12 @@
 package it.polimi.ingsw.model;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -39,24 +46,30 @@ public class WeaponMode {
     private boolean moveShooter;
     private int maxTargetMove;
     private int maxShooterMove;
-
-    /*public static void main(String[] args) {
+/*
+    public static void main(String[] args) {
         GsonBuilder g = new GsonBuilder();
         g.setPrettyPrinting();
         g.serializeNulls();
         Gson gson = g.create();
-        Weapon lock = null;
-        try {
-            lock = gson.fromJson(new FileReader("src/resources/weapons/Flamethrower.json"), Weapon.class);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        System.out.println(lock.getReloadingCost().toString() +
-                lock.getWeaponBuyCost() +
-                lock.isLoaded());
-        System.out.println(gson.toJson(lock));
-    }*/
+        List<Weapon> weaponList = new ArrayList<>();
+        File file = new File("src/resources/weapons/");
+        File[] files = file.listFiles();
+        for (File f : files) {
+            System.out.println(f.getPath());
 
+            try {
+                weaponList.add(gson.fromJson(new FileReader(f.getPath()), Weapon.class));
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+        for (Weapon w : weaponList)
+            for (WeaponMode wm : w.weaponModes)
+                if (wm.isTargetRoom())
+                    System.out.println(wm.name + wm.getDescription() + w.name);
+    }
+*/
     public WeaponMode(WeaponMode other) {
         this.name = other.name;
         this.description = other.description;
@@ -161,7 +174,7 @@ public class WeaponMode {
         return damage;
     }
 
-    public int getDamage(int index){
+    public int getDamage(int index) {
         return damage.get(index);
     }
 
@@ -195,9 +208,10 @@ public class WeaponMode {
 }
 /*//TODO:
 MOVE
-//add something to manage glove move effect (go to target square after)
+//add something to manage powerglove move effect (go to target square after)
+//cyberblade shoot + move + shoot
 
 SHOOT
 //add something to manage flamethrower 2 squares in cardinal direction diff damage
-//grenade launcher
+//grenade launcher target player and a square
 */

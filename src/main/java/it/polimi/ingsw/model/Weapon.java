@@ -12,11 +12,11 @@ import java.util.Map;
  * This class represents a weapon
  */
 public class Weapon {
-    private String name;
+    public String name;
     private String description;
     private Map<Color, Integer> reloadingCost;
     private Map<Color, Integer> buyCost;
-    private List<WeaponMode> weaponModes;
+    public List<WeaponMode> weaponModes;
     private transient int extraMove = 0;
     private transient boolean extraMoveUsed = false;
     private transient boolean loaded = true;
@@ -45,7 +45,11 @@ public class Weapon {
     }
 
     public void setSelectedWeaponMode(WeaponMode selectedWeaponMode) {
-        this.selectedWeaponMode = new WeaponMode(selectedWeaponMode);
+        this.selectedWeaponMode = new WeaponMode(selectedWeaponMode); //remove copy constructor?
+        if (selectedWeaponMode.isMoveShooter()) { //set extraMove
+            extraMove = selectedWeaponMode.getMaxShooterMove();
+            extraMoveUsed = false;
+        }
     }
 
     public void deselectWeaponMode() {
@@ -55,17 +59,38 @@ public class Weapon {
     private List<WeaponCommand> getPossibleShootCommands(GameBoard gameboard, Player shooter, ReadyToShootState state) {
         //TODO:
         List<WeaponCommand> possibleCommands = new ArrayList<>();
-
         //check if mode can move targets before shoot
         if (selectedWeaponMode.isMoveTargetBeforeShoot())
             possibleCommands.addAll(getPossibleShootCommandsTargetCanMoveBeforeShoot(shooter, state));
-
-
+            // else if(selectedWeaponMode.isTargetPlayers() && getSelectedWeaponMode().isTargetSquare())
+        else if (selectedWeaponMode.isTargetSquare())
+            possibleCommands.addAll(getPossibleShootCommandsTargetSquare(gameboard, shooter, state));
+        else if (selectedWeaponMode.isTargetPlayers())
+            possibleCommands.addAll(getPossibleShootCommandsTargetPlayers(gameboard, shooter, state));
+        else if (selectedWeaponMode.isTargetRoom())
+            possibleCommands.addAll(getPossibleShootCommandsTargetRoom(gameboard, shooter, state));
         return possibleCommands;
     }
 
-    private List<WeaponCommand> getPossibleShootCommandsTargetCanMoveBeforeShoot(Player shooter, ReadyToShootState state) {
+    private List<WeaponCommand> getPossibleShootCommandsTargetRoom(GameBoard gameboard, Player shooter, ReadyToShootState state) {
         //TODO:
+        List<WeaponCommand> possibleCommands = new ArrayList<>();
+        return  possibleCommands;
+    }
+
+    private List<WeaponCommand> getPossibleShootCommandsTargetPlayers(GameBoard gameboard, Player shooter, ReadyToShootState state) {
+        //TODO:
+        List<WeaponCommand> possibleCommands = new ArrayList<>();
+        return  possibleCommands;
+    }
+
+    private List<WeaponCommand> getPossibleShootCommandsTargetSquare(GameBoard gameboard, Player shooter, ReadyToShootState state) {
+        //TODO:
+        List<WeaponCommand> possibleCommands = new ArrayList<>();
+        return  possibleCommands;
+    }
+
+    private List<WeaponCommand> getPossibleShootCommandsTargetCanMoveBeforeShoot(Player shooter, ReadyToShootState state) {
         List<WeaponCommand> possibleCommands = new ArrayList<>();
         List<EffectCommand> effectCommands = new ArrayList<>();
         if (selectedWeaponMode.isTargetSquare()) {
@@ -80,18 +105,32 @@ public class Weapon {
         return possibleCommands;
     }
 
+
+    private List<WeaponCommand> getPossibleSelectTargetCommands(GameBoard gameboard, Player shooter, ReadyToShootState state) {
+        List<WeaponCommand> possibleCommands = new ArrayList<>();
+        if (selectedWeaponMode.isMoveTargetBeforeShoot())
+            possibleCommands.addAll(getPossibleSelectTargetCommandsTargetCanMoveBeforeShoot(gameboard, shooter, state));
+            // else if(selectedWeaponMode.isTargetPlayers() && getSelectedWeaponMode().isTargetSquare())
+        else if (selectedWeaponMode.isTargetSquare())
+            possibleCommands.addAll(getPossibleSelectTargetCommandsTargetSquare(gameboard, shooter, state));
+        else if (selectedWeaponMode.isTargetPlayers())
+            possibleCommands.addAll(getPossibleSelectTargetCommandsTargetPlayers(gameboard, shooter, state));
+        else if (selectedWeaponMode.isTargetRoom())
+            possibleCommands.addAll(getPossibleSelectTargetCommandsTargetRoom(gameboard, shooter, state));
+        return possibleCommands;
+    }
+
     private List<WeaponCommand> getPossibleSelectTargetCommandsTargetCanMoveBeforeShoot(GameBoard gameboard, Player shooter, ReadyToShootState state) {
-        //TODO:
         List<WeaponCommand> possibleCommands = new ArrayList<>();
         if (selectedWeaponMode.isMoveTargetBeforeShoot()) { //check if mode can move targets before shoot
             if (selectedWeaponMode.isTargetSquare()) {
-                if (targetSquares.isEmpty()) { //select a square first
+                if (targetSquares.isEmpty()) { //select a square (first call)
                     List<Square> possibleTargetSquares = new ArrayList<>();
                     if (selectedWeaponMode.isTargetVisibleByShooter()) //target square must be visible and with players that can be moved to it
                         possibleTargetSquares.addAll(gameboard.getReachableSquaresWithOtherPlayers(gameboard.getVisibleSquares(shooter.getPosition(), selectedWeaponMode.getMaxTargetDistance(), selectedWeaponMode.getMinTargetDistance(), false), selectedWeaponMode.getMaxTargetMove(), shooter));
                     for (Square possibleTarget : possibleTargetSquares)
                         possibleCommands.add(new SelectTargetSquareCommand(state, possibleTarget));
-                } else { //pick target players if not already selected
+                } else { //pick target players if not already selected (second call)
                     List<Player> otherPlayersOnReachableSquares = gameboard.getOtherPlayersOnReachableSquares(targetSquares.get(0), selectedWeaponMode.getMaxTargetMove(), shooter);
                     for (Player possibleTargetPlayer : otherPlayersOnReachableSquares)
                         if (!targetPlayers.contains(possibleTargetPlayer))
@@ -102,14 +141,19 @@ public class Weapon {
         return possibleCommands;
     }
 
-    private List<WeaponCommand> getPossibleSelectTargetCommands(GameBoard gameboard, Player shooter, ReadyToShootState state) {
-        //TODO:
+    private List<WeaponCommand> getPossibleSelectTargetCommandsTargetRoom(GameBoard gameboard, Player shooter, ReadyToShootState state) {
         List<WeaponCommand> possibleCommands = new ArrayList<>();
+        //TODO: method that returns a list of the possbile rooms (a square for each room)
+        return possibleCommands;
+    }
 
-        //check if mode can move targets before shoot
-        if (selectedWeaponMode.isMoveTargetBeforeShoot())
-            possibleCommands.addAll(getPossibleSelectTargetCommandsTargetCanMoveBeforeShoot(gameboard, shooter, state));
+    private List<WeaponCommand> getPossibleSelectTargetCommandsTargetPlayers(GameBoard gameboard, Player shooter, ReadyToShootState state) {
+        List<WeaponCommand> possibleCommands = new ArrayList<>();
+        return possibleCommands;
+    }
 
+    private List<WeaponCommand> getPossibleSelectTargetCommandsTargetSquare(GameBoard gameboard, Player shooter, ReadyToShootState state) {
+        List<WeaponCommand> possibleCommands = new ArrayList<>();
         return possibleCommands;
     }
 
@@ -122,14 +166,11 @@ public class Weapon {
      * @return
      */
     public List<WeaponCommand> getPossibleCommands(GameBoard gameboard, Player shooter, ReadyToShootState state) {
-        //TODO:
         List<WeaponCommand> possibleCommands = new ArrayList<>();
-
         if (!hasMaximumTargets())
             possibleCommands.addAll(getPossibleSelectTargetCommands(gameboard, shooter, state));
         if (hasSufficientTargets())
             possibleCommands.addAll(getPossibleShootCommands(gameboard, shooter, state));
-
         return possibleCommands;
 
     }
@@ -194,6 +235,7 @@ public class Weapon {
 
     public void resetMoves() {
         extraMoveUsed = false;
+        selectedWeaponMode.getMaxShooterMove();
     }
 
     public void deselectWeaponMode(WeaponMode weaponMode) {

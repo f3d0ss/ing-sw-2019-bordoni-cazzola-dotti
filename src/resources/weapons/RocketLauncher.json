@@ -78,7 +78,7 @@
       },
       "maxNumberOfTargetPlayers": 4,
       "minNumberOfTargetPlayers": 1,
-      "targetPlayers": true,
+      "targetPlayers": false,
       "targetSquare": true,
       "targetRoom": false,
       "eachTargetInTheSameRoom": false,
@@ -92,13 +92,13 @@
       "minTargetDistance": 1,
       "marks": 0,
       "damage": [
-        2,
-        0,
-        0,
-        0
+        3,
+        1,
+        1,
+        1
       ],
-      "additionalDamageAvailable": 4,
-      "maxAdditionalDamagePerPlayer": 1,
+      "additionalDamageAvailable": 0,
+      "maxAdditionalDamagePerPlayer": 0,
       "moveTargetBeforeShoot": false,
       "moveTargetAfterShoot": true,
       "moveShooter": false,

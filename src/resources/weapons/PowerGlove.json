@@ -35,9 +35,9 @@
       "maxAdditionalDamagePerPlayer": 0,
       "moveTargetBeforeShoot": false,
       "moveTargetAfterShoot": false,
-      "moveShooter": true,
+      "moveShooter": false,
       "maxTargetMove": 0,
-      "maxShooterMove": 1
+      "maxShooterMove": 0
     },
     {
       "name": "rocket fist mode",
@@ -48,7 +48,7 @@
       "maxNumberOfTargetPlayers": 2,
       "minNumberOfTargetPlayers": 1,
       "targetPlayers": true,
-      "targetSquare": true,
+      "targetSquare": false,
       "targetRoom": false,
       "eachTargetInTheSameRoom": false,
       "eachTargetOnTheSameSquare": false,
@@ -68,9 +68,9 @@
       "maxAdditionalDamagePerPlayer": 0,
       "moveTargetBeforeShoot": false,
       "moveTargetAfterShoot": false,
-      "moveShooter": true,
+      "moveShooter": false,
       "maxTargetMove": 0,
-      "maxShooterMove": 2
+      "maxShooterMove": 0
     }
   ]
 }

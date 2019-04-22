@@ -41,7 +41,7 @@
     },
     {
       "name": "scanner mode",
-      "description": "Choose up to 3 targets you can see and deal 1 mark to each"
+      "description": "Choose up to 3 targets you can see and deal 1 mark to each",
       "cost": null,
       "maxNumberOfTargetPlayers": 3,
       "minNumberOfTargetPlayers": 1,
@@ -53,7 +53,7 @@
       "eachTargetOnDifferentSquares": false,
       "damageEveryone": false,
       "targetVisibleByOtherTarget": false,
-      "targetVisibleByShooter": false,
+      "targetVisibleByShooter": true,
       "cardinalDirectionMode": true,
       "maxTargetDistance": 2147483647,
       "minTargetDistance": 0,
