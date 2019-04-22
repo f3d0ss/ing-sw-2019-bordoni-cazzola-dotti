@@ -7,7 +7,7 @@ import it.polimi.ingsw.model.command.WeaponCommand;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ReadyToShootState extends SelectedWeaponState implements TargetingPlayerState, TargetingSquareState {
+public class ReadyToShootState extends SelectedWeaponState implements TargetingPlayerState, TargetingSquareState, MovableState {
     public ReadyToShootState(AggregateAction selectedAggregateAction, Weapon selectedWeapon) {
         super(selectedAggregateAction, selectedWeapon);
     }
@@ -31,5 +31,15 @@ public class ReadyToShootState extends SelectedWeaponState implements TargetingP
 
     public void removeTargetSquare(Square targetSquare) {
         getSelectedWeapon().removeTargetSquare(targetSquare);
+    }
+
+    @Override
+    public void useMoves() {
+        getSelectedWeapon().useExtraMoves();
+    }
+
+    @Override
+    public void resetMoves() {
+        getSelectedWeapon().resetMoves();
     }
 }

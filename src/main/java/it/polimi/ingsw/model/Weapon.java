@@ -242,4 +242,9 @@ public class Weapon {
         if (selectedWeaponMode.equals(weaponMode))
             selectedWeaponMode = null;
     }
+
+    public boolean hasShoot() {
+//        TODO: return if player can shoot again
+        return false;
+    }
 }
