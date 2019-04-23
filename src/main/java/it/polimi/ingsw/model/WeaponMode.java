@@ -46,8 +46,8 @@ public class WeaponMode {
     private boolean moveShooter;
     private int maxTargetMove;
     private int maxShooterMove;
-/*
-    public static void main(String[] args) {
+
+   /* public static void main(String[] args) {
         GsonBuilder g = new GsonBuilder();
         g.setPrettyPrinting();
         g.serializeNulls();
@@ -64,12 +64,13 @@ public class WeaponMode {
                 e.printStackTrace();
             }
         }
+        int c = 1;
         for (Weapon w : weaponList)
             for (WeaponMode wm : w.weaponModes)
-                if (wm.isTargetRoom())
-                    System.out.println(wm.name + wm.getDescription() + w.name);
-    }
-*/
+                if (!wm.isMoveTargetBeforeShoot() && wm.isTargetSquare() && !wm.isTargetPlayers())
+                    System.out.println(wm.name+" " + w.name +" "+ wm.description+ c++ +" "+wm.getMaxTargetDistance()+" "+wm.getMinTargetDistance()+ " maxtargets" + wm.maxNumberOfTargetPlayers + " min" +wm.getMinNumberOfTargetPlayers());
+    }*/
+
     public WeaponMode(WeaponMode other) {
         this.name = other.name;
         this.description = other.description;

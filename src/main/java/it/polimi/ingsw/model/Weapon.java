@@ -23,6 +23,7 @@ public class Weapon {
     private transient WeaponMode selectedWeaponMode = null;
     private transient List<Player> targetPlayers = new ArrayList<>();
     private transient List<Square> targetSquares = new ArrayList<>();
+    private transient boolean damageToDo = false;
 
     public Map<Color, Integer> getWeaponBuyCost() {
         return buyCost;
@@ -57,12 +58,11 @@ public class Weapon {
     }
 
     private List<WeaponCommand> getPossibleShootCommands(GameBoard gameboard, Player shooter, ReadyToShootState state) {
-        //TODO:
         List<WeaponCommand> possibleCommands = new ArrayList<>();
-        //check if mode can move targets before shoot
         if (selectedWeaponMode.isMoveTargetBeforeShoot())
             possibleCommands.addAll(getPossibleShootCommandsTargetCanMoveBeforeShoot(shooter, state));
-            // else if(selectedWeaponMode.isTargetPlayers() && getSelectedWeaponMode().isTargetSquare())
+        else if (selectedWeaponMode.isTargetPlayers() && getSelectedWeaponMode().isTargetSquare())
+            possibleCommands.addAll(getPossibleShootCommandsMultiTarget(gameboard, shooter, state));
         else if (selectedWeaponMode.isTargetSquare())
             possibleCommands.addAll(getPossibleShootCommandsTargetSquare(gameboard, shooter, state));
         else if (selectedWeaponMode.isTargetPlayers())
@@ -72,22 +72,28 @@ public class Weapon {
         return possibleCommands;
     }
 
+    private List<WeaponCommand> getPossibleShootCommandsMultiTarget(GameBoard gameboard, Player shooter, ReadyToShootState state) {
+        //TODO:
+        List<WeaponCommand> possibleCommands = new ArrayList<>();
+        return possibleCommands;
+    }
+
     private List<WeaponCommand> getPossibleShootCommandsTargetRoom(GameBoard gameboard, Player shooter, ReadyToShootState state) {
         //TODO:
         List<WeaponCommand> possibleCommands = new ArrayList<>();
-        return  possibleCommands;
+        return possibleCommands;
     }
 
     private List<WeaponCommand> getPossibleShootCommandsTargetPlayers(GameBoard gameboard, Player shooter, ReadyToShootState state) {
         //TODO:
         List<WeaponCommand> possibleCommands = new ArrayList<>();
-        return  possibleCommands;
+        return possibleCommands;
     }
 
     private List<WeaponCommand> getPossibleShootCommandsTargetSquare(GameBoard gameboard, Player shooter, ReadyToShootState state) {
         //TODO:
         List<WeaponCommand> possibleCommands = new ArrayList<>();
-        return  possibleCommands;
+        return possibleCommands;
     }
 
     private List<WeaponCommand> getPossibleShootCommandsTargetCanMoveBeforeShoot(Player shooter, ReadyToShootState state) {
@@ -105,12 +111,12 @@ public class Weapon {
         return possibleCommands;
     }
 
-
     private List<WeaponCommand> getPossibleSelectTargetCommands(GameBoard gameboard, Player shooter, ReadyToShootState state) {
         List<WeaponCommand> possibleCommands = new ArrayList<>();
         if (selectedWeaponMode.isMoveTargetBeforeShoot())
             possibleCommands.addAll(getPossibleSelectTargetCommandsTargetCanMoveBeforeShoot(gameboard, shooter, state));
-            // else if(selectedWeaponMode.isTargetPlayers() && getSelectedWeaponMode().isTargetSquare())
+        else if (selectedWeaponMode.isTargetPlayers() && selectedWeaponMode.isTargetSquare())
+            possibleCommands.addAll(getPossibleSelectTargetCommandsMultiTarget(gameboard, shooter, state));
         else if (selectedWeaponMode.isTargetSquare())
             possibleCommands.addAll(getPossibleSelectTargetCommandsTargetSquare(gameboard, shooter, state));
         else if (selectedWeaponMode.isTargetPlayers())
@@ -141,6 +147,12 @@ public class Weapon {
         return possibleCommands;
     }
 
+    private List<WeaponCommand> getPossibleSelectTargetCommandsMultiTarget(GameBoard gameboard, Player shooter, ReadyToShootState state) {
+        //TODO:
+        List<WeaponCommand> possibleCommands = new ArrayList<>();
+        return possibleCommands;
+    }
+
     private List<WeaponCommand> getPossibleSelectTargetCommandsTargetRoom(GameBoard gameboard, Player shooter, ReadyToShootState state) {
         List<WeaponCommand> possibleCommands = new ArrayList<>();
         //TODO: method that returns a list of the possbile rooms (a square for each room)
@@ -149,30 +161,49 @@ public class Weapon {
 
     private List<WeaponCommand> getPossibleSelectTargetCommandsTargetPlayers(GameBoard gameboard, Player shooter, ReadyToShootState state) {
         List<WeaponCommand> possibleCommands = new ArrayList<>();
+        //TODO
         return possibleCommands;
     }
 
     private List<WeaponCommand> getPossibleSelectTargetCommandsTargetSquare(GameBoard gameboard, Player shooter, ReadyToShootState state) {
         List<WeaponCommand> possibleCommands = new ArrayList<>();
+        //TODO Flamethrower 2 squares (optional), rocketlauncher select 1st targetPlayer, others select all player on square
+        if (targetSquares.isEmpty()) { //selectSquare(s) first
+            List<Square> possibleTargetSquares = new ArrayList<>();
+            possibleTargetSquares.addAll(gameboard.getVisibleSquares(shooter.getPosition(), selectedWeaponMode.getMaxTargetDistance(), selectedWeaponMode.getMinTargetDistance(), true));
+            possibleTargetSquares.forEach(square -> possibleCommands.add(new SelectTargetSquareCommand(state, square)));
+        } else {
+            List<Player> possibleTargetPlayers = new ArrayList<>();
+            targetSquares.stream().map(square -> square.getHostedPlayers(shooter)).forEach(possibleTargetPlayers::addAll);
+            possibleTargetPlayers.forEach(player -> possibleCommands.add(new SelectTargetPlayerCommand(state, player)));
+        }
         return possibleCommands;
     }
 
     /**
-     * This method returns the possible commands to select targets or to shoot them
+     * This method returns the possible commands
      *
      * @param gameboard
      * @param shooter
      * @param state
      * @return
      */
-    public List<WeaponCommand> getPossibleCommands(GameBoard gameboard, Player shooter, ReadyToShootState state) {
-        List<WeaponCommand> possibleCommands = new ArrayList<>();
+    public List<Command> getPossibleCommands(GameBoard gameboard, Player shooter, ReadyToShootState state) {
+        List<Command> possibleCommands = new ArrayList<>();
+        if (hasExtraMove())
+            possibleCommands.addAll(getPossibleExtraMoveCommands(shooter, state));
         if (!hasMaximumTargets())
             possibleCommands.addAll(getPossibleSelectTargetCommands(gameboard, shooter, state));
         if (hasSufficientTargets())
             possibleCommands.addAll(getPossibleShootCommands(gameboard, shooter, state));
         return possibleCommands;
 
+    }
+
+    private List<MoveCommand> getPossibleExtraMoveCommands(Player shooter, ReadyToShootState state) {
+        List<MoveCommand> possibleCommands = new ArrayList<>();
+        shooter.getAccessibleSquare(extraMove).forEach(square -> possibleCommands.add(new MoveCommand(shooter, square, state)));
+        return possibleCommands;
     }
 
     private boolean hasMaximumTargets() {
@@ -200,13 +231,17 @@ public class Weapon {
     }
 
     public void addTargetPlayer(Player targetPlayer) {
-        if (!targetPlayers.contains(targetPlayer))
-            targetPlayers.add(targetPlayer);
+        //if (targetPlayers.contains(targetPlayer) || hasMaximumTargets() )
+        //  throw new IllegalArgumentException();
+        //else
+        targetPlayers.add(targetPlayer);
     }
 
     public void addTargetSquare(Square targetSquare) {
-        if (!targetSquares.contains(targetSquare))
-            targetSquares.add(targetSquare);
+        // if (targetSquares.contains(targetSquare) || selectedWeaponMode.isCardinalDirectionMode() && !targetSquares.isEmpty() && (targetSquare.getCol() != targetSquares.get(0).getCol() || targetSquare.getRow() != targetSquares.get(0).getRow()))
+        //   throw new IllegalArgumentException();
+        //else
+        targetSquares.add(targetSquare);
     }
 
     public void removeTargetPlayer(Player targetPlayer) {
@@ -243,8 +278,8 @@ public class Weapon {
             selectedWeaponMode = null;
     }
 
-    public boolean hasShoot() {
+    public boolean hasDamageToDo() {
 //        TODO: return if player can shoot again
-        return false;
+        return damageToDo;
     }
 }

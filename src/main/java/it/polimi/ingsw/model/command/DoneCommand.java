@@ -41,7 +41,7 @@ public class DoneCommand implements Command {
     public DoneCommand(Player player, ScopeState currentState) {
         this.player = player;
         this.currentState = currentState;
-        if (currentState.getSelectedWeapon().hasExtraMove() || currentState.getSelectedWeapon().hasShoot())
+        if (currentState.getSelectedWeapon().hasExtraMove() || currentState.getSelectedWeapon().hasDamageToDo())
             nextState = new ReadyToShootState(currentState.getSelectedAggregateAction(), currentState.getSelectedWeapon());
         else
             nextState = new ManageTurnState();
