@@ -21,18 +21,14 @@ public class MoveCommand implements Command {
             nextState = new ManageTurnState();
     }
 
-    public MoveCommand(Player player, Square newPosition, ExtraMoveState currentState) {
+    public MoveCommand(Player player, Square newPosition, ReadyToShootState currentState) {
         this.player = player;
         this.newPosition = newPosition;
         this.currentState = currentState;
-        nextState = new ReadyToShootState(currentState.getSelectedAggregateAction(), currentState.getSelectedWeapon());
-    }
-
-    public MoveCommand(Player player, Square newPosition, AfterShotState currentState) {
-        this.player = player;
-        this.newPosition = newPosition;
-        this.currentState = currentState;
-        nextState = new ManageTurnState();
+        if(!currentState.getSelectedWeapon().hasShoot())
+            nextState = new ManageTurnState();
+        else
+            nextState = currentState;
     }
 
     /**
