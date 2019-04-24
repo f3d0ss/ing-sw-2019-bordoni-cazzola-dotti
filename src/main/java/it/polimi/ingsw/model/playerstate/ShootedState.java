@@ -14,11 +14,7 @@ public class ShootedState implements PlayerState {
     @Override
     public List<Command> getPossibleCommands(Player player) {
         List<Command> commands = new ArrayList<>();
-        player.getPowerUps().forEach(powerUp -> {
-            if (powerUp.isTagBackGrenade()) {
-                commands.add(new UseTagbackGrenadeCommand(player, (TagbackGrenade) powerUp));
-            }
-        });
+        player.getTagbackGrenades().forEach(tagbackGrenade -> commands.add(new UseTagbackGrenadeCommand(player, tagbackGrenade)));
         commands.add(new DoneCommand(player, this));
         return commands;
     }

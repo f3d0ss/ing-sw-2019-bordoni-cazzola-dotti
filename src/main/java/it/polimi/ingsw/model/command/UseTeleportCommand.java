@@ -3,15 +3,16 @@ package it.polimi.ingsw.model.command;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.Square;
 import it.polimi.ingsw.model.playerstate.ManageTurnState;
+import it.polimi.ingsw.model.playerstate.SelectedTeleporterState;
 import it.polimi.ingsw.model.playerstate.TargetingPlayerState;
 
 public class UseTeleportCommand implements Command{
     private Player player;
-    private TargetingPlayerState currentState;
+    private SelectedTeleporterState currentState;
     private Square oldSquare;
     private Square newPosition;
 
-    public UseTeleportCommand(Player player, TargetingPlayerState currentState, Square newPosition) {
+    public UseTeleportCommand(Player player, SelectedTeleporterState currentState, Square newPosition) {
         this.player = player;
         this.currentState = currentState;
         this.newPosition = newPosition;
