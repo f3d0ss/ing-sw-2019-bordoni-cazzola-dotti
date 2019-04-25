@@ -67,7 +67,7 @@ public class Match {
         tmp = currentAmmoTileDeck.drawAmmoTile();
         if (tmp == null) {
             currentAmmoTileDeck = usedAmmoTileDeck;
-            usedAmmoTileDeck = new AmmoTileDeck(new ArrayList<>());
+            usedAmmoTileDeck = new AmmoTileDeck();
             currentAmmoTileDeck.shuffle();
             tmp = currentAmmoTileDeck.drawAmmoTile();
         }
@@ -101,4 +101,16 @@ public class Match {
     public void undiscard(PowerUp powerUp) {
         usedPowerUpDeck.remove(powerUp);
     }
+
+    public void restoreCards() {
+        for (TurretSquare turret : board.getTurrets()) {
+            if(turret.getAmmoTile() == null)
+                turret.setAmmoTile(currentAmmoTileDeck.drawAmmoTile());
+        }
+        for (Color color : Color.values()) {
+            while(board.getSpawn(color).lackWeapon())
+                board.getSpawn(color).addWeapon(currentWeaponDeck.drawWeapon());
+        }
+    }
+
 }
