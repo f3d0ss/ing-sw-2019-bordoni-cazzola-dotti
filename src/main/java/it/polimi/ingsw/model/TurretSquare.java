@@ -28,6 +28,10 @@ public class TurretSquare extends Square {
         this.ammoTile = ammoTile;
     }
 
+    public AmmoTile getAmmoTile() {
+        return ammoTile;
+    }
+
     public void remove(AmmoTile ammoTile){
         if (this.ammoTile != ammoTile)
             throw new IllegalStateException();
