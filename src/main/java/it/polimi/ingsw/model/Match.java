@@ -30,6 +30,10 @@ public class Match {
         return null;
     }
 
+    public ArrayList<Player> getCurrentPlayers() {
+        return currentPlayers;
+    }
+
     public int getPlayerKillshots(PlayerId id) {
         int count = 0;
         for (PlayerId tmp : killshotTrack)
