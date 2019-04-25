@@ -1,8 +1,6 @@
 package it.polimi.ingsw.model.command;
 
 import it.polimi.ingsw.model.Player;
-import it.polimi.ingsw.model.playerstate.ReadyToShootState;
-import it.polimi.ingsw.model.playerstate.SelectScopeTargetState;
 import it.polimi.ingsw.model.playerstate.TargetingPlayerState;
 
 public class SelectTargetPlayerCommand implements WeaponCommand {

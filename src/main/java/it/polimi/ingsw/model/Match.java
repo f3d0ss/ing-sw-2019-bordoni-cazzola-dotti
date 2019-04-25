@@ -1,19 +1,20 @@
 package it.polimi.ingsw.model;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Match {
 
     private static final int SKULLS = 8;
 
-    private ArrayList<PlayerId> killshotTrack;
+    private List<PlayerId> killshotTrack;
     private PowerUpDeck currentPowerUpDeck;
     private PowerUpDeck usedPowerUpDeck;
     private AmmoTileDeck currentAmmoTileDeck;
     private AmmoTileDeck usedAmmoTileDeck;
     private WeaponDeck currentWeaponDeck;
     private int deathsCounter = SKULLS;
-    private ArrayList<Player> currentPlayers;
+    private List<Player> currentPlayers;
     private GameBoard board;
 
     public Match() {
@@ -30,7 +31,7 @@ public class Match {
         return null;
     }
 
-    public ArrayList<Player> getCurrentPlayers() {
+    public List<Player> getCurrentPlayers() {
         return currentPlayers;
     }
 
@@ -108,11 +109,11 @@ public class Match {
 
     public void restoreCards() {
         for (TurretSquare turret : board.getTurrets()) {
-            if(turret.getAmmoTile() == null)
+            if (turret.getAmmoTile() == null)
                 turret.setAmmoTile(currentAmmoTileDeck.drawAmmoTile());
         }
         for (Color color : Color.values()) {
-            while(board.getSpawn(color).lackWeapon())
+            while (board.getSpawn(color).lackWeapon())
                 board.getSpawn(color).addWeapon(currentWeaponDeck.drawWeapon());
         }
     }

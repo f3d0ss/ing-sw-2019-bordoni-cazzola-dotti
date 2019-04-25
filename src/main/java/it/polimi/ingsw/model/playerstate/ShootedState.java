@@ -1,7 +1,6 @@
 package it.polimi.ingsw.model.playerstate;
 
 import it.polimi.ingsw.model.Player;
-import it.polimi.ingsw.model.TagbackGrenade;
 import it.polimi.ingsw.model.command.Command;
 import it.polimi.ingsw.model.command.DoneCommand;
 import it.polimi.ingsw.model.command.UseTagbackGrenadeCommand;

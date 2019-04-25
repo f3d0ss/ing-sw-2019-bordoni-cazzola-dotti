@@ -26,7 +26,6 @@ public class Weapon {
     private transient WeaponMode selectedWeaponMode = null;
     private transient List<Player> targetPlayers = new ArrayList<>();
     private transient List<Square> targetSquares = new ArrayList<>();
-    private transient boolean damageToDo = false; //
 
     public Map<Color, Integer> getWeaponBuyCost() {
         return buyCost;
@@ -62,7 +61,6 @@ public class Weapon {
             extraMove = selectedWeaponMode.getMaxShooterMove();
             extraMoveUsed = false;
         }
-        damageToDo = true;
     }
 
     public void deselectWeaponMode() {
@@ -306,18 +304,14 @@ public class Weapon {
     }
 
     private List<MoveCommand> getPossibleExtraMoveCommands(Player shooter, ReadyToShootState state) {
-        List<MoveCommand> possibleCommands = new ArrayList<>();
-        shooter.getAccessibleSquare(extraMove).forEach(square -> possibleCommands.add(new MoveCommand(shooter, square, state)));
-        return possibleCommands;
+        return shooter.getAccessibleSquare(extraMove).stream().map(square -> new MoveCommand(shooter, square, state)).collect(Collectors.toList());
     }
 
     private boolean hasMaximumTargets() {
-        //TODO:
         return selectedWeaponMode.getMaxNumberOfTargetPlayers() == targetPlayers.size();
     }
 
     private boolean hasSufficientTargets() {
-        //TODO:
         return selectedWeaponMode.getMinNumberOfTargetPlayers() <= targetPlayers.size();
     }
 
@@ -329,10 +323,7 @@ public class Weapon {
      * @return List of the commands
      */
     public List<SelectWeaponModeCommand> getSelectWeaponModeCommands(Player player, ChoosingWeaponOptionState state) {
-        List<SelectWeaponModeCommand> selectWeaponModeCommandList = new ArrayList<>();
-        for (WeaponMode weaponMode : weaponModes)
-            selectWeaponModeCommandList.add(new SelectWeaponModeCommand(player, state, weaponMode));
-        return selectWeaponModeCommandList;
+        return weaponModes.stream().map(weaponMode -> new SelectWeaponModeCommand(player, state, weaponMode)).collect(Collectors.toList());
     }
 
     public void addTargetPlayer(Player targetPlayer) {
@@ -385,6 +376,6 @@ public class Weapon {
 
     public boolean hasDamageToDo() {
 //        TODO: return if player can shoot again
-        return damageToDo;
+        return false;
     }
 }
