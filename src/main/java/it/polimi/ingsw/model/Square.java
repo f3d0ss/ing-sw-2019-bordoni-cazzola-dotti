@@ -85,4 +85,18 @@ public abstract class Square {
         if (getHostedPlayers().contains(player)) players.remove(player);
         return players;
     }
+
+    /**
+     * This method returns all players on the square but
+     *
+     * @param playersToExclude
+     * @return list of other players
+     */
+    public List<Player> getHostedPlayers(List<Player> playersToExclude) {
+        List<Player> players = new ArrayList<>(hostedPlayers);
+        for (Player p : playersToExclude)
+            if (players.contains(p))
+                players.remove(p);
+        return players;
+    }
 }

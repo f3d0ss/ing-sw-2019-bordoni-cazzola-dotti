@@ -47,7 +47,7 @@ public class WeaponMode {
     private int maxTargetMove;
     private int maxShooterMove;
 
-   /* public static void main(String[] args) {
+    /*public static void main(String[] args) {
         GsonBuilder g = new GsonBuilder();
         g.setPrettyPrinting();
         g.serializeNulls();
@@ -66,9 +66,9 @@ public class WeaponMode {
         }
         int c = 1;
         for (Weapon w : weaponList)
-            for (WeaponMode wm : w.weaponModes)
-                if (!wm.isMoveTargetBeforeShoot() && wm.isTargetSquare() && !wm.isTargetPlayers())
-                    System.out.println(wm.name+" " + w.name +" "+ wm.description+ c++ +" "+wm.getMaxTargetDistance()+" "+wm.getMinTargetDistance()+ " maxtargets" + wm.maxNumberOfTargetPlayers + " min" +wm.getMinNumberOfTargetPlayers());
+            for (WeaponMode wm : w.getWeaponModes())
+                if (!wm.isMoveTargetBeforeShoot() && wm.isTargetSquare() && wm.isTargetPlayers())
+                    System.out.println(c++ + wm.name + " " + " " + wm.description + " " + wm.getMaxTargetDistance() + " " + wm.getMinTargetDistance() + " maxtargets" + wm.maxNumberOfTargetPlayers + " min" + wm.getMinNumberOfTargetPlayers());
     }*/
 
     public WeaponMode(WeaponMode other) {
@@ -211,8 +211,4 @@ public class WeaponMode {
 MOVE
 //add something to manage powerglove move effect (go to target square after)
 //cyberblade shoot + move + shoot
-
-SHOOT
-//add something to manage flamethrower 2 squares in cardinal direction diff damage
-//grenade launcher target player and a square
 */
