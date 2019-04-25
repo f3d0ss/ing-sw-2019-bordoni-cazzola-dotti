@@ -54,7 +54,7 @@
       "damageEveryone": false,
       "targetVisibleByOtherTarget": false,
       "targetVisibleByShooter": true,
-      "cardinalDirectionMode": true,
+      "cardinalDirectionMode": false,
       "maxTargetDistance": 2147483647,
       "minTargetDistance": 0,
       "marks": 1,

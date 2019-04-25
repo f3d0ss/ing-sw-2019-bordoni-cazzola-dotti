@@ -59,13 +59,11 @@
       "marks": 0,
       "damage": [
         1,
-        0,
-        0,
-        0
+        1
       ],
-      "additionalDamageAvailable": 4,
-      "maxAdditionalDamagePerPlayer": 1,
-      "moveTargetBeforeShoot": true,
+      "additionalDamageAvailable": 0,
+      "maxAdditionalDamagePerPlayer": 0,
+      "moveTargetBeforeShoot": false,
       "moveTargetAfterShoot": true,
       "moveShooter": false,
       "maxTargetMove": 1,

@@ -199,4 +199,24 @@ public class Player {
     public Player getLastShooter() {
         return match.getPlayer(lastShooter);
     }
+
+    public List<TargetingScope> getTargetingScopes(){
+        //TODO:
+        return null;
+    }
+
+    public List<TagbackGrenade> getTagbackGrenades(){
+        //TODO:
+        return null;
+    }
+
+    public List<Teleporter> getTeleports(){
+        //TODO:
+        return null;
+    }
+
+    public List<Newton> getNewtons(){
+        //TODO:
+        return null;
+    }
 }

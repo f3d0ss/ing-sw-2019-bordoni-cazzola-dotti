@@ -27,10 +27,7 @@ public class ScopeState extends SelectedWeaponState {
     @Override
     public List<Command> getPossibleCommands(Player player) {
         List<Command> commands = new ArrayList<>();
-        player.getPowerUps().forEach(powerUp -> {
-            if (powerUp.isScope())
-                commands.add(new SelectScopeCommand(player, this, (TargetingScope) powerUp));
-        });
+        player.getTargetingScopes().forEach(scope -> commands.add(new SelectScopeCommand(player, this, scope)));
         commands.add(new DoneCommand(player, this));
         return commands;
     }

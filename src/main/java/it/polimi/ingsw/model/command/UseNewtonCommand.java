@@ -29,7 +29,6 @@ public class UseNewtonCommand implements Command {
         targetPlayer.move(targetSquare);
         targetPlayer.getPosition().addPlayer(targetPlayer);
         player.changeState(new ManageTurnState());
-
     }
 
     /**

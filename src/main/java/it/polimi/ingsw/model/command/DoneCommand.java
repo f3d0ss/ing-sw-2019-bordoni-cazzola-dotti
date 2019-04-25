@@ -29,32 +29,24 @@ public class DoneCommand implements Command {
     public DoneCommand(Player player, ChoosingWeaponOptionState currentState) {
         this.player = player;
         this.currentState = currentState;
-        if (currentState.getSelectedWeapon().hasExtraMove())
-            nextState = new ExtraMoveState(currentState.getSelectedAggregateAction(), currentState.getSelectedWeapon());
-        else
-            nextState = new ReadyToShootState(currentState.getSelectedAggregateAction(), currentState.getSelectedWeapon());
+        nextState = new ReadyToShootState(currentState.getSelectedAggregateAction(), currentState.getSelectedWeapon());
     }
 
-    public DoneCommand(Player player, ExtraMoveState currentState) {
+    public DoneCommand(Player player, ReadyToShootState currentState) {
         this.player = player;
         this.currentState = currentState;
-        nextState = new ReadyToShootState(currentState.getSelectedAggregateAction(), currentState.getSelectedWeapon());
+        nextState = new ManageTurnState();
     }
 
     public DoneCommand(Player player, ScopeState currentState) {
         this.player = player;
         this.currentState = currentState;
-        if (currentState.getSelectedWeapon().hasExtraMove())
-            nextState = new AfterShotState(currentState.getSelectedAggregateAction(), currentState.getSelectedWeapon());
+        if (currentState.getSelectedWeapon().hasExtraMove() || currentState.getSelectedWeapon().hasDamageToDo())
+            nextState = new ReadyToShootState(currentState.getSelectedAggregateAction(), currentState.getSelectedWeapon());
         else
             nextState = new ManageTurnState();
     }
 
-    public DoneCommand(Player player, AfterShotState currentState) {
-        this.player = player;
-        this.currentState = currentState;
-        nextState = new ManageTurnState();
-    }
 
     @Override
     public void execute() {

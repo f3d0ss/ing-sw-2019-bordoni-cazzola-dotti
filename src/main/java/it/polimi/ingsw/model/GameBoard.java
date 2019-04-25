@@ -288,16 +288,18 @@ public class GameBoard {
         }
     }
 
-/* to be implemented in weapon
-    public ArrayList<Player> getVisibleTarget(Square origin) {
-        ArrayList<Player> targets = new ArrayList<>();
-        ArrayList<Square> visibles = this.getVisibleSquares(origin);
-        for (Square s : visibles) {
-            for (Player p : s.getHostedPlayers())
-                targets.add(p);
-        }
+    /**
+     *
+     * @param shooter
+     * @param maxDistance
+     * @param minDistance
+     * @return
+     */
+    public List<Player> getVisibleTargets(Player shooter, int maxDistance, int minDistance) {
+        List<Player> targets = new ArrayList<>();
+        getVisibleSquares(shooter.getPosition(), maxDistance, minDistance, true).stream().map(s -> s.getHostedPlayers(shooter)).forEach(targets::addAll);
         return targets;
-    }*/
+    }
 
     /**
      * @param position current position
@@ -328,5 +330,28 @@ public class GameBoard {
             if (square.hasOtherPlayers(player))
                 players.addAll(square.getHostedPlayers(player));
         return players.stream().distinct().collect(Collectors.toList());
+    }
+
+    /**
+     * This method returns the third square reachable in the same direction
+     *
+     * @param firstSquare
+     * @param secondSquare
+     * @return
+     */
+    public Square getThirdSquareInTheSameDirection(Square firstSquare, Square secondSquare) {
+        if (firstSquare.getRow() == secondSquare.getRow()) {
+            if (firstSquare.getCol() < secondSquare.getCol() && secondSquare.getConnection(CardinalDirection.WEST).isAccessible(false))
+                return board[firstSquare.getRow()][secondSquare.getCol() + 1];
+            if (secondSquare.getConnection(CardinalDirection.EAST).isAccessible(false))
+                return board[firstSquare.getRow()][secondSquare.getCol() - 1];
+        }
+        if (firstSquare.getCol() == secondSquare.getCol()) {
+            if (firstSquare.getRow() < secondSquare.getRow() && secondSquare.getConnection(CardinalDirection.SOUTH).isAccessible(false))
+                return board[secondSquare.getRow() + 1][firstSquare.getCol()];
+            if (secondSquare.getConnection(CardinalDirection.NORTH).isAccessible(false))
+                return board[secondSquare.getRow() - 1][firstSquare.getCol()];
+        }
+        return null;
     }
 }
