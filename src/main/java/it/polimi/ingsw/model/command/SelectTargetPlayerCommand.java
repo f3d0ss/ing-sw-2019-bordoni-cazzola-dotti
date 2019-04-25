@@ -9,12 +9,7 @@ public class SelectTargetPlayerCommand implements Command {
     protected TargetingPlayerState currentState;
     private Player targetPlayer;
 
-    public SelectTargetPlayerCommand(ReadyToShootState currentState, Player targetPlayer) {
-        this.currentState = currentState;
-        this.targetPlayer = targetPlayer;
-    }
-
-    public SelectTargetPlayerCommand(SelectScopeTargetState currentState, Player targetPlayer) {
+    public SelectTargetPlayerCommand(TargetingPlayerState currentState, Player targetPlayer) {
         this.currentState = currentState;
         this.targetPlayer = targetPlayer;
     }

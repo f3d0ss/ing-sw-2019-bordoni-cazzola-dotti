@@ -18,10 +18,12 @@ public class ManageTurnState implements PlayerState {
                     commands.add(new SelectReloadingWeaponCommand(player, weapon, this));
             });
         }
-        player.getPowerUps().forEach(powerUp -> {
-            if (!powerUp.isScope() && !powerUp.isTagBackGrenade())
-                commands.add(new SelectPowerUpCommand(player, powerUp, this));
-        });
+//        player.getPowerUps().forEach(powerUp -> {
+//            if (!powerUp.isScope() && !powerUp.isTagBackGrenade())
+//                commands.add(new SelectPowerUpCommand(player, powerUp, this));
+//        });
+        player.getTeleports().forEach(teleport -> commands.add(new SelectPowerUpCommand(player, teleport, this)));
+        player.getNewtons().forEach(newton -> commands.add(new SelectPowerUpCommand(player, newton, this)));
         return commands;
     }
 }
