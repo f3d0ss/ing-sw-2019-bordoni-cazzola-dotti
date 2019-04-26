@@ -1,7 +1,9 @@
 package it.polimi.ingsw.model;
 
 import java.util.*;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class GameBoard {
 
@@ -22,23 +24,23 @@ public class GameBoard {
                     put(Color.YELLOW, new SpawnSquare(Connection.SAME_ROOM, Connection.MAP_BORDER, Connection.MAP_BORDER, Connection.DOOR, 2, 3, null, Color.YELLOW));
                 }};
                 board[0][0] = new TurretSquare(Connection.MAP_BORDER, Connection.SAME_ROOM, Connection.DOOR, Connection.MAP_BORDER, 0, 0, null);
-                turrets.add((TurretSquare)board[0][0]);
+                turrets.add((TurretSquare) board[0][0]);
                 board[0][1] = new TurretSquare(Connection.MAP_BORDER, Connection.SAME_ROOM, Connection.WALL, Connection.SAME_ROOM, 0, 1, null);
-                turrets.add((TurretSquare)board[0][1]);
+                turrets.add((TurretSquare) board[0][1]);
                 board[0][2] = spawns.get(Color.BLUE);
                 board[0][3] = null;
                 board[1][0] = spawns.get(Color.RED);
                 board[1][1] = new TurretSquare(Connection.WALL, Connection.SAME_ROOM, Connection.DOOR, Connection.SAME_ROOM, 1, 1, null);
-                turrets.add((TurretSquare)board[1][1]);
+                turrets.add((TurretSquare) board[1][1]);
                 board[1][2] = new TurretSquare(Connection.DOOR, Connection.DOOR, Connection.WALL, Connection.SAME_ROOM, 1, 2, null);
-                turrets.add((TurretSquare)board[1][2]);
+                turrets.add((TurretSquare) board[1][2]);
                 board[1][3] = new TurretSquare(Connection.MAP_BORDER, Connection.MAP_BORDER, Connection.SAME_ROOM, Connection.DOOR, 1, 3, null);
-                turrets.add((TurretSquare)board[1][3]);
+                turrets.add((TurretSquare) board[1][3]);
                 board[2][0] = null;
                 board[2][1] = new TurretSquare(Connection.DOOR, Connection.SAME_ROOM, Connection.MAP_BORDER, Connection.MAP_BORDER, 2, 1, null);
-                turrets.add((TurretSquare)board[2][1]);
+                turrets.add((TurretSquare) board[2][1]);
                 board[2][2] = new TurretSquare(Connection.WALL, Connection.DOOR, Connection.MAP_BORDER, Connection.SAME_ROOM, 2, 2, null);
-                turrets.add((TurretSquare)board[2][2]);
+                turrets.add((TurretSquare) board[2][2]);
                 board[2][3] = spawns.get(Color.YELLOW);
 /*            default:
                 board[0][0] = new TurretSquare(Connection.MAP_BORDER, Connection.SAME_ROOM, Connection.DOOR, Connection.MAP_BORDER, 0, 0, null);
@@ -135,7 +137,7 @@ public class GameBoard {
             }
     }
 
-    public ArrayList<Square> getRoomSquares(Square square){
+    public ArrayList<Square> getRoomSquares(Square square) {
         ArrayList<Square> list = new ArrayList<>();
         getSameRoomSquares(list, square);
         return list;
@@ -204,6 +206,12 @@ public class GameBoard {
                 }
         }
         return list;
+    }
+
+    public List<Player> getPlayersOnCardinalDirectionSquares(Player shooter, Square position, int maxRange, int minRange, boolean ignoreWalls) {
+        List<Player> players = new ArrayList<>();
+        getCardinalDirectionSquares(position, maxRange, minRange, ignoreWalls).stream().map(square -> square.getHostedPlayers(shooter)).forEach(players::addAll);
+        return players;
     }
 
     /**
@@ -289,7 +297,6 @@ public class GameBoard {
     }
 
     /**
-     *
      * @param shooter
      * @param maxDistance
      * @param minDistance
