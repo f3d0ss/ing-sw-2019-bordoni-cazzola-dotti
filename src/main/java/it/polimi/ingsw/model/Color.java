@@ -15,9 +15,6 @@ public enum Color {
         public String colorName() {
             return "Blue";
         }
-        public String colorShortName() {
-            return "B";
-        }
     },
 
     /**
@@ -27,9 +24,6 @@ public enum Color {
         @Override
         public String colorName() {
             return "Red";
-        }
-        public String colorShortName() {
-            return "R";
         }
     },
 
@@ -41,11 +35,7 @@ public enum Color {
         public String colorName() {
             return "Yellow";
         }
-        public String colorShortName() {
-            return "Y";
-        }
     };
 
     public abstract String colorName();
-    public abstract String colorShortName();
 }
