@@ -54,7 +54,7 @@
       "eachTargetOnTheSameSquare": false,
       "eachTargetOnDifferentSquares": false,
       "damageEveryone": true,
-      "targetVisibleByOtherTarget": true,
+      "targetVisibleByOtherTarget": false,
       "targetVisibleByShooter": true,
       "cardinalDirectionMode": false,
       "maxTargetDistance": 0,

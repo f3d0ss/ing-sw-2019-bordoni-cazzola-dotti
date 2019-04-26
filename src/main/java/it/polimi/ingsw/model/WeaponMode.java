@@ -47,7 +47,7 @@ public class WeaponMode {
     private int maxTargetMove;
     private int maxShooterMove;
 
-    /*public static void main(String[] args) {
+   /* public static void main(String[] args) {
         GsonBuilder g = new GsonBuilder();
         g.setPrettyPrinting();
         g.serializeNulls();
@@ -66,9 +66,13 @@ public class WeaponMode {
         }
         int c = 1;
         for (Weapon w : weaponList)
-            for (WeaponMode wm : w.getWeaponModes())
-                if (!wm.isMoveTargetBeforeShoot() && wm.isTargetSquare() && !wm.isTargetPlayers() && wm.isMoveTargetAfterShoot())
-                    System.out.println(c++ + wm.name + " " + " " + wm.description + " " + wm.getMaxTargetDistance() + " " + wm.getMinTargetDistance() + " maxtargets" + wm.maxNumberOfTargetPlayers + " min" + wm.getMinNumberOfTargetPlayers());
+            for (WeaponMode wm : w.getWeaponModes()) {
+                if (!wm.isMoveTargetBeforeShoot() && !wm.isTargetSquare() && wm.isTargetPlayers() && wm.isTargetVisibleByShooter() && !wm.isCardinalDirectionMode()) {
+                    if (wm.maxNumberOfTargetPlayers > 1)
+                        System.out.println(c + " " + w.getName() + " " + wm.name + " " + " " + wm.description + " " + wm.getMaxTargetDistance() + " " + wm.getMinTargetDistance() + " maxtargets" + wm.maxNumberOfTargetPlayers + " min" + wm.getMinNumberOfTargetPlayers());
+                    c++;
+                }
+            }
     }*/
 
     public WeaponMode(WeaponMode other) {
