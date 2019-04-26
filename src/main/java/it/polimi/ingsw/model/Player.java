@@ -36,7 +36,7 @@ public class Player {
     public Player(Match match, PlayerId id, String nickname, Square position) {
         this.match = match;
         this.id = id;
-        nickname = nickname;
+        this.nickname = nickname;
         this.position = position;
         usedAggregateAction = 0;
     }
@@ -57,12 +57,24 @@ public class Player {
         return id;
     }
 
-    public boolean isDead() {
-        return health.size() >= MAX_DAMAGE - 1;
+    public String toString() {
+        return nickname;
     }
 
-    public void setId(PlayerId id) {
-        this.id = id;
+    public List<PlayerId> getHealth() {
+        return health;
+    }
+
+    public Map<PlayerId, Integer> getMarks() {
+        return marks;
+    }
+
+    public int getDeaths() {
+        return deaths;
+    }
+
+    public boolean isDead() {
+        return health.size() >= MAX_DAMAGE - 1;
     }
 
     public void changeState(PlayerState playerState) {
