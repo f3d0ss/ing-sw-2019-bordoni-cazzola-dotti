@@ -49,7 +49,7 @@ public class Match extends Observable {
         return count;
     }
 
-    public ArrayList<PlayerId> getKillshotTrack() {
+    public List<PlayerId> getKillshotTrack() {
         return killshotTrack;
     }
 
