@@ -215,6 +215,7 @@ public class Weapon {
     private List<WeaponCommand> getPossibleSelectTargetCommandsTargetRoom(GameBoard gameboard, Player shooter, ReadyToShootState state) {
         List<WeaponCommand> possibleCommands = new ArrayList<>();
         //TODO: method that returns a list of the possbile rooms
+
         return possibleCommands;
     }
 
@@ -261,30 +262,34 @@ public class Weapon {
     }
 
     private List<WeaponCommand> getPossibleSelectTargetCommandsTargetPlayersCardinalDirection(GameBoard gameboard, Player shooter, ReadyToShootState state) {
-        //TODO
         List<WeaponCommand> possibleCommands = new ArrayList<>();
-        if (selectedWeaponMode.isTargetVisibleByShooter()) {
-//stessa roba ma con ignore walls false??????
-        } else {
-            List<Player> possibleTargets = new ArrayList<>();
+        if (selectedWeaponMode.isTargetVisibleByShooter()) {//PowerGlove rocketfistmode
             if (targetPlayers.isEmpty())
-                possibleTargets.addAll(gameboard.getPlayersOnCardinalDirectionSquares(shooter, selectedWeaponMode.getMaxTargetDistance(), selectedWeaponMode.getMinTargetDistance(), true));
-            else { //target another player in the same direction
-                possibleTargets.addAll(gameboard.getPlayersInTheSameDirection(shooter, targetPlayers, selectedWeaponMode.getMaxTargetDistance(), selectedWeaponMode.getMinTargetDistance(), true));
+                gameboard.getVisibleTargets(shooter, selectedWeaponMode.getMaxTargetDistance(), selectedWeaponMode.getMinTargetDistance()).forEach(player -> possibleCommands.add(new SelectTargetPlayerCommand(state, player)));
+            else {
+                Square squareInTheSameDirection = gameboard.getThirdSquareInTheSameDirection(shooter.getPosition(), targetPlayers.get(0).getPosition(), false);
+                if (squareInTheSameDirection != null)
+                    squareInTheSameDirection.getHostedPlayers().forEach(player -> possibleCommands.add(new SelectTargetPlayerCommand(state, player)));
             }
+        } else { //RAILGUN
+            if (targetPlayers.isEmpty())
+                gameboard.getPlayersOnCardinalDirectionSquares(shooter, selectedWeaponMode.getMaxTargetDistance(), selectedWeaponMode.getMinTargetDistance(), true).forEach(player -> possibleCommands.add(new SelectTargetPlayerCommand(state, player)));
+            else  //target another player in the same direction
+                gameboard.getPlayersInTheSameDirection(shooter, targetPlayers, selectedWeaponMode.getMaxTargetDistance(), selectedWeaponMode.getMinTargetDistance(), true).forEach(player -> possibleCommands.add(new SelectTargetPlayerCommand(state, player)));
         }
         return possibleCommands;
     }
 
     private List<WeaponCommand> getPossibleSelectTargetCommandsTargetPlayersNotVisible(GameBoard gameboard, Player shooter, ReadyToShootState state) {
-        //TODO
-        List<WeaponCommand> possibleCommands = new ArrayList<>();
-        return possibleCommands;
+        //HeatSeeker, maybe create a method to get all players / non visible in gameboard
+        List<Player> allOtherPlayers = gameboard.getOtherPlayersOnReachableSquares(shooter.getPosition(), selectedWeaponMode.getMaxTargetDistance(), shooter);
+        allOtherPlayers.removeAll(gameboard.getVisibleTargets(shooter, Integer.MAX_VALUE, 0));
+        return allOtherPlayers.stream().map(player -> new SelectTargetPlayerCommand(state, player)).collect(Collectors.toList());
     }
 
     private List<WeaponCommand> getPossibleSelectTargetCommandsTargetPlayers(GameBoard gameboard, Player shooter, ReadyToShootState state) {
         List<WeaponCommand> possibleCommands = new ArrayList<>();
-        //TODO slice n dice (cyberblade)??
+        //TODO slice n dice (cyberblade) or just consider in getShootCmds??
         if (selectedWeaponMode.isTargetVisibleByShooter() && !selectedWeaponMode.isCardinalDirectionMode())
             possibleCommands.addAll(getPossibleSelectTargetCommandsTargetPlayersVisible(gameboard, shooter, state));
         else if (selectedWeaponMode.isCardinalDirectionMode())
@@ -298,7 +303,7 @@ public class Weapon {
         List<WeaponCommand> possibleCommands = new ArrayList<>();
         List<Player> possibleTargetPlayers = new ArrayList<>();
         if (targetSquares.size() == 1) {
-            Square secondTargetSquare = gameBoard.getThirdSquareInTheSameDirection(shooter.getPosition(), targetSquares.get(0));
+            Square secondTargetSquare = gameBoard.getThirdSquareInTheSameDirection(shooter.getPosition(), targetSquares.get(0), false);
             if (secondTargetSquare != null) //ask possible 2nd square in the same direction (flameth)
                 possibleCommands.add(new SelectTargetSquareCommand(state, secondTargetSquare));
             if (targetPlayers.isEmpty()) {
