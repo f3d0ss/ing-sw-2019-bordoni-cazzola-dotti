@@ -10,23 +10,17 @@ import java.util.List;
 public class SpawnSquare extends Square {
 
     static final int MAX_WEAPON = 3;
-    private List<Weapon> weapons;
+    private ArrayList<Weapon> weapons;
     private ArrayList<PlayerId> spawnPointTrack;
-    private Color color;
 
-    public SpawnSquare(Connection northConnection, Connection eastConnection, Connection southConnection, Connection westConnection, int row, int col, List<Weapon> weapons, Color color) {
-        super(northConnection, eastConnection, southConnection, westConnection, row, col);
-        this.weapons = weapons;
-        this.spawnPointTrack = new ArrayList<>();
-        this.color = color;
+    public SpawnSquare(Connection northConnection, Connection eastConnection, Connection southConnection, Connection westConnection, int row, int col, Color color) {
+        super(northConnection, eastConnection, southConnection, westConnection, row, col, color);
+        weapons = new ArrayList<>();
+        spawnPointTrack = new ArrayList<>();
     }
 
     public List<PlayerId> getSpawnPointTrack() {
         return spawnPointTrack;
-    }
-
-    public Color getColor() {
-        return color;
     }
 
     @Override
@@ -44,6 +38,10 @@ public class SpawnSquare extends Square {
         if (weapons.size() >= MAX_WEAPON)
             throw new IllegalStateException();
         weapons.add(weapon);
+    }
+
+    public ArrayList<Weapon> getWeapons(){
+        return weapons;
     }
 
     public boolean lackWeapon() {
