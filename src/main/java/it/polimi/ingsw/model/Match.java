@@ -1,9 +1,11 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.utils.Observable;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class Match {
+public class Match extends Observable {
 
     private static final int SKULLS = 8;
 
@@ -21,6 +23,10 @@ public class Match {
         board = new GameBoard(1);
         killshotTrack = new ArrayList();
         currentPlayers = new ArrayList();
+        currentAmmoTileDeck = new AmmoTileDeck();
+        currentAmmoTileDeck.initializeDeck();
+        currentWeaponDeck = new WeaponDeck();
+        usedAmmoTileDeck = new AmmoTileDeck();
     }
 
     public Player getPlayer(PlayerId id) {
@@ -41,6 +47,10 @@ public class Match {
             if (id.equals(tmp))
                 count++;
         return count;
+    }
+
+    public ArrayList<PlayerId> getKillshotTrack() {
+        return killshotTrack;
     }
 
     public int getDeathsCounter() {
@@ -67,7 +77,7 @@ public class Match {
         killshotTrack.add(player);
     }
 
-    public AmmoTile drawAmmoTileCard() {
+    private AmmoTile drawAmmoTileCard() {
         AmmoTile tmp;
         tmp = currentAmmoTileDeck.drawAmmoTile();
         if (tmp == null) {
@@ -79,7 +89,7 @@ public class Match {
         return tmp;
     }
 
-    public Weapon drawWeaponCard() {
+    private Weapon drawWeaponCard() {
         return currentWeaponDeck.drawWeapon();
     }
 
@@ -110,12 +120,11 @@ public class Match {
     public void restoreCards() {
         for (TurretSquare turret : board.getTurrets()) {
             if (turret.getAmmoTile() == null)
-                turret.setAmmoTile(currentAmmoTileDeck.drawAmmoTile());
+                turret.setAmmoTile(drawAmmoTileCard());
         }
         for (Color color : Color.values()) {
             while (board.getSpawn(color).lackWeapon())
-                board.getSpawn(color).addWeapon(currentWeaponDeck.drawWeapon());
+                board.getSpawn(color).addWeapon(drawWeaponCard());
         }
     }
-
 }

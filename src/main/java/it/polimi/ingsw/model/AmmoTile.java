@@ -30,7 +30,7 @@ public class AmmoTile {
             string = "P";
         for (Color color : ammo.keySet())
             for (int i = 0; i < ammo.get(color); i++)
-                string = string + color.colorShortName();
+                string = string + color.colorName().substring(0,1);
         return string;
     }
 }

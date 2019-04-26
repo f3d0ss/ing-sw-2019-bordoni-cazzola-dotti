@@ -11,7 +11,7 @@ public class TurretSquare extends Square {
     private AmmoTile ammoTile;
 
     public TurretSquare(Connection northConnection, Connection eastConnection, Connection southConnection, Connection westConnection, int row, int col, AmmoTile ammoTile) {
-        super(northConnection, eastConnection, southConnection, westConnection, row, col);
+        super(northConnection, eastConnection, southConnection, westConnection, row, col, null);
         this.ammoTile = ammoTile;
     }
 

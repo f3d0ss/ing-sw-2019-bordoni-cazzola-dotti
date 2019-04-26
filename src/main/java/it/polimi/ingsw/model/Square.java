@@ -4,39 +4,31 @@ import it.polimi.ingsw.model.command.GrabCommand;
 import it.polimi.ingsw.model.playerstate.SelectedAggregateActionState;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public abstract class Square {
-    private Connection northConnection;
-    private Connection eastConnection;
-    private Connection southConnection;
-    private Connection westConnection;
+    private Map<CardinalDirection, Connection> connection;
     private int row;
     private int col;
+    private Color color;
     private ArrayList<Player> hostedPlayers;
 
-    public Square(Connection northConnection, Connection eastConnection, Connection southConnection, Connection westConnection, int row, int col) {
-        this.northConnection = northConnection;
-        this.eastConnection = eastConnection;
-        this.southConnection = southConnection;
-        this.westConnection = westConnection;
+    public Square(Connection northConnection, Connection eastConnection, Connection southConnection, Connection westConnection, int row, int col, Color color) {
+        connection = new HashMap<>();
+        connection.put(CardinalDirection.NORTH, northConnection);
+        connection.put(CardinalDirection.EAST, eastConnection);
+        connection.put(CardinalDirection.SOUTH, southConnection);
+        connection.put(CardinalDirection.WEST, westConnection);
         this.row = row;
         this.col = col;
         this.hostedPlayers = new ArrayList<>();
+        this.color = color;
     }
 
     public Connection getConnection(CardinalDirection direction) {
-        switch (direction) {
-            case NORTH:
-                return northConnection;
-            case EAST:
-                return eastConnection;
-            case SOUTH:
-                return southConnection;
-            case WEST:
-                return westConnection;
-        }
-        return null;
+        return connection.get(direction);
     }
 
     public int getRow() {
@@ -45,6 +37,10 @@ public abstract class Square {
 
     public int getCol() {
         return col;
+    }
+
+    public Color getColor() {
+        return color;
     }
 
     public void addPlayer(Player player) {
@@ -71,7 +67,6 @@ public abstract class Square {
         ArrayList<Player> players = new ArrayList<>(hostedPlayers);
         players.remove(player);
         return !players.isEmpty();
-
     }
 
     /**
