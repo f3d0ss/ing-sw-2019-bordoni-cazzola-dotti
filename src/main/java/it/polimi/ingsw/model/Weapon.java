@@ -220,20 +220,11 @@ public class Weapon {
 
 
     private List<WeaponCommand> getPossibleSelectTargetCommandsTargetPlayersVisibleStandard(GameBoard gameboard, Player shooter, ReadyToShootState state) {
-        List<WeaponCommand> possibleCommands = new ArrayList<>();
         List<Player> visibleTargets = gameboard.getVisibleTargets(shooter, selectedWeaponMode.getMaxTargetDistance(), selectedWeaponMode.getMinTargetDistance());
-        for (Player targetPlayer : targetPlayers)
-            for (Player newTarget : visibleTargets)
-                if (targetPlayer.getId().equals(newTarget.getId()))
-                    visibleTargets.remove(newTarget);
-        if (selectedWeaponMode.isEachTargetOnDifferentSquares()) {//shockwave basic
-            for (Player targetPlayer : targetPlayers)
-                for (Player newTarget : visibleTargets)
-                    if (targetPlayer.getPosition().equals(newTarget.getPosition()))
-                        visibleTargets.remove(newTarget);
-        }
-        visibleTargets.forEach(player -> possibleCommands.add(new SelectTargetPlayerCommand(state, player)));
-        return possibleCommands;
+        targetPlayers.forEach(targetPlayer -> visibleTargets.stream().filter(newTarget -> targetPlayer.getId().equals(newTarget.getId())).forEachOrdered(visibleTargets::remove));
+        if (selectedWeaponMode.isEachTargetOnDifferentSquares()) //shockwave basiceffect
+            targetPlayers.forEach(targetPlayer -> visibleTargets.stream().filter(newTarget -> targetPlayer.getPosition().equals(newTarget.getPosition())).forEachOrdered(visibleTargets::remove));
+        return visibleTargets.stream().map(player -> new SelectTargetPlayerCommand(state, player)).collect(Collectors.toList());
     }
 
     private List<WeaponCommand> getPossibleSelectTargetCommandsTargetPlayersVisibleByOtherTarget(GameBoard gameboard, Player shooter, ReadyToShootState state) {
@@ -270,6 +261,23 @@ public class Weapon {
     }
 
     private List<WeaponCommand> getPossibleSelectTargetCommandsTargetPlayersCardinalDirection(GameBoard gameboard, Player shooter, ReadyToShootState state) {
+        //TODO
+        List<WeaponCommand> possibleCommands = new ArrayList<>();
+        if (selectedWeaponMode.isTargetVisibleByShooter()) {
+//stessa roba ma con ignore walls false??????
+        } else {
+            List<Player> possibleTargets = new ArrayList<>();
+            if (targetPlayers.isEmpty())
+                possibleTargets.addAll(gameboard.getPlayersOnCardinalDirectionSquares(shooter, selectedWeaponMode.getMaxTargetDistance(), selectedWeaponMode.getMinTargetDistance(), true));
+            else { //target another player in the same direction
+                possibleTargets.addAll(gameboard.getPlayersInTheSameDirection(shooter, targetPlayers, selectedWeaponMode.getMaxTargetDistance(), selectedWeaponMode.getMinTargetDistance(), true));
+            }
+        }
+        return possibleCommands;
+    }
+
+    private List<WeaponCommand> getPossibleSelectTargetCommandsTargetPlayersNotVisible(GameBoard gameboard, Player shooter, ReadyToShootState state) {
+        //TODO
         List<WeaponCommand> possibleCommands = new ArrayList<>();
         return possibleCommands;
     }
@@ -277,12 +285,12 @@ public class Weapon {
     private List<WeaponCommand> getPossibleSelectTargetCommandsTargetPlayers(GameBoard gameboard, Player shooter, ReadyToShootState state) {
         List<WeaponCommand> possibleCommands = new ArrayList<>();
         //TODO slice n dice (cyberblade)??
-
         if (selectedWeaponMode.isTargetVisibleByShooter() && !selectedWeaponMode.isCardinalDirectionMode())
             possibleCommands.addAll(getPossibleSelectTargetCommandsTargetPlayersVisible(gameboard, shooter, state));
         else if (selectedWeaponMode.isCardinalDirectionMode())
             possibleCommands.addAll(getPossibleSelectTargetCommandsTargetPlayersCardinalDirection(gameboard, shooter, state));
-
+        else if (!selectedWeaponMode.isTargetVisibleByShooter())
+            possibleCommands.addAll(getPossibleSelectTargetCommandsTargetPlayersNotVisible(gameboard, shooter, state));
         return possibleCommands;
     }
 
