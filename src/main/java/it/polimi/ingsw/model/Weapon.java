@@ -221,10 +221,10 @@ public class Weapon {
     private List<WeaponCommand> getPossibleSelectTargetCommandsTargetRoom(GameBoard gameboard, Player shooter, ReadyToShootState state) {
         //Furnace basic mode
         List<WeaponCommand> possibleCommands = new ArrayList<>();
-        //TODO: method that returns a list of the possbile rooms
-        if (targetPlayers.isEmpty()) {
-
-        }
+        if (targetSquares.isEmpty()) //get squares at distance 1 accessible through doors.
+            gameboard.getSquareInOtherVisibleRooms(shooter.getPosition()).forEach(square -> possibleCommands.add(new SelectTargetSquareCommand(state, square)));
+        else if (targetPlayers.isEmpty())
+            gameboard.getRoomSquares(targetSquares.get(0)).forEach(square -> targetPlayers.addAll(square.getHostedPlayers(shooter)));
         return possibleCommands;
     }
 

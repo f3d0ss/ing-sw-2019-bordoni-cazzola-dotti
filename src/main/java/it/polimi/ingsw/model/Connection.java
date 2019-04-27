@@ -8,4 +8,8 @@ public enum Connection {
             return true;
         return ignoreWall && this == WALL;
     }
+
+    public boolean isDoor() {
+        return this == DOOR;
+    }
 }

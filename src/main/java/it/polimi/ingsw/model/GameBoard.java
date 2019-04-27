@@ -415,4 +415,18 @@ public class GameBoard {
         }
         return squares;
     }
+
+    /**
+     * This method returns squares at distance 1 accessible through doors.
+     *
+     * @param position
+     * @return
+     */
+    public List<Square> getSquareInOtherVisibleRooms(Square position) {
+        List<Square> list = new ArrayList<>();
+        for (CardinalDirection cardinalDirection : CardinalDirection.values())
+            if (position.getConnection(cardinalDirection).isDoor())
+                list.add(getAdjacentSquare(position, cardinalDirection));
+        return list;
+    }
 }
