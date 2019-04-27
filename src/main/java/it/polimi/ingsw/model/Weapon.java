@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model;
 
+import com.google.gson.annotations.Expose;
 import it.polimi.ingsw.model.command.*;
 import it.polimi.ingsw.model.playerstate.ChoosingWeaponOptionState;
 import it.polimi.ingsw.model.playerstate.ReadyToShootState;
@@ -12,20 +13,25 @@ import java.util.stream.IntStream;
  * This class represents a weapon
  */
 public class Weapon {
+    @Expose
     private String name;
+    @Expose
     private String description;
+    @Expose
     private Map<Color, Integer> reloadingCost;
+    @Expose
     private Map<Color, Integer> buyCost;
+    @Expose
     private List<WeaponMode> weaponModes;
-    private transient int extraMove = 0;
-    private transient boolean extraMoveUsed = false;
-    private transient boolean loaded = true;
-    private transient WeaponMode selectedWeaponMode = null;
-    private transient List<Player> targetPlayers = new ArrayList<>();
-    private transient List<Square> targetSquares = new ArrayList<>();
+    private int extraMove = 0;
+    private boolean extraMoveUsed = false;
+    private boolean loaded = true;
+    private WeaponMode selectedWeaponMode = null;
+    private List<Player> targetPlayers = new ArrayList<>();
+    private List<Square> targetSquares = new ArrayList<>();
 
     public Map<Color, Integer> getWeaponBuyCost() {
-        return buyCost;
+        return buyCost == null ? new HashMap<>() : buyCost;
     }
 
     public Map<Color, Integer> getReloadingCost() {
@@ -213,9 +219,12 @@ public class Weapon {
     }
 
     private List<WeaponCommand> getPossibleSelectTargetCommandsTargetRoom(GameBoard gameboard, Player shooter, ReadyToShootState state) {
+        //Furnace basic mode
         List<WeaponCommand> possibleCommands = new ArrayList<>();
         //TODO: method that returns a list of the possbile rooms
+        if (targetPlayers.isEmpty()) {
 
+        }
         return possibleCommands;
     }
 

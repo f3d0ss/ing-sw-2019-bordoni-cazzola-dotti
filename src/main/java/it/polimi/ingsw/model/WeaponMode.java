@@ -47,34 +47,34 @@ public class WeaponMode {
     private int maxTargetMove;
     private int maxShooterMove;
 
-    /*public static void main(String[] args) {
-        GsonBuilder g = new GsonBuilder();
-        g.setPrettyPrinting();
-        g.serializeNulls();
-        Gson gson = g.create();
-        List<Weapon> weaponList = new ArrayList<>();
-        File file = new File("src/resources/weapons/");
-        File[] files = file.listFiles();
-        for (File f : files) {
-            System.out.println(f.getPath());
+    /* public static void main(String[] args) {
+         GsonBuilder g = new GsonBuilder();
+         g.setPrettyPrinting();
+         g.serializeNulls();
+         Gson gson = g.create();
+         List<Weapon> weaponList = new ArrayList<>();
+         File file = new File("src/resources/weapons/");
+         File[] files = file.listFiles();
+         for (File f : files) {
+             System.out.println(f.getPath());
 
-            try {
-                weaponList.add(gson.fromJson(new FileReader(f.getPath()), Weapon.class));
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
-        }
-        int c = 1;
-        for (Weapon w : weaponList)
-            for (WeaponMode wm : w.getWeaponModes()) {
-                if (!wm.isMoveTargetBeforeShoot() && !wm.isTargetSquare() && wm.isTargetPlayers() && !wm.isTargetVisibleByShooter() && !wm.isCardinalDirectionMode()) {
-                    //if (wm.maxNumberOfTargetPlayers > 1)
-                        System.out.println(c + " " + w.getName() + " " + wm.name + " " + " " + wm.description + " " + wm.getMaxTargetDistance() + " " + wm.getMinTargetDistance() + " maxtargets" + wm.maxNumberOfTargetPlayers + " min" + wm.getMinNumberOfTargetPlayers());
-                    c++;
-                }
-            }
-    }*/
-
+             try {
+                 weaponList.add(gson.fromJson(new FileReader(f.getPath()), Weapon.class));
+             } catch (FileNotFoundException e) {
+                 e.printStackTrace();
+             }
+         }
+         int c = 1;
+         for (Weapon w : weaponList)
+             for (WeaponMode wm : w.getWeaponModes()) {
+                 if (!wm.isMoveTargetBeforeShoot() && !wm.isTargetSquare() && !wm.isTargetPlayers() && wm.isTargetRoom()) {
+                     //if (wm.maxNumberOfTargetPlayers > 1)
+                         System.out.println(c + " " + w.getName() + " " + wm.name + " " + " " + wm.description + " " + wm.getMaxTargetDistance() + " " + wm.getMinTargetDistance() + " maxtargets" + wm.maxNumberOfTargetPlayers + " min" + wm.getMinNumberOfTargetPlayers());
+                     c++;
+                 }
+             }
+     }
+ */
     public WeaponMode(WeaponMode other) {
         this.name = other.name;
         this.description = other.description;
