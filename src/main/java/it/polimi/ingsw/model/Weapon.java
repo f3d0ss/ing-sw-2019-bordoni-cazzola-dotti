@@ -30,22 +30,47 @@ public class Weapon {
     private List<Square> targetSquares = new ArrayList<>();
     private int damageToDo;
 
+    /**
+     * This method returns the weapon's buy cost
+     *
+     * @return Map that represents the weapon's buy cost
+     */
     public Map<Color, Integer> getWeaponBuyCost() {
         return buyCost == null ? new HashMap<>() : buyCost;
     }
 
+    /**
+     * This method returns the weapon's reloading cost
+     *
+     * @return Map that represents the weapon's reloading cost
+     */
     public Map<Color, Integer> getReloadingCost() {
         return reloadingCost;
     }
 
+    /**
+     * This method returns true if the weapon is loaded
+     *
+     * @return
+     */
     public boolean isLoaded() {
         return loaded;
     }
 
+    /**
+     * This method returns the current selected weapon mode
+     *
+     * @return current weapon mode
+     */
     public WeaponMode getSelectedWeaponMode() {
         return selectedWeaponMode;
     }
 
+    /**
+     * This method returns the weapon's name
+     *
+     * @return weapon's name
+     */
     public String getName() {
         return name;
     }
@@ -54,6 +79,11 @@ public class Weapon {
         return description;
     }
 
+    /**
+     * This method sets the weapon mode
+     *
+     * @param selectedWeaponMode weapon mode to use
+     */
     public void setSelectedWeaponMode(WeaponMode selectedWeaponMode) {
         this.selectedWeaponMode = selectedWeaponMode;
         if (selectedWeaponMode.isMoveShooter()) { //set extraMove
@@ -73,7 +103,7 @@ public class Weapon {
     /**
      * This method returns all weapon mods
      *
-     * @return
+     * @return List of all weapon's modes
      */
     public List<WeaponMode> getWeaponModes() {
         return weaponModes;
@@ -430,12 +460,12 @@ public class Weapon {
     }
 
     /**
-     * This method returns the possible commands
+     * This method returns the possible commands to execute ( ExtraMoveCommands, SelectTargetCommands, ShootCommands)
      *
      * @param gameboard
      * @param shooter
      * @param state
-     * @return
+     * @return List of all possible commands to execute
      */
     public List<Command> getPossibleCommands(GameBoard gameboard, Player shooter, ReadyToShootState state) {
         List<Command> possibleCommands = new ArrayList<>();
@@ -472,36 +502,36 @@ public class Weapon {
     }
 
     /**
-     * This metho adds a target player
+     * This method adds a target player to the target list
      *
-     * @param targetPlayer
+     * @param targetPlayer player to be added
      */
     public void addTargetPlayer(Player targetPlayer) {
         targetPlayers.add(targetPlayer);
     }
 
     /**
-     * This method adds a target square
+     * This method adds a target square to the target list
      *
-     * @param targetSquare
+     * @param targetSquare Square to be added
      */
     public void addTargetSquare(Square targetSquare) {
         targetSquares.add(targetSquare);
     }
 
     /**
-     * This method removes the player
+     * This method removes the player from the target list
      *
-     * @param targetPlayer
+     * @param targetPlayer Player to be removed
      */
     public void removeTargetPlayer(Player targetPlayer) {
         targetPlayers.remove(targetPlayer);
     }
 
     /**
-     * This method removes the square
+     * This method removes the square from the targets list
      *
-     * @param targetSquare
+     * @param targetSquare Square to be removed
      */
     public void removeTargetSquare(Square targetSquare) {
         targetSquares.remove(targetSquare);
@@ -515,7 +545,7 @@ public class Weapon {
     }
 
     /**
-     * This method must be called after the weapon has shot. Thus it should be reloaded
+     * This method unloads the weapon
      */
     public void unload() {
         loaded = false;
@@ -547,13 +577,18 @@ public class Weapon {
     /**
      * This method removes the selected weapon mode and sets it to null
      *
-     * @param weaponMode
+     * @param weaponMode Weapon mode to deselect
      */
     public void deselectWeaponMode(WeaponMode weaponMode) {
         if (selectedWeaponMode.equals(weaponMode))
             selectedWeaponMode = null;
     }
 
+    /**
+     * This method returns true if the weapon can shoot again
+     *
+     * @return
+     */
     public boolean hasDamageToDo() {
         return damageToDo > 0;
     }
