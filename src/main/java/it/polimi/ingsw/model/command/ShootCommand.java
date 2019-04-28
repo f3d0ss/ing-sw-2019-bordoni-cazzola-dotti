@@ -26,7 +26,8 @@ public class ShootCommand implements WeaponCommand {
     @Override
     public void execute() {
         effects.forEach(EffectCommand::execute);
-        if (player.hasScope()){
+        currentState.getSelectedWeapon().shoot();
+        if (player.hasScope()) {
             List<Player> shootedPlayer = effects.stream()
                     .filter(EffectCommand::hasDamage)
                     .map(EffectCommand::getPlayer).collect(Collectors.toList());
