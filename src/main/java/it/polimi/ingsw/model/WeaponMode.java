@@ -15,7 +15,6 @@ import java.util.Map;
  */
 public class WeaponMode {
     //general parameters
-    //flamethrower,grenadelauncher?
     private String name;
     private String description;
     private Map<Color, Integer> cost;
@@ -26,10 +25,10 @@ public class WeaponMode {
     private boolean targetPlayers;
     private boolean targetSquare;
     private boolean targetRoom;
-    private boolean eachTargetInTheSameRoom;
-    private boolean eachTargetOnTheSameSquare;
+    private boolean eachTargetInTheSameRoom; //(RM?)
+    private boolean eachTargetOnTheSameSquare; //(RM?)
     private boolean eachTargetOnDifferentSquares;//shockwave
-    private boolean damageEveryone; //The weapon must damage every target possible, the player can't decide not to shoot one target.
+    private boolean damageEveryone; //The weapon must damage every target possible, the player can't decide not to shoot one target.(RM?)
     private boolean targetVisibleByOtherTarget;//thor
     private boolean targetVisibleByShooter;
     private boolean cardinalDirectionMode;
@@ -74,34 +73,6 @@ public class WeaponMode {
                 }
             }
     }*/
-
-    public WeaponMode(WeaponMode other) {
-        this.name = other.name;
-        this.description = other.description;
-        this.cost = other.cost;
-        this.maxNumberOfTargetPlayers = other.maxNumberOfTargetPlayers;
-        this.targetPlayers = other.targetPlayers;
-        this.targetSquare = other.targetSquare;
-        this.targetRoom = other.targetRoom;
-        this.eachTargetInTheSameRoom = other.eachTargetInTheSameRoom;
-        this.eachTargetOnTheSameSquare = other.eachTargetOnTheSameSquare;
-        this.eachTargetOnDifferentSquares = other.eachTargetOnDifferentSquares;
-        this.damageEveryone = other.damageEveryone;
-        this.targetVisibleByOtherTarget = other.targetVisibleByOtherTarget;
-        this.targetVisibleByShooter = other.targetVisibleByShooter;
-        this.cardinalDirectionMode = other.cardinalDirectionMode;
-        this.maxTargetDistance = other.maxTargetDistance;
-        this.minTargetDistance = other.minTargetDistance;
-        this.marks = other.marks;
-        this.damage = other.damage;
-        this.additionalDamageAvailable = other.additionalDamageAvailable;
-        this.maxAdditionalDamagePerPlayer = other.maxAdditionalDamagePerPlayer;
-        this.moveTargetBeforeShoot = other.moveTargetBeforeShoot;
-        this.moveTargetAfterShoot = other.moveTargetAfterShoot;
-        this.moveShooter = other.moveShooter;
-        this.maxTargetMove = other.maxTargetMove;
-        this.maxShooterMove = other.maxShooterMove;
-    }
 
     public String getName() {
         return name;
@@ -211,8 +182,3 @@ public class WeaponMode {
         return maxShooterMove;
     }
 }
-/*//TODO:
-MOVE
-//add something to manage powerglove move effect (go to target square after)
-//cyberblade shoot + move + shoot
-*/
