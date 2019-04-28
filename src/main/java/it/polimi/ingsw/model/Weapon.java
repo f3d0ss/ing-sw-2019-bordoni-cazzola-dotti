@@ -527,11 +527,7 @@ public class Weapon {
      * @return
      */
     public boolean hasExtraMove() {
-        if (!extraMoveToDo)
-            return false;
-        if (selectedWeaponMode.getName().contains("slice and dice") && isSelectingTargets())
-            return targetPlayers.size() < 2 && damageToDo > 1;
-        return !isSelectingTargets();
+        return extraMoveToDo && !isSelectingTargets();
     }
 
     /**
@@ -572,10 +568,10 @@ public class Weapon {
     }
 
     /**
-     * This method must be called after executing a ShootCommand
+     * This method must be called when executing a ShootCommand
      */
     public void shoot() {
-        if (selectedWeaponMode.getName().contains("slice and dice") && targetPlayers.size() == 1)
+        if (selectedWeaponMode.getName().contains("slice and dice") && extraMoveToDo && targetPlayers.size() == 1)
             damageToDo--;
         else {
             damageToDo = 0;
