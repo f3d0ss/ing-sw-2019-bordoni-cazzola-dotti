@@ -1,17 +1,10 @@
 package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.command.Command;
-import it.polimi.ingsw.model.command.MoveCommand;
-import it.polimi.ingsw.model.exception.IllegalMoveException;
-import it.polimi.ingsw.model.playerstate.AfterSelectedAggregateActionState;
 import it.polimi.ingsw.model.playerstate.IdleState;
-import it.polimi.ingsw.model.playerstate.PendingPaymentWeaponOptionState;
 import it.polimi.ingsw.model.playerstate.PlayerState;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Player {
 
@@ -20,39 +13,43 @@ public class Player {
     public static final int MAX_DAMAGE = 12;
     public static final int MAX_MARKS = 3;
     public static final int MAX_WEAPONS = 3;
+    public static final int DAMAGE_BEFORE_FIRST_ADRENALINA = 2;
+    public static final int DAMAGE_BEFORE_SECOND_ADRENALINA = 5;
+    public static final int DAMAGE_BEFORE_DEAD = 10;
+    private static final Integer INITIAL_AMMO_NUMBER = 2;
 
     private Match match;
     private PlayerId id;
     private ArrayList<PlayerId> health = new ArrayList<>();
     private int deaths = 0;
-    private Map<PlayerId, Integer> marks = new HashMap<>();
+    private Map<PlayerId, Integer> marks = new EnumMap<>(PlayerId.class);
     private int points = 0;
-    private String Nickname;
+    private String nickname;
     private ArrayList<Weapon> weapons = new ArrayList<>();
     private ArrayList<PowerUp> powerUps = new ArrayList<>();
-    private Map<Color, Integer> ammo = new HashMap<Color, Integer>();
+    private Map<Color, Integer> ammo = new EnumMap<>(Color.class);
     private boolean disconnetted = false;
-    private boolean dead = false;
-    private int availableAggregateActionCounter = 2;
     private PlayerState playerState = new IdleState();
     private Square position;
     private int usedAggregateAction;
     private PlayerId lastShooter;
 
-
     public Player(Match match, PlayerId id, String nickname, Square position) {
         this.match = match;
         this.id = id;
-        Nickname = nickname;
+        this.nickname = nickname;
         this.position = position;
         usedAggregateAction = 0;
+        for (Color c : Color.values()) {
+            ammo.put(c, INITIAL_AMMO_NUMBER);
+        }
     }
 
     public Map<Color, Integer> getAmmo() {
         return ammo;
     }
 
-    public ArrayList<PowerUp> getPowerUps() {
+    public List<PowerUp> getPowerUps() {
         return powerUps;
     }
 
@@ -65,7 +62,7 @@ public class Player {
     }
 
     public boolean isDead() {
-        return health.size() >= MAX_DAMAGE - 1;
+        return health.size() > DAMAGE_BEFORE_DEAD;
     }
 
     public void setId(PlayerId id) {
@@ -90,6 +87,7 @@ public class Player {
             if (this.powerUps.size() >= MAX_POWERUP)
                 return;
             this.powerUps.add(match.drawPowerUpCard());
+            number--;
         }
     }
 
@@ -113,8 +111,7 @@ public class Player {
             possibleDamage--;
         }
         this.marks.put(color, 0);
-        //TODO: do something if is dead
-        //if (isDead()) ....
+        lastShooter = color;
     }
 
     public void addMarks(int marks, PlayerId color) {
@@ -132,10 +129,6 @@ public class Player {
         return position;
     }
 
-    public void teleport(Square square) {
-        this.position = square;
-    }
-
     public void respawn(Color color) {
         this.position = match.getBoard().getSpawn(color);
     }
@@ -146,8 +139,26 @@ public class Player {
 
 
     public List<AggregateAction> getPossibleAggregateAction() {
-        //Algorithm that calculate Aggregate Actions based on health
-        return null;
+        List<AggregateAction> aggregateActions = new ArrayList<>();
+        if (match.isLastTurn()) {
+            if (match.hasFirstPlayerPlayedLastTurn()) {
+                aggregateActions.add(new AggregateAction(2, false, true, true));
+                aggregateActions.add(new AggregateAction(3, true, false, false));
+            }else{
+                aggregateActions.add(new AggregateAction(1,false,true,true));
+                aggregateActions.add(new AggregateAction(4,false,false,false));
+                aggregateActions.add(new AggregateAction(2,true,false,false));
+            }
+        } else {
+            aggregateActions.add(new AggregateAction(3,false,false,false));
+            aggregateActions.add(new AggregateAction(1,true,false,false));
+            aggregateActions.add(new AggregateAction(0,false,true,false));
+            if (health.size() > DAMAGE_BEFORE_FIRST_ADRENALINA)
+                aggregateActions.add(new AggregateAction(2,true,false,false));
+            if (health.size() > DAMAGE_BEFORE_SECOND_ADRENALINA)
+                aggregateActions.add(new AggregateAction(1,false,true,false));
+        }
+        return aggregateActions;
     }
 
     public List<Square> getAccessibleSquare(int maxDistance) {
@@ -159,7 +170,7 @@ public class Player {
     }
 
     public void pay(Color color, int amount) {
-        if(ammo.getOrDefault(color, 0) < amount)
+        if (ammo.getOrDefault(color, 0) < amount)
             throw new IllegalStateException();
         ammo.put(color, ammo.get(color) - amount);
     }
@@ -180,7 +191,7 @@ public class Player {
         powerUps.add(powerUp);
     }
 
-    public void addWeapon(Weapon weapon){
+    public void addWeapon(Weapon weapon) {
         if (weapons.size() >= MAX_WEAPONS)
             throw new IllegalStateException();
         weapons.add(weapon);
@@ -205,5 +216,33 @@ public class Player {
 
     public Player getLastShooter() {
         return match.getPlayer(lastShooter);
+    }
+
+    public boolean isDisconnetted() {
+        return disconnetted;
+    }
+
+    public void setDisconnetted(boolean disconnetted) {
+        this.disconnetted = disconnetted;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public int getDeaths() {
+        return deaths;
+    }
+
+    public void addDeaths() {
+        deaths++;
+    }
+
+    public int getPoints() {
+        return points;
+    }
+
+    public void addPoints(int points) {
+        this.points += points;
     }
 }

@@ -15,11 +15,13 @@ public class Match {
     private int deathsCounter = SKULLS;
     private ArrayList<Player> currentPlayers;
     private GameBoard board;
+    private boolean firstPlayerPlayedLastTurn;
 
     public Match() {
         board = new GameBoard(1);
         killshotTrack = new ArrayList();
         currentPlayers = new ArrayList();
+        firstPlayerPlayedLastTurn = false;
     }
 
     public Player getPlayer(PlayerId id) {
@@ -100,5 +102,13 @@ public class Match {
 
     public void undiscard(PowerUp powerUp) {
         usedPowerUpDeck.remove(powerUp);
+    }
+
+    public boolean isLastTurn() {
+        return deathsCounter == 0;
+    }
+
+    public boolean hasFirstPlayerPlayedLastTurn() {
+        return firstPlayerPlayedLastTurn;
     }
 }
