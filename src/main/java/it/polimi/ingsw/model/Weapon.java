@@ -86,9 +86,10 @@ public class Weapon {
      */
     public void setSelectedWeaponMode(WeaponMode selectedWeaponMode) {
         this.selectedWeaponMode = selectedWeaponMode;
-        if (selectedWeaponMode.isMoveShooter()) { //set extraMove
+        if (selectedWeaponMode.isMoveShooter())  //set extraMove
             extraMoveToDo = true;
-        }
+        else
+            extraMoveToDo = false;
         damageToDo = selectedWeaponMode.getMaxNumberOfTargetPlayers();
         resetTargetLists();
     }
@@ -319,9 +320,18 @@ public class Weapon {
     private List<WeaponCommand> getPossibleSelectTargetCommandsTargetRoom(GameBoard gameboard, Player shooter, ReadyToShootState state) {
         //Furnace basic mode
         List<WeaponCommand> possibleCommands = new ArrayList<>();
-        if (targetSquares.isEmpty()) //get squares at distance 1 accessible through doors.
-            gameboard.getSquareInOtherVisibleRooms(shooter.getPosition()).forEach(square -> possibleCommands.add(new SelectTargetSquareCommand(state, square)));
-        else if (targetPlayers.isEmpty()) //add all players in the room
+        if (targetSquares.isEmpty()) { //get squares at distance 1 accessible through doors.
+            List<Square> possibleRooms = new ArrayList<>();
+            for (Square square : gameboard.getSquareInOtherVisibleRooms(shooter.getPosition())) { //rooms must have players to damage
+                for (Square squareInTheSameRoom : gameboard.getRoomSquares(square)) {
+                    if (squareInTheSameRoom.hasOtherPlayers(shooter)) {
+                        possibleRooms.add(square);
+                        break;
+                    }
+                }
+            }
+            possibleRooms.forEach(square -> possibleCommands.add(new SelectTargetSquareCommand(state, square)));
+        } else if (targetPlayers.isEmpty()) //add all players in the room
             gameboard.getRoomSquares(targetSquares.get(0)).forEach(square -> targetPlayers.addAll(square.getHostedPlayers()));
         return possibleCommands;
     }
@@ -447,7 +457,7 @@ public class Weapon {
             if (selectedWeaponMode.isCardinalDirectionMode())
                 possibleTargetSquares.addAll(gameboard.getVisibleSquares(shooter.getPosition(), selectedWeaponMode.getMinTargetDistance(), selectedWeaponMode.getMinTargetDistance(), true));
             possibleTargetSquares.addAll(gameboard.getVisibleSquares(shooter.getPosition(), selectedWeaponMode.getMaxTargetDistance(), selectedWeaponMode.getMinTargetDistance(), true));
-            possibleTargetSquares.forEach(square -> possibleCommands.add(new SelectTargetSquareCommand(state, square)));
+            possibleTargetSquares.stream().filter(square -> square.hasOtherPlayers(shooter)).forEach(square -> possibleCommands.add(new SelectTargetSquareCommand(state, square)));
         } else {
             if (selectedWeaponMode.isCardinalDirectionMode()) {
                 possibleCommands.addAll(getPossibleSelectTargetCommandsTargetSquareFlameThrower(gameboard, shooter, state));
