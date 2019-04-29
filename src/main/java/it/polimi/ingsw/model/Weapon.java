@@ -397,8 +397,8 @@ public class Weapon {
     }
 
     private List<WeaponCommand> getPossibleSelectTargetCommandsTargetPlayersNotVisible(GameBoard gameboard, Player shooter, ReadyToShootState state) {
-        //HeatSeeker, maybe create a method to get all players / non visible in gameboard
-        List<Player> allOtherPlayers = gameboard.getOtherPlayersOnReachableSquares(shooter.getPosition(), selectedWeaponMode.getMaxTargetDistance(), shooter);
+        List<Player> allOtherPlayers = shooter.getMatch().getCurrentPlayers();
+        allOtherPlayers.remove(shooter);
         allOtherPlayers.removeAll(gameboard.getVisibleTargets(shooter, Integer.MAX_VALUE, 0));
         return allOtherPlayers.stream().map(player -> new SelectTargetPlayerCommand(state, player)).collect(Collectors.toList());
     }
@@ -489,7 +489,10 @@ public class Weapon {
     }
 
     private List<MoveCommand> getPossibleExtraMoveCommands(Player shooter, ReadyToShootState state) {
-        return shooter.getAccessibleSquare(selectedWeaponMode.getMaxShooterMove()).stream().map(square -> new MoveCommand(shooter, square, state)).collect(Collectors.toList());
+        return shooter.getAccessibleSquare(selectedWeaponMode.getMaxShooterMove())
+                .stream()
+                .map(square -> new MoveCommand(shooter, square, state))
+                .collect(Collectors.toList());
     }
 
     private boolean hasMaximumTargets() {
@@ -508,7 +511,9 @@ public class Weapon {
      * @return List of the commands
      */
     public List<SelectWeaponModeCommand> getSelectWeaponModeCommands(Player player, ChoosingWeaponOptionState state) {
-        return weaponModes.stream().map(weaponMode -> new SelectWeaponModeCommand(player, state, weaponMode)).collect(Collectors.toList());
+        return weaponModes.stream()
+                .map(weaponMode -> new SelectWeaponModeCommand(player, state, weaponMode))
+                .collect(Collectors.toList());
     }
 
     /**
