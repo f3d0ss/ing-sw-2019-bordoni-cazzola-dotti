@@ -2,6 +2,8 @@ package it.polimi.ingsw.model;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import it.polimi.ingsw.model.command.*;
+import it.polimi.ingsw.model.playerstate.ReadyToShootState;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -109,7 +111,36 @@ public class WeaponTest {
     }
 
     @Test
-    void getPossibleCommands() {
+    void getPossibleCommandsWithoutTargetPlayers() {
+        Match match = new Match();
+        GameBoard gameBoard = match.getBoard();
+        Player player = new Player(match, PlayerId.VIOLET, "Mr", gameBoard.getSpawn(Color.BLUE));
+        match.addPlayer(player);
+        match.getBoard().getSpawn(Color.BLUE).addPlayer(player);
+        for (Weapon weapon : allWeapons) {
+            System.out.println(weapon.getName() + "------------");
+            ReadyToShootState state = new ReadyToShootState(new AggregateAction(0, false, true, false), weapon);
+            player.changeState(state);
+            for (WeaponMode weaponMode : weapon.getWeaponModes()) {
+                weapon.setSelectedWeaponMode(weaponMode);
+                System.out.print(weaponMode.getName() + " N of Commands: ");
+                List<Command> possibleCommands = weapon.getPossibleCommands(gameBoard, player, state);
+                int shoot = 0, move = 0, targetSquare = 0, targetPlayer = 0;
+                for (Command command : possibleCommands) {
+                    if (command instanceof ShootCommand) shoot++;
+                    else if (command instanceof MoveCommand) move++;
+                    else if (command instanceof SelectTargetPlayerCommand) targetPlayer++;
+                    else if (command instanceof SelectTargetSquareCommand) targetSquare++;
+                }
+                System.out.println("Shoot: " + shoot + "| Move: " + move + " |TargetPlayer: " + targetPlayer + " |TargetSquare: " + targetSquare);
+                assertTrue(targetPlayer == 0); //these weapons should generate Move Commands
+                if (weaponMode.isMoveShooter())
+                    assertTrue(move > 0);
+                else assertTrue(move == 0);
+                if (!weaponMode.isTargetSquare() && weaponMode.isTargetPlayers()) //these weapons can target empty squares
+                    assertTrue(targetSquare == 0);
+            }
+        }
     }
 
     @Test
