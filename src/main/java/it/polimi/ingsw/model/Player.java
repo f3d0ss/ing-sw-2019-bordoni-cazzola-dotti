@@ -18,12 +18,12 @@ public class Player {
     private PlayerId id;
     private List<PlayerId> health = new ArrayList<>();
     private int deaths = 0;
-    private Map<PlayerId, Integer> marks = new HashMap<>();
+    private Map<PlayerId, Integer> marks = new EnumMap(PlayerId.class);
     private int points = 0;
     private String nickname;
     private List<Weapon> weapons = new ArrayList<>();
     private List<PowerUp> powerUps = new ArrayList<>();
-    private Map<Color, Integer> ammo = new HashMap<>();
+    private Map<Color, Integer> ammo = new EnumMap(Color.class);
     private boolean disconnected = false;
     private boolean dead = false;
     private int availableAggregateActionCounter = 2;

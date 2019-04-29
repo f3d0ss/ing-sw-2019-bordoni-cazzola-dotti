@@ -40,7 +40,7 @@ public class SpawnSquare extends Square {
         weapons.add(weapon);
     }
 
-    public ArrayList<Weapon> getWeapons(){
+    public List<Weapon> getWeapons(){
         return weapons;
     }
 

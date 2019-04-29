@@ -3,6 +3,7 @@ package it.polimi.ingsw.model;
 import it.polimi.ingsw.utils.Observable;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Match extends Observable {
 
@@ -36,7 +37,7 @@ public class Match extends Observable {
         return null;
     }
 
-    public ArrayList<Player> getCurrentPlayers() {
+    public List<Player> getCurrentPlayers() {
         return currentPlayers;
     }
 
@@ -48,7 +49,7 @@ public class Match extends Observable {
         return count;
     }
 
-    public ArrayList<PlayerId> getKillshotTrack() {
+    public List<PlayerId> getKillshotTrack() {
         return killshotTrack;
     }
 
