@@ -1,12 +1,12 @@
 package it.polimi.ingsw.model;
 
-import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 public class PowerUpDeck implements Deck {
-    private ArrayList<PowerUp> powerUps;
+    private List<PowerUp> powerUps;
 
-    public PowerUpDeck(ArrayList<PowerUp> powerUps) {
+    public PowerUpDeck(List<PowerUp> powerUps) {
         this.powerUps = powerUps;
     }
 

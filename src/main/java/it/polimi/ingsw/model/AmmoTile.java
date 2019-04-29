@@ -22,4 +22,15 @@ public class AmmoTile {
     public Map<Color, Integer> getAmmo() {
         return ammo;
     }
+
+    @Override
+    public String toString() {
+        String string = new String();
+        if (powerUp > 0)
+            string = "P";
+        for (Color color : ammo.keySet())
+            for (int i = 0; i < ammo.get(color); i++)
+                string = string + color.colorName().substring(0,1);
+        return string;
+    }
 }

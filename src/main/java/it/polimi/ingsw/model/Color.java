@@ -37,5 +37,5 @@ public enum Color {
         }
     };
 
-    abstract public String colorName();
+    public abstract String colorName();
 }

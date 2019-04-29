@@ -11,6 +11,7 @@
       "description": "Deal 1 damage to every other player on your square.",
       "cost": null,
       "maxNumberOfTargetPlayers": 4,
+      "minNumberOfTargetPlayers": 1,
       "targetPlayers": false,
       "targetSquare": true,
       "targetRoom": false,
@@ -25,9 +26,6 @@
       "minTargetDistance": 0,
       "marks": 0,
       "damage": [
-        1,
-        1,
-        1,
         1
       ],
       "additionalDamageAvailable": 0,
@@ -46,6 +44,7 @@
         "RED": 1
       },
       "maxNumberOfTargetPlayers": 4,
+      "minNumberOfTargetPlayers": 1,
       "targetPlayers": false,
       "targetSquare": true,
       "targetRoom": false,
@@ -60,9 +59,6 @@
       "minTargetDistance": 0,
       "marks": 0,
       "damage": [
-        2,
-        2,
-        2,
         2
       ],
       "additionalDamageAvailable": 0,

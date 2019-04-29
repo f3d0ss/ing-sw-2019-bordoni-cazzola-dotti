@@ -14,6 +14,7 @@
       "description": "Choose 1 or 2 targets you can see and deal 1 damage to each.",
       "cost": null,
       "maxNumberOfTargetPlayers": 2,
+      "minNumberOfTargetPlayers": 1,
       "targetPlayers": true,
       "targetSquare": false,
       "targetRoom": false,
@@ -46,6 +47,7 @@
         "YELLOW": 1
       },
       "maxNumberOfTargetPlayers": 2,
+      "minNumberOfTargetPlayers": 1,
       "targetPlayers": true,
       "targetSquare": false,
       "targetRoom": false,
@@ -78,6 +80,7 @@
         "BLUE": 1
       },
       "maxNumberOfTargetPlayers": 3,
+      "minNumberOfTargetPlayers": 2,
       "targetPlayers": true,
       "targetSquare": false,
       "targetRoom": false,
@@ -112,6 +115,7 @@
         "BLUE": 1
       },
       "maxNumberOfTargetPlayers": 3,
+      "minNumberOfTargetPlayers": 2,
       "targetPlayers": true,
       "targetSquare": false,
       "targetRoom": false,

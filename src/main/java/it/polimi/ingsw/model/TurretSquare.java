@@ -11,7 +11,7 @@ public class TurretSquare extends Square {
     private AmmoTile ammoTile;
 
     public TurretSquare(Connection northConnection, Connection eastConnection, Connection southConnection, Connection westConnection, int row, int col, AmmoTile ammoTile) {
-        super(northConnection, eastConnection, southConnection, westConnection, row, col);
+        super(northConnection, eastConnection, southConnection, westConnection, row, col, null);
         this.ammoTile = ammoTile;
     }
 
@@ -26,6 +26,10 @@ public class TurretSquare extends Square {
         if (this.ammoTile != null)
             throw new IllegalStateException();
         this.ammoTile = ammoTile;
+    }
+
+    public AmmoTile getAmmoTile() {
+        return ammoTile;
     }
 
     public void remove(AmmoTile ammoTile){

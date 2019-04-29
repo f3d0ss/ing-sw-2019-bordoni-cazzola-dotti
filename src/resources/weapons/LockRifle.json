@@ -13,6 +13,7 @@
       "description": "Deal 2 damage and 1 mark to 1 target you can see.",
       "cost": null,
       "maxNumberOfTargetPlayers": 1,
+      "minNumberOfTargetPlayers": 1,
       "targetPlayers": true,
       "targetSquare": false,
       "targetRoom": false,
@@ -44,6 +45,7 @@
         "RED": 1
       },
       "maxNumberOfTargetPlayers": 2,
+      "minNumberOfTargetPlayers": 2,
       "targetPlayers": true,
       "targetSquare": false,
       "targetRoom": false,

@@ -11,6 +11,7 @@
       "description": "Choose a square 1 move away and possibly a second square 1 more move away in the same direction. On each square, you may choose 1 target and give it 1 damage.",
       "cost": null,
       "maxNumberOfTargetPlayers": 2,
+      "minNumberOfTargetPlayers": 1,
       "targetPlayers": false,
       "targetSquare": true,
       "targetRoom": false,
@@ -43,6 +44,7 @@
         "YELLOW": 2
       },
       "maxNumberOfTargetPlayers": 4,
+      "minNumberOfTargetPlayers": 1,
       "targetPlayers": false,
       "targetSquare": true,
       "targetRoom": false,

@@ -13,6 +13,7 @@
       "description": "Deal 2 damage to 1 target you can see that is not on your square. Then you may move the target 1 square.",
       "cost": null,
       "maxNumberOfTargetPlayers": 1,
+      "minNumberOfTargetPlayers": 1,
       "targetPlayers": true,
       "targetSquare": false,
       "targetRoom": false,
@@ -44,6 +45,7 @@
         "BLUE": 1
       },
       "maxNumberOfTargetPlayers": 1,
+      "minNumberOfTargetPlayers": 1,
       "targetPlayers": true,
       "targetSquare": false,
       "targetRoom": false,
@@ -75,7 +77,8 @@
         "YELLOW": "1"
       },
       "maxNumberOfTargetPlayers": 4,
-      "targetPlayers": true,
+      "minNumberOfTargetPlayers": 1,
+      "targetPlayers": false,
       "targetSquare": true,
       "targetRoom": false,
       "eachTargetInTheSameRoom": false,
@@ -89,13 +92,13 @@
       "minTargetDistance": 1,
       "marks": 0,
       "damage": [
-        2,
-        0,
-        0,
-        0
+        3,
+        1,
+        1,
+        1
       ],
-      "additionalDamageAvailable": 4,
-      "maxAdditionalDamagePerPlayer": 1,
+      "additionalDamageAvailable": 0,
+      "maxAdditionalDamagePerPlayer": 0,
       "moveTargetBeforeShoot": false,
       "moveTargetAfterShoot": true,
       "moveShooter": false,
@@ -110,7 +113,8 @@
         "YELLOW": 1
       },
       "maxNumberOfTargetPlayers": 4,
-      "targetPlayers": true,
+      "minNumberOfTargetPlayers": 1,
+      "targetPlayers": false,
       "targetSquare": true,
       "targetRoom": false,
       "eachTargetInTheSameRoom": false,
@@ -124,13 +128,13 @@
       "minTargetDistance": 1,
       "marks": 0,
       "damage": [
-        2,
-        0,
-        0,
-        0
+        3,
+        1,
+        1,
+        1
       ],
-      "additionalDamageAvailable": 4,
-      "maxAdditionalDamagePerPlayer": 1,
+      "additionalDamageAvailable": 0,
+      "maxAdditionalDamagePerPlayer": 0,
       "moveTargetBeforeShoot": false,
       "moveTargetAfterShoot": true,
       "moveShooter": true,

@@ -1,25 +1,32 @@
 package it.polimi.ingsw.model;
 
-import java.util.ArrayList;
+import it.polimi.ingsw.utils.Observable;
 
-public class Match {
+import java.util.ArrayList;
+import java.util.List;
+
+public class Match extends Observable {
 
     private static final int SKULLS = 8;
 
-    private ArrayList<PlayerId> killshotTrack;
+    private List<PlayerId> killshotTrack;
     private PowerUpDeck currentPowerUpDeck;
     private PowerUpDeck usedPowerUpDeck;
     private AmmoTileDeck currentAmmoTileDeck;
     private AmmoTileDeck usedAmmoTileDeck;
     private WeaponDeck currentWeaponDeck;
     private int deathsCounter = SKULLS;
-    private ArrayList<Player> currentPlayers;
+    private List<Player> currentPlayers;
     private GameBoard board;
 
     public Match() {
         board = new GameBoard(1);
         killshotTrack = new ArrayList();
         currentPlayers = new ArrayList();
+        currentAmmoTileDeck = new AmmoTileDeck();
+        currentAmmoTileDeck.initializeDeck();
+        currentWeaponDeck = new WeaponDeck();
+        usedAmmoTileDeck = new AmmoTileDeck();
     }
 
     public Player getPlayer(PlayerId id) {
@@ -30,7 +37,7 @@ public class Match {
         return null;
     }
 
-    public ArrayList<Player> getCurrentPlayers() {
+    public List<Player> getCurrentPlayers() {
         return currentPlayers;
     }
 
@@ -40,6 +47,10 @@ public class Match {
             if (id.equals(tmp))
                 count++;
         return count;
+    }
+
+    public List<PlayerId> getKillshotTrack() {
+        return killshotTrack;
     }
 
     public int getDeathsCounter() {
@@ -66,19 +77,19 @@ public class Match {
         killshotTrack.add(player);
     }
 
-    public AmmoTile drawAmmoTileCard() {
+    private AmmoTile drawAmmoTileCard() {
         AmmoTile tmp;
         tmp = currentAmmoTileDeck.drawAmmoTile();
         if (tmp == null) {
             currentAmmoTileDeck = usedAmmoTileDeck;
-            usedAmmoTileDeck = new AmmoTileDeck(new ArrayList<>());
+            usedAmmoTileDeck = new AmmoTileDeck();
             currentAmmoTileDeck.shuffle();
             tmp = currentAmmoTileDeck.drawAmmoTile();
         }
         return tmp;
     }
 
-    public Weapon drawWeaponCard() {
+    private Weapon drawWeaponCard() {
         return currentWeaponDeck.drawWeapon();
     }
 
@@ -104,5 +115,16 @@ public class Match {
 
     public void undiscard(PowerUp powerUp) {
         usedPowerUpDeck.remove(powerUp);
+    }
+
+    public void restoreCards() {
+        for (TurretSquare turret : board.getTurrets()) {
+            if (turret.getAmmoTile() == null)
+                turret.setAmmoTile(drawAmmoTileCard());
+        }
+        for (Color color : Color.values()) {
+            while (board.getSpawn(color).lackWeapon())
+                board.getSpawn(color).addWeapon(drawWeaponCard());
+        }
     }
 }

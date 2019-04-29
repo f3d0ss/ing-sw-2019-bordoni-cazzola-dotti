@@ -4,7 +4,6 @@ import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.TagbackGrenade;
 import it.polimi.ingsw.model.exception.IllegalUndoException;
 import it.polimi.ingsw.model.playerstate.IdleState;
-import it.polimi.ingsw.model.playerstate.ShootedState;
 
 public class UseTagbackGrenadeCommand implements Command {
     private TagbackGrenade grenade;

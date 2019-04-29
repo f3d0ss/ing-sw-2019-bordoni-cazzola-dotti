@@ -1,5 +1,12 @@
 package it.polimi.ingsw.model;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -8,20 +15,20 @@ import java.util.Map;
  */
 public class WeaponMode {
     //general parameters
-    //flamethrower,grenadelauncher?
     private String name;
     private String description;
     private Map<Color, Integer> cost;
     private int maxNumberOfTargetPlayers;
+    private int minNumberOfTargetPlayers;
 
     //shooting parameters
     private boolean targetPlayers;
     private boolean targetSquare;
     private boolean targetRoom;
-    private boolean eachTargetInTheSameRoom;
-    private boolean eachTargetOnTheSameSquare;
+    private boolean eachTargetInTheSameRoom; //(RM?)
+    private boolean eachTargetOnTheSameSquare; //(RM?)
     private boolean eachTargetOnDifferentSquares;//shockwave
-    private boolean damageEveryone; //The weapon must damage every target possible, the player can't decide not to shoot one target.
+    private boolean damageEveryone; //The weapon must damage every target possible, the player can't decide not to shoot one target.(RM?)
     private boolean targetVisibleByOtherTarget;//thor
     private boolean targetVisibleByShooter;
     private boolean cardinalDirectionMode;
@@ -39,21 +46,32 @@ public class WeaponMode {
     private int maxTargetMove;
     private int maxShooterMove;
 
-    /*public static void main(String[] args) {
+   /* public static void main(String[] args) {
         GsonBuilder g = new GsonBuilder();
         g.setPrettyPrinting();
         g.serializeNulls();
         Gson gson = g.create();
-        Weapon lock = null;
-        try {
-            lock = gson.fromJson(new FileReader("src/resources/weapons/Flamethrower.json"), Weapon.class);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
+        List<Weapon> weaponList = new ArrayList<>();
+        File file = new File("src/resources/weapons/");
+        File[] files = file.listFiles();
+        for (File f : files) {
+            System.out.println(f.getPath());
+
+            try {
+                weaponList.add(gson.fromJson(new FileReader(f.getPath()), Weapon.class));
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
         }
-        System.out.println(lock.getReloadingCost().toString() +
-                lock.getWeaponBuyCost() +
-                lock.isLoaded());
-        System.out.println(gson.toJson(lock));
+        int c = 1;
+        for (Weapon w : weaponList)
+            for (WeaponMode wm : w.getWeaponModes()) {
+                if (!wm.isMoveTargetBeforeShoot() && !wm.isTargetSquare() && wm.isTargetPlayers() && wm.isTargetVisibleByShooter() && !wm.isCardinalDirectionMode()) {
+                    if (wm.moveTargetAfterShoot)
+                        System.out.println(c + " " + w.getName() + " " + wm.name + " " + " " + wm.description + " " + wm.getMaxTargetDistance() + " " + wm.getMinTargetDistance() + " maxtargets" + wm.maxNumberOfTargetPlayers + " min" + wm.getMinNumberOfTargetPlayers());
+                    c++;
+                }
+            }
     }*/
 
     public String getName() {
@@ -70,6 +88,10 @@ public class WeaponMode {
 
     public int getMaxNumberOfTargetPlayers() {
         return maxNumberOfTargetPlayers;
+    }
+
+    public int getMinNumberOfTargetPlayers() {
+        return minNumberOfTargetPlayers;
     }
 
     public boolean isTargetPlayers() {
@@ -126,6 +148,10 @@ public class WeaponMode {
 
     public List<Integer> getDamage() {
         return damage;
+    }
+
+    public int getDamage(int index) {
+        return damage.get(index);
     }
 
     public int getAdditionalDamageAvailable() {
