@@ -234,7 +234,7 @@ public class GameBoard {
      */
     public List<Square> getReachableSquare(Square position, int maxMoves) {
         List<Square> list = new ArrayList<>();
-        getReachableSquare(position, list, maxMoves);
+            getReachableSquare(position, list, maxMoves);
         return list;
     }
 
@@ -273,6 +273,10 @@ public class GameBoard {
      * @author supernivem
      */
     private void getReachableSquare(Square position, List<Square> list, int maxMoves) {
+        //TODO handle high maxMoves values-------------------------------
+        if(maxMoves>15)
+            maxMoves=14;
+        //---------------------------------------------------------------
         Square adjacent;
         int furtherMove = maxMoves - 1;
         if (!list.contains(position))
