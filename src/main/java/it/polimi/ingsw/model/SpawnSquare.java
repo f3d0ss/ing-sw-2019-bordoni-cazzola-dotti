@@ -10,13 +10,13 @@ import java.util.List;
 public class SpawnSquare extends Square {
 
     static final int MAX_WEAPON = 3;
-    private List<Weapon> weapons = new ArrayList<>();
+    private ArrayList<Weapon> weapons;
     private ArrayList<PlayerId> spawnPointTrack;
 
-    public SpawnSquare(Connection northConnection, Connection eastConnection, Connection southConnection, Connection westConnection, int row, int col, List<Weapon> weapons) {
-        super(northConnection, eastConnection, southConnection, westConnection, row, col);
-        this.weapons = weapons;
-        this.spawnPointTrack = new ArrayList<>();
+    public SpawnSquare(Connection northConnection, Connection eastConnection, Connection southConnection, Connection westConnection, int row, int col, Color color) {
+        super(northConnection, eastConnection, southConnection, westConnection, row, col, color);
+        weapons = new ArrayList<>();
+        spawnPointTrack = new ArrayList<>();
     }
 
     public List<PlayerId> getSpawnPointTrack() {
@@ -40,4 +40,11 @@ public class SpawnSquare extends Square {
         weapons.add(weapon);
     }
 
+    public List<Weapon> getWeapons() {
+        return weapons;
+    }
+
+    public boolean lackWeapon() {
+        return weapons.size() < MAX_WEAPON;
+    }
 }

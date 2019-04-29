@@ -11,6 +11,7 @@
       "description": "Move a target 0, 1, or 2 squares to a square you can see, and give it 1 damage.",
       "cost": null,
       "maxNumberOfTargetPlayers": 1,
+      "minNumberOfTargetPlayers": 1,
       "targetPlayers": false,
       "targetSquare": true,
       "targetRoom": false,
@@ -43,6 +44,7 @@
         "YELLOW": 1
       },
       "maxNumberOfTargetPlayers": 1,
+      "minNumberOfTargetPlayers": 1,
       "targetPlayers": false,
       "targetSquare": true,
       "targetRoom": false,
@@ -53,7 +55,7 @@
       "targetVisibleByOtherTarget": false,
       "targetVisibleByShooter": true,
       "cardinalDirectionMode": false,
-      "maxTargetDistance": 2147483647,
+      "maxTargetDistance": 0,
       "minTargetDistance": 0,
       "marks": 0,
       "damage": [

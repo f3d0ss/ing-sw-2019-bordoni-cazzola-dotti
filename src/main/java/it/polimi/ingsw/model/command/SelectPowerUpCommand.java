@@ -1,19 +1,32 @@
 package it.polimi.ingsw.model.command;
 
+import it.polimi.ingsw.model.Newton;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.PowerUp;
+import it.polimi.ingsw.model.Teleporter;
 import it.polimi.ingsw.model.playerstate.ManageTurnState;
-import it.polimi.ingsw.model.playerstate.SelectedPowerUpState;
+import it.polimi.ingsw.model.playerstate.PlayerState;
+import it.polimi.ingsw.model.playerstate.SelectedNewtonState;
+import it.polimi.ingsw.model.playerstate.SelectedTeleporterState;
 
 public class SelectPowerUpCommand implements Command{
     private Player player;
-    private PowerUp powerUp;
     private ManageTurnState currentState;
+    private PlayerState nextState;
+    private PowerUp powerUp;
 
-    public SelectPowerUpCommand(Player player, PowerUp powerUp, ManageTurnState currentState) {
+    public SelectPowerUpCommand(Player player, Newton powerUp, ManageTurnState currentState) {
         this.player = player;
-        this.powerUp = powerUp;
         this.currentState = currentState;
+        nextState = new SelectedNewtonState(powerUp);
+        this.powerUp = powerUp;
+    }
+
+    public SelectPowerUpCommand(Player player, Teleporter powerUp, ManageTurnState currentState) {
+        this.player = player;
+        this.currentState = currentState;
+        nextState = new SelectedTeleporterState(powerUp);
+        this.powerUp = powerUp;
     }
 
     /**
@@ -21,7 +34,8 @@ public class SelectPowerUpCommand implements Command{
      */
     @Override
     public void execute() {
-        player.changeState(new SelectedPowerUpState(powerUp));
+        player.pay(powerUp);
+        player.changeState(nextState);
     }
 
     /**
@@ -29,6 +43,7 @@ public class SelectPowerUpCommand implements Command{
      */
     @Override
     public void undo() {
+        player.refund(powerUp);
         player.changeState(currentState);
     }
 }

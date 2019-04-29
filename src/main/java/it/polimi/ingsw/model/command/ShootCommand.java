@@ -2,7 +2,6 @@ package it.polimi.ingsw.model.command;
 
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.exception.IllegalUndoException;
-import it.polimi.ingsw.model.playerstate.AfterShotState;
 import it.polimi.ingsw.model.playerstate.ManageTurnState;
 import it.polimi.ingsw.model.playerstate.ReadyToShootState;
 import it.polimi.ingsw.model.playerstate.ScopeState;
@@ -27,7 +26,8 @@ public class ShootCommand implements WeaponCommand {
     @Override
     public void execute() {
         effects.forEach(EffectCommand::execute);
-        if (player.hasScope()){
+        currentState.getSelectedWeapon().shoot();
+        if (player.hasScope()) {
             List<Player> shootedPlayer = effects.stream()
                     .filter(EffectCommand::hasDamage)
                     .map(EffectCommand::getPlayer).collect(Collectors.toList());
@@ -37,7 +37,7 @@ public class ShootCommand implements WeaponCommand {
             }
         }
         if (currentState.getSelectedWeapon().hasExtraMove())
-            player.changeState(new AfterShotState(currentState.getSelectedAggregateAction(), currentState.getSelectedWeapon()));
+            player.changeState(new ReadyToShootState(currentState.getSelectedAggregateAction(), currentState.getSelectedWeapon()));
         else
             player.changeState(new ManageTurnState());
     }

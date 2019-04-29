@@ -11,6 +11,7 @@
       "description": "Deal 1 damage to 1 target you can see. Then you may move the target 1 square.",
       "cost": null,
       "maxNumberOfTargetPlayers": 1,
+      "minNumberOfTargetPlayers": 1,
       "targetPlayers": true,
       "targetSquare": false,
       "targetRoom": false,
@@ -42,6 +43,7 @@
         "RED": 1
       },
       "maxNumberOfTargetPlayers": 4,
+      "minNumberOfTargetPlayers": 1,
       "targetPlayers": true,
       "targetSquare": true,
       "targetRoom": false,
@@ -57,13 +59,11 @@
       "marks": 0,
       "damage": [
         1,
-        0,
-        0,
-        0
+        1
       ],
-      "additionalDamageAvailable": 4,
-      "maxAdditionalDamagePerPlayer": 1,
-      "moveTargetBeforeShoot": true,
+      "additionalDamageAvailable": 0,
+      "maxAdditionalDamagePerPlayer": 0,
+      "moveTargetBeforeShoot": false,
       "moveTargetAfterShoot": true,
       "moveShooter": false,
       "maxTargetMove": 1,

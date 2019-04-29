@@ -13,9 +13,9 @@ public class MatchTest {
     @Test
     public void testAddPlayer() {
         Match match = new Match();
-        Player tmp = new Player(match, PlayerId.BLUE, "Paolino", null);
+        Player tmp;
         for (PlayerId id : PlayerId.values()) {
-            tmp.setId(id);
+            tmp = new Player(match, id, "Paolino", null);
             match.addPlayer(tmp);
             assertEquals(match.getPlayer(id), tmp);
         }

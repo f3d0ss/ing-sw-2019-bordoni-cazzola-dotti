@@ -36,5 +36,5 @@ public enum PlayerId {
         }
     };
 
-    abstract public String playerIdName();
+    public abstract String playerIdName();
 }

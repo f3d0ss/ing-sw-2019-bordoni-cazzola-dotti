@@ -14,6 +14,7 @@
       "description": "Choose 1 target on any square exactly 1 move away. Move onto that square and give the target 1 damage and 2 marks.",
       "cost": null,
       "maxNumberOfTargetPlayers": 1,
+      "minNumberOfTargetPlayers": 1,
       "targetPlayers": true,
       "targetSquare": false,
       "targetRoom": false,
@@ -34,9 +35,9 @@
       "maxAdditionalDamagePerPlayer": 0,
       "moveTargetBeforeShoot": false,
       "moveTargetAfterShoot": false,
-      "moveShooter": true,
+      "moveShooter": false,
       "maxTargetMove": 0,
-      "maxShooterMove": 1
+      "maxShooterMove": 0
     },
     {
       "name": "rocket fist mode",
@@ -45,8 +46,9 @@
         "BLUE": 1
       },
       "maxNumberOfTargetPlayers": 2,
+      "minNumberOfTargetPlayers": 1,
       "targetPlayers": true,
-      "targetSquare": true,
+      "targetSquare": false,
       "targetRoom": false,
       "eachTargetInTheSameRoom": false,
       "eachTargetOnTheSameSquare": false,
@@ -66,9 +68,9 @@
       "maxAdditionalDamagePerPlayer": 0,
       "moveTargetBeforeShoot": false,
       "moveTargetAfterShoot": false,
-      "moveShooter": true,
+      "moveShooter": false,
       "maxTargetMove": 0,
-      "maxShooterMove": 2
+      "maxShooterMove": 0
     }
   ]
 }

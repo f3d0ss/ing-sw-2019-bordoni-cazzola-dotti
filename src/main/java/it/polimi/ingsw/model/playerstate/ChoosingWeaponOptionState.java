@@ -17,7 +17,7 @@ public class ChoosingWeaponOptionState extends SelectedWeaponState {
 
     @Override
     public List<Command> getPossibleCommands(Player player) {
-        List<Command> commands = new ArrayList<>(getSelectedWeapon().getSelectOptionCommands(player, this));
+        List<Command> commands = new ArrayList<>(getSelectedWeapon().getSelectWeaponModeCommands(player, this));
         commands.add(new DoneCommand(player, this));
         return commands;
     }

@@ -2,9 +2,9 @@ package it.polimi.ingsw.model;
 
 import org.junit.Test;
 
-import java.util.ArrayList;
+import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class GameBoardTest {
 
@@ -18,7 +18,7 @@ public class GameBoardTest {
     public void testGetVisibleSquares() {
         GameBoard board = new GameBoard(1);
         Square square;
-        ArrayList<Square> list;
+        List<Square> list;
         for (int i = 0; i < ROWS; i++)
             for (int j = 0; j < COLUMNS; j++) {
                 square = board.getSquare(i, j);
@@ -94,7 +94,7 @@ public class GameBoardTest {
     public void testGetAccessibleDirections() {
         GameBoard board = new GameBoard(1);
         Square square;
-        ArrayList<CardinalDirection> list;
+        List<CardinalDirection> list;
         for (int i = 0; i < ROWS * COLUMNS; i++) {
             square = board.getSquare(i / COLUMNS, i % COLUMNS);
             if (square != null) {
@@ -152,7 +152,7 @@ public class GameBoardTest {
     public void testGetCardinalDirectionSquares() {
         Match match = new Match();
         Square square, temp;
-        ArrayList<Square> list;
+        List<Square> list;
         for (int i = 0; i < ROWS; i++)
             for (int j = 0; j < COLUMNS; j++) {
                 square = match.getBoard().getSquare(i, j);
@@ -175,8 +175,8 @@ public class GameBoardTest {
         int maxMove = 6;
         Match match = new Match();
         Square square_one, square_two;
-        ArrayList<Square> list_one;
-        ArrayList<Square> list_two;
+        List<Square> list_one;
+        List<Square> list_two;
         for (int i = 0; i < 1; i++)
             for (int j = 0; j < 1; j++) {
                 square_one = match.getBoard().getSquare(i, j);

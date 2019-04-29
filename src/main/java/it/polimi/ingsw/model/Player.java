@@ -20,15 +20,16 @@ public class Player {
 
     private Match match;
     private PlayerId id;
-    private ArrayList<PlayerId> health = new ArrayList<>();
+    private List<PlayerId> health = new ArrayList<>();
     private int deaths = 0;
     private Map<PlayerId, Integer> marks = new EnumMap<>(PlayerId.class);
     private int points = 0;
     private String nickname;
-    private ArrayList<Weapon> weapons = new ArrayList<>();
-    private ArrayList<PowerUp> powerUps = new ArrayList<>();
-    private Map<Color, Integer> ammo = new EnumMap<>(Color.class);
-    private boolean disconnetted = false;
+    private List<Weapon> weapons = new ArrayList<>();
+    private List<PowerUp> powerUps = new ArrayList<>();
+    private Map<Color, Integer> ammo = new HashMap<>();
+    private boolean disconnected = false;
+    private int availableAggregateActionCounter;
     private PlayerState playerState = new IdleState();
     private Square position;
     private int usedAggregateAction;
@@ -65,8 +66,16 @@ public class Player {
         return health.size() > DAMAGE_BEFORE_DEAD;
     }
 
-    public void setId(PlayerId id) {
-        this.id = id;
+    public String toString() {
+        return nickname;
+    }
+
+    public List<PlayerId> getHealth() {
+        return health;
+    }
+
+    public Map<PlayerId, Integer> getMarks() {
+        return marks;
     }
 
     public void changeState(PlayerState playerState) {
@@ -144,19 +153,19 @@ public class Player {
             if (match.hasFirstPlayerPlayedLastTurn()) {
                 aggregateActions.add(new AggregateAction(2, false, true, true));
                 aggregateActions.add(new AggregateAction(3, true, false, false));
-            }else{
-                aggregateActions.add(new AggregateAction(1,false,true,true));
-                aggregateActions.add(new AggregateAction(4,false,false,false));
-                aggregateActions.add(new AggregateAction(2,true,false,false));
+            } else {
+                aggregateActions.add(new AggregateAction(1, false, true, true));
+                aggregateActions.add(new AggregateAction(4, false, false, false));
+                aggregateActions.add(new AggregateAction(2, true, false, false));
             }
         } else {
-            aggregateActions.add(new AggregateAction(3,false,false,false));
-            aggregateActions.add(new AggregateAction(1,true,false,false));
-            aggregateActions.add(new AggregateAction(0,false,true,false));
+            aggregateActions.add(new AggregateAction(3, false, false, false));
+            aggregateActions.add(new AggregateAction(1, true, false, false));
+            aggregateActions.add(new AggregateAction(0, false, true, false));
             if (health.size() > DAMAGE_BEFORE_FIRST_ADRENALINA)
-                aggregateActions.add(new AggregateAction(2,true,false,false));
+                aggregateActions.add(new AggregateAction(2, true, false, false));
             if (health.size() > DAMAGE_BEFORE_SECOND_ADRENALINA)
-                aggregateActions.add(new AggregateAction(1,false,true,false));
+                aggregateActions.add(new AggregateAction(1, false, true, false));
         }
         return aggregateActions;
     }
@@ -219,11 +228,11 @@ public class Player {
     }
 
     public boolean isDisconnetted() {
-        return disconnetted;
+        return disconnected;
     }
 
-    public void setDisconnetted(boolean disconnetted) {
-        this.disconnetted = disconnetted;
+    public void setDisconnetted(boolean disconnected) {
+        this.disconnected = disconnected;
     }
 
     public String getNickname() {
@@ -244,5 +253,25 @@ public class Player {
 
     public void addPoints(int points) {
         this.points += points;
+    }
+
+    public List<TargetingScope> getTargetingScopes() {
+        //TODO:
+        return null;
+    }
+
+    public List<TagbackGrenade> getTagbackGrenades() {
+        //TODO:
+        return null;
+    }
+
+    public List<Teleporter> getTeleports() {
+        //TODO:
+        return null;
+    }
+
+    public List<Newton> getNewtons() {
+        //TODO:
+        return null;
     }
 }

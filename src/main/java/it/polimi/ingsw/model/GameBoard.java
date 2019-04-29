@@ -1,36 +1,46 @@
 package it.polimi.ingsw.model;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class GameBoard {
 
-    private final static int ROWS = 3;
-    private final static int COLUMNS = 4;
+    private static final int ROWS = 3;
+    private static final int COLUMNS = 4;
     private Square[][] board = new Square[ROWS][COLUMNS];
-    private Map<Color, SpawnSquare> spawn;
+    private Map<Color, SpawnSquare> spawns;
+    private List<TurretSquare> turrets;
 
     //hard coded GameBoard only for player's movements test
 
     public GameBoard(int boardNumber) {
+        turrets = new ArrayList<>();
         switch (boardNumber) {
             case 1:
-                spawn = new HashMap<Color, SpawnSquare>() {{
-                    put(Color.BLUE, new SpawnSquare(Connection.MAP_BORDER, Connection.MAP_BORDER, Connection.DOOR, Connection.SAME_ROOM, 0, 2, null));
-                    put(Color.RED, new SpawnSquare(Connection.DOOR, Connection.SAME_ROOM, Connection.MAP_BORDER, Connection.MAP_BORDER, 1, 0, null));
-                    put(Color.YELLOW, new SpawnSquare(Connection.SAME_ROOM, Connection.MAP_BORDER, Connection.MAP_BORDER, Connection.DOOR, 2, 3, null));
+                spawns = new HashMap<Color, SpawnSquare>() {{
+                    put(Color.BLUE, new SpawnSquare(Connection.MAP_BORDER, Connection.MAP_BORDER, Connection.DOOR, Connection.SAME_ROOM, 0, 2, Color.BLUE));
+                    put(Color.RED, new SpawnSquare(Connection.DOOR, Connection.SAME_ROOM, Connection.MAP_BORDER, Connection.MAP_BORDER, 1, 0, Color.RED));
+                    put(Color.YELLOW, new SpawnSquare(Connection.SAME_ROOM, Connection.MAP_BORDER, Connection.MAP_BORDER, Connection.DOOR, 2, 3, Color.YELLOW));
                 }};
                 board[0][0] = new TurretSquare(Connection.MAP_BORDER, Connection.SAME_ROOM, Connection.DOOR, Connection.MAP_BORDER, 0, 0, null);
+                turrets.add((TurretSquare) board[0][0]);
                 board[0][1] = new TurretSquare(Connection.MAP_BORDER, Connection.SAME_ROOM, Connection.WALL, Connection.SAME_ROOM, 0, 1, null);
-                board[0][2] = spawn.get(Color.BLUE);
+                turrets.add((TurretSquare) board[0][1]);
+                board[0][2] = spawns.get(Color.BLUE);
                 board[0][3] = null;
-                board[1][0] = spawn.get(Color.RED);
+                board[1][0] = spawns.get(Color.RED);
                 board[1][1] = new TurretSquare(Connection.WALL, Connection.SAME_ROOM, Connection.DOOR, Connection.SAME_ROOM, 1, 1, null);
+                turrets.add((TurretSquare) board[1][1]);
                 board[1][2] = new TurretSquare(Connection.DOOR, Connection.DOOR, Connection.WALL, Connection.SAME_ROOM, 1, 2, null);
+                turrets.add((TurretSquare) board[1][2]);
                 board[1][3] = new TurretSquare(Connection.MAP_BORDER, Connection.MAP_BORDER, Connection.SAME_ROOM, Connection.DOOR, 1, 3, null);
+                turrets.add((TurretSquare) board[1][3]);
                 board[2][0] = null;
                 board[2][1] = new TurretSquare(Connection.DOOR, Connection.SAME_ROOM, Connection.MAP_BORDER, Connection.MAP_BORDER, 2, 1, null);
+                turrets.add((TurretSquare) board[2][1]);
                 board[2][2] = new TurretSquare(Connection.WALL, Connection.DOOR, Connection.MAP_BORDER, Connection.SAME_ROOM, 2, 2, null);
-                board[2][3] = spawn.get(Color.YELLOW);
+                turrets.add((TurretSquare) board[2][2]);
+                board[2][3] = spawns.get(Color.YELLOW);
 /*            default:
                 board[0][0] = new TurretSquare(Connection.MAP_BORDER, Connection.SAME_ROOM, Connection.DOOR, Connection.MAP_BORDER, 0, 0, null);
                 board[0][1] = new TurretSquare(Connection.MAP_BORDER, Connection.SAME_ROOM, Connection.WALL, Connection.SAME_ROOM, 0, 1, null);
@@ -46,30 +56,36 @@ public class GameBoard {
                 board[2][3] = new SpawnSquare(Connection.SAME_ROOM, Connection.MAP_BORDER, Connection.MAP_BORDER, Connection.SAME_ROOM, 2, 3, null);
 */
 //board 3 and 4 missing
+                /*spawnToColor = new HashMap<SpawnSquare, Color>() {{
+                    for (Color c : Color.values()) {
+                        put(colorToSpawn.get(c), c);
+                    }
+                }};*/
         }
     }
 
     /**
-     * @author Bordoni
      * @param row is the row's value, first is 0
      * @param col is the column's value, first is 0
      * @return the square placed in specified coordinates
+     * @author Bordoni
      */
-
     public Square getSquare(int row, int col) {
         return board[row][col];
     }
 
     /**
-     * @author Bordoni
      * @param color is the color of the spawn square requested
      * @return the uniqe spawn square of that color
+     * @author Bordoni
      */
-
     public SpawnSquare getSpawn(Color color) {
-        return spawn.get(color);
+        return spawns.get(color);
     }
 
+    public List<TurretSquare> getTurrets() {
+        return turrets;
+    }
 
     public int getHeight() {
         return ROWS;
@@ -80,12 +96,11 @@ public class GameBoard {
     }
 
     /**
-     * @author Bordoni
      * @param current is the starting position
-     * @param dir is the direction detected
+     * @param dir     is the direction detected
      * @return the square near to current in dir direction
+     * @author Bordoni
      */
-
     private Square getAdjacentSquare(Square current, CardinalDirection dir) {
         switch (dir) {
             case NORTH:
@@ -101,12 +116,11 @@ public class GameBoard {
     }
 
     /**
-     * @author Bordoni
-     * @param list is the list passed by caller, needed for recursion
+     * @param list     is the list passed by caller, needed for recursion
      * @param position the square which room is detected
+     * @author Bordoni
      */
-
-    private void getSameRoomSquares(ArrayList<Square> list, Square position) {
+    private void getSameRoomSquares(List<Square> list, Square position) {
         Square adjacent;
         for (CardinalDirection dir : CardinalDirection.values())
             if (position.getConnection(dir) == Connection.SAME_ROOM) {
@@ -118,19 +132,24 @@ public class GameBoard {
             }
     }
 
+    public List<Square> getRoomSquares(Square square) {
+        List<Square> list = new ArrayList<>();
+        getSameRoomSquares(list, square);
+        return list;
+    }
+
     /**
-     * @author supernivem
-     * @param position starting position
-     * @param maxRange maximum distance of returned squares
-     * @param minRange minimum distance of returned squares
+     * @param position       starting position
+     * @param maxRange       maximum distance of returned squares
+     * @param minRange       minimum distance of returned squares
      * @param onlyWithPlayer excluded squares where there are no players
      * @return give the list of visible squares according to input parameters
+     * @author supernivem
      */
-
-    public ArrayList<Square> getVisibleSquares(Square position, int maxRange, int minRange, boolean onlyWithPlayer) {
+    public List<Square> getVisibleSquares(Square position, int maxRange, int minRange, boolean onlyWithPlayer) {
         Square adjacent;
-        ArrayList<Square> list = new ArrayList<>();
-        ArrayList<Square> out = new ArrayList<>();
+        List<Square> list = new ArrayList<>();
+        List<Square> out = new ArrayList<>();
         list.add(position);
         if (maxRange > 0) {
             for (CardinalDirection dir : CardinalDirection.values())
@@ -153,21 +172,21 @@ public class GameBoard {
         if (!onlyWithPlayer)
             return list;
         for (Square s : list)
-            if (s.getHostedPlayers().size() != 0)
+            if (!s.getHostedPlayers().isEmpty())
                 out.add(s);
         return out;
     }
 
-    /** @author supernivem
-     * @param position is the position from where get straight direction squares
-     * @param maxRange maximum distance of gotten squares
-     * @param minRange minimum distance of gotten squares
+    /**
+     * @param position    is the position from where get straight direction squares
+     * @param maxRange    maximum distance of gotten squares
+     * @param minRange    minimum distance of gotten squares
      * @param ignoreWalls specify if ignore or consider walls
+     * @author supernivem
      */
-
-    public ArrayList<Square> getCardinalDirectionSquares(Square position, int maxRange, int minRange, boolean ignoreWalls) {
+    public List<Square> getCardinalDirectionSquares(Square position, int maxRange, int minRange, boolean ignoreWalls) {
         Square adjacent;
-        ArrayList<Square> list = new ArrayList<>();
+        List<Square> list = new ArrayList<>();
         if (minRange == 0)
             list.add(position);
         if (maxRange > 0) {
@@ -182,15 +201,21 @@ public class GameBoard {
         return list;
     }
 
-    /** @author supernivem
-     * @param list is a list passed by caller, needed to allow recursion
-     * @param position is the position from where get straight direction squares
-     * @param maxRange maximum distance of got squares
-     * @param ignoreWalls specify if ignore or consider walls
-     * @param dir is the direction in which get squares
-     */
+    public List<Player> getPlayersOnCardinalDirectionSquares(Player shooter, int maxRange, int minRange, boolean ignoreWalls) {
+        List<Player> players = new ArrayList<>();
+        getCardinalDirectionSquares(shooter.getPosition(), maxRange, minRange, ignoreWalls).stream().map(square -> square.getHostedPlayers(shooter)).forEach(players::addAll);
+        return players;
+    }
 
-    private void getStraightSquares(ArrayList<Square> list, Square position, int maxRange, boolean ignoreWalls, CardinalDirection dir) {
+    /**
+     * @param list        is a list passed by caller, needed to allow recursion
+     * @param position    is the position from where get straight direction squares
+     * @param maxRange    maximum distance of got squares
+     * @param ignoreWalls specify if ignore or consider walls
+     * @param dir         is the direction in which get squares
+     * @author supernivem
+     */
+    private void getStraightSquares(List<Square> list, Square position, int maxRange, boolean ignoreWalls, CardinalDirection dir) {
         Square next;
         if (maxRange > 0 && position.getConnection(dir).isAccessible(ignoreWalls)) {
             next = this.getAdjacentSquare(position, dir);
@@ -202,26 +227,52 @@ public class GameBoard {
     //TODO: update player
 
     /**
-     * @author supernivem
      * @param position starting position
      * @param maxMoves number of steps allowed
      * @return the list of squares reachable in at most maxMoves steps
+     * @author supernivem
      */
-
-    public ArrayList<Square> getReachableSquare(Square position, int maxMoves){
-        ArrayList<Square> list = new ArrayList<>();
+    public List<Square> getReachableSquare(Square position, int maxMoves) {
+        List<Square> list = new ArrayList<>();
         getReachableSquare(position, list, maxMoves);
         return list;
     }
 
     /**
-     * @author supernivem
+     * @param position starting position
+     * @param maxMoves max distance of the squares
+     * @param player   player to exclude
+     * @return the list of squares reachable in at most maxMoves steps with at least another player on
+     */
+    public List<Square> getReachableSquaresWithOtherPlayers(Square position, int maxMoves, Player player) {
+        List<Square> reachableSquares = getReachableSquare(position, maxMoves);
+        List<Square> squaresWithOtherPlayers = new ArrayList<>();
+        for (Square square : reachableSquares)
+            if (square.hasOtherPlayers(player))
+                squaresWithOtherPlayers.add(square);
+        return squaresWithOtherPlayers;
+    }
+
+    /**
+     * @param squares  list of squares to use as starting position
+     * @param maxMoves max distance of the squares
+     * @param player   player to exclude
+     * @return the list of squares reachable in at most maxMoves steps with at least another player on
+     */
+    public List<Square> getReachableSquaresWithOtherPlayers(List<Square> squares, int maxMoves, Player player) {
+        List<Square> reachableSquares = new ArrayList<>();
+        for (Square square : squares)
+            reachableSquares.addAll(getReachableSquaresWithOtherPlayers(square, maxMoves, player));
+        return reachableSquares.stream().distinct().collect(Collectors.toList());
+    }
+
+    /**
      * @param position starting position
      * @param maxMoves number of steps allowed
-     * @param list is a list passed by caller, needed to allow recursion
+     * @param list     is a list passed by caller, needed to allow recursion
+     * @author supernivem
      */
-
-    private void getReachableSquare(Square position, ArrayList<Square> list, int maxMoves) {
+    private void getReachableSquare(Square position, List<Square> list, int maxMoves) {
         Square adjacent;
         int furtherMove = maxMoves - 1;
         if (!list.contains(position))
@@ -235,28 +286,136 @@ public class GameBoard {
         }
     }
 
-/* to be implemented in weapon
-    public ArrayList<Player> getVisibleTarget(Square origin) {
-        ArrayList<Player> targets = new ArrayList<>();
-        ArrayList<Square> visibles = this.getVisibleSquares(origin);
-        for (Square s : visibles) {
-            for (Player p : s.getHostedPlayers())
-                targets.add(p);
-        }
+    /**
+     * @param shooter
+     * @param maxDistance
+     * @param minDistance
+     * @return
+     */
+    public List<Player> getVisibleTargets(Player shooter, int maxDistance, int minDistance) {
+        List<Player> targets = new ArrayList<>();
+        getVisibleSquares(shooter.getPosition(), maxDistance, minDistance, true).stream().map(s -> s.getHostedPlayers(shooter)).forEach(targets::addAll);
         return targets;
-    }*/
+    }
 
     /**
-     * @author supernivem
      * @param position current position
      * @return a list of accessible direction
+     * @author supernivem
      */
-
-    public ArrayList<CardinalDirection> getAccessibleDirection(Square position) {
-        ArrayList<CardinalDirection> dir = new ArrayList<>();
+    public List<CardinalDirection> getAccessibleDirection(Square position) {
+        List<CardinalDirection> dir = new ArrayList<>();
         for (CardinalDirection c : CardinalDirection.values())
             if (position.getConnection(c).isAccessible(false))
                 dir.add(c);
         return dir;
+    }
+
+    /**
+     * This method returns the players on reachable squares
+     *
+     * @param position starting position
+     * @param maxMoves max distance of other players
+     * @param player   player to exclude
+     * @return list of other players on reachable squares
+     */
+    public List<Player> getOtherPlayersOnReachableSquares(Square position, int maxMoves, Player player) {
+        List<Square> reachableSquares = getReachableSquare(position, maxMoves);
+        List<Player> players = new ArrayList<>();
+        for (Square square : reachableSquares)
+            if (square.hasOtherPlayers(player))
+                players.addAll(square.getHostedPlayers(player));
+        return players.stream().distinct().collect(Collectors.toList());
+    }
+
+    /**
+     * This method returns the square adjacent to the second square reachable in the same direction ( first square must be on the same column or the same row of second square)
+     *
+     * @param firstSquare
+     * @param secondSquare
+     * @return
+     */
+    public Square getThirdSquareInTheSameDirection(Square firstSquare, Square secondSquare, boolean ignoreWall) {
+        if (firstSquare.getRow() == secondSquare.getRow()) {
+            if (firstSquare.getCol() < secondSquare.getCol() && secondSquare.getConnection(CardinalDirection.WEST).isAccessible(ignoreWall))
+                return board[firstSquare.getRow()][secondSquare.getCol() + 1];
+            if (secondSquare.getConnection(CardinalDirection.EAST).isAccessible(ignoreWall))
+                return board[firstSquare.getRow()][secondSquare.getCol() - 1];
+        }
+        if (firstSquare.getCol() == secondSquare.getCol()) {
+            if (firstSquare.getRow() < secondSquare.getRow() && secondSquare.getConnection(CardinalDirection.SOUTH).isAccessible(ignoreWall))
+                return board[secondSquare.getRow() + 1][firstSquare.getCol()];
+            if (secondSquare.getConnection(CardinalDirection.NORTH).isAccessible(ignoreWall))
+                return board[secondSquare.getRow() - 1][firstSquare.getCol()];
+        }
+        return null;
+    }
+
+    /**
+     * This method returns all other players in the same direction (based on shooter position and on targetPlayersToExclude players position)
+     *
+     * @param shooter
+     * @param targetPlayersToExclude list of players to exclude
+     * @param maxTargetDistance
+     * @param minTargetDistance
+     * @param ignoreWalls
+     * @return List of the players
+     */
+    public List<Player> getPlayersInTheSameDirection(Player shooter, List<Player> targetPlayersToExclude, int maxTargetDistance, int minTargetDistance, boolean ignoreWalls) {
+        List<Player> players = new ArrayList<>();
+        CardinalDirection direction = getCardinalDirection(shooter.getPosition(), targetPlayersToExclude.get(0).getPosition());
+        List<Square> squaresInADirectionIgnoringWalls = getSquaresInADirection(shooter.getPosition(), direction, maxTargetDistance, minTargetDistance, ignoreWalls);
+        List<Player> playersToExclude = new ArrayList<>(targetPlayersToExclude);
+        playersToExclude.add(shooter);
+        for (Square square : squaresInADirectionIgnoringWalls) {
+            players.addAll(square.getHostedPlayers(playersToExclude));
+        }
+        return players;
+    }
+
+    private CardinalDirection getCardinalDirection(Square origin, Square target) {
+        if (origin.getRow() == target.getRow()) {
+            if (origin.getCol() <= target.getCol())
+                return CardinalDirection.WEST;
+            return CardinalDirection.EAST;
+        }
+        if (origin.getCol() == target.getCol()) {
+            if (origin.getRow() <= target.getRow())
+                return CardinalDirection.SOUTH;
+            return CardinalDirection.NORTH;
+        }
+        return null;
+    }
+
+    private List<Square> getSquaresInADirection(Square origin, CardinalDirection direction, int maxTargetDistance, int minTargetDistance, boolean ignoreWalls) {
+        List<Square> squares = new ArrayList<>();
+        Square square = origin;
+        if (minTargetDistance > 0) {
+            for (int i = 0; i < minTargetDistance; i++)
+                if (square.getConnection(direction).isAccessible(ignoreWalls))
+                    square = getAdjacentSquare(square, direction);
+        } else
+            squares.add(origin);
+        int cont = minTargetDistance;
+        while (square.getConnection(direction).isAccessible(ignoreWalls) && cont < maxTargetDistance) {
+            square = getAdjacentSquare(square, direction);
+            squares.add(square);
+            cont++;
+        }
+        return squares;
+    }
+
+    /**
+     * This method returns squares at distance 1 accessible through doors.
+     *
+     * @param position
+     * @return
+     */
+    public List<Square> getSquareInOtherVisibleRooms(Square position) {
+        List<Square> list = new ArrayList<>();
+        for (CardinalDirection cardinalDirection : CardinalDirection.values())
+            if (position.getConnection(cardinalDirection).isDoor())
+                list.add(getAdjacentSquare(position, cardinalDirection));
+        return list;
     }
 }
