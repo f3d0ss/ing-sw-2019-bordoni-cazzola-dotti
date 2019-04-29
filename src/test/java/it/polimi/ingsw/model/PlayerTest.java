@@ -31,10 +31,10 @@ public class PlayerTest {
             for (int i = 1; i < addingammo; i++) {
                 player.addAmmoTile(tile);
                 colorcubes = player.getAmmo().get(c);
-                if (i < MAX_AMMO)
-                    assertEquals(colorcubes, i);
+                if ((i + Player.INITIAL_AMMO_NUMBER) <= MAX_AMMO)
+                    assertEquals( i + Player.INITIAL_AMMO_NUMBER, colorcubes);
                 else
-                    assertEquals(colorcubes, MAX_AMMO);
+                    assertEquals(MAX_AMMO, colorcubes);
             }
         }
 
@@ -58,7 +58,7 @@ public class PlayerTest {
     public void testAddDamage() {
         Player player = new Player(null, null, null, null);
         assertEquals(player.isDead(), false);
-        for (int i=1; i<MAX_DAMAGE-1; i++) {
+        for (int i = 1; i < MAX_DAMAGE - 1; i++) {
             player.addDamage(1, PlayerId.GREEN);
             assertEquals(player.isDead(), false);
         }

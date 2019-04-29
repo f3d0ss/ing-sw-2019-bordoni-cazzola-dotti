@@ -16,7 +16,7 @@ public class Player {
     public static final int DAMAGE_BEFORE_FIRST_ADRENALINA = 2;
     public static final int DAMAGE_BEFORE_SECOND_ADRENALINA = 5;
     public static final int DAMAGE_BEFORE_DEAD = 10;
-    private static final Integer INITIAL_AMMO_NUMBER = 2;
+    public static final int INITIAL_AMMO_NUMBER = 2;
 
     private Match match;
     private PlayerId id;
