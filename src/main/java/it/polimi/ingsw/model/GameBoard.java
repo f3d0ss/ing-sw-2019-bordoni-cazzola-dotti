@@ -434,12 +434,4 @@ public class GameBoard {
         return squareList;
     }
 
-    /**
-     * This method picks a random square of the game board
-     *
-     * @return A Square
-     */
-    public Square getRandomSquare() {
-        return squareList.get(new Random().nextInt(squareList.size()));
-    }
 }

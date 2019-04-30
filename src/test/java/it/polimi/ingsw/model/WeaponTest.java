@@ -166,7 +166,7 @@ public class WeaponTest {
     void testExtraMoveCommands() {
         Match match = new Match();
         GameBoard gameBoard = match.getBoard();
-        Square square = gameBoard.getRandomSquare();
+        Square square = getRandomSquare(gameBoard);
         Player player = new Player(match, PlayerId.VIOLET, "Mr", square);
         match.addPlayer(player);
         square.addPlayer(player);
@@ -201,14 +201,14 @@ public class WeaponTest {
     void getPossibleCommands() {
         Match match = new Match();
         GameBoard gameBoard = match.getBoard();
-        Square shooterSquare = gameBoard.getRandomSquare();
+        Square shooterSquare = getRandomSquare(gameBoard);
         Player shooter = new Player(match, PlayerId.VIOLET, PlayerId.VIOLET.playerIdName(), shooterSquare);
         match.addPlayer(shooter);
         shooterSquare.addPlayer(shooter);
 
         for (PlayerId playerId : PlayerId.values()) {
             if (!playerId.equals(shooter.getId())) {
-                Square square = gameBoard.getRandomSquare();
+                Square square = getRandomSquare(gameBoard);
                 Player player = new Player(match, playerId, playerId.playerIdName(), square);
                 match.addPlayer(player);
                 square.addPlayer(player);
@@ -262,13 +262,13 @@ public class WeaponTest {
     void getPossibleShootCommandsTest() {
         Match match = new Match();
         GameBoard gameBoard = match.getBoard();
-        Square shooterSquare = gameBoard.getRandomSquare();
+        Square shooterSquare = getRandomSquare(gameBoard);
         Player shooter = new Player(match, PlayerId.VIOLET, PlayerId.VIOLET.playerIdName(), shooterSquare);
         match.addPlayer(shooter);
         shooterSquare.addPlayer(shooter);
         for (PlayerId playerId : PlayerId.values()) {
             if (!playerId.equals(shooter.getId())) {
-                Square square = gameBoard.getRandomSquare();
+                Square square = getRandomSquare(gameBoard);
                 Player player = new Player(match, playerId, playerId.playerIdName(), square);
                 match.addPlayer(player);
                 square.addPlayer(player);
@@ -282,8 +282,8 @@ public class WeaponTest {
             for (WeaponMode weaponMode : weapon.getWeaponModes()) {
                 weapon.setSelectedWeaponMode(weaponMode);
 
-                if(!weaponMode.isTargetPlayers() || weaponMode.isTargetPlayers() && weaponMode.isTargetSquare()){
-                   weapon.addTargetSquare(match.getCurrentPlayers().get(3).getPosition());
+                if (!weaponMode.isTargetPlayers() || weaponMode.isTargetSquare()) {
+                    weapon.addTargetSquare(match.getCurrentPlayers().get(3).getPosition());
                 }
 
                 for (int i = 0; i < weaponMode.getMaxNumberOfTargetPlayers(); i++) {
@@ -305,4 +305,9 @@ public class WeaponTest {
         }
 
     }
+
+    private Square getRandomSquare(GameBoard gameBoard) {
+        return gameBoard.getSquareList().get(new Random().nextInt(gameBoard.getSquareList().size()));
+    }
 }
+
