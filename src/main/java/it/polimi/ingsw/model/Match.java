@@ -1,9 +1,8 @@
 package it.polimi.ingsw.model;
 
-import it.polimi.ingsw.utils.Observable;
-
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Observable;
 
 public class Match extends Observable {
 
