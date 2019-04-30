@@ -142,13 +142,9 @@ public class GameBoard {
 
     /**
      * @param position       starting position
-     *                       <<<<<<< HEAD
      * @param maxRange       maximum distance of returned squareList
      * @param minRange       minimum distance of returned squareList
      * @param onlyWithPlayer excluded squareList where there are no players
-     * @param maxRange       maximum distance of returned squares
-     * @param minRange       minimum distance of returned squares
-     * @param onlyWithPlayer excluded squares where there are no players
      * @return give the list of visible squares according to input parameters
      * @author supernivem
      */
@@ -187,11 +183,6 @@ public class GameBoard {
      * @param position    is the position from where get straight direction squareList
      * @param maxRange    maximum distance of gotten squareList
      * @param minRange    minimum distance of gotten squareList
-     *                    =======
-     * @param position    is the position from where get straight direction squares
-     * @param maxRange    maximum distance of gotten squares
-     * @param minRange    minimum distance of gotten squares
-     *                    >>>>>>> master
      * @param ignoreWalls specify if ignore or consider walls
      * @author supernivem
      */
@@ -220,17 +211,10 @@ public class GameBoard {
 
     /**
      * @param list        is a list passed by caller, needed to allow recursion
-     *                    <<<<<<< HEAD
      * @param position    is the position from where get straight direction squareList
      * @param maxRange    maximum distance of got squareList
      * @param ignoreWalls specify if ignore or consider walls
      * @param dir         is the direction in which get squareList
-     *                    =======
-     * @param position    is the position from where get straight direction squares
-     * @param maxRange    maximum distance of got squares
-     * @param ignoreWalls specify if ignore or consider walls
-     * @param dir         is the direction in which get squares
-     *                    >>>>>>> master
      * @author supernivem
      */
     private void getStraightSquares(List<Square> list, Square position, int maxRange, boolean ignoreWalls, CardinalDirection dir) {
@@ -245,9 +229,7 @@ public class GameBoard {
     /**
      * @param position starting position
      * @param maxMoves number of steps allowed
-     *                 <<<<<<< HEAD
      * @return the list of squares reachable in at most maxMoves steps
-     * >>>>>>> master
      * @author supernivem
      */
     public List<Square> getReachableSquare(Square position, int maxMoves) {
@@ -258,7 +240,6 @@ public class GameBoard {
 
     /**
      * @param position starting position
-     *                 <<<<<<< HEAD
      * @param maxMoves max distance of the squareList
      * @param player   player to exclude
      * @return the list of squareList reachable in at most maxMoves steps with at least another player on
@@ -336,18 +317,12 @@ public class GameBoard {
     }
 
     /**
-     * <<<<<<< HEAD
      * This method returns the players on reachable squareList
-     * =======
-     * This method returns the players on reachable squares
-     * >>>>>>> master
      *
      * @param position starting position
      * @param maxMoves max distance of other players
      * @param player   player to exclude
-     *                 <<<<<<< HEAD
      * @return list of other players on reachable squares
-     * >>>>>>> master
      */
     public List<Player> getOtherPlayersOnReachableSquares(Square position, int maxMoves, Player player) {
         List<Square> reachableSquares = getReachableSquare(position, maxMoves);
@@ -436,11 +411,7 @@ public class GameBoard {
     }
 
     /**
-     * <<<<<<< HEAD
      * This method returns squareList at distance 1 accessible through doors.
-     * =======
-     * This method returns squares at distance 1 accessible through doors.
-     * >>>>>>> master
      *
      * @param position
      * @return
