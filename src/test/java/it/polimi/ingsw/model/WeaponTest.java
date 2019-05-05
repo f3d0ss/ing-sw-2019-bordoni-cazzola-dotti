@@ -72,7 +72,7 @@ public class WeaponTest {
     @Test
     void addRemoveTargetPlayer() {
         Weapon weapon = getRandomWeapon();
-        Player player = new Player(null, null, null, null);
+        Player player = new Player(null, null, null);
         weapon.addTargetPlayer(player);
         weapon.removeTargetPlayer(player);
     }

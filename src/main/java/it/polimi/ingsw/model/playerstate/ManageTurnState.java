@@ -11,17 +11,13 @@ public class ManageTurnState implements PlayerState {
     public List<Command> getPossibleCommands(Player player) {
         List<Command> commands = new ArrayList<>();
         player.getPossibleAggregateAction().forEach(aggregateAction -> commands.add(new SelectAggregateActionCommand(player, aggregateAction, this)));
-        if (commands.isEmpty()){
+        if (commands.isEmpty()) {
             commands.add(new DoneCommand(player, this));
             player.getWeapons().forEach(weapon -> {
                 if (!weapon.isLoaded())
                     commands.add(new SelectReloadingWeaponCommand(player, weapon, this));
             });
         }
-//        player.getPowerUps().forEach(powerUp -> {
-//            if (!powerUp.isScope() && !powerUp.isTagBackGrenade())
-//                commands.add(new SelectPowerUpCommand(player, powerUp, this));
-//        });
         player.getTeleports().forEach(teleport -> commands.add(new SelectPowerUpCommand(player, teleport, this)));
         player.getNewtons().forEach(newton -> commands.add(new SelectPowerUpCommand(player, newton, this)));
         return commands;
