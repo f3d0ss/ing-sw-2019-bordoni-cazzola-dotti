@@ -139,7 +139,8 @@ public class Player {
     }
 
     public void respawn(Color color) {
-        position.removePlayer(this);
+        if (position != null)
+            position.removePlayer(this);
         position = match.getBoard().getSpawn(color);
         position.addPlayer(this);
 
