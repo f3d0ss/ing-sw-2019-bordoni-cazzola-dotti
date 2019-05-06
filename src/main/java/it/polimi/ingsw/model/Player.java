@@ -4,7 +4,10 @@ import it.polimi.ingsw.model.command.Command;
 import it.polimi.ingsw.model.playerstate.IdleState;
 import it.polimi.ingsw.model.playerstate.PlayerState;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.EnumMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class Player {
@@ -28,7 +31,7 @@ public class Player {
     private String nickname;
     private List<Weapon> weapons = new ArrayList<>();
     private List<PowerUp> powerUps = new ArrayList<>();
-    private EnumMap<Color, Integer> ammo = new EnumMap<>(Color.class);
+    private Map<Color, Integer> ammo = new EnumMap<>(Color.class);
     private boolean disconnected = false;
     private int availableAggregateActionCounter;
     private PlayerState playerState = new IdleState();
@@ -163,17 +166,15 @@ public class Player {
                 aggregateActions.add(new AggregateAction(2, true, false, false));
             }
         } else {
-            if (health.size() <= DAMAGE_BEFORE_FIRST_ADRENALINA){
+            if (health.size() <= DAMAGE_BEFORE_FIRST_ADRENALINA) {
                 aggregateActions.add(new AggregateAction(3, false, false, false));
                 aggregateActions.add(new AggregateAction(1, true, false, false));
                 aggregateActions.add(new AggregateAction(0, false, true, false));
-            }
-            else if (health.size() <= DAMAGE_BEFORE_SECOND_ADRENALINA){
+            } else if (health.size() <= DAMAGE_BEFORE_SECOND_ADRENALINA) {
                 aggregateActions.add(new AggregateAction(3, false, false, false));
                 aggregateActions.add(new AggregateAction(2, true, false, false));
                 aggregateActions.add(new AggregateAction(0, false, true, false));
-            }
-            else {
+            } else {
                 aggregateActions.add(new AggregateAction(1, false, true, false));
             }
         }
@@ -280,7 +281,7 @@ public class Player {
         return powerUps.stream().filter(powerUp -> powerUp.getType() == PowerUpID.NEWTON).collect(Collectors.toList());
     }
 
-    public void initialize(){
+    public void initialize() {
         if (match.isLastTurn() && match.hasFirstPlayerPlayedLastTurn())
             availableAggregateActionCounter = 1;
         else
