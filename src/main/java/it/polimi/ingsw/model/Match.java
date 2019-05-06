@@ -17,11 +17,13 @@ public class Match extends Observable {
     private int deathsCounter = SKULLS;
     private List<Player> currentPlayers;
     private GameBoard board;
+    private boolean firstPlayerPlayedLastTurn;
 
     public Match() {
         board = new GameBoard(1);
         killshotTrack = new ArrayList();
         currentPlayers = new ArrayList();
+        firstPlayerPlayedLastTurn = false;
         currentAmmoTileDeck = new AmmoTileDeck();
         currentAmmoTileDeck.initializeDeck();
         currentWeaponDeck = new WeaponDeck();
@@ -114,6 +116,14 @@ public class Match extends Observable {
 
     public void undiscard(PowerUp powerUp) {
         usedPowerUpDeck.remove(powerUp);
+    }
+
+    public boolean isLastTurn() {
+        return deathsCounter == 0;
+    }
+
+    public boolean hasFirstPlayerPlayedLastTurn() {
+        return firstPlayerPlayedLastTurn;
     }
 
     public void restoreCards() {

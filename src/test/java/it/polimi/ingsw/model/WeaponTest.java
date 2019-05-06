@@ -75,7 +75,7 @@ public class WeaponTest {
     @Test
     void addRemoveTargetPlayer() {
         Weapon weapon = getRandomWeapon();
-        Player player = new Player(null, null, null, null);
+        Player player = new Player(null, null, null);
         weapon.addTargetPlayer(player);
         weapon.removeTargetPlayer(player);
     }
@@ -116,9 +116,9 @@ public class WeaponTest {
     void getPossibleCommandsWithoutTargetPlayers() {
         Match match = new Match();
         GameBoard gameBoard = match.getBoard();
-        Player player = new Player(match, PlayerId.VIOLET, "Mr", gameBoard.getSpawn(Color.BLUE));
+        Player player = new Player(match, PlayerId.VIOLET, "Mr");
+        player.respawn(Color.BLUE);
         match.addPlayer(player);
-        match.getBoard().getSpawn(Color.BLUE).addPlayer(player);
         for (Weapon weapon : allWeapons) {
             System.out.println(weapon.getName() + "------------");
             ReadyToShootState state = new ReadyToShootState(new AggregateAction(0, false, true, false), weapon);
@@ -149,7 +149,8 @@ public class WeaponTest {
     void getSelectWeaponModeCommands() {
         Match match = new Match();
         GameBoard gameBoard = match.getBoard();
-        Player player = new Player(match, PlayerId.VIOLET, "Mr", gameBoard.getSpawn(Color.BLUE));
+        Player player = new Player(match, PlayerId.VIOLET, "Mr");
+        player.respawn(Color.BLUE);
         for (Weapon weapon : allWeapons) {
             ChoosingWeaponOptionState state = new ChoosingWeaponOptionState(new AggregateAction(0, false, true, false), weapon);
             List<SelectWeaponModeCommand> selectWeaponModeCommands = weapon.getSelectWeaponModeCommands(player, state);
@@ -167,7 +168,9 @@ public class WeaponTest {
         Match match = new Match();
         GameBoard gameBoard = match.getBoard();
         Square square = getRandomSquare(gameBoard);
-        Player player = new Player(match, PlayerId.VIOLET, "Mr", square);
+        Player player = new Player(match, PlayerId.VIOLET, "Mr");
+        player.respawn(Color.BLUE);
+        player.move(square);
         match.addPlayer(player);
         square.addPlayer(player);
         for (Weapon weapon : allWeapons) {
@@ -202,14 +205,18 @@ public class WeaponTest {
         Match match = new Match();
         GameBoard gameBoard = match.getBoard();
         Square shooterSquare = getRandomSquare(gameBoard);
-        Player shooter = new Player(match, PlayerId.VIOLET, PlayerId.VIOLET.playerIdName(), shooterSquare);
+        Player shooter = new Player(match, PlayerId.VIOLET, PlayerId.VIOLET.playerIdName());
+        shooter.respawn(Color.BLUE);
+        shooter.move(shooterSquare);
         match.addPlayer(shooter);
         shooterSquare.addPlayer(shooter);
 
         for (PlayerId playerId : PlayerId.values()) {
             if (!playerId.equals(shooter.getId())) {
                 Square square = getRandomSquare(gameBoard);
-                Player player = new Player(match, playerId, playerId.playerIdName(), square);
+                Player player = new Player(match, playerId, playerId.playerIdName());
+                player.respawn(Color.BLUE);
+                player.move(square);
                 match.addPlayer(player);
                 square.addPlayer(player);
             }
@@ -263,13 +270,17 @@ public class WeaponTest {
         Match match = new Match();
         GameBoard gameBoard = match.getBoard();
         Square shooterSquare = getRandomSquare(gameBoard);
-        Player shooter = new Player(match, PlayerId.VIOLET, PlayerId.VIOLET.playerIdName(), shooterSquare);
+        Player shooter = new Player(match, PlayerId.VIOLET, PlayerId.VIOLET.playerIdName());
+        shooter.respawn(Color.BLUE);
+        shooter.move(shooterSquare);
         match.addPlayer(shooter);
         shooterSquare.addPlayer(shooter);
         for (PlayerId playerId : PlayerId.values()) {
             if (!playerId.equals(shooter.getId())) {
                 Square square = getRandomSquare(gameBoard);
-                Player player = new Player(match, playerId, playerId.playerIdName(), square);
+                Player player = new Player(match, playerId, playerId.playerIdName());
+                player.respawn(Color.BLUE);
+                player.move(square);
                 match.addPlayer(player);
                 square.addPlayer(player);
             }
