@@ -4,7 +4,11 @@ import it.polimi.ingsw.model.command.Command;
 import it.polimi.ingsw.model.playerstate.IdleState;
 import it.polimi.ingsw.model.playerstate.PlayerState;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.EnumMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class Player {
 
@@ -13,32 +17,34 @@ public class Player {
     public static final int MAX_DAMAGE = 12;
     public static final int MAX_MARKS = 3;
     public static final int MAX_WEAPONS = 3;
+    public static final int DAMAGE_BEFORE_FIRST_ADRENALINA = 2;
+    public static final int DAMAGE_BEFORE_SECOND_ADRENALINA = 5;
+    public static final int DAMAGE_BEFORE_DEAD = 10;
+    public static final int INITIAL_AMMO_NUMBER = 1;
 
     private Match match;
     private PlayerId id;
     private List<PlayerId> health = new ArrayList<>();
     private int deaths = 0;
-    private Map<PlayerId, Integer> marks = new HashMap<>();
+    private Map<PlayerId, Integer> marks = new EnumMap<>(PlayerId.class);
     private int points = 0;
     private String nickname;
     private List<Weapon> weapons = new ArrayList<>();
     private List<PowerUp> powerUps = new ArrayList<>();
-    private Map<Color, Integer> ammo = new HashMap<>();
+    private Map<Color, Integer> ammo = new EnumMap<>(Color.class);
     private boolean disconnected = false;
-    private boolean dead = false;
-    private int availableAggregateActionCounter = 2;
+    private int availableAggregateActionCounter;
     private PlayerState playerState = new IdleState();
     private Square position;
-    private int usedAggregateAction;
     private PlayerId lastShooter;
 
-
-    public Player(Match match, PlayerId id, String nickname, Square position) {
+    public Player(Match match, PlayerId id, String nickname) {
         this.match = match;
         this.id = id;
         this.nickname = nickname;
-        this.position = position;
-        usedAggregateAction = 0;
+        for (Color c : Color.values()) {
+            ammo.put(c, INITIAL_AMMO_NUMBER);
+        }
     }
 
     public Map<Color, Integer> getAmmo() {
@@ -57,6 +63,10 @@ public class Player {
         return id;
     }
 
+    public boolean isDead() {
+        return health.size() > DAMAGE_BEFORE_DEAD;
+    }
+
     public String toString() {
         return nickname;
     }
@@ -69,20 +79,14 @@ public class Player {
         return marks;
     }
 
-    public int getDeaths() {
-        return deaths;
-    }
-
-    public boolean isDead() {
-        return health.size() >= MAX_DAMAGE - 1;
-    }
-
     public void changeState(PlayerState playerState) {
         this.playerState = playerState;
     }
 
     public void move(Square square) {
+        position.removePlayer(this);
         position = square;
+        position.addPlayer(this);
     }
 
     private void addAmmo(Color color, Integer number) {
@@ -95,6 +99,7 @@ public class Player {
             if (this.powerUps.size() >= MAX_POWERUP)
                 return;
             this.powerUps.add(match.drawPowerUpCard());
+            number--;
         }
     }
 
@@ -111,15 +116,14 @@ public class Player {
             this.health.add(color);
             possibleDamage--;
         }
-        for (int i = this.marks.getOrDefault(color, 0); i > 0; i--) {
+        for (int i = marks.getOrDefault(color, 0); i > 0; i--) {
             if (possibleDamage <= 0)
                 break;
             this.health.add(color);
             possibleDamage--;
         }
-        this.marks.put(color, 0);
-        //TODO: do something if is dead
-        //if (isDead()) ....
+        marks.put(color, 0);
+        lastShooter = color;
     }
 
     public void addMarks(int marks, PlayerId color) {
@@ -137,12 +141,12 @@ public class Player {
         return position;
     }
 
-    public void teleport(Square square) {
-        this.position = square;
-    }
-
     public void respawn(Color color) {
-        this.position = match.getBoard().getSpawn(color);
+        if (position != null)
+            position.removePlayer(this);
+        position = match.getBoard().getSpawn(color);
+        position.addPlayer(this);
+
     }
 
     public List<Command> getPossibleCommands() {
@@ -151,8 +155,30 @@ public class Player {
 
 
     public List<AggregateAction> getPossibleAggregateAction() {
-        //Algorithm that calculate Aggregate Actions based on health
-        return null;
+        List<AggregateAction> aggregateActions = new ArrayList<>();
+        if (match.isLastTurn()) {
+            if (match.hasFirstPlayerPlayedLastTurn()) {
+                aggregateActions.add(new AggregateAction(2, false, true, true));
+                aggregateActions.add(new AggregateAction(3, true, false, false));
+            } else {
+                aggregateActions.add(new AggregateAction(1, false, true, true));
+                aggregateActions.add(new AggregateAction(4, false, false, false));
+                aggregateActions.add(new AggregateAction(2, true, false, false));
+            }
+        } else {
+            if (health.size() <= DAMAGE_BEFORE_FIRST_ADRENALINA) {
+                aggregateActions.add(new AggregateAction(3, false, false, false));
+                aggregateActions.add(new AggregateAction(1, true, false, false));
+                aggregateActions.add(new AggregateAction(0, false, true, false));
+            } else if (health.size() <= DAMAGE_BEFORE_SECOND_ADRENALINA) {
+                aggregateActions.add(new AggregateAction(3, false, false, false));
+                aggregateActions.add(new AggregateAction(2, true, false, false));
+                aggregateActions.add(new AggregateAction(0, false, true, false));
+            } else {
+                aggregateActions.add(new AggregateAction(1, false, true, false));
+            }
+        }
+        return aggregateActions;
     }
 
     public List<Square> getAccessibleSquare(int maxDistance) {
@@ -196,39 +222,69 @@ public class Player {
     }
 
     public boolean hasScope() {
-        //TODO: implement this method
-        return false;
+        return getTargetingScopes().isEmpty();
     }
 
     public void selectAggregateAction() {
-        usedAggregateAction++;
+        availableAggregateActionCounter--;
     }
 
     public void deselectAggregateAction() {
-        usedAggregateAction--;
+        availableAggregateActionCounter++;
     }
 
     public Player getLastShooter() {
         return match.getPlayer(lastShooter);
     }
 
-    public List<TargetingScope> getTargetingScopes(){
-        //TODO:
-        return null;
+    public boolean isDisconnetted() {
+        return disconnected;
     }
 
-    public List<TagbackGrenade> getTagbackGrenades(){
-        //TODO:
-        return null;
+    public void setDisconnetted(boolean disconnected) {
+        this.disconnected = disconnected;
     }
 
-    public List<Teleporter> getTeleports(){
-        //TODO:
-        return null;
+    public String getNickname() {
+        return nickname;
     }
 
-    public List<Newton> getNewtons(){
-        //TODO:
-        return null;
+    public int getDeaths() {
+        return deaths;
+    }
+
+    public void addDeaths() {
+        deaths++;
+    }
+
+    public int getPoints() {
+        return points;
+    }
+
+    public void addPoints(int points) {
+        this.points += points;
+    }
+
+    public List<PowerUp> getTargetingScopes() {
+        return powerUps.stream().filter(powerUp -> powerUp.getType() == PowerUpID.TARGETING_SCOPE).collect(Collectors.toList());
+    }
+
+    public List<PowerUp> getTagbackGrenades() {
+        return powerUps.stream().filter(powerUp -> powerUp.getType() == PowerUpID.TAGBACK_GRENADE).collect(Collectors.toList());
+    }
+
+    public List<PowerUp> getTeleports() {
+        return powerUps.stream().filter(powerUp -> powerUp.getType() == PowerUpID.TELEPORTER).collect(Collectors.toList());
+    }
+
+    public List<PowerUp> getNewtons() {
+        return powerUps.stream().filter(powerUp -> powerUp.getType() == PowerUpID.NEWTON).collect(Collectors.toList());
+    }
+
+    public void initialize() {
+        if (match.isLastTurn() && match.hasFirstPlayerPlayedLastTurn())
+            availableAggregateActionCounter = 1;
+        else
+            availableAggregateActionCounter = 2;
     }
 }
