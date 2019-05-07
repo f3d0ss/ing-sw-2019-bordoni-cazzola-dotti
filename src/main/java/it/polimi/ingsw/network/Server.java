@@ -1,23 +1,13 @@
-package it.polimi.ingsw.rmi;
-
-import java.util.Scanner;
-
-import static java.lang.Thread.sleep;
+package it.polimi.ingsw.network;
 
 public class Server {
 
     public static final int SLEEPTIME = 2000;
 
     public static void main(String[] args){
-        SocketServer socketServer = new SocketServer();
-        RmiServer rmiServer = new RmiServer();
-        Scanner stdin = new Scanner(System.in);
-        String message;
-        String answer;
-        new Thread(socketServer).start();
-        System.out.println("SocketServer avviato. In attesa di una connessione.");
-        new Thread(rmiServer).start();
-        System.out.println("RmiServer avviato. In attesa di una connessione.");
+        ServerManager serverManager = new ServerManager();
+        serverManager.run();
+        /*
         while(!socketServer.isClientReady()) {
             System.out.printf(".");
             try {
@@ -43,6 +33,6 @@ public class Server {
                 break;
         }
         System.out.println("Non ho più connessioni. Chiudo tutto");
-        socketServer.stopServer();
+        socketServer.stopServer();*/
     }
 }

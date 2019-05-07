@@ -1,4 +1,4 @@
-package it.polimi.ingsw.rmi;
+package it.polimi.ingsw.network;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -10,12 +10,14 @@ import static java.lang.Thread.sleep;
 
 public class SocketClient implements Client {
 
+    public static final int SLEEPTIME = 2000;
+
     private String ip = "127.0.0.1";
     private int port = 9000;
     private boolean messageArrived = false;
     private boolean answerSet = false;
     private boolean keepAlive = true;
-    private String message;
+    private String messageFromServer;
     private String answer;
 
     public void run() {
@@ -26,7 +28,7 @@ public class SocketClient implements Client {
         }
     }
 
-    public void sendAnswer(String answer){
+    public void sendAnswerToServer(String answer){
         this.answer = answer;
         messageArrived = false;
         answerSet = true;
@@ -44,8 +46,9 @@ public class SocketClient implements Client {
         messageArrived = true;
     }
 
-    public String getMessage(){
-        return message;
+    public String getMessageFromServer(){
+        messageArrived = false;
+        return messageFromServer;
     }
 
     public void startClient() throws IOException {
@@ -55,9 +58,10 @@ public class SocketClient implements Client {
         socket = new Socket(ip, port);
         fromServer = new Scanner(socket.getInputStream());
         toServer = new PrintWriter(socket.getOutputStream(), true);
+        System.out.println("Client socket pronto.");
         while (keepAlive) {
             try {
-                message = fromServer.nextLine();
+                messageFromServer = fromServer.nextLine();
             } catch (NoSuchElementException e){
                 System.out.println("Impossibile raggiungere il server. Disconnessione in corso.");
                 break;
@@ -71,7 +75,6 @@ public class SocketClient implements Client {
             toServer.println(answer);
             answerSet = false;
         }
-        //stdin.close();
         toServer.close();
         fromServer.close();
         socket.close();

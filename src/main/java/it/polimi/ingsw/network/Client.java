@@ -1,8 +1,8 @@
-package it.polimi.ingsw.rmi;
+package it.polimi.ingsw.network;
 
 public interface Client extends Runnable {
-    @Override
-    void run();
     boolean isMessageArrived();
+    String getMessageFromServer();
+    void sendAnswerToServer(String answer);
     void setMessageNotification();
 }
