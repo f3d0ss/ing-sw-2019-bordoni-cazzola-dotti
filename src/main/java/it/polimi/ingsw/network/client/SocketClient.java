@@ -1,4 +1,4 @@
-package it.polimi.ingsw.network;
+package it.polimi.ingsw.network.client;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -28,25 +28,25 @@ public class SocketClient implements Client {
         }
     }
 
-    public void sendAnswerToServer(String answer){
+    public void sendAnswerToServer(String answer) {
         this.answer = answer;
         messageArrived = false;
         answerSet = true;
     }
 
-    public void stopClient(){
+    public void stopClient() {
         keepAlive = false;
     }
 
-    public boolean isMessageArrived(){
+    public boolean isMessageArrived() {
         return messageArrived;
     }
 
-    public void setMessageNotification(){
+    public void setMessageNotification() {
         messageArrived = true;
     }
 
-    public String getMessageFromServer(){
+    public String getMessageFromServer() {
         messageArrived = false;
         return messageFromServer;
     }
@@ -62,15 +62,16 @@ public class SocketClient implements Client {
         while (keepAlive) {
             try {
                 messageFromServer = fromServer.nextLine();
-            } catch (NoSuchElementException e){
+            } catch (NoSuchElementException e) {
                 System.out.println("Impossibile raggiungere il server. Disconnessione in corso.");
                 break;
             }
             messageArrived = true;
-            while(!answerSet){
+            while (!answerSet) {
                 try {
                     sleep(2000);
-                } catch (InterruptedException e) {}
+                } catch (InterruptedException e) {
+                }
             }
             toServer.println(answer);
             answerSet = false;

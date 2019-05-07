@@ -1,4 +1,4 @@
-package it.polimi.ingsw.network;
+package it.polimi.ingsw.network.server;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -10,17 +10,17 @@ public class SocketReceptionist implements Runnable {
     private SocketServer socketServer;
     private Socket client;
 
-    public SocketReceptionist(ServerSocket serverSocket, SocketServer server){
+    public SocketReceptionist(ServerSocket serverSocket, SocketServer server) {
         this.serverSocket = serverSocket;
         this.socketServer = server;
     }
 
-    public void run(){
+    public void run() {
         while (true) {
             try {
                 Socket client = serverSocket.accept();
                 socketServer.registry(client);
-            } catch(IOException e) {
+            } catch (IOException e) {
                 System.out.println(e.getMessage());
                 break;
             }

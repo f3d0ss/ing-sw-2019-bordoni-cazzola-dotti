@@ -1,4 +1,7 @@
-package it.polimi.ingsw.network;
+package it.polimi.ingsw.network.client;
+
+import it.polimi.ingsw.network.server.RmiClientInterface;
+import it.polimi.ingsw.network.server.RmiServerInterface;
 
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -8,6 +11,7 @@ import java.rmi.server.UnicastRemoteObject;
 
 public class RmiClient implements Client {
 
+    int port;
     private RmiClientImplementation rmiClientImplementation;
     private RmiServerInterface rmiServerInterface;
     private boolean messageArrived = false;
@@ -15,7 +19,6 @@ public class RmiClient implements Client {
     private boolean keepAlive = true;
     private String messageFromServer;
     private String answer;
-    int port;
 
     public RmiClient(int port) {
         this.port = port;
@@ -37,7 +40,7 @@ public class RmiClient implements Client {
         messageArrived = true;
     }
 
-    public String getMessageFromServer(){
+    public String getMessageFromServer() {
         messageArrived = false;
         return messageFromServer;
     }
@@ -45,7 +48,7 @@ public class RmiClient implements Client {
     public void sendAnswerToServer(String answer) {
         try {
             rmiServerInterface.sendAnswer(answer);
-        }catch (RemoteException e){
+        } catch (RemoteException e) {
             System.out.println(e.getMessage());
         }
     }

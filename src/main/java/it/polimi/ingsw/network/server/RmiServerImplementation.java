@@ -1,4 +1,4 @@
-package it.polimi.ingsw.network;
+package it.polimi.ingsw.network.server;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;
@@ -14,21 +14,21 @@ public class RmiServerImplementation implements RmiServerInterface {
     }
 
     public synchronized void registry(RmiClientInterface client) {
-        if (!clients.contains(client)){
+        if (!clients.contains(client)) {
             clients.add(client);
             server.registry(client);
             System.out.println("New client registered.");
         }
     }
 
-    public synchronized void sendAnswer(String answer){
+    public synchronized void sendAnswer(String answer) {
         server.receiveAnswer(answer);
     }
 
-    public synchronized void sendMessage(RmiClientInterface addressee, String message){
+    public synchronized void sendMessage(RmiClientInterface addressee, String message) {
         try {
             addressee.sendMessage(message);
-        }catch (RemoteException e){
+        } catch (RemoteException e) {
             System.out.println(e.getMessage());
         }
     }

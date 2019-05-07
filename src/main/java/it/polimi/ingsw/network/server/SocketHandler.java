@@ -1,4 +1,4 @@
-package it.polimi.ingsw.network;
+package it.polimi.ingsw.network.server;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -6,22 +6,22 @@ import java.net.Socket;
 import java.util.Scanner;
 
 public class SocketHandler implements Runnable {
-    private Socket socket;
-    private SocketServer server;
     boolean keepActive = true;
     boolean printed = true;
     String message;
+    private Socket socket;
+    private SocketServer server;
 
     public SocketHandler(Socket socket, SocketServer server) {
         this.socket = socket;
         this.server = server;
     }
 
-    public void closeServer(){
+    public void closeServer() {
         keepActive = false;
-    };
+    }
 
-    public void print(String message){
+    public void print(String message) {
         this.message = message;
         printed = false;
     }
@@ -35,7 +35,8 @@ public class SocketHandler implements Runnable {
             //server.printAll(line);
 // Leggo e scrivo nella connessione finche' non ricevo "quit"
             while (keepActive) {
-                while (printed){}
+                while (printed) {
+                }
                 out.println(message);
                 out.flush();
                 printed = true;

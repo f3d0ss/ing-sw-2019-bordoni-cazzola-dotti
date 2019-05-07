@@ -1,10 +1,10 @@
-package it.polimi.ingsw.network;
+package it.polimi.ingsw.network.server;
 
 public class Server {
 
     public static final int SLEEPTIME = 2000;
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
         ServerManager serverManager = new ServerManager();
         serverManager.run();
         /*

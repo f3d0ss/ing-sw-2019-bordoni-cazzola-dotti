@@ -1,4 +1,4 @@
-package it.polimi.ingsw.network;
+package it.polimi.ingsw.network.server;
 
 import java.net.Socket;
 import java.util.ArrayList;
@@ -7,31 +7,31 @@ import java.util.Scanner;
 
 public class ServerManager implements Runnable {
 
-    private List<Socket> socketClients = new ArrayList<>();
-    private List<RmiClientInterface> rmiClients = new ArrayList<>();
     SocketServer socketServer;
     RmiServer rmiServer;
+    private List<Socket> socketClients = new ArrayList<>();
+    private List<RmiClientInterface> rmiClients = new ArrayList<>();
 
-    public void addClient(Socket client){
+    public void addClient(Socket client) {
         socketClients.add(client);
     }
 
-    public void addClient(RmiClientInterface client){
+    public void addClient(RmiClientInterface client) {
         rmiClients.add(client);
     }
 
-    public void bidWelcome(Socket client){
-        if(socketClients.contains(client))
+    public void bidWelcome(Socket client) {
+        if (socketClients.contains(client))
             socketServer.sendMessage(client, "Benvenuto");
     }
 
-    public void bidWelcome(RmiClientInterface client){
+    public void bidWelcome(RmiClientInterface client) {
         System.out.println("BidWelcome invoked");
-        if(rmiClients.contains(client))
+        if (rmiClients.contains(client))
             rmiServer.getImplementation().sendMessage(client, "Benvenuto");
     }
 
-    public void receiveAnswer(String answer){
+    public void receiveAnswer(String answer) {
         System.out.println(answer);
     }
 
