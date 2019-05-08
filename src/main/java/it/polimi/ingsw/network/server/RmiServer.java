@@ -1,4 +1,6 @@
-package it.polimi.ingsw.network;
+package it.polimi.ingsw.network.server;
+
+import it.polimi.ingsw.network.client.RmiServerInterface;
 
 import java.rmi.AlreadyBoundException;
 import java.rmi.RemoteException;
@@ -25,7 +27,11 @@ public class RmiServer implements Runnable {
 
     public void registry(RmiClientInterface client){
         serverManager.addClient(client);
-        serverManager.bidWelcome(client);
+        //serverManager.bidWelcome(client);
+    }
+
+    public void unregistry(RmiClientInterface client){
+        serverManager.removeClient(client);
     }
 
     public void receiveAnswer(String answer){
@@ -42,6 +48,6 @@ public class RmiServer implements Runnable {
         LocateRegistry.createRegistry(1099);
         Registry registry = LocateRegistry.getRegistry(1099);
         registry.bind("adrenaline", stub);
-        System.out.println("Server ready");
+        System.out.println("RmiServer avviato.");
     }
 }
