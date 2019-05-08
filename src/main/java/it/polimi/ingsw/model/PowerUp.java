@@ -3,17 +3,24 @@ package it.polimi.ingsw.model;
 /**
  * This abstract class represents a PowerUp
  */
-public abstract class PowerUp {
+public class PowerUp {
 
-    private String name;
+    public static final int TRGETING_SCOPE_DAMAGE = 1;
+    public static final int TAGBACK_GRENADE_MARKS = 1;
+
+    private PowerUpID type;
     private Color color;
 
-    public PowerUp(String name, Color color) {
+    public PowerUp(PowerUpID type, Color color) {
         this.color = color;
-        this.name = name;
+        this.type = type;
     }
 
     public Color getColor() {
         return this.color;
+    }
+
+    public PowerUpID getType() {
+        return this.type;
     }
 }

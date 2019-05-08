@@ -1,83 +1,38 @@
 package it.polimi.ingsw.network.server;
 
 import java.net.Socket;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.NoSuchElementException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class ServerManager implements Runnable {
 
-    private Map<Integer, Socket> socketClients = new HashMap<>();
-    private Map<Integer, RmiClientInterface> rmiClients = new HashMap<>();
-    private SocketServer socketServer;
-    private RmiServer rmiServer;
-    private String answer;
-    private boolean answerArrived;
-    private int idClient = 0;
+    SocketServer socketServer;
+    RmiServer rmiServer;
+    private List<Socket> socketClients = new ArrayList<>();
+    private List<RmiClientInterface> rmiClients = new ArrayList<>();
 
     public void addClient(Socket client) {
-        socketClients.put(idClient, client);
-        idClient++;
+        socketClients.add(client);
     }
 
     public void addClient(RmiClientInterface client) {
-        rmiClients.put(idClient, client);
-        idClient++;
+        rmiClients.add(client);
     }
 
-    public int getNumber(Socket client) throws NoSuchElementException{
-        for (int i = 0; i < idClient; i++)
-            if (socketClients.get(i) == client)
-                return i;
-        throw new NoSuchElementException();
+    public void bidWelcome(Socket client) {
+        if (socketClients.contains(client))
+            socketServer.sendMessage(client, "Benvenuto");
     }
 
-    public int getNumber(RmiClientInterface client) throws NoSuchElementException{
-        for (int i = 0; i < idClient; i++)
-            if (rmiClients.get(i) == client)
-                return i;
-        throw new NoSuchElementException();
+    public void bidWelcome(RmiClientInterface client) {
+        System.out.println("BidWelcome invoked");
+        if (rmiClients.contains(client))
+            rmiServer.getImplementation().sendMessage(client, "Benvenuto");
     }
 
-    public boolean isActive(int number){
-        return socketClients.containsKey(number) || rmiClients.containsKey(number);
-    }
-
-    public synchronized void removeClient(Socket client) {
-        int number = getNumber(client);
-        socketClients.remove(number);
-        socketServer.unregistry(client);
-        System.out.println("Client " + number + " rimosso.");
-    }
-
-    public synchronized void removeClient(RmiClientInterface client) {
-        int number = getNumber(client);
-        rmiClients.remove(number);
-        System.out.println("Client " + number + " rimosso.");
-    }
-
-    public void printClients() {
-        socketClients.forEach((integer, socket) -> System.out.printf("%d ", integer));
-        rmiClients.forEach((integer, rmi) -> System.out.printf("%d ", integer));
-    }
-
-    public void sendMessage(int number, String message) {
-        if (socketClients.containsKey(number)) {
-            new Thread(new Communicate(message, socketClients.get(number), socketServer, number, this)).start();
-        } else if (rmiClients.containsKey(number)) {
-            RmiClientInterface client = rmiClients.get(number);
-            answer = rmiServer.getImplementation().sendMessageAndGetAnswer(client, message);
-            System.out.println("User " + number + ": " + answer);
-            if(answer.equals("quit"))
-                removeClient(client);
-        } else
-            System.out.println("Client non registrato");
-    }
-
-    public void shutDownAllServers(){
-        socketServer.stopServer();
-        //TODO: can rmiServer be stopped?
+    public void receiveAnswer(String answer) {
+        System.out.println(answer);
     }
 
     @Override
@@ -86,7 +41,10 @@ public class ServerManager implements Runnable {
         rmiServer = new RmiServer(this);
         Scanner stdin = new Scanner(System.in);
         String message;
+        String answer;
         new Thread(socketServer).start();
+        System.out.printf("SocketServer avviato. ");
         new Thread(rmiServer).start();
+        System.out.println("RmiServer avviato.");
     }
 }

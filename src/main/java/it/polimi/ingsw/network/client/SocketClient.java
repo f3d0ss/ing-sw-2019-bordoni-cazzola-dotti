@@ -6,15 +6,19 @@ import java.net.Socket;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
+import static java.lang.Thread.sleep;
+
 public class SocketClient implements Client {
+
+    public static final int SLEEPTIME = 2000;
 
     private String ip = "127.0.0.1";
     private int port = 9000;
+    private boolean messageArrived = false;
+    private boolean answerSet = false;
     private boolean keepAlive = true;
-    private String messageToServer;
-    private Socket socket;
-    private Scanner fromServer;
-    private PrintWriter toServer;
+    private String messageFromServer;
+    private String answer;
 
     public void run() {
         try {
@@ -24,24 +28,54 @@ public class SocketClient implements Client {
         }
     }
 
+    public void sendAnswerToServer(String answer) {
+        this.answer = answer;
+        messageArrived = false;
+        answerSet = true;
+    }
+
+    public void stopClient() {
+        keepAlive = false;
+    }
+
+    public boolean isMessageArrived() {
+        return messageArrived;
+    }
+
+    public void setMessageNotification() {
+        messageArrived = true;
+    }
+
+    public String getMessageFromServer() {
+        messageArrived = false;
+        return messageFromServer;
+    }
+
     public void startClient() throws IOException {
-        Scanner stdin = new Scanner(System.in);
+        Socket socket;
+        Scanner fromServer;
+        PrintWriter toServer;
         socket = new Socket(ip, port);
         fromServer = new Scanner(socket.getInputStream());
         toServer = new PrintWriter(socket.getOutputStream(), true);
+        System.out.println("Client socket pronto.");
         while (keepAlive) {
             try {
-                System.out.println(fromServer.nextLine());
-            } catch (NoSuchElementException e){
-                System.out.println("Impossibile raggiungere il server.");
+                messageFromServer = fromServer.nextLine();
+            } catch (NoSuchElementException e) {
+                System.out.println("Impossibile raggiungere il server. Disconnessione in corso.");
                 break;
             }
-            messageToServer = (stdin.nextLine());
-            toServer.println(messageToServer);
-            if(messageToServer.equals("quit"))
-                break;
+            messageArrived = true;
+            while (!answerSet) {
+                try {
+                    sleep(2000);
+                } catch (InterruptedException e) {
+                }
+            }
+            toServer.println(answer);
+            answerSet = false;
         }
-        System.out.println("Disconnessione in corso.");
         toServer.close();
         fromServer.close();
         socket.close();
