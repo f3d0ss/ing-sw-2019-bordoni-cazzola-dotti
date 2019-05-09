@@ -34,10 +34,6 @@ public class RmiServer implements Runnable {
         serverManager.removeClient(client);
     }
 
-    public void receiveAnswer(String answer){
-        serverManager.receiveAnswer(answer);
-    }
-
     public RmiServerImplementation getImplementation(){
         return server;
     }
