@@ -1,9 +1,7 @@
 package it.polimi.ingsw.view;
 
 import it.polimi.ingsw.model.*;
-
-import java.util.Observable;
-import java.util.Observer;
+import it.polimi.ingsw.utils.Observer;
 
 public class Cli implements Observer {
 
@@ -175,7 +173,7 @@ public class Cli implements Observer {
         }
     }
 
-    private void displayEnemiesInformation(Player enemy) {
+    private void displayEnemiesInformation(Player enemy){
         System.out.printf("\n" + enemy.getId().playerIdName().toUpperCase() + " (" + enemy.toString() + ") has " + enemy.getPowerUps().size() + " poweups.");
         System.out.printf(" Ammos: ");
         enemy.getAmmo().forEach((color, value) -> System.out.printf(value + " " + color.colorName() + ", "));
@@ -188,17 +186,12 @@ public class Cli implements Observer {
         System.out.printf("(dead " + enemy.getDeaths() + " times)");
     }
 
+    @Override
     public void update(String message) {
         System.out.println(message);
         displayBoard();
-        for (Player player : match.getCurrentPlayers())
-            if (player != match.getPlayer(client))
+        for(Player player : match.getCurrentPlayers())
+            if(player != match.getPlayer(client))
                 displayEnemiesInformation(player);
     }
-
-    @Override
-    public void update(Observable observable, Object o) {
-        //TODO
-    }
-
 }

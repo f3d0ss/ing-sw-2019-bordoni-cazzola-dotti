@@ -11,15 +11,15 @@ public class CliTest {
     public void displayBoard() {
         Match match = new Match();
         PlayerId client = PlayerId.GREEN;
-        Player player = new Player(match, client, "Paolito");
-        Player enemy1 = new Player(match, PlayerId.VIOLET, "FedeCazzola");
-        Player enemy2 = new Player(match, PlayerId.GREY, "FranzDotti");
+        Player player = new Player(match, client, "Paolito", match.getBoard().getSpawn(Color.RED));
+        Player enemy1 = new Player(match, PlayerId.VIOLET, "FedeCazzola", match.getBoard().getSpawn(Color.RED));
+        Player enemy2 = new Player(match, PlayerId.GREY, "FranzDotti", match.getBoard().getSpawn(Color.RED));
         match.addPlayer(player);
-        player.respawn(Color.RED);
+        match.getBoard().getSpawn(Color.RED).addPlayer(player);
         match.addPlayer(enemy1);
-        enemy1.respawn(Color.RED);
+        match.getBoard().getSpawn(Color.RED).addPlayer(enemy1);
         match.addPlayer(enemy2);
-        enemy2.respawn(Color.RED);
+        match.getBoard().getSpawn(Color.RED).addPlayer(enemy2);
         player.addAmmoTile(new AmmoTile(0, new HashMap<Color, Integer>() {{
             put(Color.BLUE, 1);
             put(Color.RED, 4);

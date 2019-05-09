@@ -10,12 +10,8 @@ import java.rmi.server.UnicastRemoteObject;
 
 public class RmiServer implements Runnable {
 
-    RmiServerImplementation server;
     private ServerManager serverManager;
-
-    public RmiServer(ServerManager serverManager) {
-        this.serverManager = serverManager;
-    }
+    RmiServerImplementation server;
 
     public void run() {
         try {
@@ -25,7 +21,11 @@ public class RmiServer implements Runnable {
         }
     }
 
-    public void registry(RmiClientInterface client) {
+    public RmiServer(ServerManager serverManager){
+        this.serverManager = serverManager;
+    }
+
+    public void registry(RmiClientInterface client){
         serverManager.addClient(client);
         //serverManager.bidWelcome(client);
     }
@@ -34,11 +34,11 @@ public class RmiServer implements Runnable {
         serverManager.removeClient(client);
     }
 
-    public void receiveAnswer(String answer) {
+    public void receiveAnswer(String answer){
         serverManager.receiveAnswer(answer);
     }
 
-    public RmiServerImplementation getImplementation() {
+    public RmiServerImplementation getImplementation(){
         return server;
     }
 

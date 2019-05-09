@@ -1,8 +1,9 @@
 package it.polimi.ingsw.model.command;
 
+import it.polimi.ingsw.model.Newton;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.PowerUp;
-import it.polimi.ingsw.model.PowerUpID;
+import it.polimi.ingsw.model.Teleporter;
 import it.polimi.ingsw.model.playerstate.ManageTurnState;
 import it.polimi.ingsw.model.playerstate.PlayerState;
 import it.polimi.ingsw.model.playerstate.SelectedNewtonState;
@@ -11,11 +12,20 @@ import it.polimi.ingsw.model.playerstate.SelectedTeleporterState;
 public class SelectPowerUpCommand implements Command{
     private Player player;
     private ManageTurnState currentState;
+    private PlayerState nextState;
     private PowerUp powerUp;
 
-    public SelectPowerUpCommand(Player player, PowerUp powerUp, ManageTurnState currentState) {
+    public SelectPowerUpCommand(Player player, Newton powerUp, ManageTurnState currentState) {
         this.player = player;
         this.currentState = currentState;
+        nextState = new SelectedNewtonState(powerUp);
+        this.powerUp = powerUp;
+    }
+
+    public SelectPowerUpCommand(Player player, Teleporter powerUp, ManageTurnState currentState) {
+        this.player = player;
+        this.currentState = currentState;
+        nextState = new SelectedTeleporterState(powerUp);
         this.powerUp = powerUp;
     }
 
@@ -25,10 +35,7 @@ public class SelectPowerUpCommand implements Command{
     @Override
     public void execute() {
         player.pay(powerUp);
-        if (powerUp.getType() == PowerUpID.TELEPORTER)
-            player.changeState(new SelectedTeleporterState(powerUp));
-        else if(powerUp.getType() == PowerUpID.NEWTON)
-            player.changeState(new SelectedNewtonState(powerUp));
+        player.changeState(nextState);
     }
 
     /**

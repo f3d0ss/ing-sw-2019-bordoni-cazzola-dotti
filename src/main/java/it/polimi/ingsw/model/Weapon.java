@@ -86,10 +86,9 @@ public class Weapon {
      */
     public void setSelectedWeaponMode(WeaponMode selectedWeaponMode) {
         this.selectedWeaponMode = selectedWeaponMode;
-        if (selectedWeaponMode.isMoveShooter())  //set extraMove
+        if (selectedWeaponMode.isMoveShooter()) { //set extraMove
             extraMoveToDo = true;
-        else
-            extraMoveToDo = false;
+        }
         damageToDo = selectedWeaponMode.getMaxNumberOfTargetPlayers();
         resetTargetLists();
     }
@@ -320,18 +319,9 @@ public class Weapon {
     private List<WeaponCommand> getPossibleSelectTargetCommandsTargetRoom(GameBoard gameboard, Player shooter, ReadyToShootState state) {
         //Furnace basic mode
         List<WeaponCommand> possibleCommands = new ArrayList<>();
-        if (targetSquares.isEmpty()) { //get squares at distance 1 accessible through doors.
-            List<Square> possibleRooms = new ArrayList<>();
-            for (Square square : gameboard.getSquareInOtherVisibleRooms(shooter.getPosition())) { //rooms must have players to damage
-                for (Square squareInTheSameRoom : gameboard.getRoomSquares(square)) {
-                    if (squareInTheSameRoom.hasOtherPlayers(shooter)) {
-                        possibleRooms.add(square);
-                        break;
-                    }
-                }
-            }
-            possibleRooms.forEach(square -> possibleCommands.add(new SelectTargetSquareCommand(state, square)));
-        } else if (targetPlayers.isEmpty()) //add all players in the room
+        if (targetSquares.isEmpty()) //get squares at distance 1 accessible through doors.
+            gameboard.getSquareInOtherVisibleRooms(shooter.getPosition()).forEach(square -> possibleCommands.add(new SelectTargetSquareCommand(state, square)));
+        else if (targetPlayers.isEmpty()) //add all players in the room
             gameboard.getRoomSquares(targetSquares.get(0)).forEach(square -> targetPlayers.addAll(square.getHostedPlayers()));
         return possibleCommands;
     }
@@ -397,8 +387,8 @@ public class Weapon {
     }
 
     private List<WeaponCommand> getPossibleSelectTargetCommandsTargetPlayersNotVisible(GameBoard gameboard, Player shooter, ReadyToShootState state) {
-        List<Player> allOtherPlayers = shooter.getMatch().getCurrentPlayers();
-        allOtherPlayers.remove(shooter);
+        //HeatSeeker, maybe create a method to get all players / non visible in gameboard
+        List<Player> allOtherPlayers = gameboard.getOtherPlayersOnReachableSquares(shooter.getPosition(), selectedWeaponMode.getMaxTargetDistance(), shooter);
         allOtherPlayers.removeAll(gameboard.getVisibleTargets(shooter, Integer.MAX_VALUE, 0));
         return allOtherPlayers.stream().map(player -> new SelectTargetPlayerCommand(state, player)).collect(Collectors.toList());
     }
@@ -457,7 +447,7 @@ public class Weapon {
             if (selectedWeaponMode.isCardinalDirectionMode())
                 possibleTargetSquares.addAll(gameboard.getVisibleSquares(shooter.getPosition(), selectedWeaponMode.getMinTargetDistance(), selectedWeaponMode.getMinTargetDistance(), true));
             possibleTargetSquares.addAll(gameboard.getVisibleSquares(shooter.getPosition(), selectedWeaponMode.getMaxTargetDistance(), selectedWeaponMode.getMinTargetDistance(), true));
-            possibleTargetSquares.stream().filter(square -> square.hasOtherPlayers(shooter)).forEach(square -> possibleCommands.add(new SelectTargetSquareCommand(state, square)));
+            possibleTargetSquares.forEach(square -> possibleCommands.add(new SelectTargetSquareCommand(state, square)));
         } else {
             if (selectedWeaponMode.isCardinalDirectionMode()) {
                 possibleCommands.addAll(getPossibleSelectTargetCommandsTargetSquareFlameThrower(gameboard, shooter, state));
@@ -489,10 +479,7 @@ public class Weapon {
     }
 
     private List<MoveCommand> getPossibleExtraMoveCommands(Player shooter, ReadyToShootState state) {
-        return shooter.getAccessibleSquare(selectedWeaponMode.getMaxShooterMove())
-                .stream()
-                .map(square -> new MoveCommand(shooter, square, state))
-                .collect(Collectors.toList());
+        return shooter.getAccessibleSquare(selectedWeaponMode.getMaxShooterMove()).stream().map(square -> new MoveCommand(shooter, square, state)).collect(Collectors.toList());
     }
 
     private boolean hasMaximumTargets() {
@@ -511,9 +498,7 @@ public class Weapon {
      * @return List of the commands
      */
     public List<SelectWeaponModeCommand> getSelectWeaponModeCommands(Player player, ChoosingWeaponOptionState state) {
-        return weaponModes.stream()
-                .map(weaponMode -> new SelectWeaponModeCommand(player, state, weaponMode))
-                .collect(Collectors.toList());
+        return weaponModes.stream().map(weaponMode -> new SelectWeaponModeCommand(player, state, weaponMode)).collect(Collectors.toList());
     }
 
     /**

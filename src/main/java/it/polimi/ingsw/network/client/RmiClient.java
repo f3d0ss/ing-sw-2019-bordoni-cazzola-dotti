@@ -1,24 +1,24 @@
 package it.polimi.ingsw.network.client;
 
 import it.polimi.ingsw.network.server.RmiClientInterface;
-import it.polimi.ingsw.network.server.RmiServerInterface;
 
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.Scanner;
+
+import static java.lang.Thread.sleep;
 
 public class RmiClient implements Client {
 
-    int port;
+    private String serverName = "adrenaline";
     private RmiClientImplementation rmiClientImplementation;
     private RmiServerInterface rmiServerInterface;
-    private boolean messageArrived = false;
-    private boolean answerSet = false;
-    private boolean keepAlive = true;
-    private String messageFromServer;
-    private String answer;
+    private RmiClientInterface stub;
+    private Scanner stdin = new Scanner(System.in);
+    int port;
 
     public RmiClient(int port) {
         this.port = port;
@@ -32,41 +32,37 @@ public class RmiClient implements Client {
         }
     }
 
-    public boolean isMessageArrived() {
-        return messageArrived;
+    public String printMessageAndGetAnswer(String message) {
+        String answer;
+        System.out.println(message);
+        answer = stdin.nextLine();
+        if(answer.equals("quit")) {
+            System.out.println("Disconnessione in corso.");
+            closeClient();
+        }
+        return answer;
     }
 
-    public void setMessageNotification() {
-        messageArrived = true;
-    }
-
-    public String getMessageFromServer() {
-        messageArrived = false;
-        return messageFromServer;
-    }
-
-    public void sendAnswerToServer(String answer) {
+    private void closeClient(){
         try {
-            rmiServerInterface.sendAnswer(answer);
-        } catch (RemoteException e) {
+            rmiServerInterface.unregistry(stub);
+        } catch (RemoteException e){
             System.out.println(e.getMessage());
         }
-    }
-
-    public void setMessage(String message) {
-        this.messageFromServer = message;
-        answerSet = false;
-        messageArrived = true;
+        return;
     }
 
     public void startClient() throws RemoteException, NotBoundException {
-        System.out.println("Cerco Server");
         Registry registry = LocateRegistry.getRegistry(1099);
-        rmiServerInterface = (RmiServerInterface) registry.lookup("adrenaline");
+        rmiServerInterface = (RmiServerInterface) registry.lookup(serverName);
         rmiClientImplementation = new RmiClientImplementation(this);
-        RmiClientInterface stub = (RmiClientInterface) UnicastRemoteObject.exportObject(rmiClientImplementation, port);
-        System.out.println("Client in registrazione");
+        stub = (RmiClientInterface) UnicastRemoteObject.exportObject(rmiClientImplementation, port);
         rmiServerInterface.registry(stub);
-        System.out.println("Client registrato");
+        while(true){
+            rmiServerInterface.testAliveness();
+            try {
+                sleep(2000);
+            } catch (InterruptedException e){}
+        }
     }
 }

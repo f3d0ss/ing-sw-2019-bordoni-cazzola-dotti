@@ -1,7 +1,7 @@
 package it.polimi.ingsw.model.command;
 
 import it.polimi.ingsw.model.Player;
-import it.polimi.ingsw.model.PowerUp;
+import it.polimi.ingsw.model.TargetingScope;
 import it.polimi.ingsw.model.exception.IllegalUndoException;
 import it.polimi.ingsw.model.playerstate.ScopeState;
 import it.polimi.ingsw.model.playerstate.SelectScopeTargetState;
@@ -20,7 +20,7 @@ public class UseScopeCommand implements Command {
      */
     @Override
     public void execute() {
-        currentState.getSelectedPlayer().addDamage(PowerUp.TRGETING_SCOPE_DAMAGE, player.getId());
+        currentState.getSelectedPlayer().addDamage(TargetingScope.DAMAGE, player.getId());
         player.changeState(new ScopeState(currentState.getSelectedAggregateAction(), currentState.getSelectedWeapon(), currentState.getShootedPlayers()));
     }
 

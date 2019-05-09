@@ -10,7 +10,7 @@ public class SocketReceptionist implements Runnable {
     private SocketServer socketServer;
     private boolean keepAlive = true;
 
-    public SocketReceptionist(ServerSocket serverSocket, SocketServer server) {
+    public SocketReceptionist(ServerSocket serverSocket, SocketServer server){
         this.serverSocket = serverSocket;
         this.socketServer = server;
     }
@@ -24,7 +24,7 @@ public class SocketReceptionist implements Runnable {
             try {
                 Socket client = serverSocket.accept();
                 socketServer.registry(client);
-            } catch (IOException e) {
+            } catch(IOException e) {
                 System.out.println(e.getMessage());
                 break;
             }

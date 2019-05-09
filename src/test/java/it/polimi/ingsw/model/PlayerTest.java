@@ -24,17 +24,17 @@ public class PlayerTest {
         int colorcubes;
         int addingammo = 5;
 //        Map<Color,Integer> resources;
-        Player player = new Player(null, null, null);
+        Player player = new Player(null, null, null, null);
         for (Color c : Color.values()) {
             ammo.put(c, 1);
             AmmoTile tile = new AmmoTile(0, ammo);
             for (int i = 1; i < addingammo; i++) {
                 player.addAmmoTile(tile);
                 colorcubes = player.getAmmo().get(c);
-                if ((i + Player.INITIAL_AMMO_NUMBER) <= MAX_AMMO)
-                    assertEquals( i + Player.INITIAL_AMMO_NUMBER, colorcubes);
+                if (i < MAX_AMMO)
+                    assertEquals(colorcubes, i);
                 else
-                    assertEquals(MAX_AMMO, colorcubes);
+                    assertEquals(colorcubes, MAX_AMMO);
             }
         }
 
@@ -56,9 +56,9 @@ public class PlayerTest {
 
     @Test
     public void testAddDamage() {
-        Player player = new Player(null, null, null);
+        Player player = new Player(null, null, null, null);
         assertEquals(player.isDead(), false);
-        for (int i = 1; i < MAX_DAMAGE - 1; i++) {
+        for (int i=1; i<MAX_DAMAGE-1; i++) {
             player.addDamage(1, PlayerId.GREEN);
             assertEquals(player.isDead(), false);
         }
@@ -74,7 +74,7 @@ public class PlayerTest {
         int marks;
 
         for (marks = 1; marks <= MAX_MARK; marks++) {
-            Player player = new Player(null, null, null);
+            Player player = new Player(null, null, null, null);
             player.addMarks(marks, PlayerId.VIOLET);
             assertEquals(player.isDead(), false);
             for (int i = 1; i < MAX_DAMAGE - 1 - marks; i++) {
@@ -85,7 +85,7 @@ public class PlayerTest {
             assertEquals(player.isDead(), true);
         }
 
-        Player player = new Player(null, null, null);
+        Player player = new Player(null, null, null, null);
         player.addMarks(marks, PlayerId.VIOLET);
         assertEquals(player.isDead(), false);
         for (int i = 1; i < MAX_DAMAGE - 1 - MAX_MARK; i++) {

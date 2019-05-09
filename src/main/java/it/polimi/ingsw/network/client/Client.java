@@ -1,11 +1,8 @@
 package it.polimi.ingsw.network.client;
 
+import java.io.IOException;
+import java.rmi.NotBoundException;
+
 public interface Client extends Runnable {
-    boolean isMessageArrived();
-
-    String getMessageFromServer();
-
-    void sendAnswerToServer(String answer);
-
-    void setMessageNotification();
+    void startClient() throws NotBoundException, IOException;
 }

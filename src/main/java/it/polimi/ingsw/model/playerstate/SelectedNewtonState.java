@@ -1,7 +1,7 @@
 package it.polimi.ingsw.model.playerstate;
 
+import it.polimi.ingsw.model.Newton;
 import it.polimi.ingsw.model.Player;
-import it.polimi.ingsw.model.PowerUp;
 import it.polimi.ingsw.model.command.Command;
 import it.polimi.ingsw.model.command.SelectTargetPlayerCommand;
 import it.polimi.ingsw.model.command.UseNewtonCommand;
@@ -10,10 +10,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SelectedNewtonState implements PlayerState, TargetingPlayerState {
-    private PowerUp selectedNewton;
+    private Newton selectedNewton;
     private Player selectedPlayer = null;
 
-    public SelectedNewtonState(PowerUp selectedNewton) {
+    public SelectedNewtonState(Newton selectedNewton) {
         this.selectedNewton = selectedNewton;
     }
 
