@@ -36,17 +36,17 @@ public class RmiClient implements Client {
         String answer;
         System.out.println(message);
         answer = stdin.nextLine();
-        if(answer.equals("quit")) {
+        if (answer.equals("quit")) {
             System.out.println("Disconnessione in corso.");
             closeClient();
         }
         return answer;
     }
 
-    private void closeClient(){
+    private void closeClient() {
         try {
             rmiServerInterface.unregistry(stub);
-        } catch (RemoteException e){
+        } catch (RemoteException e) {
             System.out.println(e.getMessage());
         }
         return;
@@ -58,11 +58,14 @@ public class RmiClient implements Client {
         rmiClientImplementation = new RmiClientImplementation(this);
         stub = (RmiClientInterface) UnicastRemoteObject.exportObject(rmiClientImplementation, port);
         rmiServerInterface.registry(stub);
-        while(true){
+        while (true) {
             rmiServerInterface.testAliveness();
             try {
                 sleep(2000);
-            } catch (InterruptedException e){}
+            } catch (InterruptedException e) {
+                break;
+            }
         }
+        System.out.println("Impossibile raggiongere il server. Disconnessione in corso.");
     }
 }

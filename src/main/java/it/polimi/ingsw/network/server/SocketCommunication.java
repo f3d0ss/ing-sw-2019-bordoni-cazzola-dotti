@@ -2,7 +2,7 @@ package it.polimi.ingsw.network.server;
 
 import java.net.Socket;
 
-public class Communicate implements Runnable {
+public class SocketCommunication implements Runnable {
 
     private String message;
     private Socket client;
@@ -10,7 +10,7 @@ public class Communicate implements Runnable {
     private int number;
     private ServerManager serverManager;
 
-    public Communicate(String message, Socket client, SocketServer socketServer, int number, ServerManager serverManager) {
+    public SocketCommunication(String message, Socket client, SocketServer socketServer, int number, ServerManager serverManager) {
         this.message = message;
         this.client = client;
         this.socketServer = socketServer;

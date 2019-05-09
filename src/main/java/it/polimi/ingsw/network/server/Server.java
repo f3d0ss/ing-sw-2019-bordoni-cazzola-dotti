@@ -40,7 +40,7 @@ public class Server {
             if (client != -1) {
                 System.out.println("Scrivi il messaggio:");
                 message = stdin.nextLine();
-                serverManager.sendMessage(client, "Server: " + message);
+                serverManager.sendMessageAndWaitForAnswer(client, "Server: " + message);
             }
         }
         serverManager.shutDownAllServers();

@@ -26,7 +26,7 @@ public class RmiServerImplementation implements RmiServerInterface {
         System.out.println("Client rimosso.");
     }
 
-    public synchronized String sendMessageAndGetAnswer(RmiClientInterface addressee, String message) {
+    public String sendMessageAndGetAnswer(RmiClientInterface addressee, String message) {
         try {
             return addressee.sendMessageAndGetAnswer(message);
         } catch (RemoteException e) {

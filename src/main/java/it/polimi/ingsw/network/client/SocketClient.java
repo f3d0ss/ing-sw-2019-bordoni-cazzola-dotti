@@ -36,7 +36,7 @@ public class SocketClient implements Client {
                 System.out.println("Impossibile raggiungere il server.");
                 break;
             }
-            messageToServer = (stdin.nextLine());
+            messageToServer = stdin.nextLine();
             toServer.println(messageToServer);
             if(messageToServer.equals("quit"))
                 break;

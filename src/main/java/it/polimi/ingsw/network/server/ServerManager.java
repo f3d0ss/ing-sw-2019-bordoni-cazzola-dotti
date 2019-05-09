@@ -62,17 +62,17 @@ public class ServerManager implements Runnable {
         rmiClients.forEach((integer, rmi) -> System.out.printf("%d ", integer));
     }
 
-    public void sendMessage(int number, String message) {
+    public void sendMessageAndWaitForAnswer(int number, String message) {
         if (socketClients.containsKey(number)) {
-            new Thread(new Communicate(message, socketClients.get(number), socketServer, number, this)).start();
+            new Thread(new SocketCommunication(message, socketClients.get(number), socketServer, number, this)).start();
         } else if (rmiClients.containsKey(number)) {
-            RmiClientInterface client = rmiClients.get(number);
-            answer = rmiServer.getImplementation().sendMessageAndGetAnswer(client, message);
-            System.out.println("User " + number + ": " + answer);
-            if(answer.equals("quit"))
-                removeClient(client);
+            new Thread(new RmiCommunication(message, rmiClients.get(number), rmiServer, number, this)).start();
         } else
             System.out.println("Client non registrato");
+    }
+
+    public void sendMessage(int number, String message){
+
     }
 
     public void shutDownAllServers(){
