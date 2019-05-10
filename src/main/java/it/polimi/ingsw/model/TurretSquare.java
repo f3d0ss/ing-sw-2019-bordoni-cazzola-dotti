@@ -22,17 +22,17 @@ public class TurretSquare extends Square {
         return commands;
     }
 
+    public AmmoTile getAmmoTile() {
+        return ammoTile;
+    }
+
     public void setAmmoTile(AmmoTile ammoTile) {
         if (this.ammoTile != null)
             throw new IllegalStateException();
         this.ammoTile = ammoTile;
     }
 
-    public AmmoTile getAmmoTile() {
-        return ammoTile;
-    }
-
-    public void remove(AmmoTile ammoTile){
+    public void remove(AmmoTile ammoTile) {
         if (this.ammoTile != ammoTile)
             throw new IllegalStateException();
         this.ammoTile = null;

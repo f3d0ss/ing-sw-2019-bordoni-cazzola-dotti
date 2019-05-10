@@ -2,10 +2,7 @@ package it.polimi.ingsw.view;
 
 import it.polimi.ingsw.model.*;
 
-import java.util.Observable;
-import java.util.Observer;
-
-public class Cli implements Observer {
+public class Cli {
 
     private final static int INNERWIDTH = 11;
     private int height;
@@ -194,11 +191,6 @@ public class Cli implements Observer {
         for (Player player : match.getCurrentPlayers())
             if (player != match.getPlayer(client))
                 displayEnemiesInformation(player);
-    }
-
-    @Override
-    public void update(Observable observable, Object o) {
-        //TODO
     }
 
 }

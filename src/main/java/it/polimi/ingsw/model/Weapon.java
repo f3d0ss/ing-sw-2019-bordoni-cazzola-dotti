@@ -67,6 +67,19 @@ public class Weapon {
     }
 
     /**
+     * This method sets the weapon mode
+     *
+     * @param selectedWeaponMode weapon mode to use
+     */
+    public void setSelectedWeaponMode(WeaponMode selectedWeaponMode) {
+        this.selectedWeaponMode = selectedWeaponMode;
+        //set extraMove
+        extraMoveToDo = selectedWeaponMode.isMoveShooter();
+        damageToDo = selectedWeaponMode.getMaxNumberOfTargetPlayers();
+        resetTargetLists();
+    }
+
+    /**
      * This method returns the weapon's name
      *
      * @return weapon's name
@@ -77,21 +90,6 @@ public class Weapon {
 
     public String getDescription() {
         return description;
-    }
-
-    /**
-     * This method sets the weapon mode
-     *
-     * @param selectedWeaponMode weapon mode to use
-     */
-    public void setSelectedWeaponMode(WeaponMode selectedWeaponMode) {
-        this.selectedWeaponMode = selectedWeaponMode;
-        if (selectedWeaponMode.isMoveShooter())  //set extraMove
-            extraMoveToDo = true;
-        else
-            extraMoveToDo = false;
-        damageToDo = selectedWeaponMode.getMaxNumberOfTargetPlayers();
-        resetTargetLists();
     }
 
     /**

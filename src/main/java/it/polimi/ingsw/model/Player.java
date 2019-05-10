@@ -237,7 +237,7 @@ public class Player {
         return match.getPlayer(lastShooter);
     }
 
-    public boolean isDisconnetted() {
+    public boolean isDisconnected() {
         return disconnected;
     }
 

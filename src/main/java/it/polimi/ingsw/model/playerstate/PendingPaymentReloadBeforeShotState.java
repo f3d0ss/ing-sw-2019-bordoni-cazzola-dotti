@@ -7,7 +7,7 @@ import it.polimi.ingsw.model.command.SelectAmmoPaymentCommand;
 import it.polimi.ingsw.model.command.SelectPowerUpPaymentCommand;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
@@ -19,7 +19,7 @@ public class PendingPaymentReloadBeforeShotState extends SelectedWeaponState imp
     public PendingPaymentReloadBeforeShotState(AggregateAction selectedAggregateAction, Weapon selectedWeapon) {
         super(selectedAggregateAction, selectedWeapon);
         pendingCardPayment = new ArrayList<>();
-        pendingAmmo = new HashMap<>();
+        pendingAmmo = new EnumMap<>(Color.class);
     }
 
     @Override
@@ -34,14 +34,14 @@ public class PendingPaymentReloadBeforeShotState extends SelectedWeaponState imp
 
     @Override
     public void removePendingAmmo(Color color) {
-        if(pendingAmmo.getOrDefault(color, 0) <= 0)
+        if (pendingAmmo.getOrDefault(color, 0) <= 0)
             throw new IllegalStateException();
         pendingAmmo.put(color, pendingAmmo.get(color) - 1);
     }
 
     @Override
     public void removePendingCard(PowerUp powerUp) {
-        if(!pendingCardPayment.contains(powerUp))
+        if (!pendingCardPayment.contains(powerUp))
             throw new IllegalStateException();
         pendingCardPayment.add(powerUp);
     }
@@ -59,8 +59,8 @@ public class PendingPaymentReloadBeforeShotState extends SelectedWeaponState imp
     @Override
     public List<Command> getPossibleCommands(Player player) {
         List<Command> commands = new ArrayList<>();
-        Map<Color, Integer> totalPending = new HashMap<>();
-        pendingCardPayment.forEach(powerUp -> totalPending.put(powerUp.getColor(), totalPending.getOrDefault(powerUp.getColor(), 0) + 1 ));
+        Map<Color, Integer> totalPending = new EnumMap<>(Color.class);
+        pendingCardPayment.forEach(powerUp -> totalPending.put(powerUp.getColor(), totalPending.getOrDefault(powerUp.getColor(), 0) + 1));
         getSelectedWeapon().getReloadingCost().forEach((color, cost) -> {
             if (cost > pendingAmmo.getOrDefault(color, 0) + totalPending.getOrDefault(color, 0)) {
                 if (player.getAmmo().getOrDefault(color, 0) > 0) {

@@ -4,11 +4,10 @@ import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.PowerUp;
 import it.polimi.ingsw.model.PowerUpID;
 import it.polimi.ingsw.model.playerstate.ManageTurnState;
-import it.polimi.ingsw.model.playerstate.PlayerState;
 import it.polimi.ingsw.model.playerstate.SelectedNewtonState;
 import it.polimi.ingsw.model.playerstate.SelectedTeleporterState;
 
-public class SelectPowerUpCommand implements Command{
+public class SelectPowerUpCommand implements Command {
     private Player player;
     private ManageTurnState currentState;
     private PowerUp powerUp;
@@ -27,7 +26,7 @@ public class SelectPowerUpCommand implements Command{
         player.pay(powerUp);
         if (powerUp.getType() == PowerUpID.TELEPORTER)
             player.changeState(new SelectedTeleporterState(powerUp));
-        else if(powerUp.getType() == PowerUpID.NEWTON)
+        else if (powerUp.getType() == PowerUpID.NEWTON)
             player.changeState(new SelectedNewtonState(powerUp));
     }
 

@@ -1,7 +1,7 @@
 package it.polimi.ingsw.model;
 
-import it.polimi.ingsw.model.command.SelectBuyingWeaponCommand;
 import it.polimi.ingsw.model.command.GrabCommand;
+import it.polimi.ingsw.model.command.SelectBuyingWeaponCommand;
 import it.polimi.ingsw.model.playerstate.SelectedAggregateActionState;
 
 import java.util.ArrayList;

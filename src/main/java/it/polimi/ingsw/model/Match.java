@@ -2,9 +2,8 @@ package it.polimi.ingsw.model;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Observable;
 
-public class Match extends Observable {
+public class Match {
 
     private static final int SKULLS = 8;
 
@@ -19,8 +18,8 @@ public class Match extends Observable {
     private GameBoard board;
     private boolean firstPlayerPlayedLastTurn;
 
-    public Match() {
-        board = new GameBoard(1);
+    public Match(int gameBoardNumber) {
+        board = new GameBoard(gameBoardNumber);
         killshotTrack = new ArrayList();
         currentPlayers = new ArrayList();
         firstPlayerPlayedLastTurn = false;
@@ -28,6 +27,10 @@ public class Match extends Observable {
         currentAmmoTileDeck.initializeDeck();
         currentWeaponDeck = new WeaponDeck();
         usedAmmoTileDeck = new AmmoTileDeck();
+    }
+
+    public Match() {
+        this(1);
     }
 
     public Player getPlayer(PlayerId id) {
@@ -135,5 +138,9 @@ public class Match extends Observable {
             while (board.getSpawn(color).lackWeapon())
                 board.getSpawn(color).addWeapon(drawWeaponCard());
         }
+    }
+
+    public void firstPlayerPlayedLastTurn() {
+        this.firstPlayerPlayedLastTurn = true;
     }
 }

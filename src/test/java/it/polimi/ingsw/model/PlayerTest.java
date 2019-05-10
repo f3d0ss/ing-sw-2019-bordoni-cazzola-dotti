@@ -5,7 +5,7 @@ import org.junit.Test;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class PlayerTest {
 
@@ -32,7 +32,7 @@ public class PlayerTest {
                 player.addAmmoTile(tile);
                 colorcubes = player.getAmmo().get(c);
                 if ((i + Player.INITIAL_AMMO_NUMBER) <= MAX_AMMO)
-                    assertEquals( i + Player.INITIAL_AMMO_NUMBER, colorcubes);
+                    assertEquals(i + Player.INITIAL_AMMO_NUMBER, colorcubes);
                 else
                     assertEquals(MAX_AMMO, colorcubes);
             }

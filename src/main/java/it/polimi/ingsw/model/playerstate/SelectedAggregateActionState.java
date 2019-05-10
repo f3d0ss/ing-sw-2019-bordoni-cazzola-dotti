@@ -10,7 +10,7 @@ import it.polimi.ingsw.model.command.SelectShootActionCommand;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SelectedAggregateActionState extends AfterSelectedAggregateActionState implements MovableState{
+public class SelectedAggregateActionState extends AfterSelectedAggregateActionState implements MovableState {
     public SelectedAggregateActionState(AggregateAction selectedAggregateAction) {
         super(selectedAggregateAction);
     }
@@ -18,11 +18,11 @@ public class SelectedAggregateActionState extends AfterSelectedAggregateActionSt
     @Override
     public List<Command> getPossibleCommands(Player player) {
         List<Command> commands = new ArrayList<>();
-        if(!getSelectedAggregateAction().hasMoved() && getSelectedAggregateAction().getMoveNumber() > 0)
+        if (!getSelectedAggregateAction().hasMoved() && getSelectedAggregateAction().getMoveNumber() > 0)
             player.getAccessibleSquare(getSelectedAggregateAction().getMoveNumber()).forEach(square -> commands.add(new MoveCommand(player, square, this)));
-        if(getSelectedAggregateAction().isGrab())
+        if (getSelectedAggregateAction().isGrab())
             commands.addAll(player.getPosition().getGrabCommands(player, this));
-        else if(getSelectedAggregateAction().isShoot())
+        else if (getSelectedAggregateAction().isShoot())
             commands.add(new SelectShootActionCommand(player, this));
         else
             commands.add(new DoneCommand(player, this));
