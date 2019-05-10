@@ -30,7 +30,7 @@ public class AmmoTile {
             string = "P";
         for (Map.Entry<Color, Integer> entry : ammo.entrySet())
             for (int i = 0; i < entry.getValue(); i++)
-                string = string + entry.getKey().colorName().substring(0,1);
+                string = string + entry.getKey().colorName().substring(0, 1);
         return string;
     }
 }

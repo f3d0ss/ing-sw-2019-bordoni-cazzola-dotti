@@ -31,7 +31,7 @@ public class AmmoTileDeck implements Deck {
         //set tiles with one poweup
         for (Color first : Color.values())
             for (Color second : Color.values()) {
-                if(first != second) {
+                if (first != second) {
                     cubes.put(first, 1);
                     cubes.put(second, 1);
                 } else {

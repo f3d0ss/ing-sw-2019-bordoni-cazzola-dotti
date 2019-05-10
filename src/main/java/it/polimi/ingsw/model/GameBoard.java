@@ -9,19 +9,19 @@ public class GameBoard {
     private static final int COLUMNS = 4;
     private Square[][] board = new Square[ROWS][COLUMNS];
     private Map<Color, SpawnSquare> spawns;
-    private List<TurretSquare> turrets = new ArrayList<>();
+    private List<TurretSquare> turrets;
     private List<Square> squareList = new ArrayList<>();
 
     //hard coded GameBoard only for player's movements test
+
     public GameBoard(int boardNumber) {
         turrets = new ArrayList<>();
         switch (boardNumber) {
             case 1:
-                spawns = new HashMap<Color, SpawnSquare>() {{
-                    put(Color.BLUE, new SpawnSquare(Connection.MAP_BORDER, Connection.MAP_BORDER, Connection.DOOR, Connection.SAME_ROOM, 0, 2, Color.BLUE));
-                    put(Color.RED, new SpawnSquare(Connection.DOOR, Connection.SAME_ROOM, Connection.MAP_BORDER, Connection.MAP_BORDER, 1, 0, Color.RED));
-                    put(Color.YELLOW, new SpawnSquare(Connection.SAME_ROOM, Connection.MAP_BORDER, Connection.MAP_BORDER, Connection.DOOR, 2, 3, Color.YELLOW));
-                }};
+                spawns = new EnumMap<>(Color.class);
+                spawns.put(Color.BLUE, new SpawnSquare(Connection.MAP_BORDER, Connection.MAP_BORDER, Connection.DOOR, Connection.SAME_ROOM, 0, 2, Color.BLUE));
+                spawns.put(Color.RED, new SpawnSquare(Connection.DOOR, Connection.SAME_ROOM, Connection.MAP_BORDER, Connection.MAP_BORDER, 1, 0, Color.RED));
+                spawns.put(Color.YELLOW, new SpawnSquare(Connection.SAME_ROOM, Connection.MAP_BORDER, Connection.MAP_BORDER, Connection.DOOR, 2, 3, Color.YELLOW));
                 board[0][0] = new TurretSquare(Connection.MAP_BORDER, Connection.SAME_ROOM, Connection.DOOR, Connection.MAP_BORDER, 0, 0, null);
                 turrets.add((TurretSquare) board[0][0]);
                 board[0][1] = new TurretSquare(Connection.MAP_BORDER, Connection.SAME_ROOM, Connection.WALL, Connection.SAME_ROOM, 0, 1, null);
@@ -43,7 +43,7 @@ public class GameBoard {
                 board[2][3] = spawns.get(Color.YELLOW);
                 squareList.addAll(turrets);
                 Arrays.stream(Color.values()).forEach(color -> squareList.add(spawns.get(color)));
-/*            default:
+/*           case 2:
                 board[0][0] = new TurretSquare(Connection.MAP_BORDER, Connection.SAME_ROOM, Connection.DOOR, Connection.MAP_BORDER, 0, 0, null);
                 board[0][1] = new TurretSquare(Connection.MAP_BORDER, Connection.SAME_ROOM, Connection.WALL, Connection.SAME_ROOM, 0, 1, null);
                 board[0][2] = new SpawnSquare(Connection.MAP_BORDER, Connection.DOOR, Connection.DOOR, Connection.SAME_ROOM, 0, 2, null);
@@ -58,11 +58,7 @@ public class GameBoard {
                 board[2][3] = new SpawnSquare(Connection.SAME_ROOM, Connection.MAP_BORDER, Connection.MAP_BORDER, Connection.SAME_ROOM, 2, 3, null);
 */
 //board 3 and 4 missing
-                /*spawnToColor = new HashMap<SpawnSquare, Color>() {{
-                    for (Color c : Color.values()) {
-                        put(colorToSpawn.get(c), c);
-                    }
-                }};*/
+            default:
         }
     }
 
@@ -114,7 +110,7 @@ public class GameBoard {
             case WEST:
                 return this.getSquare(current.getRow(), current.getCol() - 1);
         }
-        return null;
+        return current;
     }
 
     /**
@@ -142,9 +138,9 @@ public class GameBoard {
 
     /**
      * @param position       starting position
-     * @param maxRange       maximum distance of returned squareList
-     * @param minRange       minimum distance of returned squareList
-     * @param onlyWithPlayer excluded squareList where there are no players
+     * @param maxRange       maximum distance of returned squares
+     * @param minRange       minimum distance of returned squares
+     * @param onlyWithPlayer excluded squares where there are no players
      * @return give the list of visible squares according to input parameters
      * @author supernivem
      */
@@ -180,9 +176,9 @@ public class GameBoard {
     }
 
     /**
-     * @param position    is the position from where get straight direction squareList
-     * @param maxRange    maximum distance of gotten squareList
-     * @param minRange    minimum distance of gotten squareList
+     * @param position    is the position from where get straight direction squares
+     * @param maxRange    maximum distance of gotten squares
+     * @param minRange    minimum distance of gotten squares
      * @param ignoreWalls specify if ignore or consider walls
      * @author supernivem
      */
@@ -211,10 +207,10 @@ public class GameBoard {
 
     /**
      * @param list        is a list passed by caller, needed to allow recursion
-     * @param position    is the position from where get straight direction squareList
-     * @param maxRange    maximum distance of got squareList
+     * @param position    is the position from where get straight direction squares
+     * @param maxRange    maximum distance of got squares
      * @param ignoreWalls specify if ignore or consider walls
-     * @param dir         is the direction in which get squareList
+     * @param dir         is the direction in which get squares
      * @author supernivem
      */
     private void getStraightSquares(List<Square> list, Square position, int maxRange, boolean ignoreWalls, CardinalDirection dir) {
@@ -222,9 +218,11 @@ public class GameBoard {
         if (maxRange > 0 && position.getConnection(dir).isAccessible(ignoreWalls)) {
             next = this.getAdjacentSquare(position, dir);
             list.add(next);
-            getStraightSquares(list, next, maxRange--, ignoreWalls, dir);
+            getStraightSquares(list, next, maxRange - 1, ignoreWalls, dir);
         }
     }
+
+    //TODO: update player
 
     /**
      * @param position starting position
@@ -240,9 +238,9 @@ public class GameBoard {
 
     /**
      * @param position starting position
-     * @param maxMoves max distance of the squareList
+     * @param maxMoves max distance of the squares
      * @param player   player to exclude
-     * @return the list of squareList reachable in at most maxMoves steps with at least another player on
+     * @return the list of squares reachable in at most maxMoves steps with at least another player on
      */
     public List<Square> getReachableSquaresWithOtherPlayers(Square position, int maxMoves, Player player) {
         List<Square> reachableSquares = getReachableSquare(position, maxMoves);
@@ -254,12 +252,11 @@ public class GameBoard {
     }
 
     /**
-     * @param squares  list of squareList to use as starting position
-     * @param maxMoves max distance of the squareList
+     * @param squares  list of squares to use as starting position
+     * @param maxMoves max distance of the squares
      * @param player   player to exclude
-     * @return the list of squareList reachable in at most maxMoves steps with at least another player on
+     * @return the list of squares reachable in at most maxMoves steps with at least another player on
      */
-
     public List<Square> getReachableSquaresWithOtherPlayers(List<Square> squares, int maxMoves, Player player) {
         List<Square> reachableSquares = new ArrayList<>();
         for (Square square : squares)
@@ -274,10 +271,6 @@ public class GameBoard {
      * @author supernivem
      */
     private void getReachableSquare(Square position, List<Square> list, int maxMoves) {
-        //handle high maxMoves values-------------------------------
-        if (maxMoves > ROWS * COLUMNS)
-            maxMoves = ROWS * COLUMNS;
-        //---------------------------------------------------------------
         Square adjacent;
         int furtherMove = maxMoves - 1;
         if (!list.contains(position))
@@ -317,7 +310,7 @@ public class GameBoard {
     }
 
     /**
-     * This method returns the players on reachable squareList
+     * This method returns the players on reachable squares
      *
      * @param position starting position
      * @param maxMoves max distance of other players
@@ -411,7 +404,7 @@ public class GameBoard {
     }
 
     /**
-     * This method returns squareList at distance 1 accessible through doors.
+     * This method returns squares at distance 1 accessible through doors.
      *
      * @param position
      * @return
@@ -432,5 +425,4 @@ public class GameBoard {
     public List<Square> getSquareList() {
         return squareList;
     }
-
 }
