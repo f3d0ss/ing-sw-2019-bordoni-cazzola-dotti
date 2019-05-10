@@ -17,11 +17,10 @@ public class GameBoard {
         turrets = new ArrayList<>();
         switch (boardNumber) {
             case 1:
-                spawns = new HashMap<Color, SpawnSquare>() {{
-                    put(Color.BLUE, new SpawnSquare(Connection.MAP_BORDER, Connection.MAP_BORDER, Connection.DOOR, Connection.SAME_ROOM, 0, 2, Color.BLUE));
-                    put(Color.RED, new SpawnSquare(Connection.DOOR, Connection.SAME_ROOM, Connection.MAP_BORDER, Connection.MAP_BORDER, 1, 0, Color.RED));
-                    put(Color.YELLOW, new SpawnSquare(Connection.SAME_ROOM, Connection.MAP_BORDER, Connection.MAP_BORDER, Connection.DOOR, 2, 3, Color.YELLOW));
-                }};
+                spawns = new EnumMap<>(Color.class);
+                spawns.put(Color.BLUE, new SpawnSquare(Connection.MAP_BORDER, Connection.MAP_BORDER, Connection.DOOR, Connection.SAME_ROOM, 0, 2, Color.BLUE));
+                spawns.put(Color.RED, new SpawnSquare(Connection.DOOR, Connection.SAME_ROOM, Connection.MAP_BORDER, Connection.MAP_BORDER, 1, 0, Color.RED));
+                spawns.put(Color.YELLOW, new SpawnSquare(Connection.SAME_ROOM, Connection.MAP_BORDER, Connection.MAP_BORDER, Connection.DOOR, 2, 3, Color.YELLOW));
                 board[0][0] = new TurretSquare(Connection.MAP_BORDER, Connection.SAME_ROOM, Connection.DOOR, Connection.MAP_BORDER, 0, 0, null);
                 turrets.add((TurretSquare) board[0][0]);
                 board[0][1] = new TurretSquare(Connection.MAP_BORDER, Connection.SAME_ROOM, Connection.WALL, Connection.SAME_ROOM, 0, 1, null);
@@ -41,7 +40,7 @@ public class GameBoard {
                 board[2][2] = new TurretSquare(Connection.WALL, Connection.DOOR, Connection.MAP_BORDER, Connection.SAME_ROOM, 2, 2, null);
                 turrets.add((TurretSquare) board[2][2]);
                 board[2][3] = spawns.get(Color.YELLOW);
-/*            default:
+/*           case 2:
                 board[0][0] = new TurretSquare(Connection.MAP_BORDER, Connection.SAME_ROOM, Connection.DOOR, Connection.MAP_BORDER, 0, 0, null);
                 board[0][1] = new TurretSquare(Connection.MAP_BORDER, Connection.SAME_ROOM, Connection.WALL, Connection.SAME_ROOM, 0, 1, null);
                 board[0][2] = new SpawnSquare(Connection.MAP_BORDER, Connection.DOOR, Connection.DOOR, Connection.SAME_ROOM, 0, 2, null);
@@ -56,11 +55,7 @@ public class GameBoard {
                 board[2][3] = new SpawnSquare(Connection.SAME_ROOM, Connection.MAP_BORDER, Connection.MAP_BORDER, Connection.SAME_ROOM, 2, 3, null);
 */
 //board 3 and 4 missing
-                /*spawnToColor = new HashMap<SpawnSquare, Color>() {{
-                    for (Color c : Color.values()) {
-                        put(colorToSpawn.get(c), c);
-                    }
-                }};*/
+            default:
         }
     }
 
@@ -112,7 +107,7 @@ public class GameBoard {
             case WEST:
                 return this.getSquare(current.getRow(), current.getCol() - 1);
         }
-        return null;
+        return current;
     }
 
     /**
@@ -220,7 +215,7 @@ public class GameBoard {
         if (maxRange > 0 && position.getConnection(dir).isAccessible(ignoreWalls)) {
             next = this.getAdjacentSquare(position, dir);
             list.add(next);
-            getStraightSquares(list, next, maxRange--, ignoreWalls, dir);
+            getStraightSquares(list, next, maxRange - 1, ignoreWalls, dir);
         }
     }
 
