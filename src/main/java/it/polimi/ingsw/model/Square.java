@@ -4,7 +4,7 @@ import it.polimi.ingsw.model.command.GrabCommand;
 import it.polimi.ingsw.model.playerstate.SelectedAggregateActionState;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
@@ -16,7 +16,7 @@ public abstract class Square {
     private ArrayList<Player> hostedPlayers;
 
     public Square(Connection northConnection, Connection eastConnection, Connection southConnection, Connection westConnection, int row, int col, Color color) {
-        connection = new HashMap<>();
+        connection = new EnumMap<>(CardinalDirection.class);
         connection.put(CardinalDirection.NORTH, northConnection);
         connection.put(CardinalDirection.EAST, eastConnection);
         connection.put(CardinalDirection.SOUTH, southConnection);

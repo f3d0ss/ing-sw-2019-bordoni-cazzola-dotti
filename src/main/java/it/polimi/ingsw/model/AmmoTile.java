@@ -7,8 +7,8 @@ import java.util.Map;
  */
 public class AmmoTile {
 
-    private int powerUp;
-    private Map<Color, Integer> ammo;
+    private final int powerUp;
+    private final Map<Color, Integer> ammo;
 
     public AmmoTile(int powerUp, Map<Color, Integer> ammo) {
         this.powerUp = powerUp;
@@ -25,12 +25,12 @@ public class AmmoTile {
 
     @Override
     public String toString() {
-        String string = "";
+        StringBuilder string = new StringBuilder();
         if (powerUp > 0)
-            string = "P";
+            string = new StringBuilder("P");
         for (Map.Entry<Color, Integer> entry : ammo.entrySet())
             for (int i = 0; i < entry.getValue(); i++)
-                string = string + entry.getKey().colorName().substring(0, 1);
-        return string;
+                string.append(entry.getKey().colorName(), 0, 1);
+        return string.toString();
     }
 }

@@ -7,7 +7,7 @@ import it.polimi.ingsw.model.command.SelectAmmoPaymentCommand;
 import it.polimi.ingsw.model.command.SelectPowerUpPaymentCommand;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
@@ -20,7 +20,7 @@ public class PendingPaymentScopeState extends SelectedWeaponState implements Pen
     public PendingPaymentScopeState(AggregateAction selectedAggregateAction, Weapon selectedWeapon, List<Player> shootedPlayers) {
         super(selectedAggregateAction, selectedWeapon);
         pendingCardPayment = new ArrayList<>();
-        pendingAmmo = new HashMap<>();
+        pendingAmmo = new EnumMap<>(Color.class);
         this.shootedPlayers = shootedPlayers;
     }
 

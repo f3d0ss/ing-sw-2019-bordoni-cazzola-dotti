@@ -7,7 +7,7 @@ import it.polimi.ingsw.model.command.SelectAmmoPaymentCommand;
 import it.polimi.ingsw.model.command.SelectPowerUpPaymentCommand;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
@@ -17,7 +17,7 @@ public class PendingPaymentWeaponState extends SelectedWeaponState implements Pe
 
     public PendingPaymentWeaponState(AggregateAction selectedAggregateAction, Weapon selectedWeapon) {
         super(selectedAggregateAction, selectedWeapon);
-        pendingAmmo = new HashMap<>();
+        pendingAmmo = new EnumMap<>(Color.class);
         pendingCardPayment = new ArrayList<>();
     }
 
@@ -58,7 +58,7 @@ public class PendingPaymentWeaponState extends SelectedWeaponState implements Pe
     @Override
     public List<Command> getPossibleCommands(Player player) {
         List<Command> commands = new ArrayList<>();
-        Map<Color, Integer> totalPending = new HashMap<>();
+        Map<Color, Integer> totalPending = new EnumMap<>(Color.class);
         pendingCardPayment.forEach(powerUp -> totalPending.put(powerUp.getColor(), totalPending.getOrDefault(powerUp.getColor(), 0) + 1));
         getSelectedWeapon().getWeaponBuyCost().forEach((color, cost) -> {
             if (cost > pendingAmmo.getOrDefault(color, 0) + totalPending.getOrDefault(color, 0)) {

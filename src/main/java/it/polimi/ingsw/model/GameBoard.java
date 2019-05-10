@@ -222,8 +222,6 @@ public class GameBoard {
         }
     }
 
-    //TODO: update player
-
     /**
      * @param position starting position
      * @param maxMoves number of steps allowed
