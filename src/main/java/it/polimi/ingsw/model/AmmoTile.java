@@ -25,12 +25,12 @@ public class AmmoTile {
 
     @Override
     public String toString() {
-        String string = new String();
+        String string = "";
         if (powerUp > 0)
             string = "P";
-        for (Color color : ammo.keySet())
-            for (int i = 0; i < ammo.get(color); i++)
-                string = string + color.colorName().substring(0,1);
+        for (Map.Entry<Color, Integer> entry : ammo.entrySet())
+            for (int i = 0; i < entry.getValue(); i++)
+                string = string + entry.getKey().colorName().substring(0,1);
         return string;
     }
 }

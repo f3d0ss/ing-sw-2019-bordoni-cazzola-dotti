@@ -1,6 +1,9 @@
 package it.polimi.ingsw.model.playerstate;
 
-import it.polimi.ingsw.model.*;
+import it.polimi.ingsw.model.AggregateAction;
+import it.polimi.ingsw.model.Player;
+import it.polimi.ingsw.model.Square;
+import it.polimi.ingsw.model.Weapon;
 import it.polimi.ingsw.model.command.Command;
 
 import java.util.ArrayList;

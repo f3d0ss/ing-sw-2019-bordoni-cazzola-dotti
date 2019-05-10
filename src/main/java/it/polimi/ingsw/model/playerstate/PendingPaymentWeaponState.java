@@ -1,7 +1,10 @@
 package it.polimi.ingsw.model.playerstate;
 
 import it.polimi.ingsw.model.*;
-import it.polimi.ingsw.model.command.*;
+import it.polimi.ingsw.model.command.Command;
+import it.polimi.ingsw.model.command.PayWeaponCommand;
+import it.polimi.ingsw.model.command.SelectAmmoPaymentCommand;
+import it.polimi.ingsw.model.command.SelectPowerUpPaymentCommand;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,14 +33,14 @@ public class PendingPaymentWeaponState extends SelectedWeaponState implements Pe
 
     @Override
     public void removePendingAmmo(Color color) {
-        if(pendingAmmo.getOrDefault(color, 0) <= 0)
+        if (pendingAmmo.getOrDefault(color, 0) <= 0)
             throw new IllegalStateException();
         pendingAmmo.put(color, pendingAmmo.get(color) - 1);
     }
 
     @Override
     public void removePendingCard(PowerUp powerUp) {
-        if(!pendingCardPayment.contains(powerUp))
+        if (!pendingCardPayment.contains(powerUp))
             throw new IllegalStateException();
         pendingCardPayment.add(powerUp);
     }

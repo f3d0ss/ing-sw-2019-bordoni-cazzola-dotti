@@ -1,7 +1,10 @@
 package it.polimi.ingsw.model.playerstate;
 
 import it.polimi.ingsw.model.*;
-import it.polimi.ingsw.model.command.*;
+import it.polimi.ingsw.model.command.Command;
+import it.polimi.ingsw.model.command.PayScopeCommand;
+import it.polimi.ingsw.model.command.SelectAmmoPaymentCommand;
+import it.polimi.ingsw.model.command.SelectPowerUpPaymentCommand;
 
 import java.util.ArrayList;
 import java.util.HashMap;

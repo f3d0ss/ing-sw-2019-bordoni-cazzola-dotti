@@ -28,6 +28,12 @@ public class MatchController {
 
     }
 
+    public static void main(String[] args) {
+        MatchController matchController = new MatchController(new Lobby(), 1);
+        System.out.println(matchController.getMatch().getCurrentPlayers());
+
+    }
+
     public Match getMatch() {
         return match;
     }
@@ -79,14 +85,6 @@ public class MatchController {
     public static class Lobby {
         List<String> nicknames = new ArrayList<>();
 
-        public List<String> getNicknames() {
-            return nicknames;
-        }
-
-        void addPlayer(String nickname) {
-            nicknames.add(nickname);
-        }
-
         Lobby() {
             addPlayer("Paolo");
             addPlayer("Paul");
@@ -94,11 +92,13 @@ public class MatchController {
             addPlayer("Bordo");
             addPlayer("Paolino");
         }
-    }
 
-    public static void main(String[] args) {
-        MatchController matchController = new MatchController(new Lobby(), 1);
-        System.out.println(matchController.getMatch().getCurrentPlayers());
+        public List<String> getNicknames() {
+            return nicknames;
+        }
 
+        void addPlayer(String nickname) {
+            nicknames.add(nickname);
+        }
     }
 }

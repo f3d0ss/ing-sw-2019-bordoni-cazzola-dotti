@@ -2,13 +2,14 @@ package it.polimi.ingsw.model;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
+import java.util.EnumMap;
+import java.util.Map;
 
 public class AmmoTileDeck implements Deck {
     private ArrayList<AmmoTile> ammoTiles;
 
     public AmmoTileDeck() {
-        ammoTiles = new ArrayList<AmmoTile>();
+        ammoTiles = new ArrayList<>();
     }
 
     @Override
@@ -25,45 +26,34 @@ public class AmmoTileDeck implements Deck {
     }
 
     public void initializeDeck() {
-        ammoTiles = new ArrayList<AmmoTile>();
-        AmmoTile adding;
+        ammoTiles = new ArrayList<>();
+        Map<Color, Integer> cubes = new EnumMap(Color.class);
         //set tiles with one poweup
         for (Color first : Color.values())
             for (Color second : Color.values()) {
-                adding = new AmmoTile(1, first != second ?
-                        new HashMap<Color, Integer>() {{
-                            put(first, 1);
-                            put(second, 1);
-                        }} :
-                        new HashMap<Color, Integer>() {{
-                            put(first, 2);
-                        }});
-                ammoTiles.add(adding);
+                if(first != second) {
+                    cubes.put(first, 1);
+                    cubes.put(second, 1);
+                } else {
+                    cubes.put(first, 2);
+                }
+                ammoTiles.add(new AmmoTile(1, cubes));
                 //tiles with poweups are replicated twice
-                ammoTiles.add(adding);
-                //set tiles with three ammos
+                ammoTiles.add(new AmmoTile(1, cubes));
+                //now set tiles with three ammos
                 for (Color third : Color.values()) {
                     if (first == second && second != third) {
-                        adding = new AmmoTile(0,
-                                new HashMap<Color, Integer>() {{
-                                    put(first, 2);
-                                    put(third, 1);
-                                }});
-                        ammoTiles.add(adding);
+                        cubes.put(first, 2);
+                        cubes.put(third, 1);
+                        ammoTiles.add(new AmmoTile(0, cubes));
                     } else if (first == third && second != third) {
-                        adding = new AmmoTile(0,
-                                new HashMap<Color, Integer>() {{
-                                    put(first, 2);
-                                    put(second, 1);
-                                }});
-                        ammoTiles.add(adding);
+                        cubes.put(first, 2);
+                        cubes.put(second, 1);
+                        ammoTiles.add(new AmmoTile(0, cubes));
                     } else if (second == third && first != second) {
-                        adding = new AmmoTile(0,
-                                new HashMap<Color, Integer>() {{
-                                    put(first, 1);
-                                    put(second, 2);
-                                }});
-                        ammoTiles.add(adding);
+                        cubes.put(first, 1);
+                        cubes.put(second, 2);
+                        ammoTiles.add(new AmmoTile(0, cubes));
                     }
                 }
             }

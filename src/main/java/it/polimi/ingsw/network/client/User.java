@@ -4,11 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-import static java.lang.Thread.sleep;
-
 public class User {
-
-    public static final int SLEEPTIME = 2000;
 
     public static void main(String[] args) {
         Scanner stdin = new Scanner(System.in);
@@ -22,27 +18,10 @@ public class User {
         if (answer.equals("Socket"))
             client = new SocketClient();
         else {
-            client = new RmiClient(askQuestion("Quale porta vuoi usare", stdin));
+            client = new RmiClient(askQuestion("Quale porta vuoi usare?", stdin));
         }
         new Thread(client).start();
         System.out.println("Connessione stabilita. Digitare quit per uscire");
-        while (true) {
-            while (!client.isMessageArrived()) {
-                try {
-                    sleep(SLEEPTIME);
-                } catch (InterruptedException e) {
-                    break;
-                }
-            }
-            System.out.println("Server: " + client.getMessageFromServer());
-            System.out.printf("Tu: ");
-            answer = stdin.nextLine();
-            client.sendAnswerToServer(answer);
-            if (answer.equals("quit"))
-                break;
-        }
-        System.out.println("Disconnessione.");
-        //client.stopClient();
     }
 
     public static String askQuestion(String question, Scanner in, List<String> possibleAnswers) {

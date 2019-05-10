@@ -25,7 +25,7 @@ public class MoveCommand implements Command {
         this.player = player;
         this.newPosition = newPosition;
         this.currentState = currentState;
-        if(!currentState.getSelectedWeapon().hasDamageToDo())
+        if (!currentState.getSelectedWeapon().hasDamageToDo())
             nextState = new ManageTurnState();
         else
             nextState = currentState;

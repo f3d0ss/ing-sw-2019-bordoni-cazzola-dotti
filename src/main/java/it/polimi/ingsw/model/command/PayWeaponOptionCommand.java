@@ -20,7 +20,7 @@ public class PayWeaponOptionCommand implements Command {
     public void execute() {
         currentState.getPendingAmmoPayment().forEach((color, amount) -> player.pay(color, amount));
         currentState.getPendingCardPayment().forEach(powerUp -> player.pay(powerUp));
-        player.changeState(new ChoosingWeaponOptionState(currentState.getSelectedAggregateAction(),currentState.getSelectedWeapon()));
+        player.changeState(new ChoosingWeaponOptionState(currentState.getSelectedAggregateAction(), currentState.getSelectedWeapon()));
     }
 
     /**

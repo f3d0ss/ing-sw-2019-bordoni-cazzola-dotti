@@ -5,7 +5,7 @@ import it.polimi.ingsw.model.Weapon;
 import it.polimi.ingsw.model.playerstate.ChoosingWeaponOptionState;
 import it.polimi.ingsw.model.playerstate.ChoosingWeaponState;
 
-public class SelectWeaponCommand implements Command{
+public class SelectWeaponCommand implements Command {
     private Player player;
     private Weapon weapon;
     private ChoosingWeaponState currentState;

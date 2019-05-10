@@ -34,14 +34,14 @@ public class PendingPaymentReloadBeforeShotState extends SelectedWeaponState imp
 
     @Override
     public void removePendingAmmo(Color color) {
-        if(pendingAmmo.getOrDefault(color, 0) <= 0)
+        if (pendingAmmo.getOrDefault(color, 0) <= 0)
             throw new IllegalStateException();
         pendingAmmo.put(color, pendingAmmo.get(color) - 1);
     }
 
     @Override
     public void removePendingCard(PowerUp powerUp) {
-        if(!pendingCardPayment.contains(powerUp))
+        if (!pendingCardPayment.contains(powerUp))
             throw new IllegalStateException();
         pendingCardPayment.add(powerUp);
     }
@@ -60,7 +60,7 @@ public class PendingPaymentReloadBeforeShotState extends SelectedWeaponState imp
     public List<Command> getPossibleCommands(Player player) {
         List<Command> commands = new ArrayList<>();
         Map<Color, Integer> totalPending = new HashMap<>();
-        pendingCardPayment.forEach(powerUp -> totalPending.put(powerUp.getColor(), totalPending.getOrDefault(powerUp.getColor(), 0) + 1 ));
+        pendingCardPayment.forEach(powerUp -> totalPending.put(powerUp.getColor(), totalPending.getOrDefault(powerUp.getColor(), 0) + 1));
         getSelectedWeapon().getReloadingCost().forEach((color, cost) -> {
             if (cost > pendingAmmo.getOrDefault(color, 0) + totalPending.getOrDefault(color, 0)) {
                 if (player.getAmmo().getOrDefault(color, 0) > 0) {

@@ -1,5 +1,5 @@
-
 package it.polimi.ingsw.model;
+
 public class AggregateAction {
     private final int moveNumber;
     private boolean grab;

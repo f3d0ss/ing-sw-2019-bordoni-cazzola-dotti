@@ -8,11 +8,14 @@ import java.util.Map;
 
 public interface PendingPaymentState {
     void addPendingAmmo(Color color);
+
     void addPendingCard(PowerUp powerUp);
+
     void removePendingAmmo(Color color);
+
     void removePendingCard(PowerUp powerUp);
 
-    Map<Color,Integer> getPendingAmmoPayment();
+    Map<Color, Integer> getPendingAmmoPayment();
 
     List<PowerUp> getPendingCardPayment();
 }

@@ -2,9 +2,8 @@ package it.polimi.ingsw.model;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Observable;
 
-public class Match extends Observable {
+public class Match {
 
     private static final int SKULLS = 8;
 

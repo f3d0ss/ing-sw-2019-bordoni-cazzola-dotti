@@ -5,7 +5,7 @@ import it.polimi.ingsw.model.Square;
 import it.polimi.ingsw.model.playerstate.ManageTurnState;
 import it.polimi.ingsw.model.playerstate.SelectedTeleporterState;
 
-public class UseTeleportCommand implements Command{
+public class UseTeleportCommand implements Command {
     private Player player;
     private SelectedTeleporterState currentState;
     private Square oldSquare;

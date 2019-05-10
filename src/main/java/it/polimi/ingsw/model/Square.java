@@ -90,8 +90,7 @@ public abstract class Square {
     public List<Player> getHostedPlayers(List<Player> playersToExclude) {
         List<Player> players = new ArrayList<>(hostedPlayers);
         for (Player p : playersToExclude)
-            if (players.contains(p))
-                players.remove(p);
+            players.remove(p);
         return players;
     }
 }
