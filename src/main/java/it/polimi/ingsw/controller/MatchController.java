@@ -40,23 +40,28 @@ public class MatchController {
         //TODO first turn ?
         int currentPlayer = 0;
         while (!match.isLastTurn()) {
-            new TurnController(match, players[currentPlayer]);
-            endTurnControls(currentPlayer);
+            if (!players[currentPlayer].isDisconnected()) {
+                new TurnController(match, players[currentPlayer]);
+                endTurnControls(currentPlayer);
+            }
             currentPlayer = (currentPlayer + 1) % players.length;
         }
         runLastTurn(currentPlayer);
     }
 
-    void endTurnControls(int currentPlayer){
+    void endTurnControls(int currentPlayer) {
         //TODO check weapons,powerups, ammotiles, deaths, respawn players
-
+        //check if at least 2 players are connected ...
     }
 
     private void runLastTurn(int currentPlayer) {
         for (int i = 0; i < players.length; i++) {
             if (currentPlayer == 0)
                 match.firstPlayerPlayedLastTurn();
-            new TurnController(match, players[currentPlayer]);
+            if (!players[currentPlayer].isDisconnected()) {
+                new TurnController(match, players[currentPlayer]);
+                endTurnControls(currentPlayer);
+            }
             currentPlayer = (currentPlayer + 1) % players.length;
         }
         calculateFinalScores();
