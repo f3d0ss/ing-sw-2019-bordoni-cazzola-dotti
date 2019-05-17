@@ -1,5 +1,7 @@
 package it.polimi.ingsw.model;
 
+import com.google.gson.annotations.Expose;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -7,6 +9,9 @@ public class GameBoard {
 
     private static final int ROWS = 3;
     private static final int COLUMNS = 4;
+    @Expose
+    private int gameBoardId;
+    @Expose
     private Square[][] board = new Square[ROWS][COLUMNS];
     private Map<Color, SpawnSquare> spawns;
     private List<TurretSquare> turrets;
@@ -15,30 +20,32 @@ public class GameBoard {
     //hard coded GameBoard only for player's movements test
 
     public GameBoard(int boardNumber) {
+        //TODO load with json, handle lists
         turrets = new ArrayList<>();
+        gameBoardId = boardNumber;
         switch (boardNumber) {
             case 1:
                 spawns = new EnumMap<>(Color.class);
                 spawns.put(Color.BLUE, new SpawnSquare(Connection.MAP_BORDER, Connection.MAP_BORDER, Connection.DOOR, Connection.SAME_ROOM, 0, 2, Color.BLUE));
                 spawns.put(Color.RED, new SpawnSquare(Connection.DOOR, Connection.SAME_ROOM, Connection.MAP_BORDER, Connection.MAP_BORDER, 1, 0, Color.RED));
                 spawns.put(Color.YELLOW, new SpawnSquare(Connection.SAME_ROOM, Connection.MAP_BORDER, Connection.MAP_BORDER, Connection.DOOR, 2, 3, Color.YELLOW));
-                board[0][0] = new TurretSquare(Connection.MAP_BORDER, Connection.SAME_ROOM, Connection.DOOR, Connection.MAP_BORDER, 0, 0, null);
+                board[0][0] = new TurretSquare(Connection.MAP_BORDER, Connection.SAME_ROOM, Connection.DOOR, Connection.MAP_BORDER, 0, 0);
                 turrets.add((TurretSquare) board[0][0]);
-                board[0][1] = new TurretSquare(Connection.MAP_BORDER, Connection.SAME_ROOM, Connection.WALL, Connection.SAME_ROOM, 0, 1, null);
+                board[0][1] = new TurretSquare(Connection.MAP_BORDER, Connection.SAME_ROOM, Connection.WALL, Connection.SAME_ROOM, 0, 1);
                 turrets.add((TurretSquare) board[0][1]);
                 board[0][2] = spawns.get(Color.BLUE);
                 board[0][3] = null;
                 board[1][0] = spawns.get(Color.RED);
-                board[1][1] = new TurretSquare(Connection.WALL, Connection.SAME_ROOM, Connection.DOOR, Connection.SAME_ROOM, 1, 1, null);
+                board[1][1] = new TurretSquare(Connection.WALL, Connection.SAME_ROOM, Connection.DOOR, Connection.SAME_ROOM, 1, 1);
                 turrets.add((TurretSquare) board[1][1]);
-                board[1][2] = new TurretSquare(Connection.DOOR, Connection.DOOR, Connection.WALL, Connection.SAME_ROOM, 1, 2, null);
+                board[1][2] = new TurretSquare(Connection.DOOR, Connection.DOOR, Connection.WALL, Connection.SAME_ROOM, 1, 2);
                 turrets.add((TurretSquare) board[1][2]);
-                board[1][3] = new TurretSquare(Connection.MAP_BORDER, Connection.MAP_BORDER, Connection.SAME_ROOM, Connection.DOOR, 1, 3, null);
+                board[1][3] = new TurretSquare(Connection.MAP_BORDER, Connection.MAP_BORDER, Connection.SAME_ROOM, Connection.DOOR, 1, 3);
                 turrets.add((TurretSquare) board[1][3]);
                 board[2][0] = null;
-                board[2][1] = new TurretSquare(Connection.DOOR, Connection.SAME_ROOM, Connection.MAP_BORDER, Connection.MAP_BORDER, 2, 1, null);
+                board[2][1] = new TurretSquare(Connection.DOOR, Connection.SAME_ROOM, Connection.MAP_BORDER, Connection.MAP_BORDER, 2, 1);
                 turrets.add((TurretSquare) board[2][1]);
-                board[2][2] = new TurretSquare(Connection.WALL, Connection.DOOR, Connection.MAP_BORDER, Connection.SAME_ROOM, 2, 2, null);
+                board[2][2] = new TurretSquare(Connection.WALL, Connection.DOOR, Connection.MAP_BORDER, Connection.SAME_ROOM, 2, 2);
                 turrets.add((TurretSquare) board[2][2]);
                 board[2][3] = spawns.get(Color.YELLOW);
                 squareList.addAll(turrets);
@@ -423,4 +430,19 @@ public class GameBoard {
     public List<Square> getSquareList() {
         return squareList;
     }
+
+    public List<SpawnSquare> getSpawnSquares() {
+        return spawns.values().stream().collect(Collectors.toList());
+    }
+
+   /* public static void main(String[] args) {
+        Match match = new Match();
+        GameBoard gameBoard = new GameBoard(1);
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        gsonBuilder.setPrettyPrinting();
+        Gson gson = gsonBuilder.create();
+        String s = gson.toJson(gameBoard);
+        System.out.println(s);
+    }*/
+
 }

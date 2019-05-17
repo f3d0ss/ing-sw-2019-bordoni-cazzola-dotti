@@ -82,7 +82,7 @@ public class WeaponTest {
 
     @Test
     void addRemoveTargetSquare() {
-        Square square = new TurretSquare(null, null, null, null, 0, 0, null);
+        Square square = new TurretSquare(null, null, null, null, 0, 0);
         Weapon weapon = getRandomWeapon();
         weapon.addTargetSquare(square);
         weapon.removeTargetSquare(square);
