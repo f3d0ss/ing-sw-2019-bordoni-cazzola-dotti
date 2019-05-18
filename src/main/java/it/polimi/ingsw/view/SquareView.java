@@ -1,6 +1,5 @@
 package it.polimi.ingsw.view;
 
-import it.polimi.ingsw.model.AmmoTile;
 import it.polimi.ingsw.model.CardinalDirection;
 import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.Connection;

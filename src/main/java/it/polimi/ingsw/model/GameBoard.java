@@ -1,64 +1,100 @@
 package it.polimi.ingsw.model;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.EnumMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class GameBoard {
 
     private static final int ROWS = 3;
     private static final int COLUMNS = 4;
+    private int gameBoardId;
     private Square[][] board = new Square[ROWS][COLUMNS];
-    private Map<Color, SpawnSquare> spawns;
-    private List<TurretSquare> turrets;
+    private Map<Color, SpawnSquare> spawns = new EnumMap<>(Color.class);
+    private List<TurretSquare> turrets = new ArrayList<>();
     private List<Square> squareList = new ArrayList<>();
 
     //hard coded GameBoard only for player's movements test
 
     public GameBoard(int boardNumber) {
-        turrets = new ArrayList<>();
+        //TODO load with json, handle lists
+        gameBoardId = boardNumber;
         switch (boardNumber) {
             case 1:
-                spawns = new EnumMap<>(Color.class);
-                spawns.put(Color.BLUE, new SpawnSquare(Connection.MAP_BORDER, Connection.MAP_BORDER, Connection.DOOR, Connection.SAME_ROOM, 0, 2, Color.BLUE));
-                spawns.put(Color.RED, new SpawnSquare(Connection.DOOR, Connection.SAME_ROOM, Connection.MAP_BORDER, Connection.MAP_BORDER, 1, 0, Color.RED));
-                spawns.put(Color.YELLOW, new SpawnSquare(Connection.SAME_ROOM, Connection.MAP_BORDER, Connection.MAP_BORDER, Connection.DOOR, 2, 3, Color.YELLOW));
-                board[0][0] = new TurretSquare(Connection.MAP_BORDER, Connection.SAME_ROOM, Connection.DOOR, Connection.MAP_BORDER, 0, 0, null);
-                turrets.add((TurretSquare) board[0][0]);
-                board[0][1] = new TurretSquare(Connection.MAP_BORDER, Connection.SAME_ROOM, Connection.WALL, Connection.SAME_ROOM, 0, 1, null);
-                turrets.add((TurretSquare) board[0][1]);
-                board[0][2] = spawns.get(Color.BLUE);
+                board[0][0] = new TurretSquare(Connection.MAP_BORDER, Connection.SAME_ROOM, Connection.DOOR, Connection.MAP_BORDER, 0, 0);
+                board[0][1] = new TurretSquare(Connection.MAP_BORDER, Connection.SAME_ROOM, Connection.WALL, Connection.SAME_ROOM, 0, 1);
+                board[0][2] = new SpawnSquare(Connection.MAP_BORDER, Connection.MAP_BORDER, Connection.DOOR, Connection.SAME_ROOM, 0, 2, Color.BLUE);
                 board[0][3] = null;
-                board[1][0] = spawns.get(Color.RED);
-                board[1][1] = new TurretSquare(Connection.WALL, Connection.SAME_ROOM, Connection.DOOR, Connection.SAME_ROOM, 1, 1, null);
-                turrets.add((TurretSquare) board[1][1]);
-                board[1][2] = new TurretSquare(Connection.DOOR, Connection.DOOR, Connection.WALL, Connection.SAME_ROOM, 1, 2, null);
-                turrets.add((TurretSquare) board[1][2]);
-                board[1][3] = new TurretSquare(Connection.MAP_BORDER, Connection.MAP_BORDER, Connection.SAME_ROOM, Connection.DOOR, 1, 3, null);
-                turrets.add((TurretSquare) board[1][3]);
+                board[1][0] = new SpawnSquare(Connection.DOOR, Connection.SAME_ROOM, Connection.MAP_BORDER, Connection.MAP_BORDER, 1, 0, Color.RED);
+                board[1][1] = new TurretSquare(Connection.WALL, Connection.SAME_ROOM, Connection.DOOR, Connection.SAME_ROOM, 1, 1);
+                board[1][2] = new TurretSquare(Connection.DOOR, Connection.DOOR, Connection.WALL, Connection.SAME_ROOM, 1, 2);
+                board[1][3] = new TurretSquare(Connection.MAP_BORDER, Connection.MAP_BORDER, Connection.SAME_ROOM, Connection.DOOR, 1, 3);
                 board[2][0] = null;
-                board[2][1] = new TurretSquare(Connection.DOOR, Connection.SAME_ROOM, Connection.MAP_BORDER, Connection.MAP_BORDER, 2, 1, null);
-                turrets.add((TurretSquare) board[2][1]);
-                board[2][2] = new TurretSquare(Connection.WALL, Connection.DOOR, Connection.MAP_BORDER, Connection.SAME_ROOM, 2, 2, null);
-                turrets.add((TurretSquare) board[2][2]);
-                board[2][3] = spawns.get(Color.YELLOW);
-                squareList.addAll(turrets);
-                Arrays.stream(Color.values()).forEach(color -> squareList.add(spawns.get(color)));
-/*           case 2:
-                board[0][0] = new TurretSquare(Connection.MAP_BORDER, Connection.SAME_ROOM, Connection.DOOR, Connection.MAP_BORDER, 0, 0, null);
-                board[0][1] = new TurretSquare(Connection.MAP_BORDER, Connection.SAME_ROOM, Connection.WALL, Connection.SAME_ROOM, 0, 1, null);
-                board[0][2] = new SpawnSquare(Connection.MAP_BORDER, Connection.DOOR, Connection.DOOR, Connection.SAME_ROOM, 0, 2, null);
-                board[0][3] = new SpawnSquare(Connection.MAP_BORDER, Connection.MAP_BORDER, Connection.DOOR, Connection.DOOR, 0, 3, null);
-                board[1][0] = new SpawnSquare(Connection.DOOR, Connection.SAME_ROOM, Connection.MAP_BORDER, Connection.MAP_BORDER, 1, 0, null);
-                board[1][1] = new TurretSquare(Connection.WALL, Connection.WALL, Connection.DOOR, Connection.SAME_ROOM, 1, 1, null);
-                board[1][2] = new TurretSquare(Connection.DOOR, Connection.SAME_ROOM, Connection.SAME_ROOM, Connection.WALL, 1, 2, null);
-                board[1][3] = new TurretSquare(Connection.DOOR, Connection.MAP_BORDER, Connection.SAME_ROOM, Connection.SAME_ROOM, 1, 3, null);
+                board[2][1] = new TurretSquare(Connection.DOOR, Connection.SAME_ROOM, Connection.MAP_BORDER, Connection.MAP_BORDER, 2, 1);
+                board[2][2] = new TurretSquare(Connection.WALL, Connection.DOOR, Connection.MAP_BORDER, Connection.SAME_ROOM, 2, 2);
+                board[2][3] = new SpawnSquare(Connection.SAME_ROOM, Connection.MAP_BORDER, Connection.MAP_BORDER, Connection.DOOR, 2, 3, Color.YELLOW);
+                break;
+            case 2:
+                board[0][0] = new TurretSquare(Connection.MAP_BORDER, Connection.SAME_ROOM, Connection.DOOR, Connection.MAP_BORDER, 0, 0);
+                board[0][1] = new TurretSquare(Connection.MAP_BORDER, Connection.SAME_ROOM, Connection.WALL, Connection.SAME_ROOM, 0, 1);
+                board[0][2] = new SpawnSquare(Connection.MAP_BORDER, Connection.DOOR, Connection.DOOR, Connection.SAME_ROOM, 0, 2, Color.BLUE);
+                board[0][3] = new TurretSquare(Connection.MAP_BORDER, Connection.MAP_BORDER, Connection.DOOR, Connection.DOOR, 0, 3);
+                board[1][0] = new SpawnSquare(Connection.DOOR, Connection.SAME_ROOM, Connection.MAP_BORDER, Connection.MAP_BORDER, 1, 0, Color.RED);
+                board[1][1] = new TurretSquare(Connection.WALL, Connection.WALL, Connection.DOOR, Connection.SAME_ROOM, 1, 1);
+                board[1][2] = new TurretSquare(Connection.DOOR, Connection.SAME_ROOM, Connection.SAME_ROOM, Connection.WALL, 1, 2);
+                board[1][3] = new TurretSquare(Connection.DOOR, Connection.MAP_BORDER, Connection.SAME_ROOM, Connection.SAME_ROOM, 1, 3);
                 board[2][0] = null;
-                board[2][1] = new TurretSquare(Connection.DOOR, Connection.DOOR, Connection.MAP_BORDER, Connection.MAP_BORDER, 2, 1, null);
-                board[2][2] = new TurretSquare(Connection.SAME_ROOM, Connection.SAME_ROOM, Connection.MAP_BORDER, Connection.DOOR, 2, 2, null);
-                board[2][3] = new SpawnSquare(Connection.SAME_ROOM, Connection.MAP_BORDER, Connection.MAP_BORDER, Connection.SAME_ROOM, 2, 3, null);
-*/
-//board 3 and 4 missing
+                board[2][1] = new TurretSquare(Connection.DOOR, Connection.DOOR, Connection.MAP_BORDER, Connection.MAP_BORDER, 2, 1);
+                board[2][2] = new TurretSquare(Connection.SAME_ROOM, Connection.SAME_ROOM, Connection.MAP_BORDER, Connection.DOOR, 2, 2);
+                board[2][3] = new SpawnSquare(Connection.SAME_ROOM, Connection.MAP_BORDER, Connection.MAP_BORDER, Connection.SAME_ROOM, 2, 3, Color.YELLOW);
+                break;
+            case 3:
+                board[0][0] = new TurretSquare(Connection.MAP_BORDER, Connection.DOOR, Connection.SAME_ROOM, Connection.MAP_BORDER, 0, 0);
+                board[0][1] = new TurretSquare(Connection.MAP_BORDER, Connection.SAME_ROOM, Connection.DOOR, Connection.DOOR, 0, 1);
+                board[0][2] = new SpawnSquare(Connection.MAP_BORDER, Connection.DOOR, Connection.DOOR, Connection.SAME_ROOM, 0, 2, Color.BLUE);
+                board[0][3] = new TurretSquare(Connection.MAP_BORDER, Connection.MAP_BORDER, Connection.DOOR, Connection.DOOR, 0, 3);
+                board[1][0] = new SpawnSquare(Connection.SAME_ROOM, Connection.WALL, Connection.DOOR, Connection.MAP_BORDER, 1, 0, Color.RED);
+                board[1][1] = new TurretSquare(Connection.DOOR, Connection.WALL, Connection.DOOR, Connection.WALL, 1, 1);
+                board[1][2] = new TurretSquare(Connection.DOOR, Connection.SAME_ROOM, Connection.SAME_ROOM, Connection.WALL, 1, 2);
+                board[1][3] = new TurretSquare(Connection.DOOR, Connection.MAP_BORDER, Connection.SAME_ROOM, Connection.SAME_ROOM, 1, 3);
+                board[2][0] = new TurretSquare(Connection.DOOR, Connection.SAME_ROOM, Connection.MAP_BORDER, Connection.MAP_BORDER, 2, 0);
+                board[2][1] = new TurretSquare(Connection.DOOR, Connection.DOOR, Connection.MAP_BORDER, Connection.SAME_ROOM, 2, 1);
+                board[2][2] = new TurretSquare(Connection.SAME_ROOM, Connection.SAME_ROOM, Connection.MAP_BORDER, Connection.DOOR, 2, 2);
+                board[2][3] = new SpawnSquare(Connection.SAME_ROOM, Connection.MAP_BORDER, Connection.MAP_BORDER, Connection.SAME_ROOM, 2, 3, Color.YELLOW);
+                break;
+            case 4:
+                board[0][0] = new TurretSquare(Connection.MAP_BORDER, Connection.DOOR, Connection.SAME_ROOM, Connection.MAP_BORDER, 0, 0);
+                board[0][1] = new TurretSquare(Connection.MAP_BORDER, Connection.SAME_ROOM, Connection.DOOR, Connection.DOOR, 0, 1);
+                board[1][0] = new SpawnSquare(Connection.SAME_ROOM, Connection.WALL, Connection.DOOR, Connection.MAP_BORDER, 1, 0, Color.RED);
+                board[1][1] = new TurretSquare(Connection.DOOR, Connection.SAME_ROOM, Connection.DOOR, Connection.WALL, 1, 1);
+                board[2][0] = new TurretSquare(Connection.DOOR, Connection.SAME_ROOM, Connection.MAP_BORDER, Connection.MAP_BORDER, 2, 0);
+                board[2][1] = new TurretSquare(Connection.DOOR, Connection.SAME_ROOM, Connection.MAP_BORDER, Connection.SAME_ROOM, 2, 1);
+                board[0][2] = new SpawnSquare(Connection.MAP_BORDER, Connection.MAP_BORDER, Connection.DOOR, Connection.SAME_ROOM, 0, 2, Color.BLUE);
+                board[0][3] = null;
+                board[1][2] = new TurretSquare(Connection.DOOR, Connection.DOOR, Connection.WALL, Connection.SAME_ROOM, 1, 2);
+                board[1][3] = new TurretSquare(Connection.MAP_BORDER, Connection.MAP_BORDER, Connection.SAME_ROOM, Connection.DOOR, 1, 3);
+                board[2][2] = new TurretSquare(Connection.WALL, Connection.DOOR, Connection.MAP_BORDER, Connection.SAME_ROOM, 2, 2);
+                board[2][3] = new SpawnSquare(Connection.SAME_ROOM, Connection.MAP_BORDER, Connection.MAP_BORDER, Connection.DOOR, 2, 3, Color.YELLOW);
+                break;
             default:
+        }
+        initialize();
+    }
+
+    private void initialize() {
+        for (int i = 0; i < ROWS; i++) {
+            for (int j = 0; j < COLUMNS; j++) {
+                Square square = board[i][j];
+                if (square != null) {
+                    if (square.getColor() != null)
+                        spawns.put(square.getColor(), (SpawnSquare) square);
+                    else
+                        turrets.add((TurretSquare) square);
+                    squareList.add(square);
+                }
+            }
         }
     }
 
@@ -423,4 +459,9 @@ public class GameBoard {
     public List<Square> getSquareList() {
         return squareList;
     }
+
+    public List<SpawnSquare> getSpawnSquares() {
+        return spawns.values().stream().collect(Collectors.toList());
+    }
+
 }

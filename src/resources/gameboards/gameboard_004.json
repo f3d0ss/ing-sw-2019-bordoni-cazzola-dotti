@@ -1,0 +1,142 @@
+{
+  "gameBoardId": 4,
+  "board": [
+    [
+      {
+        "connection": {
+          "NORTH": "MAP_BORDER",
+          "EAST": "DOOR",
+          "WEST": "MAP_BORDER",
+          "SOUTH": "SAME_ROOM"
+        },
+        "row": 0,
+        "col": 0,
+        "hostedPlayers": []
+      },
+      {
+        "connection": {
+          "NORTH": "MAP_BORDER",
+          "EAST": "SAME_ROOM",
+          "WEST": "DOOR",
+          "SOUTH": "DOOR"
+        },
+        "row": 0,
+        "col": 1,
+        "hostedPlayers": []
+      },
+      {
+        "weapons": [],
+        "spawnPointTrack": [],
+        "connection": {
+          "NORTH": "MAP_BORDER",
+          "EAST": "MAP_BORDER",
+          "WEST": "SAME_ROOM",
+          "SOUTH": "DOOR"
+        },
+        "row": 0,
+        "col": 2,
+        "color": "BLUE",
+        "hostedPlayers": []
+      },
+      null
+    ],
+    [
+      {
+        "weapons": [],
+        "spawnPointTrack": [],
+        "connection": {
+          "NORTH": "SAME_ROOM",
+          "EAST": "WALL",
+          "WEST": "MAP_BORDER",
+          "SOUTH": "DOOR"
+        },
+        "row": 1,
+        "col": 0,
+        "color": "RED",
+        "hostedPlayers": []
+      },
+      {
+        "connection": {
+          "NORTH": "DOOR",
+          "EAST": "SAME_ROOM",
+          "WEST": "WALL",
+          "SOUTH": "DOOR"
+        },
+        "row": 1,
+        "col": 1,
+        "hostedPlayers": []
+      },
+      {
+        "connection": {
+          "NORTH": "DOOR",
+          "EAST": "DOOR",
+          "WEST": "SAME_ROOM",
+          "SOUTH": "WALL"
+        },
+        "row": 1,
+        "col": 2,
+        "hostedPlayers": []
+      },
+      {
+        "connection": {
+          "NORTH": "MAP_BORDER",
+          "EAST": "MAP_BORDER",
+          "WEST": "DOOR",
+          "SOUTH": "SAME_ROOM"
+        },
+        "row": 1,
+        "col": 3,
+        "hostedPlayers": []
+      }
+    ],
+    [
+      {
+        "connection": {
+          "NORTH": "DOOR",
+          "EAST": "SAME_ROOM",
+          "WEST": "MAP_BORDER",
+          "SOUTH": "MAP_BORDER"
+        },
+        "row": 2,
+        "col": 0,
+        "hostedPlayers": []
+      },
+      {
+        "connection": {
+          "NORTH": "DOOR",
+          "EAST": "SAME_ROOM",
+          "WEST": "SAME_ROOM",
+          "SOUTH": "MAP_BORDER"
+        },
+        "row": 2,
+        "col": 1,
+        "hostedPlayers": []
+      },
+      {
+        "connection": {
+          "NORTH": "WALL",
+          "EAST": "DOOR",
+          "WEST": "SAME_ROOM",
+          "SOUTH": "MAP_BORDER"
+        },
+        "row": 2,
+        "col": 2,
+        "hostedPlayers": []
+      },
+      {
+        "weapons": [],
+        "spawnPointTrack": [],
+        "connection": {
+          "NORTH": "SAME_ROOM",
+          "EAST": "MAP_BORDER",
+          "WEST": "DOOR",
+          "SOUTH": "MAP_BORDER"
+        },
+        "row": 2,
+        "col": 3,
+        "color": "YELLOW",
+        "hostedPlayers": []
+      }
+    ]
+  ]
+}

@@ -13,7 +13,7 @@ public abstract class Square {
     private int row;
     private int col;
     private Color color;
-    private ArrayList<Player> hostedPlayers;
+    private List<Player> hostedPlayers;
 
     public Square(Connection northConnection, Connection eastConnection, Connection southConnection, Connection westConnection, int row, int col, Color color) {
         connection = new EnumMap<>(CardinalDirection.class);
@@ -64,7 +64,7 @@ public abstract class Square {
      * @return true if there is at least another player
      */
     public boolean hasOtherPlayers(Player player) {
-        ArrayList<Player> players = new ArrayList<>(hostedPlayers);
+        List<Player> players = new ArrayList<>(hostedPlayers);
         players.remove(player);
         return !players.isEmpty();
     }

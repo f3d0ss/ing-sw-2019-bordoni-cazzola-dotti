@@ -3,8 +3,6 @@ package it.polimi.ingsw.view;
 import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.PlayerId;
 
-import java.util.ArrayList;
-import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
