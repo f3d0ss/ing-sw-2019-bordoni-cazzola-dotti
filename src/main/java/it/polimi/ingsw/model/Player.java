@@ -100,10 +100,14 @@ public class Player {
         this.playerState = playerState;
     }
 
-    public void move(Square square) {
+    public void untracedMove(Square square) {
         position.removePlayer(this);
         position = square;
         position.addPlayer(this);
+    }
+
+    public void move(Square square) {
+        untracedMove(square);
     }
 
     private void addAmmo(Color color, Integer number) {
