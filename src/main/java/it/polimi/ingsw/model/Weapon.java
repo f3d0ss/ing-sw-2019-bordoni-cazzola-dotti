@@ -487,16 +487,15 @@ public class Weapon {
     }
 
     private List<MoveCommand> getPossibleExtraMoveCommands(GameBoard gameBoard, Player shooter, ReadyToShootState state) {
-        //TODO copy constructor or clone player?? Current implementation may cause problem with model notifying temp position change to view?
         Square currentPosition = shooter.getPosition();
         List<MoveCommand> list = new ArrayList<>();
         for (Square square : shooter.getAccessibleSquare(selectedWeaponMode.getMaxShooterMove())) {
-            shooter.move(square);
+            shooter.untracedMove(square);
             if (!getPossibleSelectTargetCommands(gameBoard, shooter, state).isEmpty()) {
                 MoveCommand moveCommand = new MoveCommand(shooter, square, state);
                 list.add(moveCommand);
             }
-            shooter.move(currentPosition);
+            shooter.untracedMove(currentPosition);
         }
         return list;
     }
