@@ -3,6 +3,9 @@ package it.polimi.ingsw.model;
 import it.polimi.ingsw.model.command.Command;
 import it.polimi.ingsw.model.playerstate.IdleState;
 import it.polimi.ingsw.model.playerstate.PlayerState;
+import it.polimi.ingsw.view.PlayerView;
+import it.polimi.ingsw.view.PowerUpView;
+import it.polimi.ingsw.view.WeaponView;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
@@ -23,19 +26,19 @@ public class Player {
     public static final int INITIAL_AMMO_NUMBER = 1;
 
     private Match match;
+    private int points = 0;
+    private boolean disconnected = false;
+    private PlayerState playerState = new IdleState();
+    private Square position;
     private PlayerId id;
     private List<PlayerId> health = new ArrayList<>();
     private int deaths = 0;
     private Map<PlayerId, Integer> marks = new EnumMap<>(PlayerId.class);
-    private int points = 0;
     private String nickname;
     private List<Weapon> weapons = new ArrayList<>();
     private List<PowerUp> powerUps = new ArrayList<>();
     private Map<Color, Integer> ammo = new EnumMap<>(Color.class);
-    private boolean disconnected = false;
     private int availableAggregateActionCounter;
-    private PlayerState playerState = new IdleState();
-    private Square position;
     private PlayerId lastShooter;
 
     public Player(Match match, PlayerId id, String nickname) {
@@ -45,6 +48,20 @@ public class Player {
         for (Color c : Color.values()) {
             ammo.put(c, INITIAL_AMMO_NUMBER);
         }
+    }
+
+    public void update() {
+        match.getVirtualViews().forEach(view -> view.update(getPlayerView()));
+    }
+
+    public PlayerView getPlayerView() {
+        List<WeaponView> wvs = new ArrayList<>();
+        List<PowerUpView> pvs = new ArrayList<>();
+        weapons.forEach(weapon -> wvs.add(new WeaponView(weapon.getName(), weapon.isLoaded())));
+        powerUps.forEach(powerUp -> pvs.add(new PowerUpView(powerUp.getType(), powerUp.getColor())));
+//        TODO: decide if view need to know
+//        playerState.updatePlayerView(playerView);
+        return new PlayerView(id, health, deaths, marks, nickname, wvs, pvs, ammo, availableAggregateActionCounter);
     }
 
     public Map<Color, Integer> getAmmo() {
