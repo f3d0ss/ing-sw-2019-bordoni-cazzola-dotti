@@ -1,6 +1,8 @@
 package it.polimi.ingsw.model;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import it.polimi.ingsw.utils.RuntimeTypeAdapterFactory;
 import it.polimi.ingsw.view.ViewInterface;
 
 import java.io.File;
@@ -27,7 +29,7 @@ public class Match {
     private List<ViewInterface> views;
 
     public Match(int gameBoardNumber) {
-        board = new GameBoard(gameBoardNumber);
+        initializeGameBoard(gameBoardNumber);
         killshotTrack = new ArrayList();
         currentPlayers = new ArrayList();
         firstPlayerPlayedLastTurn = false;
@@ -38,6 +40,27 @@ public class Match {
     public Match() {
         this(1);
     }
+
+    private void initializeGameBoard(int gameBoardNumber) {
+        RuntimeTypeAdapterFactory<Square> runtimeTypeAdapterFactory = RuntimeTypeAdapterFactory
+                .of(Square.class, "type")
+                .registerSubtype(SpawnSquare.class, "spawn")
+                .registerSubtype(TurretSquare.class, "turret");
+
+        Gson gson = new GsonBuilder()
+                .registerTypeAdapterFactory(runtimeTypeAdapterFactory)
+                .create();
+
+        try {
+            board = gson.fromJson(new FileReader("src/resources/gameboards/gameboard_" +
+                    String.format("%03d", gameBoardNumber) + ".json"), GameBoard.class);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        board.initialize();
+    }
+
 
     private void initializeAmmoTiles() {
         Gson gson = new Gson();
