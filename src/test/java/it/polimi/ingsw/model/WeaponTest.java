@@ -135,10 +135,8 @@ public class WeaponTest {
                     else if (command instanceof SelectTargetSquareCommand) targetSquare++;
                 }
                 System.out.println("Shoot: " + shoot + "| Move: " + move + " |TargetPlayer: " + targetPlayer + " |TargetSquare: " + targetSquare);
-                assertTrue(targetPlayer == 0); //these weapons should generate Move Commands
-                if (weaponMode.isMoveShooter())
-                    assertTrue(move > 0);
-                else assertTrue(move == 0);
+                assertTrue(targetPlayer == 0);
+                assertTrue(move == 0);
                 if (!weaponMode.isTargetSquare() && weaponMode.isTargetPlayers()) //these weapons can target empty squares
                     assertTrue(targetSquare == 0);
             }
