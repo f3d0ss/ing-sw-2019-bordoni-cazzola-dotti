@@ -1,18 +1,10 @@
 package it.polimi.ingsw.model;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 public class WeaponDeck implements Deck {
-    private List<Weapon> weapons = new ArrayList<>();
-
-    /*public WeaponDeck() {
-        //TODO: hardcoded weapon creation just for tests
-        weapons = new ArrayList<>();
-        for (int i = 0; i < 21; i++)
-            weapons.add(new Weapon());
-    }*/
+    private List<Weapon> weapons;
 
     public WeaponDeck(List<Weapon> weaponList) {
         weapons = weaponList;

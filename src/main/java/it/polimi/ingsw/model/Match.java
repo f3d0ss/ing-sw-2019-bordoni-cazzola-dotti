@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model;
 
 import com.google.gson.Gson;
+import it.polimi.ingsw.view.ViewInterface;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -23,6 +24,7 @@ public class Match {
     private List<Player> currentPlayers;
     private GameBoard board;
     private boolean firstPlayerPlayedLastTurn;
+    private List<ViewInterface> views;
 
     public Match(int gameBoardNumber) {
         board = new GameBoard(gameBoardNumber);
@@ -181,4 +183,7 @@ public class Match {
         this.firstPlayerPlayedLastTurn = true;
     }
 
+    public List<ViewInterface> getVirtualViews() {
+        return views;
+    }
 }

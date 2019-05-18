@@ -1,9 +1,5 @@
 package it.polimi.ingsw.model;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.annotations.Expose;
-
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
@@ -14,9 +10,7 @@ public class GameBoard {
 
     private static final int ROWS = 3;
     private static final int COLUMNS = 4;
-    @Expose
     private int gameBoardId;
-    @Expose
     private Square[][] board = new Square[ROWS][COLUMNS];
     private Map<Color, SpawnSquare> spawns = new EnumMap<>(Color.class);
     private List<TurretSquare> turrets = new ArrayList<>();
@@ -468,16 +462,6 @@ public class GameBoard {
 
     public List<SpawnSquare> getSpawnSquares() {
         return spawns.values().stream().collect(Collectors.toList());
-    }
-
-    public static void main(String[] args) {
-        Match match = new Match();
-        GameBoard gameBoard = new GameBoard(4);
-        GsonBuilder gsonBuilder = new GsonBuilder();
-        gsonBuilder.setPrettyPrinting();
-        Gson gson = gsonBuilder.create();
-        String s = gson.toJson(gameBoard);
-        System.out.println(s);
     }
 
 }
