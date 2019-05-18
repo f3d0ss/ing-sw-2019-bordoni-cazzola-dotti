@@ -1,5 +1,7 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.view.ViewInterface;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +19,7 @@ public class Match {
     private List<Player> currentPlayers;
     private GameBoard board;
     private boolean firstPlayerPlayedLastTurn;
+    private List<ViewInterface> views;
 
     public Match(int gameBoardNumber) {
         board = new GameBoard(gameBoardNumber);
@@ -142,5 +145,9 @@ public class Match {
 
     public void firstPlayerPlayedLastTurn() {
         this.firstPlayerPlayedLastTurn = true;
+    }
+
+    public List<ViewInterface> getVirtualViews() {
+        return views;
     }
 }
