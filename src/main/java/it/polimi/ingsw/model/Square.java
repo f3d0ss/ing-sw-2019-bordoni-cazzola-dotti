@@ -14,8 +14,10 @@ public abstract class Square {
     private int col;
     private Color color;
     private List<Player> hostedPlayers;
+    private String type;
 
-    public Square(Connection northConnection, Connection eastConnection, Connection southConnection, Connection westConnection, int row, int col, Color color) {
+    public Square(Connection northConnection, Connection eastConnection, Connection southConnection, Connection westConnection, int row, int col, Color color, String type) {
+        this.type = type;
         connection = new EnumMap<>(CardinalDirection.class);
         connection.put(CardinalDirection.NORTH, northConnection);
         connection.put(CardinalDirection.EAST, eastConnection);

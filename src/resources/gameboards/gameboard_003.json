@@ -3,6 +3,7 @@
   "board": [
     [
       {
+        "ammoTile": null,
         "connection": {
           "NORTH": "MAP_BORDER",
           "EAST": "DOOR",
@@ -11,9 +12,12 @@
         },
         "row": 0,
         "col": 0,
-        "hostedPlayers": []
+        "color": null,
+        "hostedPlayers": [],
+        "type": "turret"
       },
       {
+        "ammoTile": null,
         "connection": {
           "NORTH": "MAP_BORDER",
           "EAST": "SAME_ROOM",
@@ -22,7 +26,9 @@
         },
         "row": 0,
         "col": 1,
-        "hostedPlayers": []
+        "color": null,
+        "hostedPlayers": [],
+        "type": "turret"
       },
       {
         "weapons": [],
@@ -36,9 +42,11 @@
         "row": 0,
         "col": 2,
         "color": "BLUE",
-        "hostedPlayers": []
+        "hostedPlayers": [],
+        "type": "spawn"
       },
       {
+        "ammoTile": null,
         "connection": {
           "NORTH": "MAP_BORDER",
           "EAST": "MAP_BORDER",
@@ -47,7 +55,9 @@
         },
         "row": 0,
         "col": 3,
-        "hostedPlayers": []
+        "color": null,
+        "hostedPlayers": [],
+        "type": "turret"
       }
     ],
     [
@@ -63,9 +73,11 @@
         "row": 1,
         "col": 0,
         "color": "RED",
-        "hostedPlayers": []
+        "hostedPlayers": [],
+        "type": "spawn"
       },
       {
+        "ammoTile": null,
         "connection": {
           "NORTH": "DOOR",
           "EAST": "WALL",
@@ -74,9 +86,12 @@
         },
         "row": 1,
         "col": 1,
-        "hostedPlayers": []
+        "color": null,
+        "hostedPlayers": [],
+        "type": "turret"
       },
       {
+        "ammoTile": null,
         "connection": {
           "NORTH": "DOOR",
           "EAST": "SAME_ROOM",
@@ -85,9 +100,12 @@
         },
         "row": 1,
         "col": 2,
-        "hostedPlayers": []
+        "color": null,
+        "hostedPlayers": [],
+        "type": "turret"
       },
       {
+        "ammoTile": null,
         "connection": {
           "NORTH": "DOOR",
           "EAST": "MAP_BORDER",
@@ -96,11 +114,14 @@
         },
         "row": 1,
         "col": 3,
-        "hostedPlayers": []
+        "color": null,
+        "hostedPlayers": [],
+        "type": "turret"
       }
     ],
     [
       {
+        "ammoTile": null,
         "connection": {
           "NORTH": "DOOR",
           "EAST": "SAME_ROOM",
@@ -109,9 +130,12 @@
         },
         "row": 2,
         "col": 0,
-        "hostedPlayers": []
+        "color": null,
+        "hostedPlayers": [],
+        "type": "turret"
       },
       {
+        "ammoTile": null,
         "connection": {
           "NORTH": "DOOR",
           "EAST": "DOOR",
@@ -120,9 +144,12 @@
         },
         "row": 2,
         "col": 1,
-        "hostedPlayers": []
+        "color": null,
+        "hostedPlayers": [],
+        "type": "turret"
       },
       {
+        "ammoTile": null,
         "connection": {
           "NORTH": "SAME_ROOM",
           "EAST": "SAME_ROOM",
@@ -131,7 +158,9 @@
         },
         "row": 2,
         "col": 2,
-        "hostedPlayers": []
+        "color": null,
+        "hostedPlayers": [],
+        "type": "turret"
       },
       {
         "weapons": [],
@@ -145,8 +174,12 @@
         "row": 2,
         "col": 3,
         "color": "YELLOW",
-        "hostedPlayers": []
+        "hostedPlayers": [],
+        "type": "spawn"
       }
     ]
-  ]
+  ],
+  "spawns": {},
+  "turrets": [],
+  "squareList": []
 }
