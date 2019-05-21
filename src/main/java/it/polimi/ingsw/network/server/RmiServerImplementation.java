@@ -14,11 +14,10 @@ public class RmiServerImplementation implements RmiServerInterface {
 
     public synchronized void registry(RmiClientInterface client) {
         server.registry(client);
-        System.out.println("Client registrato.");
     }
 
-    public synchronized void testAliveness() {
-        server.getImplementation();
+    public synchronized boolean testAliveness() {
+        return true;
     }
 
     public synchronized void unregistry(RmiClientInterface client) {

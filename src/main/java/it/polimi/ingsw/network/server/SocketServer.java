@@ -48,8 +48,10 @@ public class SocketServer implements Runnable {
         fromClient.put(client, new Scanner(client.getInputStream()));
         toClient.put(client, new PrintWriter(client.getOutputStream(), true));
         //clientReady.put(client, false);
-        System.out.println("User " + serverManager.getNumber(client) + " accettato sul SocketServer");
+        int number = serverManager.getNumber(client);
+        System.out.println("User " + number + " accettato sul SocketServer");
         //serverManager.bidWelcome(client);
+        serverManager.addClientToLobby(number);
     }
 
     public void unregistry(Socket client) {
@@ -64,6 +66,7 @@ public class SocketServer implements Runnable {
     public void startServer() throws IOException {
         serverSocket = new ServerSocket(port);
         System.out.println("SocketServer avviato.");
+        serverManager.setSocketReady();
         new Thread(new SocketReceptionist(serverSocket, this)).start();
         while (keepAlive) {
             try {

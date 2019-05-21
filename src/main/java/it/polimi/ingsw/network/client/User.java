@@ -9,19 +9,19 @@ public class User {
     public static void main(String[] args) {
         Scanner stdin = new Scanner(System.in);
         String answer;
-        String message;
+        String ip;
         Client client;
         answer = askQuestion("Quale tecnologia vuoi usare?", stdin, new ArrayList<String>() {{
             add("Socket");
             add("RMI");
         }});
+        ip = askQuestion("Digita l'indirizzo ip del server", "string", stdin);
         if (answer.equals("Socket"))
-            client = new SocketClient();
+            client = new SocketClient(ip);
         else {
-            client = new RmiClient(askQuestion("Quale porta vuoi usare?", stdin));
+            client = new RmiClient(ip, askQuestion("Quale porta vuoi usare? [serve per l'esecuzione in locale]", 1, stdin));
         }
         new Thread(client).start();
-        System.out.println("Connessione stabilita. Digitare quit per uscire");
     }
 
     public static String askQuestion(String question, Scanner in, List<String> possibleAnswers) {
@@ -34,13 +34,22 @@ public class User {
             System.out.println("Invalid answer, try again");
             answer = in.nextInt();
         }
+        in.nextLine();
         return possibleAnswers.get(answer - 1);
     }
 
-    public static int askQuestion(String question, Scanner in) {
-        int answer;
+    public static int askQuestion(String question, int retType, Scanner in) {
+        int out;
         System.out.println(question);
-        answer = in.nextInt();
-        return answer;
+        out = in.nextInt();
+        in.nextLine();
+        return out;
+    }
+
+    public static String askQuestion(String question, String retType, Scanner in) {
+        String out;
+        System.out.println(question);
+        out = in.nextLine();
+        return out;
     }
 }
