@@ -4,10 +4,12 @@ public class GameCountDown extends Thread {
 
     private ServerManager serverManager;
     private boolean stopped = false;
-    int secondsToWait = 20;
+    int secondsToWait;
+    int seconds;
 
-    public GameCountDown(ServerManager serverManager){
+    public GameCountDown(ServerManager serverManager, int secondsToWait){
         this.serverManager = serverManager;
+        this.secondsToWait = secondsToWait;
     }
 
     public void reset(){
@@ -15,17 +17,21 @@ public class GameCountDown extends Thread {
         secondsToWait = 0;
     }
 
+    public void restore(){
+        stopped = false;
+        seconds = secondsToWait;
+    }
+
     public int getTimeLeft(){
         return secondsToWait;
     }
 
     public void run(){
-        stopped = false;
-        while (secondsToWait > 0) {
+        while (seconds > 0) {
             try {
                 sleep(1000);
             } catch (InterruptedException e) {}
-            secondsToWait--;
+            seconds--;
         }
         if(!stopped)
             serverManager.startNewGame();

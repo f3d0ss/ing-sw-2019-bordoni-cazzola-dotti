@@ -1,6 +1,7 @@
 package it.polimi.ingsw.network.server;
 
 import it.polimi.ingsw.network.Message;
+import it.polimi.ingsw.network.Protocol;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -48,7 +49,7 @@ public class Server {
             if (client != -1) {
                 System.out.println("Scrivi il messaggio:");
                 message = stdin.nextLine();
-                serverManager.sendMessageAndWaitForAnswer(client, new Message(message, null, 0));
+                serverManager.sendMessageAndWaitForAnswer(client, new Message(Protocol.TRY, message, null, 0));
             }
         }
         serverManager.shutDownAllServers();

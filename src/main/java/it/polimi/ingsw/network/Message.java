@@ -4,17 +4,23 @@ import java.io.Serializable;
 import java.util.List;
 
 public class Message implements Serializable {
-    public String question;
+    public Protocol type;
+    private String stringInQuestion;
     private List<String> possibleAnswers;
-    private int toBeShown;
+    private Object attachment;
 
-    public Message(String question, List<String> possibleAnswers, int toBeShown) {
-        this.question = question;
+    public Message(Protocol type, String stringInQuestion, List<String> possibleAnswers, int attachment) {
+        this.type = type;
+        this.stringInQuestion = stringInQuestion;
         this.possibleAnswers = possibleAnswers;
-        this.toBeShown = toBeShown;
+        this.attachment = attachment;
     }
 
-    public boolean requiresAnswer(){
-        return possibleAnswers == null;
+    public List<String> getPossibleAnswer(){
+        return possibleAnswers;
+    }
+
+    public String getStringInQuestion(){
+        return stringInQuestion;
     }
 }

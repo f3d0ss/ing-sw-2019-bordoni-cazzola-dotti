@@ -47,10 +47,8 @@ public class SocketServer implements Runnable {
         serverManager.addClient(client);
         fromClient.put(client, new Scanner(client.getInputStream()));
         toClient.put(client, new PrintWriter(client.getOutputStream(), true));
-        //clientReady.put(client, false);
         int number = serverManager.getNumber(client);
         System.out.println("User " + number + " accettato sul SocketServer");
-        //serverManager.bidWelcome(client);
         serverManager.addClientToLobby(number);
     }
 

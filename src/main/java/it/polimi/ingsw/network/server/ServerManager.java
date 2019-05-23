@@ -2,6 +2,7 @@ package it.polimi.ingsw.network.server;
 
 import com.google.gson.Gson;
 import it.polimi.ingsw.network.Message;
+import it.polimi.ingsw.network.Protocol;
 
 import java.net.Socket;
 import java.util.*;
@@ -20,53 +21,92 @@ public class ServerManager implements Runnable {
     private boolean rmiServerReady = false;
     private int idClient = 12345;
     private Map<Integer, String> lobby = new HashMap<>();
-    private GameCountDown countDown = new GameCountDown(this);
+    private GameCountDown countDown = new GameCountDown(this, 20);
 
     public void addClient(Socket client) {
         socketClients.put(idClient, client);
+        answerReady.put(idClient, true);
         idClient++;
     }
 
     public void addClient(RmiClientInterface client) {
         rmiClients.put(idClient, client);
+        answerReady.put(idClient, true);
         idClient++;
     }
 
     public void addClientToLobby(int id) {
         lobby.put(id, "");
-        askForNickname(id);
+        login(id);
         if (lobby.size() == 3) {
+            countDown.restore();
             new Thread(countDown).start();
+            notifyTimeLeft();
         } else if (lobby.size() == 5) {
             countDown.reset();
             startNewGame();
         }
     }
 
-    private void askForNickname(int id) {
-        String nickname;
-        List<String> possibleAnswers = new ArrayList<>();
-        String question = "Benvenuto su Adrenalina!\nSei stato accettato con il codice " + id + ". Memorizzalo per riconnetterti a seguito di disconnessioni impreviste.\n";
-        possibleAnswers.add("string");
+    private void login(int id) {
+        sendMessageAndWaitForAnswer(id, new Message(Protocol.WELCOME, String.valueOf(id), null, 0));
         if (lobby.size() == 1) {
-            question = question + "Sei il primo giocatore; ";
+            sendMessageAndWaitForAnswer(id, new Message(Protocol.LOGIN_FIRST, "", null, 0));
         } else {
-            question = question + "Sono in attesa di una nuova partita: ";
+            String playerAlreadyIn = "";
+            List<String> players = new ArrayList<>();
             for (int i : lobby.keySet())
-                if (!lobby.get(i).equals(""))
-                    question = question + lobby.get(i) + "; ";
+                if (!lobby.get(i).equals("")) {
+                    playerAlreadyIn = playerAlreadyIn + lobby.get(i) + "; ";
+                    players.add(lobby.get(i));
+                }
+            sendMessageAndWaitForAnswer(id, new Message(Protocol.LOGIN_OTHERS, playerAlreadyIn, null, 0));
+            while (lobby.containsValue(answers.get(id))) {
+                sendMessageAndWaitForAnswer(id, new Message(Protocol.LOGIN_REPEAT, "", null, 0));
+            }
         }
-        question = question + "digita il tuo nickname:";
-        nickname = sendMessageAndWaitForAnswer(id, new Message(question, possibleAnswers, 0));
-        while (lobby.containsValue(nickname)) {
-            question = "Nickname già presente. Scegline un altro: ";
-            nickname = sendMessageAndWaitForAnswer(id, new Message(question, possibleAnswers, 0));
-        }
-        lobby.put(id, answers.get(id));
+        String name = answers.get(id);
+        lobby.put(id, name);
+        confirmLogin(id);
+        if (lobby.size() == 1)
+            chooseBoard(id);
+        else
+            notifyNewEntry(id, name);
+    }
+
+    private void notifyNewEntry(int id, String newEntry) {
+        Integer[] clients = lobby.keySet().toArray(new Integer[0]);
+        for (int i : clients)
+            if (i != id)
+                sendMessageAndWaitForAnswer(i, new Message(Protocol.NEW_ENTRY, newEntry, null, 0));
+    }
+
+    private void notifyTimeLeft() {
+        Integer[] clients = lobby.keySet().toArray(new Integer[0]);
+        String timeLeft = String.valueOf(countDown.getTimeLeft());
+        for (int i : clients)
+            sendMessageAndWaitForAnswer(i, new Message(Protocol.COUNTDOWN, timeLeft, null, 0));
+    }
+
+    private void notifyGameStarting() {
+        Integer[] clients = lobby.keySet().toArray(new Integer[0]);
+        for (int i : clients)
+            sendMessageAndWaitForAnswer(i, new Message(Protocol.ARE_YOU_READY, "", null, 0));
+    }
+
+    private void confirmLogin(int id) {
+        sendMessageAndWaitForAnswer(id, new Message(Protocol.LOGIN_CONFIRM, "", null, 0));
+    }
+
+    private void chooseBoard(int id){
+        sendMessageAndWaitForAnswer(id, new Message(Protocol.CHOOSE_BOARD, "", Arrays.asList(new String[]{"Board1", "Board2", "Board3", "Board4"}), 0));
+        //TODO:
     }
 
     public void startNewGame() {
+        notifyGameStarting();
         //TODO: create a new game (controller)
+        lobby.clear();
     }
 
     public boolean allServerReady() {
@@ -96,7 +136,8 @@ public class ServerManager implements Runnable {
     }
 
     public void setAnswer(int client, String answer) {
-        answers.put(client, answer);
+        if (!answer.equals(Protocol.ACK.getQuestion()))
+            answers.put(client, answer);
         answerReady.put(client, true);
     }
 
@@ -131,6 +172,13 @@ public class ServerManager implements Runnable {
     }
 
     public String sendMessageAndWaitForAnswer(int number, Message message) {
+        while (!answerReady.get(number)) {
+            try {
+                sleep(1000);
+            } catch (InterruptedException e) {
+                break;
+            }
+        }
         answerReady.put(number, false);
         Gson gson = new Gson();
         String json = gson.toJson(message);

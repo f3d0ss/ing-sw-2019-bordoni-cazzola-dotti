@@ -1,7 +1,5 @@
 package it.polimi.ingsw.network.client;
 
-import com.google.gson.Gson;
-import it.polimi.ingsw.network.Message;
 import it.polimi.ingsw.network.server.RmiClientInterface;
 
 import java.rmi.NotBoundException;
@@ -13,7 +11,7 @@ import java.util.Scanner;
 
 import static java.lang.Thread.sleep;
 
-public class RmiClient implements Client {
+public class RmiClient extends Client {
 
     int port;
     private String ip;
@@ -37,16 +35,12 @@ public class RmiClient implements Client {
     }
 
     public String printMessageAndGetAnswer(String message) {
-        String answer;
-        Gson gson = new Gson();
-        Message fromServer = gson.fromJson(message, Message.class);
-        System.out.println(fromServer.question);
-        answer = stdin.nextLine();
-        if (answer.equals("quit")) {
+        return manageMessage(message, stdin);
+        /*if (answer.equals("quit")) {
             System.out.println("Disconnessione in corso.");
             closeClient();
         }
-        return answer;
+        return answer;*/
     }
 
     private void closeClient() {
@@ -63,8 +57,8 @@ public class RmiClient implements Client {
         rmiServerInterface = (RmiServerInterface) registry.lookup(serverName);
         rmiClientImplementation = new RmiClientImplementation(this);
         stub = (RmiClientInterface) UnicastRemoteObject.exportObject(rmiClientImplementation, port);
-        rmiServerInterface.registry(stub);
         System.out.println("Connessione stabilita. Digitare quit per uscire");
+        rmiServerInterface.registry(stub);
         while (true) {
             try {
                 sleep(2000);
@@ -73,7 +67,7 @@ public class RmiClient implements Client {
             }
             try {
                 rmiServerInterface.testAliveness();
-            } catch (RemoteException e){
+            } catch (RemoteException e) {
                 System.out.println(e.getMessage());
                 break;
             }

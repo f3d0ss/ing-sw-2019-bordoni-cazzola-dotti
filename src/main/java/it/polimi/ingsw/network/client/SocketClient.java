@@ -1,15 +1,12 @@
 package it.polimi.ingsw.network.client;
 
-import com.google.gson.Gson;
-import it.polimi.ingsw.network.Message;
-
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
-public class SocketClient implements Client {
+public class SocketClient extends Client {
 
     private String ip;
     private int port = 9000;
@@ -45,17 +42,16 @@ public class SocketClient implements Client {
                 System.out.println("Impossibile raggiungere il server.");
                 break;
             }
-            Gson gson = new Gson();
-            Message fromServer = gson.fromJson(input, Message.class);
-            System.out.println(fromServer.question);
-            if(fromServer.requiresAnswer())
-                toServer.println("ACK");
-            else {
-                messageToServer = stdin.nextLine();
-                toServer.println(messageToServer);
-                if (messageToServer.equals("quit"))
-                    break;
-            }
+            toServer.println(manageMessage(input, stdin));
+
+                /*if (fromServer.requiresAnswer())
+                    toServer.println("ACK");
+                else {
+                    messageToServer = stdin.nextLine();
+                    toServer.println(messageToServer);
+                    if (messageToServer.equals("quit"))
+                        break;
+                }*/
         }
         System.out.println("Disconnessione in corso.");
         toServer.close();
