@@ -14,7 +14,7 @@ public class SpawnSquare extends Square {
     private ArrayList<PlayerId> spawnPointTrack;
 
     public SpawnSquare(Connection northConnection, Connection eastConnection, Connection southConnection, Connection westConnection, int row, int col, Color color) {
-        super(northConnection, eastConnection, southConnection, westConnection, row, col, color);
+        super(northConnection, eastConnection, southConnection, westConnection, row, col, color, "spawn");
         weapons = new ArrayList<>();
         spawnPointTrack = new ArrayList<>();
     }
