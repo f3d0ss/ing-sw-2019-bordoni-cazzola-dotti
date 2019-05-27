@@ -115,6 +115,19 @@ public class Player {
         this.ammo.put(color, newAmmoNumber < MAX_AMMO ? newAmmoNumber : MAX_AMMO);
     }
 
+    /**
+     * This method is used before the player respawns.
+     * He draws one powerup card, even if he already has MAX_POWERUP.
+     */
+    public void drawPowerUpForRespawn() {
+        powerUps.add(match.drawPowerUpCard());
+    }
+
+    public void discardPowerUp(PowerUp powerUp) {
+        powerUps.remove(powerUp);
+        match.discard(powerUp);
+    }
+
     private void addPowerUp(int number) {
         while (number > 0) {
             if (this.powerUps.size() >= MAX_POWERUP)
@@ -167,7 +180,8 @@ public class Player {
             position.removePlayer(this);
         position = match.getBoard().getSpawn(color);
         position.addPlayer(this);
-
+        //restore health
+        health = new ArrayList<>();
     }
 
     public List<Command> getPossibleCommands() {
@@ -217,8 +231,7 @@ public class Player {
     }
 
     public void pay(PowerUp powerUp) {
-        match.discard(powerUp);
-        powerUps.remove(powerUp);
+        discardPowerUp(powerUp);
     }
 
     public void refund(Color color, Integer amount) {

@@ -191,14 +191,21 @@ public class Match {
         return firstPlayerPlayedLastTurn;
     }
 
+    /**
+     * This method replaces any stuff taken. Replace ammo tiles with new tiles from the ammo stacks.
+     * If you empty the stacks, shuffle the discard pile (including any tiles you grabbed this turn) and make new ammo stacks.
+     * Replace weapons by drawing from the weapons deck. If the deck is empty, no new weapons will appear for the rest of the game.
+     */
     public void restoreCards() {
         for (TurretSquare turret : board.getTurrets()) {
             if (turret.getAmmoTile() == null)
                 turret.setAmmoTile(drawAmmoTileCard());
         }
-        for (Color color : Color.values()) {
-            while (board.getSpawn(color).lackWeapon())
-                board.getSpawn(color).addWeapon(drawWeaponCard());
+
+        for (SpawnSquare spawnSquare : board.getSpawnSquares()) {
+            while (spawnSquare.lackWeapon() && !currentWeaponDeck.isEmpty()) {
+                spawnSquare.addWeapon(currentWeaponDeck.drawWeapon());
+            }
         }
     }
 
