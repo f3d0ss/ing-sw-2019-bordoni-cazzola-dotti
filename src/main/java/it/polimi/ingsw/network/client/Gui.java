@@ -10,7 +10,7 @@ public class Gui implements Ui, Runnable {
 
     private String answer = "";
 
-    public String showMessage(String toBeShown){
+    public String showMessage(String toBeShown) {
         ChooseConnection window = new ChooseConnection();
         window.start(new Stage());
         /*Stage stage = new Stage();
@@ -20,7 +20,7 @@ public class Gui implements Ui, Runnable {
         return answer;
     }
 
-    public String showMessage(String toBeShown, List<String> possibleAnswers){
+    public String showMessage(String toBeShown, List<String> possibleAnswers) {
         return "";
     }
 
@@ -29,11 +29,11 @@ public class Gui implements Ui, Runnable {
     }
 
     @Override
-    public void run(){
+    public void run() {
         Application.launch(ChooseConnection.class);
     }
 
-    public void show(){
+    public void show() {
         ChooseConnection.show();
     }
 }

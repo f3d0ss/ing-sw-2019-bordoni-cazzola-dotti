@@ -25,6 +25,10 @@ public class ChooseConnection extends Application {
         client = c;
     }
 
+    public static void show() {
+        stage.show();
+    }
+
     @Override
     public void start(Stage inputStage) {
         stage = inputStage;
@@ -93,11 +97,11 @@ public class ChooseConnection extends Application {
         });
 
         gridPane.setAlignment(Pos.CENTER);
-        gridPane.setHalignment(text, HPos.CENTER);
-        gridPane.setHalignment(buttonSocket, HPos.CENTER);
-        gridPane.setHalignment(buttonRmi, HPos.CENTER);
+        GridPane.setHalignment(text, HPos.CENTER);
+        GridPane.setHalignment(buttonSocket, HPos.CENTER);
+        GridPane.setHalignment(buttonRmi, HPos.CENTER);
 
-        gridPane.setStyle("-fx-background-image: url('https://www.meeplemountain.com/wp-content/uploads/2017/11/adrenaline.jpg')");
+        gridPane.setStyle("-fx-background-image: url(\"file:src/resources/images/other/loginscreen.jpg\");");
 
         Scene scene = new Scene(gridPane);
         stage.setTitle("Welcome");
@@ -108,9 +112,5 @@ public class ChooseConnection extends Application {
 
     private boolean isValidIp(String input) {
         return input.matches("^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?).(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?).(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?).(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$");
-    }
-
-    public static void show(){
-        stage.show();
     }
 }

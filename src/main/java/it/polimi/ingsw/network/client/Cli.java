@@ -7,12 +7,12 @@ public class Cli implements Ui {
 
     Scanner stdin = new Scanner(System.in);
 
-    public String showMessage(String toBeShown){
+    public String showMessage(String toBeShown) {
         System.out.println(toBeShown);
         return stdin.nextLine();
     }
 
-    public String showMessage(String toBeShown, List<String> possibleAnswers){
+    public String showMessage(String toBeShown, List<String> possibleAnswers) {
         int choice;
         System.out.println(toBeShown);
         for (int i = 0; i < possibleAnswers.size(); i++)

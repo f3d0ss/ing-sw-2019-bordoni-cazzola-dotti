@@ -45,7 +45,8 @@ public class RmiServer implements Runnable {
     public void startServer() throws RemoteException, AlreadyBoundException {
         try {
             System.setProperty("java.rmi.server.hostname", InetAddress.getLocalHost().getHostAddress());
-        } catch(UnknownHostException e){}
+        } catch (UnknownHostException e) {
+        }
         server = new RmiServerImplementation(this);
         RmiServerInterface stub = (RmiServerInterface) UnicastRemoteObject.exportObject(server, 39000);
         LocateRegistry.createRegistry(1099);

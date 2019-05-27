@@ -98,8 +98,8 @@ public class ServerManager implements Runnable {
         sendMessageAndWaitForAnswer(id, new Message(Protocol.LOGIN_CONFIRM, "", null, 0));
     }
 
-    private void chooseBoard(int id){
-        sendMessageAndWaitForAnswer(id, new Message(Protocol.CHOOSE_BOARD, "", Arrays.asList(new String[]{"Board1", "Board2", "Board3", "Board4"}), 0));
+    private void chooseBoard(int id) {
+        sendMessageAndWaitForAnswer(id, new Message(Protocol.CHOOSE_BOARD, "", Arrays.asList("Board1", "Board2", "Board3", "Board4"), 0));
         //TODO:
     }
 

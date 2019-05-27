@@ -19,8 +19,12 @@ public class GuiMessage extends Application {
     private static final String ERROR_STYLE = "-fx-font: normal bold 12px 'sans-serif'; -fx-text-fill: #FF0000;";
     private static Message message;
 
+    public static void main(String[] args) {
+        launch(args);
+    }
+
     public void setMessage(Message message) {
-        this.message = message;
+        GuiMessage.message = message;
     }
 
     @Override
@@ -49,23 +53,19 @@ public class GuiMessage extends Application {
         //gridPane.setHgap(5);
 
         gridPane.setAlignment(Pos.BOTTOM_CENTER);
-        gridPane.setHalignment(text, HPos.CENTER);
-        gridPane.setHalignment(button1, HPos.CENTER);
+        GridPane.setHalignment(text, HPos.CENTER);
+        GridPane.setHalignment(button1, HPos.CENTER);
 
-        gridPane.add(text, 0,1);
+        gridPane.add(text, 0, 1);
         gridPane.add(textField1, 0, 2);
         gridPane.add(button1, 0, 3);
 
-        gridPane.setStyle("-fx-background-image: url('https://www.meeplemountain.com/wp-content/uploads/2017/11/adrenaline.jpg')");
+        gridPane.setStyle("-fx-background-image: url(\"file:src/resources/images/other/loginscreen.jpg\");");
 
         Scene scene = new Scene(gridPane);
         stage.setTitle("Login");
         stage.setResizable(false);
         stage.setScene(scene);
         stage.show();
-    }
-
-    public static void main(String args[]){
-        launch(args);
     }
 }

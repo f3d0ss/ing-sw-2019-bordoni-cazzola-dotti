@@ -16,11 +16,11 @@ public class Message implements Serializable {
         this.attachment = attachment;
     }
 
-    public List<String> getPossibleAnswer(){
+    public List<String> getPossibleAnswer() {
         return possibleAnswers;
     }
 
-    public String getStringInQuestion(){
+    public String getStringInQuestion() {
         return stringInQuestion;
     }
 }

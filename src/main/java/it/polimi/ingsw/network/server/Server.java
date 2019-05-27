@@ -21,11 +21,11 @@ public class Server {
         System.out.println("Avvio servers in corso...");
         try {
             System.out.println("local ip: " + InetAddress.getLocalHost().getHostAddress());
-        }catch (UnknownHostException e){
+        } catch (UnknownHostException e) {
             System.out.println("local ip: unknown");
         }
         serverManager.run();
-        while(!serverManager.allServerReady()) {
+        while (!serverManager.allServerReady()) {
             try {
                 sleep(1000);
             } catch (InterruptedException e) {

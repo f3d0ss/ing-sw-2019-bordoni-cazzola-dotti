@@ -18,9 +18,10 @@ public class Client implements Runnable {
         this.ui = ui;
     }
 
-    public Client(){}
+    public Client() {
+    }
 
-    public void setUi(Ui ui){
+    public void setUi(Ui ui) {
         this.ui = ui;
     }
 
@@ -49,19 +50,19 @@ public class Client implements Runnable {
         return ui.showMessage(completeMessage, possibleAnswers);
     }
 
-    public void setIp(String ip) {
-        this.ip = ip;
-    }
-
     public String getIp() {
         return ip;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setIp(String ip) {
+        this.ip = ip;
     }
 
     public String getType() {
         return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }
