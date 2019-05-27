@@ -7,7 +7,6 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.Scanner;
 
 import static java.lang.Thread.sleep;
 
@@ -19,9 +18,9 @@ public class RmiClient extends Client {
     private RmiClientImplementation rmiClientImplementation;
     private RmiServerInterface rmiServerInterface;
     private RmiClientInterface stub;
-    private Scanner stdin = new Scanner(System.in);
 
-    public RmiClient(String ip, int port) {
+    public RmiClient(String ip, int port, Ui ui) {
+        super(ui);
         this.ip = ip;
         this.port = port;
     }
@@ -35,7 +34,7 @@ public class RmiClient extends Client {
     }
 
     public String printMessageAndGetAnswer(String message) {
-        return manageMessage(message, stdin);
+        return manageMessage(message);
         /*if (answer.equals("quit")) {
             System.out.println("Disconnessione in corso.");
             closeClient();

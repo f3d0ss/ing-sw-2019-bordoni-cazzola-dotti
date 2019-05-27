@@ -1,49 +1,62 @@
 package it.polimi.ingsw.network.client;
 
+import com.google.gson.Gson;
+import it.polimi.ingsw.gui.ChooseConnection;
+import it.polimi.ingsw.network.Message;
+import it.polimi.ingsw.network.Protocol;
+import javafx.application.Application;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import static java.lang.StrictMath.random;
+
 public class User {
 
     public static void main(String[] args) {
-        Scanner stdin = new Scanner(System.in);
-        String answer;
+        String connectionType;
+        String uiChoice;
+        Ui ui = new Cli();
         String ip;
-        Client client;
-        answer = askQuestion("Quale tecnologia vuoi usare?", stdin, new ArrayList<String>() {{
-            add("Socket");
-            add("RMI");
-        }});
-        ip = askQuestion("Digita l'indirizzo ip del server", "string", stdin);
-        if (answer.equals("Socket"))
-            client = new SocketClient(ip);
+        Client client = new Client(ui);
+        List<String> answers = new ArrayList<>();
+        answers.add("GUI");
+        answers.add("CLI");
+        uiChoice = client.manageMessage(new Gson().toJson(new Message(Protocol.CHOOSE_UI, "", answers, 0)));
+        if (uiChoice.equals("GUI")) {
+            ChooseConnection.setClient(client);
+            Application.launch(ChooseConnection.class);
+            connectionType = client.getType();
+            ip = client.getIp();
+            System.out.println("ciaone");
+        } else {
+            answers = new ArrayList<>();
+            answers.add("Socket");
+            answers.add("RMI");
+            connectionType = client.manageMessage(new Gson().toJson(new Message(Protocol.CHOOSE_CONNECTION, "", answers, 0)));
+            ip = client.manageMessage(new Gson().toJson(new Message(Protocol.INSERT_IP, "", null, 0)));
+        }
+        /*
+        if (uiChoice.equals("GUI")) {
+            ChooseConnection window = new ChooseConnection();
+            window.setClient(client);
+            Application.launch(ChooseConnection.class);
+            ip = client.getIp();
+            connectionType = client.getType();
+        } else {
+            answers = new ArrayList<>();
+            answers.add("Socket");
+            answers.add("RMI");
+            connectionType = client.manageMessage(new Gson().toJson(new Message(Protocol.CHOOSE_CONNECTION, "", answers, 0)));
+            ip = client.manageMessage(new Gson().toJson(new Message(Protocol.INSERT_IP, "", null, 0)));
+        }*/
+        if (connectionType.equals("Socket"))
+            client = new SocketClient(ip, 9000, ui);
         else {
-            client = new RmiClient(ip, askQuestion("Quale porta vuoi usare? [serve per l'esecuzione in locale]", 1, stdin));
+            client = new RmiClient(ip, (int) (random() * 10000), ui);
         }
         new Thread(client).start();
-    }
-
-    public static String askQuestion(String question, Scanner in, List<String> possibleAnswers) {
-        int answer;
-        System.out.println(question);
-        for (int i = 0; i < possibleAnswers.size(); i++)
-            System.out.println((i + 1) + ". " + possibleAnswers.get(i));
-        answer = in.nextInt();
-        while (answer > possibleAnswers.size()) {
-            System.out.println("Invalid answer, try again");
-            answer = in.nextInt();
-        }
-        in.nextLine();
-        return possibleAnswers.get(answer - 1);
-    }
-
-    public static int askQuestion(String question, int retType, Scanner in) {
-        int out;
-        System.out.println(question);
-        out = in.nextInt();
-        in.nextLine();
-        return out;
     }
 
     public static String askQuestion(String question, String retType, Scanner in) {
