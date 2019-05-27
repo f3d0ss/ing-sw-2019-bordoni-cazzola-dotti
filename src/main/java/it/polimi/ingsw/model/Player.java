@@ -24,6 +24,7 @@ public class Player {
     public static final int DAMAGE_BEFORE_SECOND_ADRENALINA = 5;
     public static final int DAMAGE_BEFORE_DEAD = 10;
     public static final int INITIAL_AMMO_NUMBER = 1;
+    //TODO flipped board ???
 
     private Match match;
     private int points = 0;
