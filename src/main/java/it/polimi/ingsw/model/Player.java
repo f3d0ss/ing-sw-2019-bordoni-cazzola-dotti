@@ -1,7 +1,9 @@
 package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.command.Command;
+import it.polimi.ingsw.model.command.RespawnCommand;
 import it.polimi.ingsw.model.playerstate.IdleState;
+import it.polimi.ingsw.model.playerstate.ManageTurnState;
 import it.polimi.ingsw.model.playerstate.PlayerState;
 import it.polimi.ingsw.view.PlayerView;
 import it.polimi.ingsw.view.PowerUpView;
@@ -116,15 +118,7 @@ public class Player {
         this.ammo.put(color, newAmmoNumber < MAX_AMMO ? newAmmoNumber : MAX_AMMO);
     }
 
-    /**
-     * This method is used before the player respawns.
-     * He draws one powerup card, even if he already has MAX_POWERUP.
-     */
-    public void drawPowerUpForRespawn() {
-        powerUps.add(match.drawPowerUpCard());
-    }
-
-    public void discardPowerUp(PowerUp powerUp) {
+    public void pay(PowerUp powerUp) {
         powerUps.remove(powerUp);
         match.discard(powerUp);
     }
@@ -189,6 +183,21 @@ public class Player {
         return playerState.getPossibleCommands(this);
     }
 
+    public List<RespawnCommand> getRespawnCommands() {
+        List<RespawnCommand> respawnCommands = new ArrayList<>();
+        addExtraPowerUp();
+        powerUps.forEach(powerUp -> respawnCommands.add(new RespawnCommand(this, powerUp)));
+        return respawnCommands;
+    }
+
+    public List<RespawnCommand> getSpawnCommands() {
+        addExtraPowerUp();
+        return getRespawnCommands();
+    }
+
+    private void addExtraPowerUp() {
+        this.powerUps.add(match.drawPowerUpCard());
+    }
 
     public List<AggregateAction> getPossibleAggregateAction() {
         List<AggregateAction> aggregateActions = new ArrayList<>();
@@ -231,9 +240,6 @@ public class Player {
         ammo.put(color, ammo.get(color) - amount);
     }
 
-    public void pay(PowerUp powerUp) {
-        discardPowerUp(powerUp);
-    }
 
     public void refund(Color color, Integer amount) {
         addAmmo(color, amount);
@@ -276,7 +282,7 @@ public class Player {
         return disconnected;
     }
 
-    public void setDisconnetted(boolean disconnected) {
+    public void setDisconnected(boolean disconnected) {
         this.disconnected = disconnected;
     }
 
@@ -290,6 +296,7 @@ public class Player {
 
     public void addDeaths() {
         deaths++;
+        match.decreaseDeathsCounter();
     }
 
     public int getPoints() {
@@ -317,6 +324,7 @@ public class Player {
     }
 
     public void initialize() {
+        playerState = new ManageTurnState();
         if (match.isLastTurn() && match.hasFirstPlayerPlayedLastTurn())
             availableAggregateActionCounter = 1;
         else

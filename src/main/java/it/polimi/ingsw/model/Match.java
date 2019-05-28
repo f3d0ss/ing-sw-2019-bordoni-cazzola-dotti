@@ -123,7 +123,7 @@ public class Match {
         return deathsCounter;
     }
 
-    public boolean decreaseDeathsCounter() {
+    boolean decreaseDeathsCounter() {
         if (deathsCounter == 0) {
             return false;
         }

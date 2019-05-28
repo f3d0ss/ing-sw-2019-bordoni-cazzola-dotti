@@ -4,7 +4,6 @@ import it.polimi.ingsw.model.Match;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.PlayerId;
 import it.polimi.ingsw.model.command.Command;
-import it.polimi.ingsw.model.command.SelectPowerUpToDiscardCommand;
 import it.polimi.ingsw.view.ViewInterface;
 import it.polimi.ingsw.view.VirtualView;
 
@@ -37,6 +36,72 @@ public class MatchController {
         players = match.getCurrentPlayers();
     }
 
+    /**
+     * This method orders a map following the official rules:
+     * If multiple players dealt the same amount of damage, break the tie in favor of the player whose damage landed first
+     *
+     * @param counts            map to order (ID,numberof points/tokens)
+     * @param orderByFirstBlood must be ordered by first blood
+     * @return Leaderboard
+     */
+    static Map<PlayerId, Long> sort(Map<PlayerId, Long> counts, List<PlayerId> orderByFirstBlood) {
+        counts = counts.entrySet().stream()
+                .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
+
+        List<Long> duplicates = counts.values().stream().collect(Collectors.groupingBy(Function.identity()))
+                .entrySet()
+                .stream()
+                .filter(e -> e.getValue().size() > 1)
+                .map(Map.Entry::getKey)
+                .collect(Collectors.toList());
+        PlayerId[] keys;
+        if (!duplicates.isEmpty()) {
+            keys = new PlayerId[counts.size()];
+            Long[] values = new Long[counts.size()];
+            int index = 0;
+            for (Map.Entry<PlayerId, Long> mapEntry : counts.entrySet()) {
+                keys[index] = mapEntry.getKey();
+                values[index] = mapEntry.getValue();
+                index++;
+            }
+            for (Long duplicate : duplicates) {
+                int duplicateFrequency = Collections.frequency(Arrays.asList(values), duplicate);
+                for (int j = 1; j < duplicateFrequency; j++) {
+                    for (int i = 1; i < values.length; i++) {
+                        if (values[i].equals(values[i - 1]) && orderByFirstBlood.indexOf(keys[i - 1]) > orderByFirstBlood.indexOf(keys[i])) {
+                            PlayerId tempId = keys[i];
+                            keys[i] = keys[i - 1];
+                            keys[i - 1] = tempId;
+                        }
+                    }
+                }
+            }
+            LinkedHashMap<PlayerId, Long> sortedMap = new LinkedHashMap<>();
+            for (int i = 0; i < keys.length; i++) {
+                sortedMap.put(keys[i], values[i]);
+            }
+            counts = sortedMap;
+        }
+        return counts;
+    }
+
+    public static void main(String[] args) {
+        Map<String, ViewInterface> lobby = new LinkedHashMap<>();
+        lobby.put("Paolo", new VirtualView());
+        lobby.put("DDE$&T", new VirtualView());
+        lobby.put("LOLL", new VirtualView());
+        lobby.put("Paolo", new VirtualView());
+        lobby.put("Marco", new VirtualView());
+        MatchController matchController = new MatchController(lobby, 1);
+        System.out.println(matchController.match.getCurrentPlayers());
+        matchController.match.getCurrentPlayers().stream().map(Player::getId).forEach(System.out::println);
+        List<Integer> l = new ArrayList<>();
+        l.addAll(Arrays.asList(1, 2, 5, 6, 5, 1, 22, 22, 1, 0, 0));
+        //l.stream().sorted((a, b) -> Integer.compare(b, a)).forEach(System.out::println);
+    }
+
     private void initializeMatch() {
         //TODO all cards / stuff created and ready
     }
@@ -53,7 +118,6 @@ public class MatchController {
         }
         runLastTurn(currentPlayer);
     }
-
 
     void endTurnControls(int currentPlayer) {
         checkDisconnections();
@@ -173,57 +237,6 @@ public class MatchController {
     }
 
     /**
-     * This method orders a map following the official rules:
-     * If multiple players dealt the same amount of damage, break the tie in favor of the player whose damage landed first
-     *
-     * @param counts            map to order (ID,numberof points/tokens)
-     * @param orderByFirstBlood must be ordered by first blood
-     * @return Leaderboard
-     */
-    static Map<PlayerId, Long> sort(Map<PlayerId, Long> counts, List<PlayerId> orderByFirstBlood) {
-        counts = counts.entrySet().stream()
-                .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
-                .collect(Collectors.toMap(
-                        Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
-
-        List<Long> duplicates = counts.values().stream().collect(Collectors.groupingBy(Function.identity()))
-                .entrySet()
-                .stream()
-                .filter(e -> e.getValue().size() > 1)
-                .map(Map.Entry::getKey)
-                .collect(Collectors.toList());
-        PlayerId[] keys;
-        if (!duplicates.isEmpty()) {
-            keys = new PlayerId[counts.size()];
-            Long[] values = new Long[counts.size()];
-            int index = 0;
-            for (Map.Entry<PlayerId, Long> mapEntry : counts.entrySet()) {
-                keys[index] = mapEntry.getKey();
-                values[index] = mapEntry.getValue();
-                index++;
-            }
-            for (Long duplicate : duplicates) {
-                int duplicateFrequency = Collections.frequency(Arrays.asList(values), duplicate);
-                for (int j = 1; j < duplicateFrequency; j++) {
-                    for (int i = 1; i < values.length; i++) {
-                        if (values[i].equals(values[i - 1]) && orderByFirstBlood.indexOf(keys[i - 1]) > orderByFirstBlood.indexOf(keys[i])) {
-                            PlayerId tempId = keys[i];
-                            keys[i] = keys[i - 1];
-                            keys[i - 1] = tempId;
-                        }
-                    }
-                }
-            }
-            LinkedHashMap<PlayerId, Long> sortedMap = new LinkedHashMap<>();
-            for (int i = 0; i < keys.length; i++) {
-                sortedMap.put(keys[i], values[i]);
-            }
-            counts = sortedMap;
-        }
-        return counts;
-    }
-
-    /**
      * This method adds the points for number of damage tokens
      *
      * @param deadPlayer   player dead
@@ -272,11 +285,8 @@ public class MatchController {
      */
     private void respawn(Player currentPlayer) {
         //TODO playerstate for respawn?
-        //draw 1 pu (even if u have 3)
-        currentPlayer.drawPowerUpForRespawn();
         List<Command> commands = new ArrayList<>();
-        currentPlayer.getPowerUps()
-                .forEach(powerUp -> commands.add(new SelectPowerUpToDiscardCommand(currentPlayer, powerUp)));
+        commands.addAll(currentPlayer.getRespawnCommands());
         int selectedCommand = virtualViews.get(currentPlayer.getId()).sendCommands(commands);
         commands.get(selectedCommand).execute();
     }
@@ -308,21 +318,6 @@ public class MatchController {
             if (player.getId().equals(playerId))
                 return player;
         return null;
-    }
-
-    public static void main(String[] args) {
-        Map<String,ViewInterface> lobby = new LinkedHashMap<>();
-        lobby.put("Paolo", new VirtualView());
-        lobby.put("DDE$&T", new VirtualView());
-        lobby.put("LOLL", new VirtualView());
-        lobby.put("Paolo", new VirtualView());
-        lobby.put("Marco", new VirtualView());
-        MatchController matchController = new MatchController(lobby, 1);
-        System.out.println(matchController.match.getCurrentPlayers());
-        matchController.match.getCurrentPlayers().stream().map(Player::getId).forEach(System.out::println);
-        List<Integer> l = new ArrayList<>();
-        l.addAll(Arrays.asList(1, 2, 5, 6, 5, 1, 22, 22, 1, 0, 0));
-        //l.stream().sorted((a, b) -> Integer.compare(b, a)).forEach(System.out::println);
     }
 
 }
