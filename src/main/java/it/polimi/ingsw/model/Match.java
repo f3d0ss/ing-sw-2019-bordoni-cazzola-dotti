@@ -139,6 +139,11 @@ public class Match {
         currentPlayers.add(player);
     }
 
+    public void addPlayer(Player player, ViewInterface viewInterface) {
+        currentPlayers.add(player);
+        views.add(viewInterface);
+    }
+
     public void addKillshot(PlayerId player) {
         killshotTrack.add(player);
     }
@@ -216,4 +221,5 @@ public class Match {
     public List<ViewInterface> getVirtualViews() {
         return views;
     }
+
 }

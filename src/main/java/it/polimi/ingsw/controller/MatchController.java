@@ -24,16 +24,14 @@ public class MatchController {
     private Map<PlayerId, ViewInterface> virtualViews;
     private List<Player> players;
 
-    public MatchController(Map<Integer, String> lobby, int gameBoardNumber) {
+    public MatchController(Map<String, ViewInterface> lobby, int gameBoardNumber) {
         match = new Match(gameBoardNumber);
         PlayerId[] values = PlayerId.values();
-        List<String> nicknames = lobby.values().stream().collect(Collectors.toList());
+        List<String> nicknames = lobby.keySet().stream().collect(Collectors.toList());
         for (int i = 0; i < nicknames.size(); i++) {
-            //Vv vv = new Vv()
-            ViewInterface vv = new VirtualView();
             String nickname = nicknames.get(i);
             Player player = new Player(match, values[i], nickname);
-            match.addPlayer(player); // and his vv
+            match.addPlayer(player, lobby.get(nickname)); // and his vv
             //match add vv
         }
         players = match.getCurrentPlayers();
@@ -313,12 +311,12 @@ public class MatchController {
     }
 
     public static void main(String[] args) {
-        Map<Integer, String> lobby = new HashMap<>();
-        lobby.put(1, "Paolo");
-        lobby.put(2, "DDE$&T");
-        lobby.put(3, "LOLL");
-        lobby.put(4, "Paolo");
-        lobby.put(5, "Marco");
+        Map<String,ViewInterface> lobby = new LinkedHashMap<>();
+        lobby.put("Paolo", new VirtualView());
+        lobby.put("DDE$&T", new VirtualView());
+        lobby.put("LOLL", new VirtualView());
+        lobby.put("Paolo", new VirtualView());
+        lobby.put("Marco", new VirtualView());
         MatchController matchController = new MatchController(lobby, 1);
         System.out.println(matchController.match.getCurrentPlayers());
         matchController.match.getCurrentPlayers().stream().map(Player::getId).forEach(System.out::println);
