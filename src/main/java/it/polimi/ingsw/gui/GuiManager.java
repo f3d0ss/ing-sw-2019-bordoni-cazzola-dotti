@@ -34,7 +34,7 @@ public class GuiManager extends Application {
         gui.setReady(true);
     }
 
-    public static void showWindow(){
+    public static void showWindow() {
         stage.show();
     }
 

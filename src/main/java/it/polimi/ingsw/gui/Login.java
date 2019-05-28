@@ -46,7 +46,7 @@ public class Login extends GridPane {
         setVgap(10);
         setHgap(100);
 
-        add(text, 0, 0 );
+        add(text, 0, 0);
         add(nameField, 0, 1);
         add(invalidNameText, 0, 2);
         add(submit, 0, 3);
