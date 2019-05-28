@@ -1,5 +1,7 @@
 package it.polimi.ingsw.network.client;
 
+import it.polimi.ingsw.network.Protocol;
+
 import java.util.List;
 import java.util.Scanner;
 
@@ -7,14 +9,16 @@ public class Cli implements Ui {
 
     Scanner stdin = new Scanner(System.in);
 
-    public String showMessage(String toBeShown) {
+    public String showMessage(String toBeShown){
         System.out.println(toBeShown);
         return stdin.nextLine();
     }
 
-    public String showMessage(String toBeShown, List<String> possibleAnswers) {
-        int choice;
+    public String showMessage(String toBeShown, List<String> possibleAnswers){
         System.out.println(toBeShown);
+        if(possibleAnswers == null)
+            return Protocol.ACK.getQuestion();
+        int choice;
         for (int i = 0; i < possibleAnswers.size(); i++)
             System.out.println("(" + (i + 1) + ") " + possibleAnswers.get(i));
         choice = stdin.nextInt();
