@@ -21,6 +21,7 @@ public class SocketCommunication implements Runnable {
     @Override
     public void run() {
         String answer = socketServer.sendMessageAndGetAnswer(client, message);
+        serverManager.setAnswer(number, answer);
         System.out.println("User " + number + ": " + answer);
         if (answer.equals("quit"))
             serverManager.removeClient(client);

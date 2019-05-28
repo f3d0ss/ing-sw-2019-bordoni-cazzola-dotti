@@ -18,6 +18,7 @@ public class RmiCommunication implements Runnable {
     @Override
     public void run() {
         String answer = rmiServer.getImplementation().sendMessageAndGetAnswer(client, message);
+        serverManager.setAnswer(number, answer);
         System.out.println("User " + number + ": " + answer);
         if (answer.equals("quit"))
             serverManager.removeClient(client);

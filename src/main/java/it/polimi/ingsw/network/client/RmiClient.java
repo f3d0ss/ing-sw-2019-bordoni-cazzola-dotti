@@ -7,20 +7,21 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.Scanner;
 
 import static java.lang.Thread.sleep;
 
-public class RmiClient implements Client {
+public class RmiClient extends Client {
 
     int port;
+    private String ip;
     private String serverName = "adrenaline";
     private RmiClientImplementation rmiClientImplementation;
     private RmiServerInterface rmiServerInterface;
     private RmiClientInterface stub;
-    private Scanner stdin = new Scanner(System.in);
 
-    public RmiClient(int port) {
+    public RmiClient(String ip, int port, Ui ui) {
+        super(ui);
+        this.ip = ip;
         this.port = port;
     }
 
@@ -33,14 +34,12 @@ public class RmiClient implements Client {
     }
 
     public String printMessageAndGetAnswer(String message) {
-        String answer;
-        System.out.println(message);
-        answer = stdin.nextLine();
-        if (answer.equals("quit")) {
+        return manageMessage(message);
+        /*if (answer.equals("quit")) {
             System.out.println("Disconnessione in corso.");
             closeClient();
         }
-        return answer;
+        return answer;*/
     }
 
     private void closeClient() {
@@ -53,19 +52,26 @@ public class RmiClient implements Client {
     }
 
     public void startClient() throws RemoteException, NotBoundException {
-        Registry registry = LocateRegistry.getRegistry(1099);
+        Registry registry = LocateRegistry.getRegistry(ip, 1099);
         rmiServerInterface = (RmiServerInterface) registry.lookup(serverName);
         rmiClientImplementation = new RmiClientImplementation(this);
         stub = (RmiClientInterface) UnicastRemoteObject.exportObject(rmiClientImplementation, port);
+        System.out.println("Connessione stabilita. Digitare quit per uscire");
         rmiServerInterface.registry(stub);
         while (true) {
-            rmiServerInterface.testAliveness();
             try {
                 sleep(2000);
             } catch (InterruptedException e) {
                 break;
             }
+            try {
+                rmiServerInterface.testAliveness();
+            } catch (RemoteException e) {
+                System.out.println(e.getMessage());
+                break;
+            }
         }
-        System.out.println("Impossibile raggiongere il server. Disconnessione in corso.");
+        System.out.println("Impossibile raggiungere il server. Disconnessione in corso.");
+        System.exit(-1);
     }
 }

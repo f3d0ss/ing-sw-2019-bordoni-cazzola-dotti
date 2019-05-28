@@ -1,5 +1,10 @@
 package it.polimi.ingsw.network.server;
 
+import it.polimi.ingsw.network.Message;
+import it.polimi.ingsw.network.Protocol;
+
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.Scanner;
 
 import static java.lang.Thread.sleep;
@@ -10,19 +15,26 @@ public class Server {
 
     public static void main(String[] args) {
         ServerManager serverManager = new ServerManager();
-        serverManager.run();
         Scanner stdin = new Scanner(System.in);
         String message;
         int client;
         System.out.println("Avvio servers in corso...");
         try {
-            sleep(2000);
-        } catch (InterruptedException e) {
+            System.out.println("local ip: " + InetAddress.getLocalHost().getHostAddress());
+        } catch (UnknownHostException e) {
+            System.out.println("local ip: unknown");
+        }
+        serverManager.run();
+        while (!serverManager.allServerReady()) {
+            try {
+                sleep(1000);
+            } catch (InterruptedException e) {
+            }
         }
         while (keepAlive) {
-            System.out.printf("Clients attivi: ");
+            System.out.printf("Clients attivi: [");
             serverManager.printClients();
-            System.out.println("Scrivi con quale client vuoi comunicare, -1 per aggiornare la lista.");
+            System.out.println("] Scrivi con quale client vuoi comunicare, -1 per aggiornare la lista.");
             while (true) {
                 try {
                     client = Integer.parseInt(stdin.nextLine());
@@ -37,7 +49,7 @@ public class Server {
             if (client != -1) {
                 System.out.println("Scrivi il messaggio:");
                 message = stdin.nextLine();
-                serverManager.sendMessageAndWaitForAnswer(client, "Server: " + message);
+                serverManager.sendMessageAndWaitForAnswer(client, new Message(Protocol.TRY, message, null, 0));
             }
         }
         serverManager.shutDownAllServers();

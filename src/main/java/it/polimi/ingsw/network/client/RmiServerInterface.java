@@ -11,5 +11,5 @@ public interface RmiServerInterface extends Remote {
 
     void unregistry(RmiClientInterface client) throws RemoteException;
 
-    void testAliveness() throws RemoteException;
+    boolean testAliveness() throws RemoteException;
 }
