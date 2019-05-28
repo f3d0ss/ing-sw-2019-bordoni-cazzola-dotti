@@ -1,7 +1,9 @@
 package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.command.Command;
+import it.polimi.ingsw.model.command.RespawnCommand;
 import it.polimi.ingsw.model.playerstate.IdleState;
+import it.polimi.ingsw.model.playerstate.ManageTurnState;
 import it.polimi.ingsw.model.playerstate.PlayerState;
 import it.polimi.ingsw.view.PlayerView;
 import it.polimi.ingsw.view.PowerUpView;
@@ -167,13 +169,27 @@ public class Player {
             position.removePlayer(this);
         position = match.getBoard().getSpawn(color);
         position.addPlayer(this);
-
     }
 
     public List<Command> getPossibleCommands() {
         return playerState.getPossibleCommands(this);
     }
 
+    public List<RespawnCommand> getRespawnCommands() {
+        List<RespawnCommand> respawnCommands = new ArrayList<>();
+        addExtraPowerUp();
+        powerUps.forEach(powerUp -> respawnCommands.add(new RespawnCommand(this, powerUp)));
+        return respawnCommands;
+    }
+
+    public List<RespawnCommand> getSpawnCommands() {
+        addExtraPowerUp();
+        return getRespawnCommands();
+    }
+
+    private void addExtraPowerUp() {
+        this.powerUps.add(match.drawPowerUpCard());
+    }
 
     public List<AggregateAction> getPossibleAggregateAction() {
         List<AggregateAction> aggregateActions = new ArrayList<>();
@@ -303,6 +319,7 @@ public class Player {
     }
 
     public void initialize() {
+        playerState = new ManageTurnState();
         if (match.isLastTurn() && match.hasFirstPlayerPlayedLastTurn())
             availableAggregateActionCounter = 1;
         else
