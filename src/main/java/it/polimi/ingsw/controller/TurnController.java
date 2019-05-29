@@ -15,9 +15,9 @@ import java.util.Map;
  */
 class TurnController {
 
-    private Player currentPlayer;
-    private Map<PlayerId, ViewInterface> virtualViews;
-    private Deque<Command> commandStack = new ArrayDeque<>();
+    private final Player currentPlayer;
+    private final Map<PlayerId, ViewInterface> virtualViews;
+    private final Deque<Command> commandStack = new ArrayDeque<>();
 
     TurnController(Player player, Map<PlayerId, ViewInterface> virtualViews) {
         this.currentPlayer = player;

@@ -18,9 +18,9 @@ public class MatchController {
     private static final int[] POINTS_PER_KILL_FLIPPED_BOARD = {2, 1};
     private static final int MIN_PLAYERS = 3;
     private static final int POINTS_PER_FIRST_BLOOD = 1;
-    private Match match;
-    private Map<PlayerId, ViewInterface> virtualViews;
-    private List<Player> players;
+    private final Match match;
+    private final Map<PlayerId, ViewInterface> virtualViews = new LinkedHashMap<>();
+    private final List<Player> players;
 
     public MatchController(Map<String, ViewInterface> lobby, int gameBoardNumber) {
         match = new Match(gameBoardNumber);
@@ -29,8 +29,8 @@ public class MatchController {
         for (int i = 0; i < nicknames.size(); i++) {
             String nickname = nicknames.get(i);
             Player player = new Player(match, values[i], nickname);
-            match.addPlayer(player, lobby.get(nickname)); // and his vv
-            //match add vv
+            match.addPlayer(player, lobby.get(nickname));
+            virtualViews.put(values[i], lobby.get(nickname));
         }
         players = match.getCurrentPlayers();
     }
@@ -201,14 +201,14 @@ public class MatchController {
     }
 
     /**
-     * This method adds point for the deadPlayer's track. Adds marks to killshotTrack
+     * This method adds the points for the deadPlayer's track. Adds marks to killshotTrack
      *
-     * @param deadPlayer
+     * @param deadPlayer track to score owner.
      */
     private void calculateTrackScores(Player deadPlayer) {
         List<PlayerId> track = deadPlayer.getHealth();
         if (!deadPlayer.isFlippedBoard())
-            getPlayerById(track.get(0)).addPoints(POINTS_PER_FIRST_BLOOD);
+            Objects.requireNonNull(getPlayerById(track.get(0))).addPoints(POINTS_PER_FIRST_BLOOD);
         //marks for 12th dmg
         //extra token on killshottrack for 12th dmg
 
@@ -216,7 +216,7 @@ public class MatchController {
         PlayerId playerId11thDamage = track.get(Player.MAX_DAMAGE - 2);
         match.addKillshot(playerId11thDamage);
         if (track.get(Player.MAX_DAMAGE - 1) != null) {
-            getPlayerById(playerId11thDamage).addMarks(1, deadPlayer.getId());
+            Objects.requireNonNull(getPlayerById(playerId11thDamage)).addMarks(1, deadPlayer.getId());
             match.addKillshot(playerId11thDamage);
         }
         scoreTrackPoints(deadPlayer, sortByPoints(track));
@@ -225,8 +225,8 @@ public class MatchController {
     /**
      * This method return an array of PlayerId ordered by most points scored on this track
      *
-     * @param track
-     * @return
+     * @param track track to score
+     * @return Array ordered by first blood
      */
     private PlayerId[] sortByPoints(List<PlayerId> track) {
         List<PlayerId> orderByFirstBlood = track.stream().distinct().collect(Collectors.toList());
@@ -258,7 +258,7 @@ public class MatchController {
                 points = pointsPerKill[pointsPerKill.length - 1];
             else
                 points = pointsPerKill[i + offset];
-            getPlayerById(keys[i]).addPoints(points);
+            Objects.requireNonNull(getPlayerById(keys[i])).addPoints(points);
         }
     }
 
@@ -275,7 +275,7 @@ public class MatchController {
                 points = pointsPerKill[pointsPerKill.length - 1];
             else
                 points = pointsPerKill[i];
-            getPlayerById(keys[i]).addPoints(points);
+            Objects.requireNonNull(getPlayerById(keys[i])).addPoints(points);
         }
     }
 
