@@ -1,6 +1,6 @@
 package it.polimi.ingsw.network.client;
 
-import it.polimi.ingsw.gui.GuiManager;
+import it.polimi.ingsw.view.gui.GuiManager;
 import javafx.application.Application;
 import javafx.application.Platform;
 

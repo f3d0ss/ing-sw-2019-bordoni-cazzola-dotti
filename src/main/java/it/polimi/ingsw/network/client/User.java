@@ -1,7 +1,7 @@
 package it.polimi.ingsw.network.client;
 
 import com.google.gson.Gson;
-import it.polimi.ingsw.gui.GuiManager;
+import it.polimi.ingsw.view.gui.GuiManager;
 import it.polimi.ingsw.network.Message;
 import it.polimi.ingsw.network.Protocol;
 
