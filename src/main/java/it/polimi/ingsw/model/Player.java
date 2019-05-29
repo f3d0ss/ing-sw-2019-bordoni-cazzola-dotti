@@ -26,7 +26,6 @@ public class Player {
     public static final int DAMAGE_BEFORE_SECOND_ADRENALINA = 5;
     public static final int DAMAGE_BEFORE_DEAD = 10;
     public static final int INITIAL_AMMO_NUMBER = 1;
-    //TODO flipped board ???
 
     private Match match;
     private int points = 0;
@@ -43,6 +42,7 @@ public class Player {
     private Map<Color, Integer> ammo = new EnumMap<>(Color.class);
     private int availableAggregateActionCounter;
     private PlayerId lastShooter;
+    private boolean flippedBoard = false;
 
     public Player(Match match, PlayerId id, String nickname) {
         this.match = match;
@@ -64,7 +64,7 @@ public class Player {
         powerUps.forEach(powerUp -> pvs.add(new PowerUpView(powerUp.getType(), powerUp.getColor())));
 //        TODO: decide if view need to know
 //        playerState.updatePlayerView(playerView);
-        return new PlayerView(id, health, deaths, marks, nickname, wvs, pvs, ammo, availableAggregateActionCounter);
+        return new PlayerView(id, health, deaths, marks, nickname, wvs, pvs, ammo, availableAggregateActionCounter, flippedBoard);
     }
 
     public Map<Color, Integer> getAmmo() {
@@ -175,8 +175,9 @@ public class Player {
             position.removePlayer(this);
         position = match.getBoard().getSpawn(color);
         position.addPlayer(this);
-        //restore health
         health = new ArrayList<>();
+        if (match.isLastTurn())
+            flippedBoard = true;
     }
 
     public List<Command> getPossibleCommands() {
@@ -306,6 +307,21 @@ public class Player {
     public void addPoints(int points) {
         this.points += points;
     }
+
+    /**
+     * @return true if the player's board is flipped
+     */
+    public boolean isFlippedBoard() {
+        return flippedBoard;
+    }
+
+    /**
+     * This method gives the player the flipped board (Final frenzy only player board) This board offers no point for first blood.
+     */
+    public void flipBoard() {
+        this.flippedBoard = true;
+    }
+
 
     public List<PowerUp> getTargetingScopes() {
         return powerUps.stream().filter(powerUp -> powerUp.getType() == PowerUpID.TARGETING_SCOPE).collect(Collectors.toList());
