@@ -4,6 +4,9 @@ import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.playerstate.ChoosingWeaponOptionState;
 import it.polimi.ingsw.model.playerstate.PendingPaymentWeaponOptionState;
 
+/**
+ * This command actualize the payment for the weapon's option selected
+ */
 public class PayWeaponOptionCommand implements Command {
     private Player player;
     private PendingPaymentWeaponOptionState currentState;
@@ -33,6 +36,9 @@ public class PayWeaponOptionCommand implements Command {
         player.changeState(currentState);
     }
 
+    /**
+     * @return true if the command is undoable
+     */
     @Override
     public boolean isUndoable() {
         return true;

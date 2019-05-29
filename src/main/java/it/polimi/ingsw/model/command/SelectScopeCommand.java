@@ -5,11 +5,20 @@ import it.polimi.ingsw.model.PowerUp;
 import it.polimi.ingsw.model.playerstate.PendingPaymentScopeState;
 import it.polimi.ingsw.model.playerstate.ScopeState;
 
+/**
+ * This command represent the action of select a scope
+ */
 public class SelectScopeCommand implements Command {
     private Player player;
     private ScopeState currentState;
     private PowerUp powerUp;
 
+    /**
+     * This constructor create a command for select a scope
+     * @param player is the player who select the scope
+     * @param currentState is the current state
+     * @param powerUp is the scope selected
+     */
     public SelectScopeCommand(Player player, ScopeState currentState, PowerUp powerUp) {
         this.player = player;
         this.currentState = currentState;
@@ -34,6 +43,9 @@ public class SelectScopeCommand implements Command {
         player.changeState(currentState);
     }
 
+    /**
+     * @return true if the command is undoable
+     */
     @Override
     public boolean isUndoable() {
         return true;

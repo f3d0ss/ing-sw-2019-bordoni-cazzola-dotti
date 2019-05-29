@@ -4,10 +4,18 @@ import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.playerstate.PendingPaymentScopeState;
 import it.polimi.ingsw.model.playerstate.SelectScopeTargetState;
 
+/**
+ * This command actualize the payment for the scope
+ */
 public class PayScopeCommand implements Command {
     private Player player;
     private PendingPaymentScopeState currentState;
 
+    /**
+     * This constructor create a command for pay the scope
+     * @param player is the player who use the scope
+     * @param currentState is the current state
+     */
     public PayScopeCommand(Player player, PendingPaymentScopeState currentState) {
         this.player = player;
         this.currentState = currentState;
@@ -33,6 +41,9 @@ public class PayScopeCommand implements Command {
         player.changeState(currentState);
     }
 
+    /**
+     * @return true if the command is undoable
+     */
     @Override
     public boolean isUndoable() {
         return true;

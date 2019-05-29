@@ -7,11 +7,20 @@ import it.polimi.ingsw.model.playerstate.ManageTurnState;
 import it.polimi.ingsw.model.playerstate.SelectedNewtonState;
 import it.polimi.ingsw.model.playerstate.SelectedTeleporterState;
 
+/**
+ * This command represent the action of select a power up
+ */
 public class SelectPowerUpCommand implements Command {
     private Player player;
     private ManageTurnState currentState;
     private PowerUp powerUp;
 
+    /**
+     *  This constructor create a command for select a power up
+     * @param player is the player who select the power up
+     * @param powerUp is the power up selected
+     * @param currentState is the current state
+     */
     public SelectPowerUpCommand(Player player, PowerUp powerUp, ManageTurnState currentState) {
         this.player = player;
         this.currentState = currentState;
@@ -39,6 +48,9 @@ public class SelectPowerUpCommand implements Command {
         player.changeState(currentState);
     }
 
+    /**
+     * @return true if the command is undoable
+     */
     @Override
     public boolean isUndoable() {
         return true;

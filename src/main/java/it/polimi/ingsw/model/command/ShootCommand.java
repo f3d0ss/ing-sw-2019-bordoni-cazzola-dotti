@@ -9,11 +9,20 @@ import it.polimi.ingsw.model.playerstate.ScopeState;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * This command represent the shoot action
+ */
 public class ShootCommand implements WeaponCommand {
     private List<EffectCommand> effects;
     private Player player;
     private ReadyToShootState currentState;
 
+    /**
+     * This constructor create a command for shoot
+     * @param currentState is the current state
+     * @param effects is the list of single effects
+     * @param player is the player who shoot
+     */
     public ShootCommand(ReadyToShootState currentState, List<EffectCommand> effects, Player player) {
         this.currentState = currentState;
         this.effects = effects;
@@ -50,6 +59,9 @@ public class ShootCommand implements WeaponCommand {
         throw new IllegalUndoException();
     }
 
+    /**
+     * @return true if the command is undoable
+     */
     @Override
     public boolean isUndoable() {
         return false;
