@@ -9,11 +9,11 @@ public class Cli implements Ui {
 
     Scanner stdin = new Scanner(System.in);
 
-    public String showMessage(String toBeShown, List<String> possibleAnswers){
+    public String showMessage(String toBeShown, List<String> possibleAnswers, boolean isAnswerRequired) {
         System.out.println(toBeShown);
-        if(possibleAnswers == null)
-            return Protocol.ACK.getQuestion();
-        else if(possibleAnswers.size()==1)
+        if (!isAnswerRequired)
+            return Protocol.ack;
+        else if (possibleAnswers == null)
             return stdin.nextLine();
         int choice;
         for (int i = 0; i < possibleAnswers.size(); i++)

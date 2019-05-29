@@ -15,7 +15,7 @@ public class GuiManager extends Application {
     private static Gui gui;
     private static Stage stage;
     private static GridPane gridPane;
-    private static Window window;
+    private static LoginWindow window;
     private static boolean inputReady;
 
     public static void setClient(Client c) {
@@ -29,20 +29,19 @@ public class GuiManager extends Application {
     @Override
     public void start(Stage inputStage) {
         stage = new Stage();
-        window = new Window(stage, gui, "ciao", null, "");
+        window = new LoginWindow(stage, gui, "ciao", null, "", false);
         Scene scene = new Scene(window);
-        stage.setTitle("Welcome");
+        stage.setTitle("Login");
         stage.setResizable(false);
         stage.setScene(scene);
         gui.setReady(true);
     }
 
-    public static void setMessageAndShow(String string, List<String> answers) {
+    public static void setMessageAndShow(String string, List<String> answers, boolean isAnswerRequired) {
         String defaultAnswer = "";
         if (answers != null)
             defaultAnswer = answers.get(0);
-        window = new Window(stage, gui, string, answers, defaultAnswer);
-        //window.setMessage(string);
+        window = new LoginWindow(stage, gui, string, answers, defaultAnswer, isAnswerRequired);
         inputReady = false;
         stage.setScene(new Scene(window));
         stage.show();

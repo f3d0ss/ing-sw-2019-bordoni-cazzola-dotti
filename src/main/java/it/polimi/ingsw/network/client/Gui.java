@@ -16,10 +16,10 @@ public class Gui implements Ui, Runnable {
     private String type;
     private String name;
 
-    public String showMessage(String toBeShown, List<String> possibleAnswers){
+    public String showMessage(String toBeShown, List<String> possibleAnswers, boolean isAnswerRequired){
         inputReady = false;
         System.out.println(toBeShown);//to be removed
-        Platform.runLater(() -> GuiManager.setMessageAndShow(toBeShown, possibleAnswers));
+        Platform.runLater(() -> GuiManager.setMessageAndShow(toBeShown, possibleAnswers, isAnswerRequired));
         while (!inputReady) {
             try {
                 sleep(1000);

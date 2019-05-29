@@ -1,5 +1,6 @@
 package it.polimi.ingsw.network.client;
 
+import it.polimi.ingsw.network.Protocol;
 import it.polimi.ingsw.network.server.RmiClientInterface;
 
 import java.rmi.NotBoundException;
@@ -34,6 +35,8 @@ public class RmiClient extends Client {
     }
 
     public String printMessageAndGetAnswer(String message) {
+        if(message == Protocol.ping)
+            return Protocol.ack;
         return manageMessage(message);
         /*if (answer.equals("quit")) {
             System.out.println("Disconnessione in corso.");

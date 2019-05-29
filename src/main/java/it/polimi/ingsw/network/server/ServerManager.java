@@ -51,7 +51,7 @@ public class ServerManager implements Runnable {
     private void login(int id) {
         sendMessageAndWaitForAnswer(id, new Message(Protocol.WELCOME, String.valueOf(id), null, 0));
         if (lobby.size() == 1) {
-            sendMessageAndWaitForAnswer(id, new Message(Protocol.LOGIN_FIRST, "", Arrays.asList("string"), 0));
+            sendMessageAndWaitForAnswer(id, new Message(Protocol.LOGIN_FIRST, "", null, 0));
         } else {
             String playerAlreadyIn = "";
             List<String> players = new ArrayList<>();
@@ -60,9 +60,9 @@ public class ServerManager implements Runnable {
                     playerAlreadyIn = playerAlreadyIn + lobby.get(i) + "; ";
                     players.add(lobby.get(i));
                 }
-            sendMessageAndWaitForAnswer(id, new Message(Protocol.LOGIN_OTHERS, playerAlreadyIn, Arrays.asList("string"), 0));
+            sendMessageAndWaitForAnswer(id, new Message(Protocol.LOGIN_OTHERS, playerAlreadyIn, null, 0));
             while (lobby.containsValue(answers.get(id))) {
-                sendMessageAndWaitForAnswer(id, new Message(Protocol.LOGIN_REPEAT, "", Arrays.asList("string"), 0));
+                sendMessageAndWaitForAnswer(id, new Message(Protocol.LOGIN_REPEAT, "", null, 0));
             }
         }
         String name = answers.get(id);
@@ -136,7 +136,7 @@ public class ServerManager implements Runnable {
     }
 
     public void setAnswer(int client, String answer) {
-        if (!answer.equals(Protocol.ACK.getQuestion()))
+        if (!answer.equals(Protocol.ack))
             answers.put(client, answer);
         answerReady.put(client, true);
     }
@@ -182,11 +182,11 @@ public class ServerManager implements Runnable {
         answerReady.put(number, false);
         Gson gson = new Gson();
         String json = gson.toJson(message);
-        if (socketClients.containsKey(number)) {
+        if (socketClients.containsKey(number))
             new Thread(new SocketCommunication(json, socketClients.get(number), socketServer, number, this)).start();
-        } else if (rmiClients.containsKey(number)) {
+        else if (rmiClients.containsKey(number))
             new Thread(new RmiCommunication(json, rmiClients.get(number), rmiServer, number, this)).start();
-        } else
+        else
             System.out.println("Client non registrato");
         while (!answerReady.get(number)) {
             try {
@@ -196,6 +196,15 @@ public class ServerManager implements Runnable {
             }
         }
         return answers.get(number);
+    }
+
+    public void sendPing(int number) {
+        if (socketClients.containsKey(number))
+            socketServer.sendMessageAndGetAnswer(socketClients.get(number), Protocol.ping);
+        else if (rmiClients.containsKey(number))
+            rmiServer.getImplementation().sendMessageAndGetAnswer(rmiClients.get(number), Protocol.ping);
+        else
+            System.out.println("Client non registrato");
     }
 
     public void shutDownAllServers() {
@@ -209,5 +218,15 @@ public class ServerManager implements Runnable {
         rmiServer = new RmiServer(this);
         new Thread(socketServer).start();
         new Thread(rmiServer).start();
+        while (true) {
+            try {
+                sleep(1000);
+            } catch (InterruptedException e) {
+                break;
+            }
+            Integer[] clients = lobby.keySet().toArray(new Integer[0]);
+            for (int i : clients)
+                sendPing(i);
+        }
     }
 }
