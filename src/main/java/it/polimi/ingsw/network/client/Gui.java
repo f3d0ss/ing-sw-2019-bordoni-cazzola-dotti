@@ -6,28 +6,28 @@ import javafx.application.Platform;
 
 import java.util.List;
 
+import static java.lang.Thread.sleep;
+
 public class Gui implements Ui, Runnable {
 
     private String answer = "";
     private boolean ready = false;
     private boolean inputReady = false;
-    private String ip;
     private String type;
     private String name;
 
-    public String showMessage(String toBeShown){
-        show();
-        /*Stage stage = new Stage();
-        stage.setTitle("Welcome");
-        stage.setResizable(false);
-        Platform.runLater(() -> stage.show());*/
-        return answer;
-    }
-
     public String showMessage(String toBeShown, List<String> possibleAnswers){
-        setScene();
-        show();
-        return "";
+        inputReady = false;
+        System.out.println(toBeShown);//to be removed
+        Platform.runLater(() -> GuiManager.setMessageAndShow(toBeShown, possibleAnswers));
+        while (!inputReady) {
+            try {
+                sleep(1000);
+            } catch (InterruptedException e) {}
+        }
+        GuiManager.setInputReady(false);
+        System.out.println(answer);
+        return answer;
     }
 
     public void setAnswer(String answer) {
@@ -47,18 +47,6 @@ public class Gui implements Ui, Runnable {
         Application.launch(GuiManager.class);
     }
 
-    public void show(){
-        Platform.runLater(() -> GuiManager.showWindow());
-    }
-
-    public void setIp(String ip) {
-        this.ip = ip;
-    }
-
-    public String getIp() {
-        return ip;
-    }
-
     public void setType(String type) {
         this.type = type;
     }
@@ -75,15 +63,7 @@ public class Gui implements Ui, Runnable {
         this.name = name;
     }
 
-    public boolean isInputReady() {
-        return inputReady;
-    }
-
     public void setInputReady(boolean inputReady) {
         this.inputReady = inputReady;
-    }
-
-    public static void setScene() {
-        Platform.runLater(() -> GuiManager.setScene());
     }
 }
