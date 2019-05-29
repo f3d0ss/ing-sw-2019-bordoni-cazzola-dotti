@@ -5,6 +5,7 @@ import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.Square;
 import it.polimi.ingsw.model.Weapon;
 import it.polimi.ingsw.model.command.Command;
+import it.polimi.ingsw.model.command.DoneCommand;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +17,10 @@ public class ReadyToShootState extends SelectedWeaponState implements TargetingP
 
     @Override
     public List<Command> getPossibleCommands(Player player) {
-        return new ArrayList<>(getSelectedWeapon().getPossibleCommands(player.getMatch().getBoard(), player, this));
+        List<Command> commands = new ArrayList<>();
+        if(!getSelectedWeapon().isLoaded()) commands.add(new DoneCommand(player, this));
+        commands.addAll(getSelectedWeapon().getPossibleCommands(player.getMatch().getBoard(), player, this));
+        return commands;
     }
 
     public void addTargetPlayer(Player targetPlayer) {

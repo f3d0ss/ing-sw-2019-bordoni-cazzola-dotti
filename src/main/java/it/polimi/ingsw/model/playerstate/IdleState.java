@@ -9,6 +9,6 @@ public class IdleState implements PlayerState {
 
     @Override
     public List<Command> getPossibleCommands(Player player) {
-        throw new IllegalStateException();
+        return null;
     }
 }
