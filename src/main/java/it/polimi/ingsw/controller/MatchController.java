@@ -5,7 +5,6 @@ import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.PlayerId;
 import it.polimi.ingsw.model.command.Command;
 import it.polimi.ingsw.view.ViewInterface;
-import it.polimi.ingsw.view.VirtualView;
 
 import java.util.*;
 import java.util.function.Function;
@@ -26,7 +25,7 @@ public class MatchController {
     public MatchController(Map<String, ViewInterface> lobby, int gameBoardNumber) {
         match = new Match(gameBoardNumber);
         PlayerId[] values = PlayerId.values();
-        List<String> nicknames = lobby.keySet().stream().collect(Collectors.toList());
+        List<String> nicknames = new ArrayList<>(lobby.keySet());
         for (int i = 0; i < nicknames.size(); i++) {
             String nickname = nicknames.get(i);
             Player player = new Player(match, values[i], nickname);
@@ -42,14 +41,13 @@ public class MatchController {
      *
      * @param counts            map to order (ID,numberof points/tokens)
      * @param orderByFirstBlood must be ordered by first blood
-     * @return Leaderboard
+     * @return Leaderboard (ordered Map)
      */
     static Map<PlayerId, Long> sort(Map<PlayerId, Long> counts, List<PlayerId> orderByFirstBlood) {
         counts = counts.entrySet().stream()
                 .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
                 .collect(Collectors.toMap(
                         Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
-
         List<Long> duplicates = counts.values().stream().collect(Collectors.groupingBy(Function.identity()))
                 .entrySet()
                 .stream()
@@ -87,39 +85,40 @@ public class MatchController {
         return counts;
     }
 
-    public static void main(String[] args) {
-        Map<String, ViewInterface> lobby = new LinkedHashMap<>();
-        lobby.put("Paolo", new VirtualView());
-        lobby.put("DDE$&T", new VirtualView());
-        lobby.put("LOLL", new VirtualView());
-        lobby.put("Paolo", new VirtualView());
-        lobby.put("Marco", new VirtualView());
-        MatchController matchController = new MatchController(lobby, 1);
-        System.out.println(matchController.match.getCurrentPlayers());
-        matchController.match.getCurrentPlayers().stream().map(Player::getId).forEach(System.out::println);
-        List<Integer> l = new ArrayList<>();
-        l.addAll(Arrays.asList(1, 2, 5, 6, 5, 1, 22, 22, 1, 0, 0));
-        //l.stream().sorted((a, b) -> Integer.compare(b, a)).forEach(System.out::println);
+    /**
+     * This method handles the first turn of each player
+     */
+    private void firstTurn() {
+        players.stream().filter(currentPlayer -> !currentPlayer.isDisconnected()).forEachOrdered(currentPlayer -> {
+            spawnFirstTime(currentPlayer);
+            new TurnController(currentPlayer, virtualViews).runTurn();
+            endTurnControls(currentPlayer);
+        });
     }
 
-    private void initializeMatch() {
-        //TODO all cards / stuff created and ready
-    }
-
-    private void runMatch() {
-        //TODO first turn ?
-        int currentPlayer = 0;
+    /**
+     * This method starts the match
+     */
+    public void runMatch() {
+        firstTurn();
+        int currentPlayerIndex = 0;
         while (!match.isLastTurn()) {
-            if (!players.get(currentPlayer).isDisconnected()) {
-                new TurnController(match, players.get(currentPlayer), virtualViews);
+            Player currentPlayer = players.get(currentPlayerIndex);
+            if (!currentPlayer.isDisconnected()) {
+                new TurnController(currentPlayer, virtualViews).runTurn();
                 endTurnControls(currentPlayer);
             }
-            currentPlayer = (currentPlayer + 1) % players.size();
+            currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
         }
-        runLastTurn(currentPlayer);
+        runFinalFrenzyTurn(currentPlayerIndex);
     }
 
-    void endTurnControls(int currentPlayer) {
+    /**
+     * This method shall be called at end of each player's turn. Checks disconnections, restores cards, scores points, respawns dead players.
+     *
+     * @param currentPlayer Player whose turn just ended
+     */
+    private void endTurnControls(Player currentPlayer) {
         checkDisconnections();
         match.restoreCards();
         int numberOfKills = 0;
@@ -127,40 +126,44 @@ public class MatchController {
             if (player.isDead()) {
                 numberOfKills++;
                 player.addDeaths();
-                calculateTrackScores(player, false);
+                calculateTrackScores(player);
                 respawn(player);
             }
         }
         if (numberOfKills > 1) { //doublekill points
-            players.get(currentPlayer).addPoints(numberOfKills - 1);
+            currentPlayer.addPoints(numberOfKills - 1);
         }
     }
 
-    private void runLastTurn(int currentPlayer) {
+    /**
+     * This method handles the last turn of each player
+     *
+     * @param currentPlayerIndex index of the first player to play the last turn
+     */
+    private void runFinalFrenzyTurn(int currentPlayerIndex) {
         //player with no damage get flipped board
         giveFlippedBoards();
         for (int i = 0; i < players.size(); i++) {
-            if (currentPlayer == 0)
+            if (currentPlayerIndex == 0)
                 match.firstPlayerPlayedLastTurn();
-            if (!players.get(currentPlayer).isDisconnected()) {
-                new TurnController(match, players.get(currentPlayer), virtualViews);
+            Player currentPlayer = players.get(currentPlayerIndex);
+            if (!currentPlayer.isDisconnected()) {
+                new TurnController(currentPlayer, virtualViews);
                 endTurnControls(currentPlayer);
             }
-            currentPlayer = (currentPlayer + 1) % players.size();
+            currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
         }
         calculateFinalScores();
     }
 
     /**
      * This method make all players with no damage (including those who were just scored) flip their boards over.
-     * They keep marks  and  ammo,  but  skulls  are  set  aside.  Their  boards offer no point for first blood
+     * They keep marks and ammo.
      */
     private void giveFlippedBoards() {
-        for (Player player : players) {
-            if (player.getHealth().isEmpty()) {
-                //give flipped board
-            }
-        }
+        players.stream()
+                .filter(player -> player.getHealth().isEmpty())
+                .forEach(Player::flipBoard);
     }
 
     /**
@@ -185,7 +188,7 @@ public class MatchController {
     private PlayerId[] scoreAllBoards() {
         for (Player player : players) {
             if (!player.isDead()) {
-                calculateTrackScores(player, true);
+                calculateTrackScores(player);
             }
         }
         PlayerId[] killshotTrack = sortByPoints(match.getKillshotTrack());
@@ -194,19 +197,18 @@ public class MatchController {
     }
 
     private void endMatch() {
-        //TODO
+        //TODO send leaderboard and end-game message
     }
 
     /**
      * This method adds point for the deadPlayer's track. Adds marks to killshotTrack
      *
      * @param deadPlayer
-     * @param flipped    true if board is flipped
      */
-    private void calculateTrackScores(Player deadPlayer, boolean flipped) {
+    private void calculateTrackScores(Player deadPlayer) {
         List<PlayerId> track = deadPlayer.getHealth();
-        if (!flipped)
-            getPlayer(track.get(0)).addPoints(POINTS_PER_FIRST_BLOOD);
+        if (!deadPlayer.isFlippedBoard())
+            getPlayerById(track.get(0)).addPoints(POINTS_PER_FIRST_BLOOD);
         //marks for 12th dmg
         //extra token on killshottrack for 12th dmg
 
@@ -214,10 +216,10 @@ public class MatchController {
         PlayerId playerId11thDamage = track.get(Player.MAX_DAMAGE - 2);
         match.addKillshot(playerId11thDamage);
         if (track.get(Player.MAX_DAMAGE - 1) != null) {
-            getPlayer(playerId11thDamage).addMarks(1, deadPlayer.getId());
+            getPlayerById(playerId11thDamage).addMarks(1, deadPlayer.getId());
             match.addKillshot(playerId11thDamage);
         }
-        scoreTrackPoints(deadPlayer, sortByPoints(track), flipped);
+        scoreTrackPoints(deadPlayer, sortByPoints(track));
     }
 
     /**
@@ -239,14 +241,13 @@ public class MatchController {
     /**
      * This method adds the points for number of damage tokens
      *
-     * @param deadPlayer   player dead
-     * @param keys         must be sorted by rules
-     * @param flippedBoard true if board is flipped
+     * @param deadPlayer player dead
+     * @param keys       must be sorted by rules
      */
-    private void scoreTrackPoints(Player deadPlayer, PlayerId[] keys, boolean flippedBoard) {
+    private void scoreTrackPoints(Player deadPlayer, PlayerId[] keys) {
         final int[] pointsPerKill;
         int offset = 0;
-        if (flippedBoard) pointsPerKill = POINTS_PER_KILL_FLIPPED_BOARD;
+        if (deadPlayer.isFlippedBoard()) pointsPerKill = POINTS_PER_KILL_FLIPPED_BOARD;
         else {
             pointsPerKill = POINTS_PER_KILL;
             offset = deadPlayer.getDeaths();
@@ -257,7 +258,7 @@ public class MatchController {
                 points = pointsPerKill[pointsPerKill.length - 1];
             else
                 points = pointsPerKill[i + offset];
-            getPlayer(keys[i]).addPoints(points);
+            getPlayerById(keys[i]).addPoints(points);
         }
     }
 
@@ -274,7 +275,7 @@ public class MatchController {
                 points = pointsPerKill[pointsPerKill.length - 1];
             else
                 points = pointsPerKill[i];
-            getPlayer(keys[i]).addPoints(points);
+            getPlayerById(keys[i]).addPoints(points);
         }
     }
 
@@ -284,10 +285,19 @@ public class MatchController {
      * @param currentPlayer player to respawn
      */
     private void respawn(Player currentPlayer) {
-        //TODO playerstate for respawn?
-        List<Command> commands = new ArrayList<>();
-        commands.addAll(currentPlayer.getRespawnCommands());
-        int selectedCommand = virtualViews.get(currentPlayer.getId()).sendCommands(commands);
+        List<Command> commands = new ArrayList<>(currentPlayer.getRespawnCommands());
+        int selectedCommand = virtualViews.get(currentPlayer.getId()).sendCommands(commands, false);
+        commands.get(selectedCommand).execute();
+    }
+
+    /**
+     * This method handles the spawn before the first turn starts
+     *
+     * @param currentPlayer player to spawn
+     */
+    private void spawnFirstTime(Player currentPlayer) {
+        List<Command> commands = new ArrayList<>(currentPlayer.getSpawnCommands());
+        int selectedCommand = virtualViews.get(currentPlayer.getId()).sendCommands(commands, false);
         commands.get(selectedCommand).execute();
     }
 
@@ -307,13 +317,7 @@ public class MatchController {
         }
     }
 
-    /**
-     * This method returns the player associated
-     *
-     * @param playerId
-     * @return
-     */
-    private Player getPlayer(PlayerId playerId) {
+    private Player getPlayerById(PlayerId playerId) {
         for (Player player : players)
             if (player.getId().equals(playerId))
                 return player;

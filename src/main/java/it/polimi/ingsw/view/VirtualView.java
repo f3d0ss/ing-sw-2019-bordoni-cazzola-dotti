@@ -21,7 +21,7 @@ public class VirtualView implements ViewInterface {
     }
 
     @Override
-    public int sendCommands(List<Command> commands) {
+    public int sendCommands(List<Command> commands, boolean undo) {
         return 0;
     }
 }
