@@ -41,4 +41,9 @@ public class UseNewtonCommand implements Command {
         targetPlayer.getPosition().addPlayer(targetPlayer);
         player.changeState(currentState);
     }
+
+    @Override
+    public boolean isUndoable() {
+        return true;
+    }
 }

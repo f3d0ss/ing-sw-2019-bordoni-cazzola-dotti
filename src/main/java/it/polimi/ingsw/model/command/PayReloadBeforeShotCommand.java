@@ -34,4 +34,9 @@ public class PayReloadBeforeShotCommand implements Command {
         currentState.getSelectedWeapon().unload();
         player.changeState(currentState);
     }
+
+    @Override
+    public boolean isUndoable() {
+        return true;
+    }
 }

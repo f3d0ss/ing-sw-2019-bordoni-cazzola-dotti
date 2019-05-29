@@ -41,4 +41,9 @@ public class SelectDiscardedWeaponCommand implements Command {
         currentState.getSpawn().removeWeapon(weaponToDiscard);
         player.changeState(currentState);
     }
+
+    @Override
+    public boolean isUndoable() {
+        return true;
+    }
 }

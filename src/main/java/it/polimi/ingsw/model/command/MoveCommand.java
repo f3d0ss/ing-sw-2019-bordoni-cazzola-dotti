@@ -10,25 +10,34 @@ public class MoveCommand implements Command {
     private MovableState currentState;
     private Square oldSquare;
     private PlayerState nextState;
+    private boolean undoable;
 
     public MoveCommand(Player player, Square newPosition, SelectedAggregateActionState currentState) {
         this.player = player;
         this.newPosition = newPosition;
         this.currentState = currentState;
-        if (currentState.getSelectedAggregateAction().isShoot() || currentState.getSelectedAggregateAction().isGrab())
+        if (currentState.getSelectedAggregateAction().isShoot() || currentState.getSelectedAggregateAction().isGrab()){
             nextState = currentState;
-        else
+            undoable = true;
+        }
+        else{
             nextState = new ManageTurnState();
+            undoable = false;
+        }
     }
 
     public MoveCommand(Player player, Square newPosition, ReadyToShootState currentState) {
         this.player = player;
         this.newPosition = newPosition;
         this.currentState = currentState;
-        if (!currentState.getSelectedWeapon().hasDamageToDo())
+        if (!currentState.getSelectedWeapon().hasDamageToDo()){
             nextState = new ManageTurnState();
-        else
+            undoable = false;
+        }
+        else{
             nextState = currentState;
+            undoable = true;
+        }
     }
 
     /**
@@ -50,5 +59,10 @@ public class MoveCommand implements Command {
         player.move(oldSquare);
         currentState.resetMoves();
         player.changeState(currentState);
+    }
+
+    @Override
+    public boolean isUndoable() {
+        return undoable;
     }
 }

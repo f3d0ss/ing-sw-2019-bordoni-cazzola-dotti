@@ -27,4 +27,9 @@ public class SelectPowerUpPaymentCommand extends SelectPaymentCommand {
     public void undo() {
         currentState.removePendingCard(powerUp);
     }
+
+    @Override
+    public boolean isUndoable() {
+        return true;
+    }
 }

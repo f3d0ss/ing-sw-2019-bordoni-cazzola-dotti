@@ -27,4 +27,9 @@ public class SelectTargetSquareCommand implements WeaponCommand {
     public void undo() {
         currentState.removeTargetSquare(targetSquare);
     }
+
+    @Override
+    public boolean isUndoable() {
+        return true;
+    }
 }

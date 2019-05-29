@@ -39,4 +39,9 @@ public class UseTeleportCommand implements Command {
         player.getPosition().addPlayer(player);
         player.changeState(currentState);
     }
+
+    @Override
+    public boolean isUndoable() {
+        return true;
+    }
 }

@@ -32,4 +32,9 @@ public class GrabTileCommand extends GrabCommand {
     public void undo() {
         throw new IllegalUndoException();
     }
+
+    @Override
+    public boolean isUndoable() {
+        return false;
+    }
 }

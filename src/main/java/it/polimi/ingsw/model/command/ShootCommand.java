@@ -49,4 +49,9 @@ public class ShootCommand implements WeaponCommand {
     public void undo() {
         throw new IllegalUndoException();
     }
+
+    @Override
+    public boolean isUndoable() {
+        return false;
+    }
 }

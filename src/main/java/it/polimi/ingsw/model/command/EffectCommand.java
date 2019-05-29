@@ -40,6 +40,11 @@ public class EffectCommand implements Command {
         throw new IllegalUndoException();
     }
 
+    @Override
+    public boolean isUndoable() {
+        return false;
+    }
+
     public Player getPlayer() {
         return player;
     }

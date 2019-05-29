@@ -34,4 +34,9 @@ public class PayReloadWeaponCommand implements Command {
         currentState.getSelectedReloadingWeapon().unload();
         player.changeState(currentState);
     }
+
+    @Override
+    public boolean isUndoable() {
+        return true;
+    }
 }

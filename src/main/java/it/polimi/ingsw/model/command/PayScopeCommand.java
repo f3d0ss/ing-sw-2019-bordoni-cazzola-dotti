@@ -32,4 +32,9 @@ public class PayScopeCommand implements Command {
         currentState.getPendingCardPayment().forEach(powerUp -> player.refund(powerUp));
         player.changeState(currentState);
     }
+
+    @Override
+    public boolean isUndoable() {
+        return true;
+    }
 }

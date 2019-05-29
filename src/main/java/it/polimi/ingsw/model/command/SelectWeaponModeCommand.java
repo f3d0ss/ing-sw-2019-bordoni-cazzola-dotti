@@ -28,4 +28,9 @@ public class SelectWeaponModeCommand implements Command {
         currentState.getSelectedWeapon().deselectWeaponMode(weaponMode);
         player.changeState(currentState);
     }
+
+    @Override
+    public boolean isUndoable() {
+        return true;
+    }
 }

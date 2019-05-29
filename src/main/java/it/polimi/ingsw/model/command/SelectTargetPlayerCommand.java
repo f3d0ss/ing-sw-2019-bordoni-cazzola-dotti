@@ -27,4 +27,9 @@ public class SelectTargetPlayerCommand implements WeaponCommand {
     public void undo() {
         currentState.removeTargetPlayer(targetPlayer);
     }
+
+    @Override
+    public boolean isUndoable() {
+        return true;
+    }
 }

@@ -33,4 +33,9 @@ public class SelectScopeCommand implements Command {
         player.refund(powerUp);
         player.changeState(currentState);
     }
+
+    @Override
+    public boolean isUndoable() {
+        return true;
+    }
 }

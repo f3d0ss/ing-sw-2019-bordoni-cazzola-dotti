@@ -34,4 +34,9 @@ public class PayWeaponCommand implements Command {
         player.removeWeapon(currentState.getSelectedWeapon());
         player.changeState(currentState);
     }
+
+    @Override
+    public boolean isUndoable() {
+        return false;
+    }
 }

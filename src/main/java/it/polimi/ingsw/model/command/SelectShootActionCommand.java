@@ -28,4 +28,9 @@ public class SelectShootActionCommand implements Command {
     public void undo() {
         player.changeState(currentState);
     }
+
+    @Override
+    public boolean isUndoable() {
+        return true;
+    }
 }

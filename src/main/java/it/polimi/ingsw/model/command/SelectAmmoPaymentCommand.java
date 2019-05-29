@@ -27,4 +27,9 @@ public class SelectAmmoPaymentCommand extends SelectPaymentCommand {
     public void undo() {
         currentState.removePendingAmmo(color);
     }
+
+    @Override
+    public boolean isUndoable() {
+        return true;
+    }
 }

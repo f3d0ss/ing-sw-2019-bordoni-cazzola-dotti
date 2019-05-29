@@ -31,4 +31,9 @@ public class UseScopeCommand implements Command {
     public void undo() {
         throw new IllegalUndoException();
     }
+
+    @Override
+    public boolean isUndoable() {
+        return false;
+    }
 }

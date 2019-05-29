@@ -33,4 +33,9 @@ public class SelectAggregateActionCommand implements Command {
         player.deselectAggregateAction();
         player.changeState(currentState);
     }
+
+    @Override
+    public boolean isUndoable() {
+        return true;
+    }
 }

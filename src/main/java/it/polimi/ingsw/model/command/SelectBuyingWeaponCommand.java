@@ -40,4 +40,9 @@ public class SelectBuyingWeaponCommand extends GrabCommand {
         spawn.addWeapon(weapon);
         player.changeState(currentState);
     }
+
+    @Override
+    public boolean isUndoable() {
+        return true;
+    }
 }
