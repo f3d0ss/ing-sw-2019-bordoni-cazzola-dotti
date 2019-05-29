@@ -7,12 +7,16 @@ import javafx.scene.Scene;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
+import java.util.List;
+
 public class GuiManager extends Application {
 
     private static Client client;
     private static Gui gui;
     private static Stage stage;
     private static GridPane gridPane;
+    private static Window window;
+    private static boolean inputReady;
 
     public static void setClient(Client c) {
         client = c;
@@ -24,21 +28,27 @@ public class GuiManager extends Application {
 
     @Override
     public void start(Stage inputStage) {
-        stage = inputStage;
-
-        Scene scene = new Scene(new Window(stage, gui));
+        stage = new Stage();
+        window = new Window(stage, gui, "ciao", null, "");
+        Scene scene = new Scene(window);
         stage.setTitle("Welcome");
         stage.setResizable(false);
         stage.setScene(scene);
-        //stage.show();
         gui.setReady(true);
     }
 
-    public static void showWindow() {
+    public static void setMessageAndShow(String string, List<String> answers) {
+        String defaultAnswer = "";
+        if (answers != null)
+            defaultAnswer = answers.get(0);
+        window = new Window(stage, gui, string, answers, defaultAnswer);
+        //window.setMessage(string);
+        inputReady = false;
+        stage.setScene(new Scene(window));
         stage.show();
     }
 
-    public static void setScene() {
-        gridPane = new Login(stage, gui);
+    public static void setInputReady(boolean input) {
+        inputReady = input;
     }
 }

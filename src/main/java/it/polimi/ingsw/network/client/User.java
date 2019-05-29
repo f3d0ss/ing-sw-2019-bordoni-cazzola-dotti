@@ -6,8 +6,8 @@ import it.polimi.ingsw.network.Message;
 import it.polimi.ingsw.network.Protocol;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Scanner;
 
 import static java.lang.StrictMath.random;
 import static java.lang.Thread.sleep;
@@ -36,42 +36,18 @@ public class User {
                 }
                 System.out.printf(".");
             }
-            System.out.println(".");
-            gui.setScene();
-            System.out.println("Scene settata");
-            gui.setInputReady(false);
-            gui.show();
-            while (!gui.isInputReady()) {
-                try {
-                    sleep(1000);
-                } catch (InterruptedException e) {
-                }
-            }
-            connectionType = gui.getType();
-            ip = gui.getIp();
-            System.out.println("ciaone");
+            client.setUi(gui);
             ui = gui;
-        } else {
-            answers = new ArrayList<>();
-            answers.add("Socket");
-            answers.add("RMI");
-            connectionType = client.manageMessage(new Gson().toJson(new Message(Protocol.CHOOSE_CONNECTION, "", answers, 0)));
-            ip = client.manageMessage(new Gson().toJson(new Message(Protocol.INSERT_IP, "", null, 0)));
         }
-        /*
-        if (uiChoice.equals("GUI")) {
-            GuiManager window = new GuiManager();
-            window.setClient(client);
-            Application.launch(GuiManager.class);
-            ip = client.getIp();
-            connectionType = client.getType();
-        } else {
-            answers = new ArrayList<>();
-            answers.add("Socket");
-            answers.add("RMI");
-            connectionType = client.manageMessage(new Gson().toJson(new Message(Protocol.CHOOSE_CONNECTION, "", answers, 0)));
-            ip = client.manageMessage(new Gson().toJson(new Message(Protocol.INSERT_IP, "", null, 0)));
-        }*/
+        answers = new ArrayList<>();
+        answers.add("Socket");
+        answers.add("RMI");
+        connectionType = client.manageMessage(new Gson().toJson(new Message(Protocol.CHOOSE_CONNECTION, "", answers, 0)));
+        ip = client.manageMessage(new Gson().toJson(new Message(Protocol.INSERT_IP, "", Arrays.asList("string"), 0)));
+        while(!isValidIp(ip)){
+            ip = client.manageMessage(new Gson().toJson(new Message(Protocol.INSERT_IP_AGAIN, "", Arrays.asList("string"), 0)));
+        }
+        System.out.println("Avvio client");
         if (connectionType.equals("Socket"))
             client = new SocketClient(ip, 9000, ui);
         else {
@@ -80,10 +56,7 @@ public class User {
         new Thread(client).start();
     }
 
-    public static String askQuestion(String question, String retType, Scanner in) {
-        String out;
-        System.out.println(question);
-        out = in.nextLine();
-        return out;
+    private static boolean isValidIp(String input) {
+        return input.matches("^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?).(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?).(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?).(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$");
     }
 }

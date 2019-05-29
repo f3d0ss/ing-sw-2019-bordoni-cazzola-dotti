@@ -14,7 +14,7 @@ public enum Protocol {
     },
     CHOOSE_CONNECTION {
         public String getQuestion() {
-            return "Scegli la tecnologia di connessione e inserisci l'indirizzo ip del server.";
+            return "Scegli la tecnologia di connessione.";
         }
     },
     INSERT_IP {
@@ -22,9 +22,14 @@ public enum Protocol {
             return "Inserisci l'indirizzo ip del server.";
         }
     },
+    INSERT_IP_AGAIN {
+        public String getQuestion() {
+            return "Ip non valido. Riprova.";
+        }
+    },
     WELCOME {
         public String getQuestion() {
-            return "Benvenuto su Adrenalina!\nSei stato accettato con il codice %s. Memorizzalo per riconnetterti a seguito di disconnessioni impreviste.";
+            return "Benvenuto su Adrenalina!\nSei stato accettato con il codice %s.\nMemorizzalo per riconnetterti a seguito di disconnessioni impreviste.";
         }
     },
     LOGIN_FIRST {

@@ -53,7 +53,6 @@ public class Login extends GridPane {
 
         submit.setOnAction(e -> {
             gui.setName(nameField.getText());
-            gui.setType("Socket");
             gui.setInputReady(true);
             stage.hide();
         });
@@ -62,7 +61,7 @@ public class Login extends GridPane {
         setHalignment(text, HPos.CENTER);
         setHalignment(submit, HPos.CENTER);
 
-        setStyle("-fx-background-image: url('https://www.meeplemountain.com/wp-content/uploads/2017/11/adrenaline.jpg')");
+        setStyle("-fx-background-image: url('https://www.meeplemountain.com/wp-content/uploads/2017/11/adrenaline.jpg');");
     }
 
     private boolean isValidName(String input) {

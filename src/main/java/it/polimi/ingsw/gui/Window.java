@@ -1,11 +1,13 @@
 package it.polimi.ingsw.gui;
 
+import it.polimi.ingsw.network.Protocol;
 import it.polimi.ingsw.network.client.Gui;
 import javafx.application.Platform;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.GridPane;
@@ -13,15 +15,24 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.*;
 import javafx.stage.Stage;
 
+import java.util.List;
+
 public class Window extends GridPane {
 
     private static final String ERROR_STYLE = "-fx-font: normal bold 12px 'sans-serif'; -fx-text-fill: #FF0000;";
+    private static final String BUTTON_STYLE = "-fx-background-color: #222222; -fx-text-fill: white;";
+    static ComboBox<String> comboBox;
 
-    public Window(Stage stage, Gui gui) {
+    public Window(Stage stage, Gui gui, String message, List<String> answers, String defaultOption) {
+        Text text = new Text(message);
         DropShadow shadow = new DropShadow();
+        Text wait = new Text("Attendi...");
+        TextField textField = new TextField();
+        Button buttonNext = new Button("Next");
+        Button buttonQuit = new Button("Quit");
+
         shadow.setSpread(0.6);
         shadow.setColor(Color.BLACK);
-        Text text = new Text("Immetti l'indirizzo ip del server\ne scegli la modalità di connessione");
         text.setTextAlignment(TextAlignment.CENTER);
         text.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.ITALIC, 12));
         text.setFill(Color.WHITE);
@@ -29,18 +40,16 @@ public class Window extends GridPane {
 
         Platform.setImplicitExit(false);
 
-        Text invalidIpText = new Text("Invalid IP. Try again.");
-        invalidIpText.setStyle(ERROR_STYLE);
-        invalidIpText.setVisible(false);
+        comboBox = new ComboBox<>();
+        setHalignment(comboBox, HPos.CENTER);
 
-        Button buttonSocket = new Button("Socket");
-        Button buttonRmi = new Button("RMI");
-        buttonSocket.setStyle("-fx-background-color: #222222; -fx-text-fill: white;");
-        buttonRmi.setStyle("-fx-background-color: #222222; -fx-text-fill: white;");
-        buttonSocket.setMinWidth(100);
-        buttonRmi.setMinWidth(100);
+        wait.setStyle(ERROR_STYLE);
+        wait.setVisible(false);
 
-        TextField ipField = new TextField("127.0.0.1");
+        buttonNext.setStyle(BUTTON_STYLE);
+        buttonNext.setMinWidth(100);
+        buttonQuit.setStyle(BUTTON_STYLE);
+        buttonQuit.setMinWidth(100);
 
         setMinSize(730, 510);
 
@@ -49,48 +58,46 @@ public class Window extends GridPane {
         setVgap(10);
         setHgap(100);
 
-        add(text, 0, 0, 2, 1);
-        add(ipField, 0, 1, 2, 1);
-        add(invalidIpText, 0, 2, 2, 1);
-        add(buttonSocket, 0, 3, 1, 1);
-        add(buttonRmi, 1, 3, 1, 1);
+        add(text, 0, 0);
+        if (answers != null) {
+            if (answers.size() == 1)
+                add(textField, 0, 1);
+            else {
+                comboBox.getItems().addAll(answers);
+                comboBox.setValue(defaultOption);
+                add(comboBox, 0, 1);
+            }
+        }
+        add(wait, 0, 2);
+        add(buttonNext, 0, 3);
+        add(buttonQuit, 0, 4);
 
-        ipField.textProperty().addListener((v, oldValue, newValue) -> {
-            if (isValidIp(newValue))
-                ipField.setStyle("-fx-background-color: white;");
+        buttonNext.setOnAction(e -> {
+            if (answers == null)
+                gui.setAnswer(Protocol.ACK.getQuestion());
+            else if (answers.size() == 1)
+                gui.setAnswer(textField.getText());
             else
-                ipField.setStyle("-fx-background-color: #FF9999;");
+                gui.setAnswer(comboBox.getValue());
+            gui.setInputReady(true);
+            comboBox.setVisible(false);
+            textField.setVisible(false);
+            buttonNext.setVisible(false);
+            wait.setVisible(true);
+            //stage.setScene(new Scene(new Wait(message)));
         });
 
-        buttonSocket.setOnAction(e -> {
-            if (isValidIp(ipField.getText())) {
-                gui.setIp(ipField.getText());
-                gui.setType("Socket");
-                gui.setInputReady(true);
-                stage.hide();
-            } else
-                invalidIpText.setVisible(true);
-        });
-
-        buttonRmi.setOnAction(e -> {
-            if (isValidIp(ipField.getText())) {
-                gui.setIp(ipField.getText());
-                gui.setType("Rmi");
-                gui.setInputReady(true);
-                stage.hide();
-            } else
-                invalidIpText.setVisible(true);
-        });
+        buttonQuit.setOnAction(e -> System.exit(1));
 
         setAlignment(Pos.CENTER);
         setHalignment(text, HPos.CENTER);
-        setHalignment(buttonSocket, HPos.CENTER);
-        setHalignment(buttonRmi, HPos.CENTER);
+        setHalignment(buttonNext, HPos.CENTER);
+        setHalignment(buttonQuit, HPos.CENTER);
 
         setStyle("-fx-background-image: url('https://www.meeplemountain.com/wp-content/uploads/2017/11/adrenaline.jpg')");
     }
 
-    private boolean isValidIp(String input) {
-        return input.matches("^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?).(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?).(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?).(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$");
+    public void setMessage(String string) {
+        //message = string;
     }
 }
