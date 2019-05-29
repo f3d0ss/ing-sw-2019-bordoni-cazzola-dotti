@@ -13,7 +13,8 @@ public class PayScopeCommand implements Command {
 
     /**
      * This constructor create a command for pay the scope
-     * @param player is the player who use the scope
+     *
+     * @param player       is the player who use the scope
      * @param currentState is the current state
      */
     public PayScopeCommand(Player player, PendingPaymentScopeState currentState) {

@@ -17,10 +17,11 @@ public class SelectBuyingWeaponCommand extends GrabCommand {
 
     /**
      * This constructor create the command for select the weapon to bay
-     * @param player is the player who select the weapon
+     *
+     * @param player       is the player who select the weapon
      * @param currentState is the current state
-     * @param weapon is the weapon to select
-     * @param spawn is the spawn where the weapon is selected
+     * @param weapon       is the weapon to select
+     * @param spawn        is the spawn where the weapon is selected
      */
     public SelectBuyingWeaponCommand(Player player, SelectedAggregateActionState currentState, Weapon weapon, SpawnSquare spawn) {
         super(player);

@@ -12,6 +12,7 @@ public class SelectTargetPlayerCommand implements WeaponCommand {
 
     /**
      * This constructor create a command for select a player as target
+     *
      * @param currentState is the current state
      * @param targetPlayer is the player selected as target
      */

@@ -15,9 +15,10 @@ public class SelectWeaponModeCommand implements Command {
 
     /**
      * This constructor create a command for select a weapon mode
-     * @param player is the player who select the weapon mode
+     *
+     * @param player       is the player who select the weapon mode
      * @param currentState is the current state
-     * @param weaponMode is the weapon mode selected
+     * @param weaponMode   is the weapon mode selected
      */
     public SelectWeaponModeCommand(Player player, ChoosingWeaponOptionState currentState, WeaponMode weaponMode) {
         this.player = player;

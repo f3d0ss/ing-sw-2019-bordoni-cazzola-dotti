@@ -17,7 +17,8 @@ public class UseNewtonCommand implements Command {
 
     /**
      * This constructor create a command for use a newton
-     * @param player is the player who use the newton
+     *
+     * @param player       is the player who use the newton
      * @param currentState is the current state
      * @param targetSquare is the square where the target player will be moved
      * @param targetPlayer is the target player

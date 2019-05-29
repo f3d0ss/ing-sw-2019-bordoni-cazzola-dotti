@@ -15,9 +15,10 @@ public class SelectScopeCommand implements Command {
 
     /**
      * This constructor create a command for select a scope
-     * @param player is the player who select the scope
+     *
+     * @param player       is the player who select the scope
      * @param currentState is the current state
-     * @param powerUp is the scope selected
+     * @param powerUp      is the scope selected
      */
     public SelectScopeCommand(Player player, ScopeState currentState, PowerUp powerUp) {
         this.player = player;

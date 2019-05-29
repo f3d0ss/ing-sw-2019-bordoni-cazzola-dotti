@@ -16,9 +16,10 @@ public class SelectPowerUpCommand implements Command {
     private PowerUp powerUp;
 
     /**
-     *  This constructor create a command for select a power up
-     * @param player is the player who select the power up
-     * @param powerUp is the power up selected
+     * This constructor create a command for select a power up
+     *
+     * @param player       is the player who select the power up
+     * @param powerUp      is the power up selected
      * @param currentState is the current state
      */
     public SelectPowerUpCommand(Player player, PowerUp powerUp, ManageTurnState currentState) {

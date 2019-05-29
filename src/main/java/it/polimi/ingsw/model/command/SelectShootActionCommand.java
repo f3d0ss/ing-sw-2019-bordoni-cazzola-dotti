@@ -13,7 +13,8 @@ public class SelectShootActionCommand implements Command {
 
     /**
      * This constructor create a command for select a shoot action
-     * @param player is the player who select the shoot action
+     *
+     * @param player       is the player who select the shoot action
      * @param currentState is the current state
      */
     public SelectShootActionCommand(Player player, SelectedAggregateActionState currentState) {
