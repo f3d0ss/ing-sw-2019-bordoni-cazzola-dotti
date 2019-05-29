@@ -9,7 +9,7 @@ import java.util.List;
 
 public class SpawnSquare extends Square {
 
-    static final int MAX_WEAPON = 3;
+    public static final int MAX_WEAPON = 3;
     private ArrayList<Weapon> weapons;
     private ArrayList<PlayerId> spawnPointTrack;
 

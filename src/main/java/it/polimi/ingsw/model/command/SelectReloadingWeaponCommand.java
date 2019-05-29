@@ -4,6 +4,9 @@ import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.Weapon;
 import it.polimi.ingsw.model.playerstate.*;
 
+/**
+ * This command represent the action of select a weapon to reload
+ */
 public class SelectReloadingWeaponCommand implements Command {
     private Player player;
     private PlayerState currentState;
@@ -49,5 +52,13 @@ public class SelectReloadingWeaponCommand implements Command {
     @Override
     public void undo() {
         player.changeState(currentState);
+    }
+
+    /**
+     * @return true if the command is undoable
+     */
+    @Override
+    public boolean isUndoable() {
+        return true;
     }
 }

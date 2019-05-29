@@ -5,10 +5,18 @@ import it.polimi.ingsw.model.PowerUp;
 import it.polimi.ingsw.model.exception.IllegalUndoException;
 import it.polimi.ingsw.model.playerstate.IdleState;
 
+/**
+ * This command represent the action of use a tagback grenade
+ */
 public class UseTagbackGrenadeCommand implements Command {
     private PowerUp grenade;
     private Player player;
 
+    /**
+     * This constructor create a command for use a tagback grenade
+     * @param player is the player who use the tagback grenade
+     * @param grenade is the grenade
+     */
     public UseTagbackGrenadeCommand(Player player, PowerUp grenade) {
         this.grenade = grenade;
         this.player = player;
@@ -30,5 +38,13 @@ public class UseTagbackGrenadeCommand implements Command {
     @Override
     public void undo() {
         throw new IllegalUndoException();
+    }
+
+    /**
+     * @return true if the command is undoable
+     */
+    @Override
+    public boolean isUndoable() {
+        return false;
     }
 }

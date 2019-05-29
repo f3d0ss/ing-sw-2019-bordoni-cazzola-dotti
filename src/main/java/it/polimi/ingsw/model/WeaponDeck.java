@@ -26,4 +26,8 @@ public class WeaponDeck implements Deck {
     public void remove(Weapon weapon) {
         weapons.remove(weapon);
     }
+
+    public boolean isEmpty() {
+        return weapons.isEmpty();
+    }
 }

@@ -5,6 +5,9 @@ import it.polimi.ingsw.model.Square;
 import it.polimi.ingsw.model.playerstate.ManageTurnState;
 import it.polimi.ingsw.model.playerstate.TargetingPlayerState;
 
+/**
+ * This command represent the action of use a newton
+ */
 public class UseNewtonCommand implements Command {
     private Player player;
     private TargetingPlayerState currentState;
@@ -12,6 +15,13 @@ public class UseNewtonCommand implements Command {
     private Square targetSquare;
     private Square oldSquare;
 
+    /**
+     * This constructor create a command for use a newton
+     * @param player is the player who use the newton
+     * @param currentState is the current state
+     * @param targetSquare is the square where the target player will be moved
+     * @param targetPlayer is the target player
+     */
     public UseNewtonCommand(Player player, TargetingPlayerState currentState, Square targetSquare, Player targetPlayer) {
         this.player = player;
         this.currentState = currentState;
@@ -40,5 +50,13 @@ public class UseNewtonCommand implements Command {
         targetPlayer.move(oldSquare);
         targetPlayer.getPosition().addPlayer(targetPlayer);
         player.changeState(currentState);
+    }
+
+    /**
+     * @return true if the command is undoable
+     */
+    @Override
+    public boolean isUndoable() {
+        return true;
     }
 }

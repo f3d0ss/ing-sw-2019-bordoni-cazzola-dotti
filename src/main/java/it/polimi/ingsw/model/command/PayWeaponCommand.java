@@ -4,10 +4,18 @@ import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.playerstate.ManageTurnState;
 import it.polimi.ingsw.model.playerstate.PendingPaymentWeaponState;
 
+/**
+ * This command represents the action of buy a weapon
+ */
 public class PayWeaponCommand implements Command {
     private Player player;
     private PendingPaymentWeaponState currentState;
 
+    /**
+     * This constructor create a command for buy a weapon
+     * @param player is the player who buy the weapon
+     * @param currentState is the current state
+     */
     public PayWeaponCommand(Player player, PendingPaymentWeaponState currentState) {
         this.player = player;
         this.currentState = currentState;
@@ -33,5 +41,13 @@ public class PayWeaponCommand implements Command {
         currentState.getPendingCardPayment().forEach(powerUp -> player.refund(powerUp));
         player.removeWeapon(currentState.getSelectedWeapon());
         player.changeState(currentState);
+    }
+
+    /**
+     * @return true if the command is undoable
+     */
+    @Override
+    public boolean isUndoable() {
+        return false;
     }
 }

@@ -16,8 +16,9 @@ public class PlayerView {
     private final List<PowerUpView> powerUps;
     private final Map<Color, Integer> ammo;
     private final int availableAggregateActionCounter;
+    private final boolean flippedBoard;
 
-    public PlayerView(PlayerId id, List<PlayerId> health, int deaths, Map<PlayerId, Integer> marks, String nickname, List<WeaponView> weapons, List<PowerUpView> powerUps, Map<Color, Integer> ammo, int availableAggregateActionCounter) {
+    public PlayerView(PlayerId id, List<PlayerId> health, int deaths, Map<PlayerId, Integer> marks, String nickname, List<WeaponView> weapons, List<PowerUpView> powerUps, Map<Color, Integer> ammo, int availableAggregateActionCounter, boolean flippedBoard) {
         this.id = id;
         this.health = health;
         this.deaths = deaths;
@@ -27,5 +28,6 @@ public class PlayerView {
         this.powerUps = powerUps;
         this.ammo = ammo;
         this.availableAggregateActionCounter = availableAggregateActionCounter;
+        this.flippedBoard = flippedBoard;
     }
 }

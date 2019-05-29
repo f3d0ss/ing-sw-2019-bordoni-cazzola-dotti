@@ -4,10 +4,18 @@ import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.playerstate.ChoosingWeaponState;
 import it.polimi.ingsw.model.playerstate.SelectedAggregateActionState;
 
+/**
+ * This command represent the action of select a shoot action
+ */
 public class SelectShootActionCommand implements Command {
     private Player player;
     private SelectedAggregateActionState currentState;
 
+    /**
+     * This constructor create a command for select a shoot action
+     * @param player is the player who select the shoot action
+     * @param currentState is the current state
+     */
     public SelectShootActionCommand(Player player, SelectedAggregateActionState currentState) {
         this.player = player;
         this.currentState = currentState;
@@ -27,5 +35,13 @@ public class SelectShootActionCommand implements Command {
     @Override
     public void undo() {
         player.changeState(currentState);
+    }
+
+    /**
+     * @return true if the command is undoable
+     */
+    @Override
+    public boolean isUndoable() {
+        return true;
     }
 }

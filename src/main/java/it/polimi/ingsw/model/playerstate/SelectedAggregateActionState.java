@@ -20,12 +20,12 @@ public class SelectedAggregateActionState extends AfterSelectedAggregateActionSt
         List<Command> commands = new ArrayList<>();
         if (!getSelectedAggregateAction().hasMoved() && getSelectedAggregateAction().getMoveNumber() > 0)
             player.getAccessibleSquare(getSelectedAggregateAction().getMoveNumber()).forEach(square -> commands.add(new MoveCommand(player, square, this)));
-        if (getSelectedAggregateAction().isGrab())
-            commands.addAll(player.getPosition().getGrabCommands(player, this));
-        else if (getSelectedAggregateAction().isShoot())
-            commands.add(new SelectShootActionCommand(player, this));
-        else
-            commands.add(new DoneCommand(player, this));
+        else {
+            if (getSelectedAggregateAction().isGrab())
+                commands.addAll(player.getPosition().getGrabCommands(player, this));
+            else if (getSelectedAggregateAction().isShoot())
+                commands.add(new SelectShootActionCommand(player, this));
+        }
 
         return commands;
     }

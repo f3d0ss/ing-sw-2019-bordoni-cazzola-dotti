@@ -1,7 +1,9 @@
 package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.command.Command;
+import it.polimi.ingsw.model.command.RespawnCommand;
 import it.polimi.ingsw.model.playerstate.IdleState;
+import it.polimi.ingsw.model.playerstate.ManageTurnState;
 import it.polimi.ingsw.model.playerstate.PlayerState;
 import it.polimi.ingsw.view.PlayerView;
 import it.polimi.ingsw.view.PowerUpView;
@@ -40,6 +42,7 @@ public class Player {
     private Map<Color, Integer> ammo = new EnumMap<>(Color.class);
     private int availableAggregateActionCounter;
     private PlayerId lastShooter;
+    private boolean flippedBoard = false;
 
     public Player(Match match, PlayerId id, String nickname) {
         this.match = match;
@@ -61,7 +64,7 @@ public class Player {
         powerUps.forEach(powerUp -> pvs.add(new PowerUpView(powerUp.getType(), powerUp.getColor())));
 //        TODO: decide if view need to know
 //        playerState.updatePlayerView(playerView);
-        return new PlayerView(id, health, deaths, marks, nickname, wvs, pvs, ammo, availableAggregateActionCounter);
+        return new PlayerView(id, health, deaths, marks, nickname, wvs, pvs, ammo, availableAggregateActionCounter, flippedBoard);
     }
 
     public Map<Color, Integer> getAmmo() {
@@ -113,6 +116,11 @@ public class Player {
     private void addAmmo(Color color, Integer number) {
         int newAmmoNumber = this.ammo.getOrDefault(color, 0) + number;
         this.ammo.put(color, newAmmoNumber < MAX_AMMO ? newAmmoNumber : MAX_AMMO);
+    }
+
+    public void pay(PowerUp powerUp) {
+        powerUps.remove(powerUp);
+        match.discard(powerUp);
     }
 
     private void addPowerUp(int number) {
@@ -167,13 +175,30 @@ public class Player {
             position.removePlayer(this);
         position = match.getBoard().getSpawn(color);
         position.addPlayer(this);
-
+        health = new ArrayList<>();
+        if (match.isLastTurn())
+            flippedBoard = true;
     }
 
     public List<Command> getPossibleCommands() {
         return playerState.getPossibleCommands(this);
     }
 
+    public List<RespawnCommand> getRespawnCommands() {
+        List<RespawnCommand> respawnCommands = new ArrayList<>();
+        addExtraPowerUp();
+        powerUps.forEach(powerUp -> respawnCommands.add(new RespawnCommand(this, powerUp)));
+        return respawnCommands;
+    }
+
+    public List<RespawnCommand> getSpawnCommands() {
+        addExtraPowerUp();
+        return getRespawnCommands();
+    }
+
+    private void addExtraPowerUp() {
+        this.powerUps.add(match.drawPowerUpCard());
+    }
 
     public List<AggregateAction> getPossibleAggregateAction() {
         List<AggregateAction> aggregateActions = new ArrayList<>();
@@ -216,10 +241,6 @@ public class Player {
         ammo.put(color, ammo.get(color) - amount);
     }
 
-    public void pay(PowerUp powerUp) {
-        match.discard(powerUp);
-        powerUps.remove(powerUp);
-    }
 
     public void refund(Color color, Integer amount) {
         addAmmo(color, amount);
@@ -262,7 +283,7 @@ public class Player {
         return disconnected;
     }
 
-    public void setDisconnetted(boolean disconnected) {
+    public void setDisconnected(boolean disconnected) {
         this.disconnected = disconnected;
     }
 
@@ -276,6 +297,7 @@ public class Player {
 
     public void addDeaths() {
         deaths++;
+        match.decreaseDeathsCounter();
     }
 
     public int getPoints() {
@@ -285,6 +307,21 @@ public class Player {
     public void addPoints(int points) {
         this.points += points;
     }
+
+    /**
+     * @return true if the player's board is flipped
+     */
+    public boolean isFlippedBoard() {
+        return flippedBoard;
+    }
+
+    /**
+     * This method gives the player the flipped board (Final frenzy only player board) This board offers no point for first blood.
+     */
+    public void flipBoard() {
+        this.flippedBoard = true;
+    }
+
 
     public List<PowerUp> getTargetingScopes() {
         return powerUps.stream().filter(powerUp -> powerUp.getType() == PowerUpID.TARGETING_SCOPE).collect(Collectors.toList());
@@ -303,6 +340,7 @@ public class Player {
     }
 
     public void initialize() {
+        playerState = new ManageTurnState();
         if (match.isLastTurn() && match.hasFirstPlayerPlayedLastTurn())
             availableAggregateActionCounter = 1;
         else
