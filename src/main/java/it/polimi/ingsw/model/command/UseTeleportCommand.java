@@ -4,6 +4,9 @@ import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.Square;
 import it.polimi.ingsw.model.playerstate.ManageTurnState;
 import it.polimi.ingsw.model.playerstate.SelectedTeleporterState;
+import it.polimi.ingsw.view.commandmessage.CommandMessage;
+import it.polimi.ingsw.view.commandmessage.CommandType;
+import it.polimi.ingsw.view.commandmessage.SimpleCommandMessage;
 
 /**
  * This command represent the action of use a teleport
@@ -16,9 +19,10 @@ public class UseTeleportCommand implements Command {
 
     /**
      * This constructor create a command for use a teleport
-     * @param player is the player who use the teleport
+     *
+     * @param player       is the player who use the teleport
      * @param currentState is the current state
-     * @param newPosition is the position where the player will be moved
+     * @param newPosition  is the position where the player will be moved
      */
     public UseTeleportCommand(Player player, SelectedTeleporterState currentState, Square newPosition) {
         this.player = player;
@@ -55,5 +59,10 @@ public class UseTeleportCommand implements Command {
     @Override
     public boolean isUndoable() {
         return true;
+    }
+
+    @Override
+    public CommandMessage createCommandMessage() {
+        return new SimpleCommandMessage(CommandType.USE_TELEPORT);
     }
 }

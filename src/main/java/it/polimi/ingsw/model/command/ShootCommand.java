@@ -5,6 +5,9 @@ import it.polimi.ingsw.model.exception.IllegalUndoException;
 import it.polimi.ingsw.model.playerstate.ManageTurnState;
 import it.polimi.ingsw.model.playerstate.ReadyToShootState;
 import it.polimi.ingsw.model.playerstate.ScopeState;
+import it.polimi.ingsw.view.commandmessage.CommandMessage;
+import it.polimi.ingsw.view.commandmessage.CommandType;
+import it.polimi.ingsw.view.commandmessage.SimpleCommandMessage;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -19,9 +22,10 @@ public class ShootCommand implements WeaponCommand {
 
     /**
      * This constructor create a command for shoot
+     *
      * @param currentState is the current state
-     * @param effects is the list of single effects
-     * @param player is the player who shoot
+     * @param effects      is the list of single effects
+     * @param player       is the player who shoot
      */
     public ShootCommand(ReadyToShootState currentState, List<EffectCommand> effects, Player player) {
         this.currentState = currentState;
@@ -65,5 +69,10 @@ public class ShootCommand implements WeaponCommand {
     @Override
     public boolean isUndoable() {
         return false;
+    }
+
+    @Override
+    public CommandMessage createCommandMessage() {
+        return new SimpleCommandMessage(CommandType.SHOOT);
     }
 }

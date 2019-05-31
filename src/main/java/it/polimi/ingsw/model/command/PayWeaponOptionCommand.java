@@ -3,6 +3,9 @@ package it.polimi.ingsw.model.command;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.playerstate.ChoosingWeaponOptionState;
 import it.polimi.ingsw.model.playerstate.PendingPaymentWeaponOptionState;
+import it.polimi.ingsw.view.commandmessage.CommandMessage;
+import it.polimi.ingsw.view.commandmessage.CommandType;
+import it.polimi.ingsw.view.commandmessage.SimpleCommandMessage;
 
 /**
  * This command actualize the payment for the weapon's option selected
@@ -42,5 +45,10 @@ public class PayWeaponOptionCommand implements Command {
     @Override
     public boolean isUndoable() {
         return true;
+    }
+
+    @Override
+    public CommandMessage createCommandMessage() {
+        return new SimpleCommandMessage(CommandType.PAY);
     }
 }
