@@ -12,9 +12,11 @@ import javafx.scene.control.TextField;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.scene.text.*;
 import javafx.stage.Stage;
 
+import java.awt.*;
 import java.util.List;
 
 public class LoginWindow extends GridPane {
@@ -31,10 +33,15 @@ public class LoginWindow extends GridPane {
         Button buttonNext = new Button("Next");
         Button buttonQuit = new Button("Quit");
 
+        GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+        int width = gd.getDisplayMode().getWidth() / 2;
+        int height = gd.getDisplayMode().getHeight() / 2;
+        double scaleFactor = (double) width / 960; //1 for a 1920x1080
+
         shadow.setSpread(0.6);
         shadow.setColor(Color.BLACK);
         text.setTextAlignment(TextAlignment.CENTER);
-        text.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.ITALIC, 12));
+        text.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.ITALIC, 12 * scaleFactor));
         text.setFill(Color.WHITE);
         text.setEffect(shadow);
 
@@ -47,16 +54,16 @@ public class LoginWindow extends GridPane {
         wait.setVisible(false);
 
         buttonNext.setStyle(BUTTON_STYLE);
-        buttonNext.setMinWidth(100);
+        buttonNext.setMinWidth(100 * scaleFactor);
         buttonQuit.setStyle(BUTTON_STYLE);
-        buttonQuit.setMinWidth(100);
+        buttonQuit.setMinWidth(100 * scaleFactor);
 
-        setMinSize(730, 510);
+        setMinSize(width, height);
 
-        setPadding(new Insets(10, 10, 10, 10));
+        setPadding(new Insets(10 * scaleFactor, 10 * scaleFactor, 10 * scaleFactor, 10 * scaleFactor));
 
-        setVgap(10);
-        setHgap(100);
+        setVgap(10 * scaleFactor);
+        setHgap(100 * scaleFactor);
 
         add(text, 0, 0);
         if (isAnswerRequired) {
@@ -93,7 +100,7 @@ public class LoginWindow extends GridPane {
         setHalignment(buttonNext, HPos.CENTER);
         setHalignment(buttonQuit, HPos.CENTER);
 
-        setStyle("-fx-background-image: url('https://www.meeplemountain.com/wp-content/uploads/2017/11/adrenaline.jpg')");
+        setStyle("-fx-background-image: url('file:src/resources/images/other/loginscreen.jpg')");
     }
 
     public void setMessage(String string) {
