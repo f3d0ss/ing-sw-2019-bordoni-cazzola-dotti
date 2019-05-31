@@ -1,12 +1,11 @@
 package it.polimi.ingsw.network.client;
 
 import com.google.gson.Gson;
-import it.polimi.ingsw.gui.GuiManager;
 import it.polimi.ingsw.network.Message;
 import it.polimi.ingsw.network.Protocol;
+import it.polimi.ingsw.view.gui.GuiManager;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static java.lang.StrictMath.random;
@@ -43,9 +42,9 @@ public class User {
         answers.add("Socket");
         answers.add("RMI");
         connectionType = client.manageMessage(new Gson().toJson(new Message(Protocol.CHOOSE_CONNECTION, "", answers, 0)));
-        ip = client.manageMessage(new Gson().toJson(new Message(Protocol.INSERT_IP, "", Arrays.asList("string"), 0)));
-        while(!isValidIp(ip)){
-            ip = client.manageMessage(new Gson().toJson(new Message(Protocol.INSERT_IP_AGAIN, "", Arrays.asList("string"), 0)));
+        ip = client.manageMessage(new Gson().toJson(new Message(Protocol.INSERT_IP, "", null, 0)));
+        while (!isValidIp(ip)) {
+            ip = client.manageMessage(new Gson().toJson(new Message(Protocol.INSERT_IP_AGAIN, "", null, 0)));
         }
         System.out.println("Avvio client");
         if (connectionType.equals("Socket"))

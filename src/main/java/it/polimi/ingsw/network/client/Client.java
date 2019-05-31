@@ -9,7 +9,6 @@ import java.util.List;
 
 public class Client implements Runnable {
 
-    private String ip;
     private String type;
     private Ui ui;
 
@@ -17,7 +16,7 @@ public class Client implements Runnable {
         this.ui = ui;
     }
 
-    public void setUi(Ui ui){
+    public void setUi(Ui ui) {
         this.ui = ui;
     }
 
@@ -34,22 +33,15 @@ public class Client implements Runnable {
         String subMessage = fromServer.getStringInQuestion();
         String completeMessage = String.format(mainMessage, subMessage);
         List<String> possibleAnswers = fromServer.getPossibleAnswer();
-        return ui.showMessage(completeMessage, possibleAnswers);
-    }
-
-    public void setIp(String ip) {
-        this.ip = ip;
-    }
-
-    public String getIp() {
-        return ip;
-    }
-
-    public void setType(String type) {
-        this.type = type;
+        boolean isAnswerRequired = fromServer.type.requiresAnswer();
+        return ui.showMessage(completeMessage, possibleAnswers, isAnswerRequired);
     }
 
     public String getType() {
         return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }

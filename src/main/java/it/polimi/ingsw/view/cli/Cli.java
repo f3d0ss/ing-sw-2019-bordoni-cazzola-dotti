@@ -1,4 +1,4 @@
-package it.polimi.ingsw.view;
+package it.polimi.ingsw.view.cli;
 
 import it.polimi.ingsw.model.*;
 

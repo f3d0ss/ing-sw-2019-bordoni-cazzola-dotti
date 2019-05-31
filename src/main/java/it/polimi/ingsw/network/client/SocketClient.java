@@ -1,5 +1,7 @@
 package it.polimi.ingsw.network.client;
 
+import it.polimi.ingsw.network.Protocol;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
@@ -33,7 +35,7 @@ public class SocketClient extends Client {
     public void startClient() throws IOException {
         socket = new Socket(ip, port);
         fromServer = new Scanner(socket.getInputStream());
-        System.out.println("Connessione stabilita. Digitare quit per uscire");
+        //System.out.println("Connessione stabilita. Digitare quit per uscire");
         toServer = new PrintWriter(socket.getOutputStream(), true);
         while (keepAlive) {
             try {
@@ -42,7 +44,10 @@ public class SocketClient extends Client {
                 System.out.println("Impossibile raggiungere il server.");
                 break;
             }
-            toServer.println(manageMessage(input));
+            if (input == Protocol.ping)
+                toServer.println(Protocol.ack);
+            else
+                toServer.println(manageMessage(input));
         }
         System.out.println("Disconnessione in corso.");
         toServer.close();

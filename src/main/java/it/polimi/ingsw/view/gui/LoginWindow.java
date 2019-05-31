@@ -1,4 +1,4 @@
-package it.polimi.ingsw.gui;
+package it.polimi.ingsw.view.gui;
 
 import it.polimi.ingsw.network.Protocol;
 import it.polimi.ingsw.network.client.Gui;
@@ -17,13 +17,13 @@ import javafx.stage.Stage;
 
 import java.util.List;
 
-public class Window extends GridPane {
+public class LoginWindow extends GridPane {
 
     private static final String ERROR_STYLE = "-fx-font: normal bold 12px 'sans-serif'; -fx-text-fill: #FF0000;";
     private static final String BUTTON_STYLE = "-fx-background-color: #222222; -fx-text-fill: white;";
     static ComboBox<String> comboBox;
 
-    public Window(Stage stage, Gui gui, String message, List<String> answers, String defaultOption) {
+    public LoginWindow(Stage stage, Gui gui, String message, List<String> answers, String defaultOption, boolean isAnswerRequired) {
         Text text = new Text(message);
         DropShadow shadow = new DropShadow();
         Text wait = new Text("Attendi...");
@@ -59,8 +59,8 @@ public class Window extends GridPane {
         setHgap(100);
 
         add(text, 0, 0);
-        if (answers != null) {
-            if (answers.size() == 1)
+        if (isAnswerRequired) {
+            if (answers == null)
                 add(textField, 0, 1);
             else {
                 comboBox.getItems().addAll(answers);
@@ -73,9 +73,9 @@ public class Window extends GridPane {
         add(buttonQuit, 0, 4);
 
         buttonNext.setOnAction(e -> {
-            if (answers == null)
-                gui.setAnswer(Protocol.ACK.getQuestion());
-            else if (answers.size() == 1)
+            if (!isAnswerRequired)
+                gui.setAnswer(Protocol.ack);
+            else if (answers == null)
                 gui.setAnswer(textField.getText());
             else
                 gui.setAnswer(comboBox.getValue());
@@ -84,7 +84,6 @@ public class Window extends GridPane {
             textField.setVisible(false);
             buttonNext.setVisible(false);
             wait.setVisible(true);
-            //stage.setScene(new Scene(new Wait(message)));
         });
 
         buttonQuit.setOnAction(e -> System.exit(1));
