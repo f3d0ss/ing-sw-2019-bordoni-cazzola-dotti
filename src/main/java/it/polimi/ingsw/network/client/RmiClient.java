@@ -3,13 +3,12 @@ package it.polimi.ingsw.network.client;
 import it.polimi.ingsw.network.Protocol;
 import it.polimi.ingsw.network.server.RmiClientInterface;
 
+import java.rmi.ConnectException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
-
-import static java.lang.Thread.sleep;
 
 public class RmiClient extends Client {
 
@@ -20,8 +19,8 @@ public class RmiClient extends Client {
     private RmiServerInterface rmiServerInterface;
     private RmiClientInterface stub;
 
-    public RmiClient(String ip, int port, Ui ui) {
-        super(ui);
+    public RmiClient(String ip, int port, Ui ui, User user) {
+        super(ui, user);
         this.ip = ip;
         this.port = port;
     }
@@ -54,13 +53,19 @@ public class RmiClient extends Client {
         return;
     }
 
-    public void startClient() throws RemoteException, NotBoundException {
-        Registry registry = LocateRegistry.getRegistry(ip, 1099);
-        rmiServerInterface = (RmiServerInterface) registry.lookup(serverName);
-        rmiClientImplementation = new RmiClientImplementation(this);
-        stub = (RmiClientInterface) UnicastRemoteObject.exportObject(rmiClientImplementation, port);
-        System.out.println("Connessione stabilita. Digitare quit per uscire");
-        rmiServerInterface.registry(stub);
+    public void startClient() throws RemoteException, NotBoundException, ConnectException {
+        System.out.println("Connessione al RMI server in corso...");
+        try {
+            Registry registry = LocateRegistry.getRegistry(ip, 1099);
+            rmiServerInterface = (RmiServerInterface) registry.lookup(serverName);
+            rmiClientImplementation = new RmiClientImplementation(this);
+            stub = (RmiClientInterface) UnicastRemoteObject.exportObject(rmiClientImplementation, port);
+            rmiServerInterface.registry(stub);
+            System.out.println("Connessione stabilita.");
+        } catch (ConnectException e ){
+            System.out.println(e.getMessage());
+        }
+        /*
         while (true) {
             try {
                 sleep(2000);
@@ -73,7 +78,7 @@ public class RmiClient extends Client {
                 System.out.println(e.getMessage());
                 break;
             }
-        }
+        }*/
         System.out.println("Impossibile raggiungere il server. Disconnessione in corso.");
         System.exit(-1);
     }

@@ -38,8 +38,9 @@ public class SocketServer implements Runnable {
         try {
             return fromClient.get(addressee).nextLine();
         } catch (NoSuchElementException e) {
-            serverManager.removeClient(addressee);
-            return "Impossibile raggiungere il client.";
+            //serverManager.removeClient(addressee);
+            unregistry(addressee);
+            return "Impossibile raggiungere il client." + e.getMessage();
         }
     }
 
@@ -55,6 +56,7 @@ public class SocketServer implements Runnable {
     public void unregistry(Socket client) {
         fromClient.remove(client);
         toClient.remove(client);
+        serverManager.removeClient(client);
     }
 
     public void stopServer() {

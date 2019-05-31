@@ -74,9 +74,33 @@ public enum Protocol {
             return false;
         }
     },
+    NEW_CONNECTION {
+        public String getQuestion() {
+            return "Nuova connessione al server.";
+        }
+        public boolean requiresAnswer() {
+            return false;
+        }
+    },
     LOGIN_CONFIRM {
         public String getQuestion() {
             return "Iscrizione riuscita! Ora attendi che altri giocatori si connettano.";
+        }
+        public boolean requiresAnswer() {
+            return false;
+        }
+    },
+    WAIT_FOR_PLAYERS {
+        public String getQuestion() {
+            return "Mancano %s giocatori per l'avvio della partita.";
+        }
+        public boolean requiresAnswer() {
+            return false;
+        }
+    },
+    REMOVAL {
+        public String getQuestion() {
+            return "%s si è disconnesso.";
         }
         public boolean requiresAnswer() {
             return false;
@@ -92,7 +116,7 @@ public enum Protocol {
     },
     ARE_YOU_READY {
         public String getQuestion() {
-            return "L'attesa è finita. Preparati a combattere!";
+            return "Attendi...";
         }
         public boolean requiresAnswer() {
             return false;
