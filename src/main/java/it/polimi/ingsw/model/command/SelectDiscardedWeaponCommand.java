@@ -5,6 +5,9 @@ import it.polimi.ingsw.model.Weapon;
 import it.polimi.ingsw.model.playerstate.DiscardingWeaponState;
 import it.polimi.ingsw.model.playerstate.PendingPaymentWeaponState;
 
+/**
+ * This command represent the action of discard a weapon used only when a player has already 3 weapons
+ */
 public class SelectDiscardedWeaponCommand implements Command {
 
     private Player player;
@@ -12,6 +15,12 @@ public class SelectDiscardedWeaponCommand implements Command {
     private Weapon weaponToDiscard;
     private boolean wasLoaded;
 
+    /**
+     * This constructor create a command for discard a weapon
+     * @param player is the player who discard the weapon
+     * @param currentState is the current state
+     * @param weaponToDiscard is the weapon to discard
+     */
     public SelectDiscardedWeaponCommand(Player player, DiscardingWeaponState currentState, Weapon weaponToDiscard) {
         this.player = player;
         this.currentState = currentState;
@@ -40,5 +49,13 @@ public class SelectDiscardedWeaponCommand implements Command {
         player.addWeapon(weaponToDiscard);
         currentState.getSpawn().removeWeapon(weaponToDiscard);
         player.changeState(currentState);
+    }
+
+    /**
+     * @return true if the command is undoable
+     */
+    @Override
+    public boolean isUndoable() {
+        return true;
     }
 }

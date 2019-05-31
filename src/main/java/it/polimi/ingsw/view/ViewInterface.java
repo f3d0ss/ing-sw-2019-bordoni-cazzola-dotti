@@ -11,5 +11,5 @@ public interface ViewInterface {
 
     void update(PlayerView pw);
 
-    int sendCommands(List<Command> commands);
+    int sendCommands(List<Command> commands, boolean undo);
 }

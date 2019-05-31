@@ -1,4 +1,4 @@
-package it.polimi.ingsw.network;
+﻿package it.polimi.ingsw.network;
 
 public enum Protocol {
 
@@ -32,6 +32,11 @@ public enum Protocol {
         }
         public boolean requiresAnswer() {
             return true;
+        }
+    },
+    INSERT_IP_AGAIN {
+        public String getQuestion() {
+            return "Ip non valido. Riprova.";
         }
     },
     WELCOME {

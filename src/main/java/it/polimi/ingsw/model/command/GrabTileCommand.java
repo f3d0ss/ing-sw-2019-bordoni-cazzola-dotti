@@ -5,10 +5,18 @@ import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.TurretSquare;
 import it.polimi.ingsw.model.exception.IllegalUndoException;
 
+/**
+ * This command represent the action of grab a tile
+ */
 public class GrabTileCommand extends GrabCommand {
     private AmmoTile ammoTile;
     private TurretSquare square;
 
+    /**
+     * @param player   is the player who do the action
+     * @param ammoTile is the tail that the player grab
+     * @param square   is the square where the player grab the tail
+     */
     public GrabTileCommand(Player player, AmmoTile ammoTile, TurretSquare square) {
         super(player);
         this.ammoTile = ammoTile;
@@ -31,5 +39,13 @@ public class GrabTileCommand extends GrabCommand {
     @Override
     public void undo() {
         throw new IllegalUndoException();
+    }
+
+    /**
+     * @return true if the command is undoable
+     */
+    @Override
+    public boolean isUndoable() {
+        return false;
     }
 }

@@ -4,31 +4,55 @@ import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.Square;
 import it.polimi.ingsw.model.playerstate.*;
 
+/**
+ * This command represents a move action
+ */
 public class MoveCommand implements Command {
     private Player player;
     private Square newPosition;
     private MovableState currentState;
     private Square oldSquare;
     private PlayerState nextState;
+    private boolean undoable;
 
+    /**
+     * This constructor create a command that move the player and change the state in the next state
+     *
+     * @param player       is the player who move
+     * @param newPosition  is the new position
+     * @param currentState is the current state
+     */
     public MoveCommand(Player player, Square newPosition, SelectedAggregateActionState currentState) {
         this.player = player;
         this.newPosition = newPosition;
         this.currentState = currentState;
-        if (currentState.getSelectedAggregateAction().isShoot() || currentState.getSelectedAggregateAction().isGrab())
+        if (currentState.getSelectedAggregateAction().isShoot() || currentState.getSelectedAggregateAction().isGrab()) {
             nextState = currentState;
-        else
+            undoable = true;
+        } else {
             nextState = new ManageTurnState();
+            undoable = false;
+        }
     }
 
+    /**
+     * This constructor create a command that move the player and change the state in the next state
+     *
+     * @param player       is the player who move
+     * @param newPosition  is the new position
+     * @param currentState is the current state
+     */
     public MoveCommand(Player player, Square newPosition, ReadyToShootState currentState) {
         this.player = player;
         this.newPosition = newPosition;
         this.currentState = currentState;
-        if (!currentState.getSelectedWeapon().hasDamageToDo())
+        if (!currentState.getSelectedWeapon().hasDamageToDo()) {
             nextState = new ManageTurnState();
-        else
+            undoable = false;
+        } else {
             nextState = currentState;
+            undoable = true;
+        }
     }
 
     /**
@@ -50,5 +74,13 @@ public class MoveCommand implements Command {
         player.move(oldSquare);
         currentState.resetMoves();
         player.changeState(currentState);
+    }
+
+    /**
+     * @return true if the command is undoable
+     */
+    @Override
+    public boolean isUndoable() {
+        return undoable;
     }
 }

@@ -6,6 +6,7 @@ import it.polimi.ingsw.network.Protocol;
 import it.polimi.ingsw.view.gui.GuiManager;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static java.lang.StrictMath.random;
