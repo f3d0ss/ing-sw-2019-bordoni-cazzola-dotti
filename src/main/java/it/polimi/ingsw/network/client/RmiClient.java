@@ -36,7 +36,7 @@ public class RmiClient extends Client {
     }
 
     public String printMessageAndGetAnswer(String message) {
-        if(message == Protocol.ping)
+        if (message == Protocol.ping)
             return Protocol.ack;
         return manageMessage(message);
         /*if (answer.equals("quit")) {
@@ -64,7 +64,7 @@ public class RmiClient extends Client {
             stub = (RmiClientInterface) UnicastRemoteObject.exportObject(rmiClientImplementation, port);
             rmiServerInterface.registry(stub);
             System.out.println("Connessione stabilita.");
-        } catch (ConnectException e ){
+        } catch (ConnectException e) {
             System.out.println(e.getMessage());
             ip = manageMessage(new Gson().toJson(new Message(Protocol.INSERT_IP_AGAIN, "", null, 0)));
             run();

@@ -44,7 +44,7 @@ public class SocketClient extends Client {
                 System.out.println("Impossibile raggiungere il server.");
                 break;
             }
-            if(input == Protocol.ping)
+            if (input == Protocol.ping)
                 toServer.println(Protocol.ack);
             else
                 toServer.println(manageMessage(input));

@@ -16,7 +16,7 @@ public class Client implements Runnable {
         this.ui = ui;
     }
 
-    public void setUi(Ui ui){
+    public void setUi(Ui ui) {
         this.ui = ui;
     }
 
@@ -37,11 +37,11 @@ public class Client implements Runnable {
         return ui.showMessage(completeMessage, possibleAnswers, isAnswerRequired);
     }
 
-    public void setType(String type) {
-        this.type = type;
-    }
-
     public String getType() {
         return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }

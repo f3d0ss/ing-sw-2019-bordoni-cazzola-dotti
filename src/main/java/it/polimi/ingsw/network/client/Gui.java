@@ -16,14 +16,15 @@ public class Gui implements Ui, Runnable {
     private String type;
     private String name;
 
-    public String showMessage(String toBeShown, List<String> possibleAnswers, boolean isAnswerRequired){
+    public String showMessage(String toBeShown, List<String> possibleAnswers, boolean isAnswerRequired) {
         inputReady = false;
         System.out.println(toBeShown);//to be removed
         Platform.runLater(() -> GuiManager.setMessageAndShow(toBeShown, possibleAnswers, isAnswerRequired));
         while (!inputReady) {
             try {
                 sleep(1000);
-            } catch (InterruptedException e) {}
+            } catch (InterruptedException e) {
+            }
         }
         GuiManager.setInputReady(false);
         System.out.println(answer);
@@ -43,16 +44,16 @@ public class Gui implements Ui, Runnable {
     }
 
     @Override
-    public void run(){
+    public void run() {
         Application.launch(GuiManager.class);
-    }
-
-    public void setType(String type) {
-        this.type = type;
     }
 
     public String getType() {
         return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public String getName() {

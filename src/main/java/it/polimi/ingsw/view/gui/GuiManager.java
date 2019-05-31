@@ -26,17 +26,6 @@ public class GuiManager extends Application {
         GuiManager.gui = gui;
     }
 
-    @Override
-    public void start(Stage inputStage) {
-        stage = new Stage();
-        window = new LoginWindow(stage, gui, "ciao", null, "", false);
-        Scene scene = new Scene(window);
-        stage.setTitle("Login");
-        stage.setResizable(false);
-        stage.setScene(scene);
-        gui.setReady(true);
-    }
-
     public static void setMessageAndShow(String string, List<String> answers, boolean isAnswerRequired) {
         String defaultAnswer = "";
         if (answers != null)
@@ -49,5 +38,16 @@ public class GuiManager extends Application {
 
     public static void setInputReady(boolean input) {
         inputReady = input;
+    }
+
+    @Override
+    public void start(Stage inputStage) {
+        stage = new Stage();
+        window = new LoginWindow(stage, gui, "ciao", null, "", false);
+        Scene scene = new Scene(window);
+        stage.setTitle("Login");
+        stage.setResizable(false);
+        stage.setScene(scene);
+        gui.setReady(true);
     }
 }
