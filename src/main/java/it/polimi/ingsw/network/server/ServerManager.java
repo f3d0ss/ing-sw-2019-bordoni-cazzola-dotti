@@ -54,7 +54,7 @@ public class ServerManager implements Runnable {
         sendMessageAndWaitForAnswer(id, new Message(Protocol.WELCOME, String.valueOf(id), null, 0));
         notifyNewConnection(id);
         if (lobby.size() == 1) {
-            sendMessageAndWaitForAnswer(id, new Message(Protocol.LOGIN_FIRST, "", Arrays.asList("string"), 0));
+            sendMessageAndWaitForAnswer(id, new Message(Protocol.LOGIN_FIRST, "", null, 0));
         } else {
             String playerAlreadyIn = "";
             List<String> players = new ArrayList<>();
@@ -63,9 +63,9 @@ public class ServerManager implements Runnable {
                     playerAlreadyIn = playerAlreadyIn + lobby.get(i) + "; ";
                     players.add(lobby.get(i));
                 }
-            sendMessageAndWaitForAnswer(id, new Message(Protocol.LOGIN_OTHERS, playerAlreadyIn, Arrays.asList("string"), 0));
+            sendMessageAndWaitForAnswer(id, new Message(Protocol.LOGIN_OTHERS, playerAlreadyIn, null, 0));
             while (lobby.containsValue(answers.get(id))) {
-                sendMessageAndWaitForAnswer(id, new Message(Protocol.LOGIN_REPEAT, "", Arrays.asList("string"), 0));
+                sendMessageAndWaitForAnswer(id, new Message(Protocol.LOGIN_REPEAT, "", null, 0));
             }
         }
         String name = answers.get(id);
