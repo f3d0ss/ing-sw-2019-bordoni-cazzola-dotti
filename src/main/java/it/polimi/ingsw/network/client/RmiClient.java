@@ -1,5 +1,7 @@
 package it.polimi.ingsw.network.client;
 
+import com.google.gson.Gson;
+import it.polimi.ingsw.network.Message;
 import it.polimi.ingsw.network.Protocol;
 import it.polimi.ingsw.network.server.RmiClientInterface;
 
@@ -19,8 +21,8 @@ public class RmiClient extends Client {
     private RmiServerInterface rmiServerInterface;
     private RmiClientInterface stub;
 
-    public RmiClient(String ip, int port, Ui ui, User user) {
-        super(ui, user);
+    public RmiClient(String ip, int port, Ui ui) {
+        super(ui);
         this.ip = ip;
         this.port = port;
     }
@@ -53,7 +55,7 @@ public class RmiClient extends Client {
         return;
     }
 
-    public void startClient() throws RemoteException, NotBoundException, ConnectException {
+    public void startClient() throws RemoteException, NotBoundException {
         System.out.println("Connessione al RMI server in corso...");
         try {
             Registry registry = LocateRegistry.getRegistry(ip, 1099);
@@ -64,6 +66,8 @@ public class RmiClient extends Client {
             System.out.println("Connessione stabilita.");
         } catch (ConnectException e ){
             System.out.println(e.getMessage());
+            ip = manageMessage(new Gson().toJson(new Message(Protocol.INSERT_IP_AGAIN, "", null, 0)));
+            run();
         }
         /*
         while (true) {

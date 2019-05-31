@@ -11,11 +11,9 @@ public class Client implements Runnable {
 
     private String type;
     private Ui ui;
-    private User user;
 
-    public Client(Ui ui, User user) {
+    public Client(Ui ui) {
         this.ui = ui;
-        this.user = user;
     }
 
     public void setUi(Ui ui){
