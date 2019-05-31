@@ -10,7 +10,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.effect.DropShadow;
-import javafx.scene.layout.GridPane;
+import javafx.scene.image.Image;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.*;
@@ -22,7 +23,6 @@ import java.util.List;
 public class LoginWindow extends GridPane {
 
     private static final String ERROR_STYLE = "-fx-font: normal bold 12px 'sans-serif'; -fx-text-fill: #FF0000;";
-    private static final String BUTTON_STYLE = "-fx-background-color: #222222; -fx-text-fill: white;";
     static ComboBox<String> comboBox;
 
     public LoginWindow(Stage stage, Gui gui, String message, List<String> answers, String defaultOption, boolean isAnswerRequired) {
@@ -34,14 +34,20 @@ public class LoginWindow extends GridPane {
         Button buttonQuit = new Button("Quit");
 
         GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
-        int width = gd.getDisplayMode().getWidth() / 2;
-        int height = gd.getDisplayMode().getHeight() / 2;
-        double scaleFactor = (double) width / 960; //1 for a 1920x1080
+        int monitorWidth = gd.getDisplayMode().getWidth();
+        int monitorHeight = gd.getDisplayMode().getHeight();
+        double scaleFactor = monitorHeight / 1080; //1 for a 1920x1080
+        double width = monitorWidth / 4;
+        double height = monitorHeight / 4;
+
+        setBackground(new Background(new BackgroundImage(new Image("file:src/resources/images/other/loginHQ.jpg"),
+                BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, new BackgroundSize(width, height, true, true, true, true))));
 
         shadow.setSpread(0.6);
         shadow.setColor(Color.BLACK);
         text.setTextAlignment(TextAlignment.CENTER);
-        text.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.ITALIC, 12 * scaleFactor));
+        Font verdana = Font.font("verdana", FontWeight.BOLD, FontPosture.ITALIC, 12 * scaleFactor);
+        text.setFont(verdana);
         text.setFill(Color.WHITE);
         text.setEffect(shadow);
 
@@ -53,17 +59,13 @@ public class LoginWindow extends GridPane {
         wait.setStyle(ERROR_STYLE);
         wait.setVisible(false);
 
-        buttonNext.setStyle(BUTTON_STYLE);
         buttonNext.setMinWidth(100 * scaleFactor);
-        buttonQuit.setStyle(BUTTON_STYLE);
         buttonQuit.setMinWidth(100 * scaleFactor);
 
         setMinSize(width, height);
 
         setPadding(new Insets(10 * scaleFactor, 10 * scaleFactor, 10 * scaleFactor, 10 * scaleFactor));
 
-        setVgap(10 * scaleFactor);
-        setHgap(100 * scaleFactor);
 
         add(text, 0, 0);
         if (isAnswerRequired) {
@@ -78,6 +80,8 @@ public class LoginWindow extends GridPane {
         add(wait, 0, 2);
         add(buttonNext, 0, 3);
         add(buttonQuit, 0, 4);
+        buttonNext.setFont(verdana);
+        buttonQuit.setFont(verdana);
 
         buttonNext.setOnAction(e -> {
             if (!isAnswerRequired)
@@ -99,8 +103,6 @@ public class LoginWindow extends GridPane {
         setHalignment(text, HPos.CENTER);
         setHalignment(buttonNext, HPos.CENTER);
         setHalignment(buttonQuit, HPos.CENTER);
-
-        setStyle("-fx-background-image: url('file:src/resources/images/other/loginscreen.jpg')");
     }
 
     public void setMessage(String string) {
