@@ -34,11 +34,6 @@ public enum Protocol {
             return true;
         }
     },
-    INSERT_IP_AGAIN {
-        public String getQuestion() {
-            return "Ip non valido. Riprova.";
-        }
-    },
     WELCOME {
         public String getQuestion() {
             return "Benvenuto su Adrenalina!\nSei stato accettato con il codice %s.\nMemorizzalo per riconnetterti a seguito di disconnessioni impreviste.";
