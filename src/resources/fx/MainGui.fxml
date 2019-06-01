@@ -1,136 +1,129 @@
-<?xml version="1" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.layout.*?>
-<Pane maxHeight="925" maxWidth="1400" minHeight="925" minWidth="1400" prefHeight="925" prefWidth="1400"
-      stylesheets="@MainGui.css" xmlns="http://javafx.com/javafx/11.1" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="it.polimi.ingsw.view.gui.MainGuiController">
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+
+
+<Pane maxHeight="925" maxWidth="1400" minHeight="925" minWidth="1400" prefHeight="925" prefWidth="1400" stylesheets="@MainGui.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.polimi.ingsw.view.gui.MainGuiController">
     <children>
         <VBox>
             <children>
                 <HBox>
                     <children>
-                        <GridPane id="gameBoard" fx:id="gameBoard" maxHeight="750" maxWidth="1000" prefHeight="750"
-                                  prefWidth="1000">
+                        <GridPane id="gameBoard" fx:id="gameBoard" maxHeight="750" maxWidth="1000" prefHeight="750" prefWidth="1000">
                             <columnConstraints>
-                                <ColumnConstraints prefWidth="250"/>
-                                <ColumnConstraints prefWidth="250"/>
-                                <ColumnConstraints prefWidth="250"/>
-                                <ColumnConstraints prefWidth="250"/>
+                                <ColumnConstraints prefWidth="250" />
+                                <ColumnConstraints prefWidth="250" />
+                                <ColumnConstraints prefWidth="250" />
+                                <ColumnConstraints prefWidth="250" />
                             </columnConstraints>
                             <rowConstraints>
-                                <RowConstraints prefHeight="250"/>
-                                <RowConstraints prefHeight="250"/>
-                                <RowConstraints prefHeight="250"/>
+                                <RowConstraints prefHeight="250" />
+                                <RowConstraints prefHeight="250" />
+                                <RowConstraints prefHeight="250" />
                             </rowConstraints>
                         </GridPane>
                         <VBox id="right" fx:id="right" alignment="TOP_RIGHT" prefHeight="0" prefWidth="400">
                             <children>
-                                <HBox id="killShootTrack" fx:id="killShootTrack" maxHeight="60" maxWidth="400"
-                                      minHeight="60" minWidth="400" prefHeight="60" prefWidth="400">
+                                <HBox id="killShootTrack" fx:id="killShootTrack" maxHeight="60" maxWidth="400" minHeight="60" minWidth="400" prefHeight="60" prefWidth="400">
                                     <children>
                                         <GridPane>
                                             <columnConstraints>
-                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="43" prefWidth="43"/>
-                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="43" prefWidth="43"/>
-                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="43" prefWidth="43"/>
-                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="43" prefWidth="43"/>
-                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="43" prefWidth="43"/>
-                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="43" prefWidth="43"/>
-                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="43" prefWidth="43"/>
-                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="43" prefWidth="43"/>
-                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="56" prefWidth="56"/>
+                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="43" prefWidth="43" />
+                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="43" prefWidth="43" />
+                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="43" prefWidth="43" />
+                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="43" prefWidth="43" />
+                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="43" prefWidth="43" />
+                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="43" prefWidth="43" />
+                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="43" prefWidth="43" />
+                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="43" prefWidth="43" />
+                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="56" prefWidth="56" />
                                             </columnConstraints>
                                             <rowConstraints>
-                                                <RowConstraints minHeight="10" prefHeight="30" vgrow="SOMETIMES"/>
+                                                <RowConstraints minHeight="10" prefHeight="30" vgrow="SOMETIMES" />
                                             </rowConstraints>
                                         </GridPane>
                                     </children>
                                 </HBox>
-                                <HBox id="blueSpawnWeapons" fx:id="blueSpawnWeapons" maxHeight="175" maxWidth="400"
-                                      minHeight="175" minWidth="400" prefHeight="175" prefWidth="400">
+                                <HBox id="blueSpawnWeapons" fx:id="blueSpawnWeapons" maxHeight="175" maxWidth="400" minHeight="175" minWidth="400" prefHeight="175" prefWidth="400">
                                     <children>
                                         <Pane prefHeight="200" prefWidth="103" styleClass="spawnWeapon">
                                             <HBox.margin>
-                                                <Insets left="18"/>
+                                                <Insets left="18" />
                                             </HBox.margin>
                                         </Pane>
                                         <Pane prefHeight="200" prefWidth="103" styleClass="spawnWeapon">
                                             <HBox.margin>
-                                                <Insets left="25"/>
+                                                <Insets left="25" />
                                             </HBox.margin>
                                         </Pane>
                                         <Pane prefHeight="200" prefWidth="103" styleClass="spawnWeapon">
                                             <HBox.margin>
-                                                <Insets left="28"/>
+                                                <Insets left="28" />
                                             </HBox.margin>
                                         </Pane>
                                     </children>
                                 </HBox>
-                                <HBox id="redSpawnWeapons" fx:id="redSpawnWeapons" maxHeight="175" maxWidth="400"
-                                      minHeight="175" minWidth="400" prefHeight="175" prefWidth="400">
+                                <HBox id="redSpawnWeapons" fx:id="redSpawnWeapons" maxHeight="175" maxWidth="400" minHeight="175" minWidth="400" prefHeight="175" prefWidth="400">
                                     <children>
                                         <Pane prefHeight="200" prefWidth="103" styleClass="spawnWeapon">
                                             <HBox.margin>
-                                                <Insets left="18"/>
+                                                <Insets left="18" />
                                             </HBox.margin>
                                         </Pane>
                                         <Pane prefHeight="200" prefWidth="103" styleClass="spawnWeapon">
                                             <HBox.margin>
-                                                <Insets left="25"/>
+                                                <Insets left="25" />
                                             </HBox.margin>
                                         </Pane>
                                         <Pane prefHeight="200" prefWidth="103" styleClass="spawnWeapon">
                                             <HBox.margin>
-                                                <Insets left="28"/>
+                                                <Insets left="28" />
                                             </HBox.margin>
                                         </Pane>
                                     </children>
                                 </HBox>
-                                <HBox id="yellowSpawnWeapons" fx:id="yellowSpawnWeapons" maxHeight="175" maxWidth="400"
-                                      minHeight="175" minWidth="400" prefHeight="175" prefWidth="400">
+                                <HBox id="yellowSpawnWeapons" fx:id="yellowSpawnWeapons" maxHeight="175" maxWidth="400" minHeight="175" minWidth="400" prefHeight="175" prefWidth="400">
                                     <children>
                                         <Pane prefHeight="200" prefWidth="103" styleClass="spawnWeapon">
                                             <HBox.margin>
-                                                <Insets left="18"/>
+                                                <Insets left="18" />
                                             </HBox.margin>
                                         </Pane>
                                         <Pane prefHeight="200" prefWidth="103" styleClass="spawnWeapon">
                                             <HBox.margin>
-                                                <Insets left="25"/>
+                                                <Insets left="25" />
                                             </HBox.margin>
                                         </Pane>
                                         <Pane prefHeight="200" prefWidth="103" styleClass="spawnWeapon">
                                             <HBox.margin>
-                                                <Insets left="28"/>
+                                                <Insets left="28" />
                                             </HBox.margin>
                                         </Pane>
                                     </children>
                                 </HBox>
-                                <HBox id="otherPlayerContainer" fx:id="otherPlayerContainer" maxHeight="165"
-                                      maxWidth="400" minHeight="165" minWidth="400" prefHeight="165" prefWidth="400">
+                                <HBox id="otherPlayerContainer" fx:id="otherPlayerContainer" maxHeight="165" maxWidth="400" minHeight="165" minWidth="400" prefHeight="165" prefWidth="400">
                                     <children>
                                         <GridPane prefHeight="165" prefWidth="409">
                                             <columnConstraints>
-                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10" prefWidth="100"/>
-                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10" prefWidth="100"/>
+                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10" prefWidth="100" />
+                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10" prefWidth="100" />
                                             </columnConstraints>
                                             <rowConstraints>
-                                                <RowConstraints minHeight="10" prefHeight="30" vgrow="SOMETIMES"/>
-                                                <RowConstraints minHeight="10" prefHeight="30" vgrow="SOMETIMES"/>
+                                                <RowConstraints minHeight="10" prefHeight="30" vgrow="SOMETIMES" />
+                                                <RowConstraints minHeight="10" prefHeight="30" vgrow="SOMETIMES" />
                                             </rowConstraints>
                                             <children>
-                                                <Button id="otherPlayer1" fx:id="otherPlayer1" styleClass="otherPlayer"
-                                                        text="P1" GridPane.halignment="CENTER"/>
-                                                <Button id="otherPlayer3" fx:id="otherPlayer3" styleClass="otherPlayer"
-                                                        text="P3" GridPane.halignment="CENTER" GridPane.rowIndex="1"/>
-                                                <Button id="otherPlayer2" fx:id="otherPlayer2" styleClass="otherPlayer"
-                                                        text="P2" GridPane.columnIndex="1"
-                                                        GridPane.halignment="CENTER"/>
-                                                <Button id="otherPlayer4" fx:id="otherPlayer4" styleClass="otherPlayer"
-                                                        text="P4" GridPane.columnIndex="1" GridPane.halignment="CENTER"
-                                                        GridPane.rowIndex="1"/>
+                                                <Button id="otherPlayer1" fx:id="otherPlayer1" styleClass="otherPlayer" text="P1" GridPane.halignment="CENTER" />
+                                                <Button id="otherPlayer3" fx:id="otherPlayer3" styleClass="otherPlayer" text="P3" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+                                                <Button id="otherPlayer2" fx:id="otherPlayer2" styleClass="otherPlayer" text="P2" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
+                                                <Button id="otherPlayer4" fx:id="otherPlayer4" styleClass="otherPlayer" text="P4" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
                                             </children>
                                         </GridPane>
                                     </children>
@@ -145,108 +138,80 @@
                             <children>
                                 <VBox prefHeight="175" prefWidth="45">
                                     <children>
-                                        <HBox prefHeight="32" prefWidth="45"/> <!-- spacing -->
-                                        <HBox id="playerAggregateActionMMM" fx:id="playerAggregateActionMMM"
-                                              prefHeight="29" prefWidth="45"/>
-                                        <HBox id="playerAggregateActionMG" fx:id="playerAggregateActionMG"
-                                              prefHeight="29" prefWidth="45"/>
-                                        <HBox id="playerAggregateActionS" fx:id="playerAggregateActionS" prefHeight="29"
-                                              prefWidth="45"/>
-                                        <HBox id="playerActionReload" fx:id="playerActionReload" prefHeight="56"
-                                              prefWidth="45"/>
+                                        <HBox prefHeight="32" prefWidth="45" /> <!-- spacing -->
+                                        <HBox id="playerAggregateActionMMM" fx:id="playerAggregateActionMMM" prefHeight="29" prefWidth="45" />
+                                        <HBox id="playerAggregateActionMG" fx:id="playerAggregateActionMG" prefHeight="29" prefWidth="45" />
+                                        <HBox id="playerAggregateActionS" fx:id="playerAggregateActionS" prefHeight="29" prefWidth="45" />
+                                        <HBox id="playerActionReload" fx:id="playerActionReload" prefHeight="56" prefWidth="45" />
                                     </children>
                                 </VBox>
-                                <VBox prefHeight="175" prefWidth="15"/> <!-- spacing -->
+                                <VBox prefHeight="175" prefWidth="15" /> <!-- spacing -->
                                 <VBox prefHeight="175" prefWidth="475">
                                     <children>
                                         <HBox prefHeight="30" prefWidth="475">
                                             <children>
-                                                <HBox prefHeight="30" prefWidth="270"/>
-                                                <HBox id="playerMarks" fx:id="playerMarks" prefHeight="100"
-                                                      prefWidth="205"/>
+                                                <HBox prefHeight="30" prefWidth="270" />
+                                                <HBox id="playerMarks" fx:id="playerMarks" prefHeight="100" prefWidth="205" />
                                             </children>
                                         </HBox>
                                         <HBox prefHeight="30" prefWidth="475">
                                             <children>
-                                                <HBox prefHeight="30" prefWidth="80"/>
-                                                <HBox id="playerAggregateActionMMG" fx:id="playerAggregateActionMMG"
-                                                      prefHeight="30" prefWidth="55"/>
-                                                <HBox prefHeight="30" prefWidth="65"/>
-                                                <HBox id="playerAggregateActionMS" fx:id="playerAggregateActionMS"
-                                                      prefHeight="30" prefWidth="55"/>
-                                                <HBox prefHeight="30" prefWidth="220"/>
+                                                <HBox prefHeight="30" prefWidth="80" />
+                                                <HBox id="playerAggregateActionMMG" fx:id="playerAggregateActionMMG" prefHeight="30" prefWidth="55" />
+                                                <HBox prefHeight="30" prefWidth="65" />
+                                                <HBox id="playerAggregateActionMS" fx:id="playerAggregateActionMS" prefHeight="30" prefWidth="55" />
+                                                <HBox prefHeight="30" prefWidth="220" />
                                             </children>
                                         </HBox>
                                         <HBox prefHeight="55" prefWidth="475">
                                             <children>
                                                 <GridPane id="playerHealthGrid" fx:id="playerHealthGrid">
                                                     <columnConstraints>
-                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10"
-                                                                           prefWidth="100"/>
-                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10"
-                                                                           prefWidth="100"/>
-                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10"
-                                                                           prefWidth="100"/>
-                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10"
-                                                                           prefWidth="100"/>
-                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10"
-                                                                           prefWidth="100"/>
-                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10"
-                                                                           prefWidth="100"/>
-                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10"
-                                                                           prefWidth="100"/>
-                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10"
-                                                                           prefWidth="100"/>
-                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10"
-                                                                           prefWidth="100"/>
-                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10"
-                                                                           prefWidth="100"/>
-                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10"
-                                                                           prefWidth="100"/>
-                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10"
-                                                                           prefWidth="100"/>
+                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10" prefWidth="100" />
+                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10" prefWidth="100" />
+                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10" prefWidth="100" />
+                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10" prefWidth="100" />
+                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10" prefWidth="100" />
+                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10" prefWidth="100" />
+                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10" prefWidth="100" />
+                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10" prefWidth="100" />
+                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10" prefWidth="100" />
+                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10" prefWidth="100" />
+                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10" prefWidth="100" />
+                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10" prefWidth="100" />
                                                     </columnConstraints>
                                                     <rowConstraints>
-                                                        <RowConstraints minHeight="10" prefHeight="30"
-                                                                        vgrow="SOMETIMES"/>
+                                                        <RowConstraints minHeight="10" prefHeight="30" vgrow="SOMETIMES" />
                                                     </rowConstraints>
                                                 </GridPane>
                                             </children>
                                         </HBox>
                                         <HBox prefHeight="60" prefWidth="475">
                                             <children>
-                                                <HBox prefHeight="60" prefWidth="85"/>
-                                                <GridPane id="playerDeathsGrid" fx:id="playerDeathsGrid" prefHeight="60"
-                                                          prefWidth="224">
+                                                <HBox prefHeight="60" prefWidth="85" />
+                                                <GridPane id="playerDeathsGrid" fx:id="playerDeathsGrid" prefHeight="60" prefWidth="224">
                                                     <columnConstraints>
-                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10"
-                                                                           prefWidth="100"/>
-                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10"
-                                                                           prefWidth="100"/>
-                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10"
-                                                                           prefWidth="100"/>
-                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10"
-                                                                           prefWidth="100"/>
-                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10"
-                                                                           prefWidth="100"/>
-                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10"
-                                                                           prefWidth="100"/>
+                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10" prefWidth="100" />
+                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10" prefWidth="100" />
+                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10" prefWidth="100" />
+                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10" prefWidth="100" />
+                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10" prefWidth="100" />
+                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10" prefWidth="100" />
                                                     </columnConstraints>
                                                     <rowConstraints>
-                                                        <RowConstraints minHeight="10" prefHeight="30"
-                                                                        vgrow="SOMETIMES"/>
+                                                        <RowConstraints minHeight="10" prefHeight="30" vgrow="SOMETIMES" />
                                                     </rowConstraints>
                                                 </GridPane>
                                             </children>
                                         </HBox>
                                     </children>
                                 </VBox>
-                                <VBox prefHeight="175" prefWidth="15"/> <!-- spacing -->
+                                <VBox prefHeight="175" prefWidth="15" /> <!-- spacing -->
                                 <VBox prefHeight="175" prefWidth="150">
                                     <children>
-                                        <HBox prefHeight="100" prefWidth="200"/>
-                                        <HBox prefHeight="100" prefWidth="200"/>
-                                        <HBox prefHeight="100" prefWidth="200"/>
+                                        <HBox prefHeight="100" prefWidth="200" />
+                                        <HBox prefHeight="100" prefWidth="200" />
+                                        <HBox prefHeight="100" prefWidth="200" />
                                     </children>
                                 </VBox>
                             </children>
@@ -255,16 +220,16 @@
                             <children>
                                 <HBox id="playerPowerUpContainer" fx:id="playerPowerUpContainer">
                                     <children>
-                                        <HBox prefHeight="175" prefWidth="113" styleClass="playerPowerUPTest"/>
-                                        <HBox prefHeight="175" prefWidth="113" styleClass="playerPowerUPTest"/>
-                                        <HBox prefHeight="175" prefWidth="113" styleClass="playerPowerUPTest"/>
+                                        <HBox prefHeight="175" prefWidth="113" styleClass="playerPowerUPTest" />
+                                        <HBox prefHeight="175" prefWidth="113" styleClass="playerPowerUPTest" />
+                                        <HBox prefHeight="175" prefWidth="113" styleClass="playerPowerUPTest" />
                                     </children>
                                 </HBox>
                                 <HBox id="playerWeaponContainer" fx:id="playerWeaponContainer">
                                     <children>
-                                        <HBox prefHeight="175" prefWidth="103" styleClass="playerWeaponTest"/>
-                                        <HBox prefHeight="175" prefWidth="103" styleClass="playerWeaponTest"/>
-                                        <HBox prefHeight="175" prefWidth="103" styleClass="playerWeaponTest"/>
+                                        <HBox prefHeight="175" prefWidth="103" styleClass="playerWeaponTest" />
+                                        <HBox prefHeight="175" prefWidth="103" styleClass="playerWeaponTest" />
+                                        <HBox prefHeight="175" prefWidth="103" styleClass="playerWeaponTest" />
                                     </children>
                                 </HBox>
                             </children>

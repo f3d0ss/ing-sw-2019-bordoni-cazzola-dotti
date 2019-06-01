@@ -49,7 +49,6 @@ public class MainGuiController {
     public void initialize() {
         List<Button> buttons = new ArrayList<>(Arrays.asList(otherPlayer1, otherPlayer3, otherPlayer2, otherPlayer4));
         buttons.forEach(this::handlePlayerButton);
-        blueSpawnWeapons.setSpacing(10);
     }
 
     private void handlePlayerButton(Button button) {
