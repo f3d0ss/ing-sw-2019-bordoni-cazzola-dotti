@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.Cursor?>
 <?import javafx.scene.layout.*?>
-<Pane maxHeight="925.0" maxWidth="1400.0" minHeight="925.0" minWidth="1400.0" prefHeight="925.0" prefWidth="1400.0"
-      stylesheets="@MainGui.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<Pane maxHeight="925" maxWidth="1400" minHeight="925" minWidth="1400" prefHeight="925" prefWidth="1400"
+      stylesheets="@MainGui.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="it.polimi.ingsw.view.gui.MainGuiController">
     <children>
         <VBox>
             <children>
@@ -24,31 +24,28 @@
                                 <RowConstraints prefHeight="250"/>
                             </rowConstraints>
                         </GridPane>
-                        <VBox id="right" fx:id="right" alignment="TOP_RIGHT" prefHeight="0.0" prefWidth="400.0">
-                            <cursor>
-                                <Cursor fx:constant="MOVE"/>
-                            </cursor>
+                        <VBox id="right" fx:id="right" alignment="TOP_RIGHT" prefHeight="0" prefWidth="400">
                             <children>
                                 <HBox id="killShootTrack" fx:id="killShootTrack" maxHeight="60" maxWidth="400"
-                                      minHeight="60" minWidth="400" prefHeight="60.0" prefWidth="400.0"/>
+                                      minHeight="60" minWidth="400" prefHeight="60" prefWidth="400"/>
                                 <HBox id="blueSpawnWeapons" fx:id="blueSpawnWeapons" maxHeight="175" maxWidth="400"
-                                      minHeight="175" minWidth="400" prefHeight="175.0" prefWidth="400.0"/>
+                                      minHeight="175" minWidth="400" prefHeight="175" prefWidth="400"/>
                                 <HBox id="redSpawnWeapons" fx:id="redSpawnWeapons" maxHeight="175" maxWidth="400"
-                                      minHeight="175" minWidth="400" prefHeight="175.0" prefWidth="400.0"/>
+                                      minHeight="175" minWidth="400" prefHeight="175" prefWidth="400"/>
                                 <HBox id="yellowSpawnWeapons" fx:id="yellowSpawnWeapons" maxHeight="175" maxWidth="400"
-                                      minHeight="175" minWidth="400" prefHeight="175.0" prefWidth="400.0"/>
+                                      minHeight="175" minWidth="400" prefHeight="175" prefWidth="400"/>
                                 <HBox id="otherPlayerContainer" fx:id="otherPlayerContainer" maxHeight="165"
-                                      maxWidth="400" minHeight="165" minWidth="400" prefHeight="165.0"
-                                      prefWidth="400.0">
+                                      maxWidth="400" minHeight="165" minWidth="400" prefHeight="165"
+                                      prefWidth="400">
                                     <children>
-                                        <GridPane prefHeight="165.0" prefWidth="409.0">
+                                        <GridPane prefHeight="165" prefWidth="409">
                                             <columnConstraints>
-                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10" prefWidth="100"/>
+                                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10" prefWidth="100"/>
                                             </columnConstraints>
                                             <rowConstraints>
-                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-                                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                                                <RowConstraints minHeight="10" prefHeight="30" vgrow="SOMETIMES"/>
+                                                <RowConstraints minHeight="10" prefHeight="30" vgrow="SOMETIMES"/>
                                             </rowConstraints>
                                             <children>
                                                 <Button id="otherPlayer1" fx:id="otherPlayer1" styleClass="otherPlayer"
@@ -69,89 +66,89 @@
                         </VBox>
                     </children>
                 </HBox>
-                <HBox prefHeight="175.0" prefWidth="1400.0">
+                <HBox prefHeight="175" prefWidth="1400">
                     <children>
-                        <HBox id="playerBoard" fx:id="playerBoard" prefHeight="175.0" prefWidth="700.0">
+                        <HBox id="playerBoard" fx:id="playerBoard" prefHeight="175" prefWidth="700">
                             <children>
-                                <VBox prefHeight="175.0" prefWidth="45.0"/>
-                                <VBox prefHeight="175.0" prefWidth="15.0"/> <!-- spacing -->
-                                <VBox prefHeight="175.0" prefWidth="475.0">
+                                <VBox prefHeight="175" prefWidth="45"/>
+                                <VBox prefHeight="175" prefWidth="15"/> <!-- spacing -->
+                                <VBox prefHeight="175" prefWidth="475">
                                     <children>
-                                        <HBox prefHeight="30.0" prefWidth="475.0">
+                                        <HBox prefHeight="30" prefWidth="475">
                                             <children>
-                                                <HBox prefHeight="30.0" prefWidth="270.0"/>
-                                                <HBox id="playerMarks" fx:id="playerMarks" prefHeight="100.0"
-                                                      prefWidth="205.0"/>
+                                                <HBox prefHeight="30" prefWidth="270"/>
+                                                <HBox id="playerMarks" fx:id="playerMarks" prefHeight="100"
+                                                      prefWidth="205"/>
                                             </children>
                                         </HBox>
-                                        <HBox prefHeight="30.0" prefWidth="475.0">
+                                        <HBox prefHeight="30" prefWidth="475">
                                             <children>
-                                                <HBox prefHeight="30" prefWidth="80.0"/>
+                                                <HBox prefHeight="30" prefWidth="80"/>
                                                 <HBox id="playerAggregateActionMMG" fx:id="playerAggregateActionMMG"
-                                                      prefHeight="30" prefWidth="55.0"/>
-                                                <HBox prefHeight="30" prefWidth="65.0"/>
+                                                      prefHeight="30" prefWidth="55"/>
+                                                <HBox prefHeight="30" prefWidth="65"/>
                                                 <HBox id="playerAggregateActionMS" fx:id="playerAggregateActionMS"
-                                                      prefHeight="30" prefWidth="55.0"/>
-                                                <HBox prefHeight="30" prefWidth="220.0"/>
+                                                      prefHeight="30" prefWidth="55"/>
+                                                <HBox prefHeight="30" prefWidth="220"/>
                                             </children>
                                         </HBox>
-                                        <HBox prefHeight="55" prefWidth="475.0">
+                                        <HBox prefHeight="55" prefWidth="475">
                                             <children>
                                                 <GridPane id="playerHealthGrid" fx:id="playerHealthGrid">
                                                     <columnConstraints>
-                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"
-                                                                           prefWidth="100.0"/>
-                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"
-                                                                           prefWidth="100.0"/>
-                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"
-                                                                           prefWidth="100.0"/>
-                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"
-                                                                           prefWidth="100.0"/>
-                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"
-                                                                           prefWidth="100.0"/>
-                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"
-                                                                           prefWidth="100.0"/>
-                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"
-                                                                           prefWidth="100.0"/>
-                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"
-                                                                           prefWidth="100.0"/>
-                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"
-                                                                           prefWidth="100.0"/>
-                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"
-                                                                           prefWidth="100.0"/>
-                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"
-                                                                           prefWidth="100.0"/>
-                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"
-                                                                           prefWidth="100.0"/>
+                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10"
+                                                                           prefWidth="100"/>
+                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10"
+                                                                           prefWidth="100"/>
+                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10"
+                                                                           prefWidth="100"/>
+                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10"
+                                                                           prefWidth="100"/>
+                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10"
+                                                                           prefWidth="100"/>
+                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10"
+                                                                           prefWidth="100"/>
+                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10"
+                                                                           prefWidth="100"/>
+                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10"
+                                                                           prefWidth="100"/>
+                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10"
+                                                                           prefWidth="100"/>
+                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10"
+                                                                           prefWidth="100"/>
+                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10"
+                                                                           prefWidth="100"/>
+                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10"
+                                                                           prefWidth="100"/>
                                                     </columnConstraints>
                                                     <rowConstraints>
-                                                        <RowConstraints minHeight="10.0" prefHeight="30.0"
+                                                        <RowConstraints minHeight="10" prefHeight="30"
                                                                         vgrow="SOMETIMES"/>
                                                     </rowConstraints>
                                                 </GridPane>
                                             </children>
                                         </HBox>
-                                        <HBox prefHeight="60" prefWidth="475.0">
+                                        <HBox prefHeight="60" prefWidth="475">
                                             <children>
-                                                <HBox prefHeight="60.0" prefWidth="85.0"/>
+                                                <HBox prefHeight="60" prefWidth="85"/>
                                                 <GridPane id="playerDeathsGrid" fx:id="playerDeathsGrid"
-                                                          prefHeight="60.0" prefWidth="224.0">
+                                                          prefHeight="60" prefWidth="224">
                                                     <columnConstraints>
-                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"
-                                                                           prefWidth="100.0"/>
-                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"
-                                                                           prefWidth="100.0"/>
-                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"
-                                                                           prefWidth="100.0"/>
-                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"
-                                                                           prefWidth="100.0"/>
-                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"
-                                                                           prefWidth="100.0"/>
-                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"
-                                                                           prefWidth="100.0"/>
+                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10"
+                                                                           prefWidth="100"/>
+                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10"
+                                                                           prefWidth="100"/>
+                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10"
+                                                                           prefWidth="100"/>
+                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10"
+                                                                           prefWidth="100"/>
+                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10"
+                                                                           prefWidth="100"/>
+                                                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10"
+                                                                           prefWidth="100"/>
                                                     </columnConstraints>
                                                     <rowConstraints>
-                                                        <RowConstraints minHeight="10.0" prefHeight="30.0"
+                                                        <RowConstraints minHeight="10" prefHeight="30"
                                                                         vgrow="SOMETIMES"/>
                                                     </rowConstraints>
                                                 </GridPane>
@@ -159,8 +156,8 @@
                                         </HBox>
                                     </children>
                                 </VBox>
-                                <VBox prefHeight="175.0" prefWidth="15.0"/> <!-- spacing -->
-                                <VBox prefHeight="175.0" prefWidth="150.0"/>
+                                <VBox prefHeight="175" prefWidth="15"/> <!-- spacing -->
+                                <VBox prefHeight="175" prefWidth="150"/>
                             </children>
                         </HBox>
                     </children>
