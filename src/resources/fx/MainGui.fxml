@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane id="base" fx:id="base" maxHeight="900.0" maxWidth="1400.0" minHeight="900.0" minWidth="1400.0" prefHeight="900.0" prefWidth="1400.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+    <center>
+        <GridPane id="gameBoard" fx:id="gameBoard" stylesheets="@MainGui.css" BorderPane.alignment="CENTER">
+            <columnConstraints>
+                <ColumnConstraints prefWidth="231.25" />
+                <ColumnConstraints prefWidth="231.25" />
+                <ColumnConstraints prefWidth="231.25" />
+                <ColumnConstraints prefWidth="231.25" />
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints prefHeight="233.3333334" />
+                <RowConstraints prefHeight="233.3333334" />
+                <RowConstraints prefHeight="233.3333334" />
+            </rowConstraints>
+            <BorderPane.margin>
+                <Insets bottom="200.0" />
+            </BorderPane.margin>
+        </GridPane>
+    </center>
+    <right>
+        <VBox id="right" fx:id="right" alignment="CENTER_RIGHT" prefHeight="700.0" prefWidth="475.0">
+            <cursor>
+                <Cursor fx:constant="MOVE" />
+            </cursor>
+            <BorderPane.margin>
+                <Insets bottom="200.0" />
+            </BorderPane.margin>
+            <children>
+                <HBox id="killShootTrack" fx:id="killShootTrack" prefHeight="175.0" prefWidth="475.0" stylesheets="@MainGui.css" />
+                <HBox id="blueSpawnWeapons" fx:id="blueSpawnWeapons" prefHeight="175.0" prefWidth="475.0" stylesheets="@MainGui.css" />
+                <HBox id="redSpawnWeapons" fx:id="redSpawnWeapons" prefHeight="175.0" prefWidth="475.0" stylesheets="@MainGui.css" />
+                <HBox id="yellowSpawnWeapons" fx:id="yellowSpawnWeapons" prefHeight="175.0" prefWidth="475.0" stylesheets="@MainGui.css" />
+            </children>
+        </VBox>
+    </right>
+</BorderPane>

@@ -1,0 +1,29 @@
+#gameBoard {
+    -fx-background-image: url("../images/gameboards/GameBoard003.png");
+    -fx-background-size: cover;
+}
+
+#killShootTrack {
+    -fx-background-image: url("../images/gameboards/killShootTrack.png");
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: contain;
+
+}
+
+#blueSpawnWeapons {
+    -fx-background-image: url("../images/gameboards/blueSpawn.png");
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: contain;
+}
+
+#redSpawnWeapons {
+    -fx-background-image: url("../images/gameboards/redSpawn.png");
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: contain;
+}
+
+#yellowSpawnWeapons {
+    -fx-background-image: url("../images/gameboards/yellowSpawn.png");
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: contain;
+}
