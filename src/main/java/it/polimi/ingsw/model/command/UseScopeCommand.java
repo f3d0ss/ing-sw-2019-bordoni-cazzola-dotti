@@ -15,7 +15,8 @@ public class UseScopeCommand implements Command {
 
     /**
      * This constructor create a command for use a scope
-     * @param player is the player who use the scope
+     *
+     * @param player       is the player who use the scope
      * @param currentState is the current state
      */
     public UseScopeCommand(Player player, SelectScopeTargetState currentState) {

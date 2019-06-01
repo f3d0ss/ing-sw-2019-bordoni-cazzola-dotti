@@ -13,7 +13,8 @@ public class RespawnCommand implements Command {
 
     /**
      * This constructor create a command for reSpawn
-     * @param player is the player who reSpawn
+     *
+     * @param player  is the player who reSpawn
      * @param powerUp is the powerUp used for reSpawn
      */
     public RespawnCommand(Player player, PowerUp powerUp) {

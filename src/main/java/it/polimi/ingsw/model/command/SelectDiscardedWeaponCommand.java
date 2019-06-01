@@ -17,8 +17,9 @@ public class SelectDiscardedWeaponCommand implements Command {
 
     /**
      * This constructor create a command for discard a weapon
-     * @param player is the player who discard the weapon
-     * @param currentState is the current state
+     *
+     * @param player          is the player who discard the weapon
+     * @param currentState    is the current state
      * @param weaponToDiscard is the weapon to discard
      */
     public SelectDiscardedWeaponCommand(Player player, DiscardingWeaponState currentState, Weapon weaponToDiscard) {

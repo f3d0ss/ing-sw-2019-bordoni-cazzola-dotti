@@ -12,9 +12,10 @@ public class SelectAmmoPaymentCommand extends SelectPaymentCommand {
 
     /**
      * This constructor create a command for select an ammo for a payment
-     * @param player is the player who select the ammo
+     *
+     * @param player       is the player who select the ammo
      * @param currentState is the current state
-     * @param color is the color of the ammo selected
+     * @param color        is the color of the ammo selected
      */
     public SelectAmmoPaymentCommand(Player player, PendingPaymentState currentState, Color color) {
         super(player, currentState);

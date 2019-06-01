@@ -13,7 +13,8 @@ public class PayReloadWeaponCommand implements Command {
 
     /**
      * This constructor create a command for pay the reloading
-     * @param player is the player who reload
+     *
+     * @param player       is the player who reload
      * @param currentState is the current state
      */
     public PayReloadWeaponCommand(Player player, PendingPaymentReloadWeaponState currentState) {

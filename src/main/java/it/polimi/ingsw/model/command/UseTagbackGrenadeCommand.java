@@ -14,7 +14,8 @@ public class UseTagbackGrenadeCommand implements Command {
 
     /**
      * This constructor create a command for use a tagback grenade
-     * @param player is the player who use the tagback grenade
+     *
+     * @param player  is the player who use the tagback grenade
      * @param grenade is the grenade
      */
     public UseTagbackGrenadeCommand(Player player, PowerUp grenade) {

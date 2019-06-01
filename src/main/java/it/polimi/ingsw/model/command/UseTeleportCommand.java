@@ -16,9 +16,10 @@ public class UseTeleportCommand implements Command {
 
     /**
      * This constructor create a command for use a teleport
-     * @param player is the player who use the teleport
+     *
+     * @param player       is the player who use the teleport
      * @param currentState is the current state
-     * @param newPosition is the position where the player will be moved
+     * @param newPosition  is the position where the player will be moved
      */
     public UseTeleportCommand(Player player, SelectedTeleporterState currentState, Square newPosition) {
         this.player = player;

@@ -1,29 +1,50 @@
 #gameBoard {
     -fx-background-image: url("../images/gameboards/GameBoard003.png");
-    -fx-background-size: cover;
 }
 
 #killShootTrack {
     -fx-background-image: url("../images/gameboards/killShootTrack.png");
     -fx-background-repeat: no-repeat;
-    -fx-background-size: contain;
+    -fx-background-size: 100%;
 
 }
 
 #blueSpawnWeapons {
     -fx-background-image: url("../images/gameboards/blueSpawn.png");
     -fx-background-repeat: no-repeat;
-    -fx-background-size: contain;
+    -fx-background-size: 100%;
 }
 
 #redSpawnWeapons {
     -fx-background-image: url("../images/gameboards/redSpawn.png");
     -fx-background-repeat: no-repeat;
-    -fx-background-size: contain;
+    -fx-background-size: 100%;
 }
 
 #yellowSpawnWeapons {
     -fx-background-image: url("../images/gameboards/yellowSpawn.png");
     -fx-background-repeat: no-repeat;
-    -fx-background-size: contain;
+    -fx-background-size: 100%;
+}
+
+#playerBoard {
+    -fx-background-image: url("../images/playerboards/blue_board.png");
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: 100%;
+}
+
+.otherPlayer {
+    -fx-background-color: #ddd;
+    -fx-pref-width: 200px;
+    -fx-pref-height: 82px;
+    -fx-border-color: black;
+}
+
+#base {
+    -fx-maxHeight: 1025px;
+    -fx-maxWidth: 1400px;
+    -fx-minHeight: 1025px;
+    -fx-minWidth: 1400px;
+    -fx-prefHeight: 1025px;
+    -fx-prefWidth: 1400px;
 }

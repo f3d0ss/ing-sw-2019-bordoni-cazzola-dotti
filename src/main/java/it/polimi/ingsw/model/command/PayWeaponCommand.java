@@ -13,7 +13,8 @@ public class PayWeaponCommand implements Command {
 
     /**
      * This constructor create a command for buy a weapon
-     * @param player is the player who buy the weapon
+     *
+     * @param player       is the player who buy the weapon
      * @param currentState is the current state
      */
     public PayWeaponCommand(Player player, PendingPaymentWeaponState currentState) {

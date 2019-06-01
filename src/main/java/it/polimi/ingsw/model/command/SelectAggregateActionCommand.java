@@ -15,9 +15,10 @@ public class SelectAggregateActionCommand implements Command {
 
     /**
      * This constructor create a command for select an aggregate action
-     * @param player is the player who select the aggregate action
+     *
+     * @param player          is the player who select the aggregate action
      * @param aggregateAction is the aggregate action selected
-     * @param currentState is the current state
+     * @param currentState    is the current state
      */
     public SelectAggregateActionCommand(Player player, AggregateAction aggregateAction, ManageTurnState currentState) {
         this.player = player;

@@ -12,6 +12,7 @@ public class SelectTargetSquareCommand implements WeaponCommand {
 
     /**
      * This constructor create a command for select a square as target
+     *
      * @param currentState is the current state
      * @param targetSquare is the square selected as target
      */

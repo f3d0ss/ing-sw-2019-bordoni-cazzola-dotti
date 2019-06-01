@@ -12,9 +12,10 @@ public class SelectPowerUpPaymentCommand extends SelectPaymentCommand {
 
     /**
      * This constructor create a command for select a power up for a payment
-     * @param player is the player who select the power up
+     *
+     * @param player       is the player who select the power up
      * @param currentState is the current state
-     * @param powerUp is the power up selected
+     * @param powerUp      is the power up selected
      */
     public SelectPowerUpPaymentCommand(Player player, PendingPaymentState currentState, PowerUp powerUp) {
         super(player, currentState);
