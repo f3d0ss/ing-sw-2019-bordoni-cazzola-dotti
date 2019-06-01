@@ -30,8 +30,7 @@ public class MainGui extends Application {
         }
         Scene scene = new Scene(base);
         primaryStage.setScene(scene);
-        primaryStage.setMaxWidth(1400);
-        primaryStage.setMaxHeight(925);
+        primaryStage.setResizable(false);
         primaryStage.show();
     }
 

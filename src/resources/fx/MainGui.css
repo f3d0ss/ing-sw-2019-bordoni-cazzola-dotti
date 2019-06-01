@@ -13,6 +13,11 @@
     -fx-background-image: url("../images/gameboards/blueSpawn.png");
     -fx-background-repeat: no-repeat;
     -fx-background-size: 100%;
+
+}
+
+#blueSpawnWeapons > ColumnConstraints{
+    -fx-padding: 15px;
 }
 
 #redSpawnWeapons {
@@ -47,4 +52,25 @@
     -fx-minWidth: 1400px;
     -fx-prefHeight: 1025px;
     -fx-prefWidth: 1400px;
+}
+
+.playerPowerUPTest {
+    -fx-background-image: url("../images/cards/AD_powerups_IT_022.png");
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: 100%;
+}
+
+.playerWeaponTest {
+    -fx-background-image: url("../images/cards/AD_weapons_IT_022.png");
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: 100%;
+}
+
+.spawnWeapon {
+    -fx-background-image: url("../images/cards/AD_weapons_IT_022.png");
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: 100%;
+    -fx-padding: 5px;
+    -fx-border-insets: 5px;
+    -fx-background-insets: 5px;
 }
