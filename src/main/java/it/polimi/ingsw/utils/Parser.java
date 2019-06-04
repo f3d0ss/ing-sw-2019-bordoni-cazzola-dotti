@@ -10,7 +10,7 @@ import java.io.Reader;
 
 /**
  * This class represents a parser that can serialize and deserialize objects
- * Hides which library
+ * Hides which library is used
  */
 public class Parser {
 
