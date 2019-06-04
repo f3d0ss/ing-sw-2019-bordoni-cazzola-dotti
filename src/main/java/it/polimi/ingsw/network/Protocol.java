@@ -27,11 +27,43 @@ public enum Protocol {
         }
     }, INSERT_IP_AGAIN {
         public String getQuestion() {
-            return "Ip non valido. Riprova.";
+            return "Server non raggiungibile. Reimmetti l'indirizzo ip o riprova più tardi.";
         }
 
         public boolean requiresAnswer() {
             return true;
+        }
+    }, RECONNECT {
+        public String getQuestion() {
+            return "Vuoi iniziare un nuovo gioco o riconnetterti a un gioco esistente?";
+        }
+
+        public boolean requiresAnswer() {
+            return true;
+        }
+    }, INSERT_OLD_CODE {
+        public String getQuestion() {
+            return "Inserisci il codice con cui eri stato registrato alla connessione.";
+        }
+
+        public boolean requiresAnswer() {
+            return true;
+        }
+    }, INVALID_OLD_CODE {
+        public String getQuestion() {
+            return "Codice non riconosciuto. Attenzione: la partita potrebbe essere terminata!";
+        }
+
+        public boolean requiresAnswer() {
+            return false;
+        }
+    }, UNREACHABLE_SERVER {
+        public String getQuestion() {
+            return "Impossibile raggiungere il server. Riprova più tardi.";
+        }
+
+        public boolean requiresAnswer() {
+            return false;
         }
     }, WELCOME {
         public String getQuestion() {
@@ -41,17 +73,17 @@ public enum Protocol {
         public boolean requiresAnswer() {
             return false;
         }
-    }, LOGIN_FIRST {
+    }, WELCOME_BACK {
         public String getQuestion() {
-            return "Sei il primo giocatore; digita il tuo nickname:";
+            return "Bentornato!";
         }
 
         public boolean requiresAnswer() {
-            return true;
+            return false;
         }
-    }, LOGIN_OTHERS {
+    }, LOGIN_FIRST {
         public String getQuestion() {
-            return "Sono in attesa di una nuova partita: %sdigita il tuo nickname:";
+            return "Digita il tuo nickname:";
         }
 
         public boolean requiresAnswer() {
@@ -83,7 +115,7 @@ public enum Protocol {
         }
     }, LOGIN_CONFIRM {
         public String getQuestion() {
-            return "Iscrizione riuscita! Ora attendi che altri giocatori si connettano.";
+            return "Iscrizione riuscita, %s! Ora attendi che altri giocatori si connettano.";
         }
 
         public boolean requiresAnswer() {
@@ -121,6 +153,14 @@ public enum Protocol {
         public boolean requiresAnswer() {
             return false;
         }
+    }, LET_US_START {
+        public String getQuestion() {
+            return "Avvio del gioco in corso...";
+        }
+
+        public boolean requiresAnswer() {
+            return false;
+        }
     }, CHOOSE_BOARD {
         public String getQuestion() {
             return "Scegli l'arena di gioco:";
@@ -139,7 +179,8 @@ public enum Protocol {
         }
     };
     public static final String ack = Character.toString((char) 3);
-    public static final String ping = Character.toString((char) 4);
+    public static final String ping = Character.toString((char) 4);//to be removed
+    public static final String err = Character.toString((char) 5);
 
     public abstract String getQuestion();
 
