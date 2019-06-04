@@ -1,10 +1,9 @@
 package it.polimi.ingsw.model;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import it.polimi.ingsw.model.command.*;
 import it.polimi.ingsw.model.playerstate.ChoosingWeaponOptionState;
 import it.polimi.ingsw.model.playerstate.ReadyToShootState;
+import it.polimi.ingsw.utils.Parser;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -23,16 +22,13 @@ public class WeaponTest {
     List<Weapon> allWeapons;
 
     private List<Weapon> getAllWeapons() {
-        GsonBuilder g = new GsonBuilder();
-        g.setPrettyPrinting();
-        g.serializeNulls();
-        Gson gson = g.create();
+        Parser parser = new Parser();
         List<Weapon> weaponList = new ArrayList<>();
         File file = new File("src/resources/weapons/");
         File[] files = file.listFiles();
         for (File f : files) {
             try {
-                weaponList.add(gson.fromJson(new FileReader(f.getPath()), Weapon.class));
+                weaponList.add(parser.deserialize(new FileReader(f.getPath()), Weapon.class));
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
