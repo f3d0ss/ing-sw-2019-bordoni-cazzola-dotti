@@ -14,20 +14,24 @@ public class Server {
     private static boolean keepAlive = true;
 
     public static void main(String[] args) {
-        ServerManager serverManager = new ServerManager();
+        ServerManager serverManager;
         Scanner stdin = new Scanner(System.in);
         String message;
         int client;
+        int seconds;
         System.out.println("Avvio servers in corso...");
         try {
             System.out.println("local ip: " + InetAddress.getLocalHost().getHostAddress());
         } catch (UnknownHostException e) {
             System.out.println("local ip: unknown");
         }
+        System.out.println("Specifica il numero di secondi del timeout dopo la terza connessione:");
+    seconds = stdin.nextInt();
+        serverManager = new ServerManager(seconds);
         serverManager.run();
         while (!serverManager.allServerReady()) {
             try {
-                sleep(1000);
+                sleep(100);
             } catch (InterruptedException e) {
             }
         }

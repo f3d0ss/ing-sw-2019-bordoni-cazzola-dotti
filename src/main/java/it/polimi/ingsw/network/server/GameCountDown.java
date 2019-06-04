@@ -2,8 +2,8 @@ package it.polimi.ingsw.network.server;
 
 public class GameCountDown extends Thread {
 
-    int secondsToWait;
-    int seconds;
+    private int secondsToWait;
+    private int seconds;
     private ServerManager serverManager;
     private boolean stopped = false;
 
@@ -14,7 +14,7 @@ public class GameCountDown extends Thread {
 
     public void reset() {
         stopped = true;
-        secondsToWait = 0;
+        seconds = 0;
     }
 
     public void restore() {
@@ -23,7 +23,7 @@ public class GameCountDown extends Thread {
     }
 
     public int getTimeLeft() {
-        return secondsToWait;
+        return seconds;
     }
 
     public void run() {

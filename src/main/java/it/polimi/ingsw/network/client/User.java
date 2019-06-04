@@ -6,6 +6,7 @@ import it.polimi.ingsw.network.Protocol;
 import it.polimi.ingsw.view.gui.GuiManager;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static java.lang.StrictMath.random;
@@ -30,7 +31,7 @@ public class User {
             System.out.printf("Avvio Gui in corso.");
             while (!gui.isReady()) {
                 try {
-                    sleep(1000);
+                    sleep(100);
                 } catch (InterruptedException e) {
                 }
                 System.out.printf(".");
@@ -38,15 +39,11 @@ public class User {
             client.setUi(gui);
             ui = gui;
         }
-        answers = new ArrayList<>();
-        answers.add("Socket");
-        answers.add("RMI");
-        connectionType = client.manageMessage(new Gson().toJson(new Message(Protocol.CHOOSE_CONNECTION, "", answers, 0)));
+        connectionType = client.manageMessage(new Gson().toJson(new Message(Protocol.CHOOSE_CONNECTION, "", Arrays.asList("Socket", "RMI"), 0)));
         ip = client.manageMessage(new Gson().toJson(new Message(Protocol.INSERT_IP, "", null, 0)));
         while (!isValidIp(ip)) {
             ip = client.manageMessage(new Gson().toJson(new Message(Protocol.INSERT_IP_AGAIN, "", null, 0)));
         }
-        System.out.println("Avvio client");
         if (connectionType.equals("Socket"))
             client = new SocketClient(ip, 9000, ui);
         else {

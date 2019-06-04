@@ -43,7 +43,7 @@ public class GuiManager extends Application {
     @Override
     public void start(Stage inputStage) {
         stage = new Stage();
-        window = new LoginWindow(stage, gui, "ciao", null, "", false);
+        window = new LoginWindow(stage, gui, "", null, "", false);
         Scene scene = new Scene(window);
         stage.setTitle("Login");
         stage.setResizable(false);

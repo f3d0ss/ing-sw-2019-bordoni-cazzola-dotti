@@ -22,7 +22,7 @@ public class Gui implements Ui, Runnable {
         Platform.runLater(() -> GuiManager.setMessageAndShow(toBeShown, possibleAnswers, isAnswerRequired));
         while (!inputReady) {
             try {
-                sleep(1000);
+                sleep(100);
             } catch (InterruptedException e) {
             }
         }

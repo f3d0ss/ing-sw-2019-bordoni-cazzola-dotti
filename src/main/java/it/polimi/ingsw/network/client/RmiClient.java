@@ -12,6 +12,8 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 
+import static java.lang.Thread.sleep;
+
 public class RmiClient extends Client {
 
     int port;
@@ -36,6 +38,7 @@ public class RmiClient extends Client {
     }
 
     public String printMessageAndGetAnswer(String message) {
+        //TODO: to be corrected
         if (message == Protocol.ping)
             return Protocol.ack;
         return manageMessage(message);
@@ -67,9 +70,9 @@ public class RmiClient extends Client {
         } catch (ConnectException e) {
             System.out.println(e.getMessage());
             ip = manageMessage(new Gson().toJson(new Message(Protocol.INSERT_IP_AGAIN, "", null, 0)));
-            run();
+            startClient();
+            return;
         }
-        /*
         while (true) {
             try {
                 sleep(2000);
@@ -82,7 +85,7 @@ public class RmiClient extends Client {
                 System.out.println(e.getMessage());
                 break;
             }
-        }*/
+        }
         System.out.println("Impossibile raggiungere il server. Disconnessione in corso.");
         System.exit(-1);
     }
