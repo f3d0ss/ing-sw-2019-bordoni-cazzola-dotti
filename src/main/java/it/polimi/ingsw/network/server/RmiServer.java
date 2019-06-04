@@ -31,7 +31,7 @@ public class RmiServer implements Runnable {
         serverManager.addClient(client);
         int number = serverManager.getNumber(client);
         System.out.println("User " + number + " accettato sul RmiServer.");
-        serverManager.addClientToLobby(number);
+        new Thread(new ClientReception(serverManager, number)).start();
     }
 
     public void unregistry(RmiClientInterface client) {
