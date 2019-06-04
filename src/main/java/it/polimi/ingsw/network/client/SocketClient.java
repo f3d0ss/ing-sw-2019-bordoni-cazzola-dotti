@@ -54,7 +54,6 @@ public class SocketClient extends Client {
             try {
                 input = fromServer.nextLine();
             } catch (NoSuchElementException e) {
-                manageMessage(new Gson().toJson(new Message(Protocol.UNREACHABLE_SERVER, "", null, 0)));
                 break;
             }
             //TODO: to be corrected
@@ -63,7 +62,7 @@ public class SocketClient extends Client {
             else
                 toServer.println(manageMessage(input));
         }
-        System.out.println("Disconnessione in corso.");
+        manageMessage(new Gson().toJson(new Message(Protocol.UNREACHABLE_SERVER, "", null, 0)));
         toServer.close();
         fromServer.close();
         socket.close();

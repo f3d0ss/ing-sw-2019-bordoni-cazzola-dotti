@@ -11,6 +11,10 @@ import static java.lang.Thread.sleep;
 
 public class ServerManager implements Runnable {
 
+    private final static int MIN_PLAYERS = 3;
+    private final static int MAX_PLAYERS = 5;
+    private final static int DEFAULT_BOARD = 1;
+    private final static int MILLIS_TO_WAIT = 100;
     private Map<Integer, Socket> socketClients = new HashMap<>();
     private Map<Integer, RmiClientInterface> rmiClients = new HashMap<>();
     private Map<Integer, String> answers = new HashMap<>();
@@ -100,23 +104,24 @@ public class ServerManager implements Runnable {
         connected.add(id);
         login(id);
         connected.remove((Object) id);
-        if (lobby.size() == 3) {
+        if (lobby.size() == MIN_PLAYERS) {
             countDown.restore();
             new Thread(countDown).start();
             //notifyTimeLeft();
-        } else if (lobby.size() == 5) {
+        } else if (lobby.size() == MAX_PLAYERS) {
             countDown.reset();
             checkAllConnections();
         }
     }
 
+    /*
     public boolean reconnect(String code) {
         if (socketClients.containsKey(Integer.parseInt(code)) || rmiClients.containsKey(Integer.parseInt(code))) {
             //TODO: call controller of game of player
             return true;
         }
         return false;
-    }
+    }*/
 
     private void login(int id) {
         String name;
@@ -136,23 +141,24 @@ public class ServerManager implements Runnable {
         if (sendMessageAndWaitForAnswer(id, new Message(Protocol.LOGIN_CONFIRM, name, null, 0)).equals(Protocol.err))
             return;
         if (chosenBoard == 0) {
-            chosenBoard = 1;
+            chosenBoard = DEFAULT_BOARD;
             String ans = sendMessageAndWaitForAnswer(id, new Message(Protocol.CHOOSE_BOARD, "", Arrays.asList("Board1", "Board2", "Board3", "Board4"), 0));
             if (ans.equals(Protocol.err))
                 return;
             else
                 try {
                     chosenBoard = Integer.parseInt(ans.substring(5, 6));
-                } catch (NumberFormatException e){
-                    chosenBoard = 1;
+                } catch (NumberFormatException e) {
+                    chosenBoard = DEFAULT_BOARD;
                 }
+            notifyTimeLeft(id, lobby.size());
         }
     }
 
     private void notifyNewEntry(int id, String newEntry) {
         Integer[] clients = lobby.keySet().toArray(new Integer[0]);
         for (int i : clients) {
-            if(answerReady.get(i)) {
+            if (answerReady.get(i)) {
                 if (i != id)
                     sendMessageAndWaitForAnswer(i, new Message(Protocol.NEW_ENTRY, newEntry, null, 0));
                 notifyTimeLeft(i, clients.length);
@@ -171,8 +177,8 @@ public class ServerManager implements Runnable {
     }
 
     private void notifyTimeLeft(int id, int size) {
-        if (size < 3)
-            sendMessageAndWaitForAnswer(id, new Message(Protocol.WAIT_FOR_PLAYERS, String.valueOf(3 - size), null, 0));
+        if (size < MIN_PLAYERS)
+            sendMessageAndWaitForAnswer(id, new Message(Protocol.WAIT_FOR_PLAYERS, String.valueOf(MIN_PLAYERS - size), null, 0));
         else
             sendMessageAndWaitForAnswer(id, new Message(Protocol.COUNTDOWN, String.valueOf(countDown.getTimeLeft()), null, 0));
     }
@@ -196,7 +202,7 @@ public class ServerManager implements Runnable {
 
     public void checkAllConnections() {
         lastCheckBeforeGameStarting();
-        if (lobby.size() >= 3) {
+        if (lobby.size() >= MIN_PLAYERS) {
             notifyGameStarting();
             //TODO: create a new game (controller)
             chosenBoard = 0;
@@ -258,12 +264,12 @@ public class ServerManager implements Runnable {
     private void removeClientFromLobby(int number) {
         String name = lobby.get(number);
         lobby.remove(number);
-        if (lobby.size() < 3 && countDown.isAlive())
+        if (lobby.size() < MIN_PLAYERS && countDown.isAlive())
             countDown.reset();
         Integer[] clients = lobby.keySet().toArray(new Integer[0]);
         for (int i : clients) {
             sendMessageAndWaitForAnswer(i, new Message(Protocol.REMOVAL, name, null, 0));
-            //notifyTimeLeft(i, clients.length);
+            notifyTimeLeft(i, clients.length);//to be removed?
         }
     }
 
@@ -275,7 +281,7 @@ public class ServerManager implements Runnable {
     public String sendMessageAndWaitForAnswer(int number, Message message) {
         while (!answerReady.get(number)) {
             try {
-                sleep(100);
+                sleep(MILLIS_TO_WAIT);
             } catch (InterruptedException e) {
                 break;
             }
@@ -293,7 +299,7 @@ public class ServerManager implements Runnable {
         }
         while (!answerReady.get(number)) {
             try {
-                sleep(100);
+                sleep(MILLIS_TO_WAIT);
             } catch (InterruptedException e) {
                 break;
             }
@@ -321,17 +327,15 @@ public class ServerManager implements Runnable {
         rmiServer = new RmiServer(this);
         new Thread(socketServer).start();
         new Thread(rmiServer).start();
-        while (true) {
+        /*while (true) {
             try {
                 sleep(5000);
             } catch (InterruptedException e) {
                 break;
             }
-            /*
             Integer[] clients = lobby.keySet().toArray(new Integer[0]);
             for (int i : clients)
                 if (answerReady.get(i))
                     sendPing(i);*/
         }
     }
-}

@@ -5,9 +5,7 @@ import it.polimi.ingsw.network.Message;
 import it.polimi.ingsw.network.Protocol;
 import it.polimi.ingsw.view.gui.GuiManager;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 import static java.lang.StrictMath.random;
 import static java.lang.Thread.sleep;
@@ -20,10 +18,7 @@ public class User {
         Ui ui = new Cli();
         String ip;
         Client client = new Client(ui);
-        List<String> answers = new ArrayList<>();
-        answers.add("GUI");
-        answers.add("CLI");
-        uiChoice = client.manageMessage(new Gson().toJson(new Message(Protocol.CHOOSE_UI, "", answers, 0)));
+        uiChoice = client.manageMessage(new Gson().toJson(new Message(Protocol.CHOOSE_UI, "", Arrays.asList("CLI", "GUI"), 0)));
         if (uiChoice.equals("GUI")) {
             Gui gui = new Gui();
             new Thread(gui).start();
@@ -31,7 +26,7 @@ public class User {
             System.out.printf("Avvio Gui in corso.");
             while (!gui.isReady()) {
                 try {
-                    sleep(100);
+                    sleep(1000);
                 } catch (InterruptedException e) {
                 }
                 System.out.printf(".");

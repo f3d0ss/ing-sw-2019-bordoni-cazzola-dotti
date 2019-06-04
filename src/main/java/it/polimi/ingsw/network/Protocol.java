@@ -163,7 +163,7 @@ public enum Protocol {
         }
     }, CHOOSE_BOARD {
         public String getQuestion() {
-            return "Scegli l'arena di gioco:";
+            return "Sei il primo giocagore: scegli l'arena di gioco.";
         }
 
         public boolean requiresAnswer() {
@@ -178,6 +178,7 @@ public enum Protocol {
             return false;
         }
     };
+    //TODO: rename
     public static final String ack = Character.toString((char) 3);
     public static final String ping = Character.toString((char) 4);//to be removed
     public static final String err = Character.toString((char) 5);

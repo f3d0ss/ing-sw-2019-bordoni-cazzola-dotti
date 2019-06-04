@@ -62,7 +62,7 @@ public class RmiClient extends Client {
         System.out.println("Connessione al RMI server in corso...");
         try {
             Registry registry = LocateRegistry.getRegistry(ip, 1099);
-            rmiServerInterface = (RmiServerInterface) registry.lookup(serverName);
+            rmiServerInterface = (RmiServerInterface) registry.lookup(RmiServerInterface.NAME);
             rmiClientImplementation = new RmiClientImplementation(this);
             stub = (RmiClientInterface) UnicastRemoteObject.exportObject(rmiClientImplementation, port);
             rmiServerInterface.registry(stub);
@@ -86,7 +86,7 @@ public class RmiClient extends Client {
                 break;
             }
         }
-        System.out.println("Impossibile raggiungere il server. Disconnessione in corso.");
+        manageMessage(new Gson().toJson(new Message(Protocol.UNREACHABLE_SERVER, "", null, 0)));
         System.exit(-1);
     }
 }
