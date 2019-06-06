@@ -152,8 +152,5 @@
         "type": "spawn"
       }
     ]
-  ],
-  "spawns": {},
-  "turrets": [],
-  "squareList": []
+  ]
 }

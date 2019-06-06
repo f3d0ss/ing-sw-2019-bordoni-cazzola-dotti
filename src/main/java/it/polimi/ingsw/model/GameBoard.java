@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -11,9 +12,9 @@ public class GameBoard {
     private static final int COLUMNS = 4;
     private int gameBoardId;
     private Square[][] board;
-    private Map<Color, SpawnSquare> spawns;
-    private List<TurretSquare> turrets;
-    private List<Square> squareList;
+    private Map<Color, SpawnSquare> spawns = new LinkedHashMap<>();
+    private List<TurretSquare> turrets = new ArrayList<>();
+    private List<Square> squareList = new ArrayList<>();
 
     void initialize() {
         for (int i = 0; i < ROWS; i++) {
