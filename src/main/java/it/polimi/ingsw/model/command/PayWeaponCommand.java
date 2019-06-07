@@ -3,6 +3,9 @@ package it.polimi.ingsw.model.command;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.playerstate.ManageTurnState;
 import it.polimi.ingsw.model.playerstate.PendingPaymentWeaponState;
+import it.polimi.ingsw.view.commandmessage.CommandMessage;
+import it.polimi.ingsw.view.commandmessage.CommandType;
+import it.polimi.ingsw.view.commandmessage.SimpleCommandMessage;
 
 /**
  * This command represents the action of buy a weapon
@@ -13,7 +16,8 @@ public class PayWeaponCommand implements Command {
 
     /**
      * This constructor create a command for buy a weapon
-     * @param player is the player who buy the weapon
+     *
+     * @param player       is the player who buy the weapon
      * @param currentState is the current state
      */
     public PayWeaponCommand(Player player, PendingPaymentWeaponState currentState) {
@@ -49,5 +53,10 @@ public class PayWeaponCommand implements Command {
     @Override
     public boolean isUndoable() {
         return false;
+    }
+
+    @Override
+    public CommandMessage createCommandMessage() {
+        return new SimpleCommandMessage(CommandType.PAY);
     }
 }

@@ -4,6 +4,9 @@ import it.polimi.ingsw.model.AmmoTile;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.TurretSquare;
 import it.polimi.ingsw.model.exception.IllegalUndoException;
+import it.polimi.ingsw.view.commandmessage.CommandMessage;
+import it.polimi.ingsw.view.commandmessage.CommandType;
+import it.polimi.ingsw.view.commandmessage.SimpleCommandMessage;
 
 /**
  * This command represent the action of grab a tile
@@ -47,5 +50,10 @@ public class GrabTileCommand extends GrabCommand {
     @Override
     public boolean isUndoable() {
         return false;
+    }
+
+    @Override
+    public CommandMessage createCommandMessage() {
+        return new SimpleCommandMessage(CommandType.GRAB_TILE);
     }
 }

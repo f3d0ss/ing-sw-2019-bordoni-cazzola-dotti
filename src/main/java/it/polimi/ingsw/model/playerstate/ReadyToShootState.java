@@ -18,7 +18,7 @@ public class ReadyToShootState extends SelectedWeaponState implements TargetingP
     @Override
     public List<Command> getPossibleCommands(Player player) {
         List<Command> commands = new ArrayList<>();
-        if(!getSelectedWeapon().isLoaded()) commands.add(new DoneCommand(player, this));
+        if (!getSelectedWeapon().isLoaded()) commands.add(new DoneCommand(player, this));
         commands.addAll(getSelectedWeapon().getPossibleCommands(player.getMatch().getBoard(), player, this));
         return commands;
     }

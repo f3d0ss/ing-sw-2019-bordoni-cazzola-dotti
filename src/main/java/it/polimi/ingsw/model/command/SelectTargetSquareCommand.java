@@ -2,6 +2,9 @@ package it.polimi.ingsw.model.command;
 
 import it.polimi.ingsw.model.Square;
 import it.polimi.ingsw.model.playerstate.TargetingSquareState;
+import it.polimi.ingsw.view.commandmessage.CommandMessage;
+import it.polimi.ingsw.view.commandmessage.CommandType;
+import it.polimi.ingsw.view.commandmessage.SquareCommandMessage;
 
 /**
  * This command represent the action of select a square as target
@@ -12,6 +15,7 @@ public class SelectTargetSquareCommand implements WeaponCommand {
 
     /**
      * This constructor create a command for select a square as target
+     *
      * @param currentState is the current state
      * @param targetSquare is the square selected as target
      */
@@ -42,5 +46,10 @@ public class SelectTargetSquareCommand implements WeaponCommand {
     @Override
     public boolean isUndoable() {
         return true;
+    }
+
+    @Override
+    public CommandMessage createCommandMessage() {
+        return new SquareCommandMessage(CommandType.SELECT_TARGET_SQUARE, targetSquare.getRow(), targetSquare.getCol());
     }
 }

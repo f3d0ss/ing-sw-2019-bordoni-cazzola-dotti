@@ -6,6 +6,9 @@ import it.polimi.ingsw.model.Weapon;
 import it.polimi.ingsw.model.playerstate.DiscardingWeaponState;
 import it.polimi.ingsw.model.playerstate.PendingPaymentWeaponState;
 import it.polimi.ingsw.model.playerstate.SelectedAggregateActionState;
+import it.polimi.ingsw.view.commandmessage.CommandMessage;
+import it.polimi.ingsw.view.commandmessage.CommandType;
+import it.polimi.ingsw.view.commandmessage.WeaponCommandMessage;
 
 /**
  * This command represent the action of select the weapon to buy
@@ -17,10 +20,11 @@ public class SelectBuyingWeaponCommand extends GrabCommand {
 
     /**
      * This constructor create the command for select the weapon to bay
-     * @param player is the player who select the weapon
+     *
+     * @param player       is the player who select the weapon
      * @param currentState is the current state
-     * @param weapon is the weapon to select
-     * @param spawn is the spawn where the weapon is selected
+     * @param weapon       is the weapon to select
+     * @param spawn        is the spawn where the weapon is selected
      */
     public SelectBuyingWeaponCommand(Player player, SelectedAggregateActionState currentState, Weapon weapon, SpawnSquare spawn) {
         super(player);
@@ -57,5 +61,10 @@ public class SelectBuyingWeaponCommand extends GrabCommand {
     @Override
     public boolean isUndoable() {
         return true;
+    }
+
+    @Override
+    public CommandMessage createCommandMessage() {
+        return new WeaponCommandMessage(CommandType.SELECT_BUYING_WEAPON, weapon.getName());
     }
 }

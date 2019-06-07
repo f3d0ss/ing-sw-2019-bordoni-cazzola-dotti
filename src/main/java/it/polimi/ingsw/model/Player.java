@@ -200,28 +200,30 @@ public class Player {
         this.powerUps.add(match.drawPowerUpCard());
     }
 
-    public List<AggregateAction> getPossibleAggregateAction() {
-        List<AggregateAction> aggregateActions = new ArrayList<>();
+    public List<AggregateActionID> getPossibleAggregateAction() {
+        List<AggregateActionID> aggregateActions = new ArrayList<>();
         if (match.isLastTurn()) {
             if (match.hasFirstPlayerPlayedLastTurn()) {
-                aggregateActions.add(new AggregateAction(2, false, true, true));
-                aggregateActions.add(new AggregateAction(3, true, false, false));
+                aggregateActions.add(AggregateActionID.MOVE_MOVE_RELOAD_SHOOT);
+                aggregateActions.add(AggregateActionID.MOVE_MOVE_MOVE_GRAB);
             } else {
-                aggregateActions.add(new AggregateAction(1, false, true, true));
-                aggregateActions.add(new AggregateAction(4, false, false, false));
-                aggregateActions.add(new AggregateAction(2, true, false, false));
+                aggregateActions.add(AggregateActionID.MOVE_RELOAD_SHOOT);
+                aggregateActions.add(AggregateActionID.MOVE_MOVE_MOVE_MOVE);
+                aggregateActions.add(AggregateActionID.MOVE_MOVE_GRAB);
             }
         } else {
             if (health.size() <= DAMAGE_BEFORE_FIRST_ADRENALINA) {
-                aggregateActions.add(new AggregateAction(3, false, false, false));
-                aggregateActions.add(new AggregateAction(1, true, false, false));
-                aggregateActions.add(new AggregateAction(0, false, true, false));
+                aggregateActions.add(AggregateActionID.MOVE_MOVE_MOVE);
+                aggregateActions.add(AggregateActionID.MOVE_GRAB);
+                aggregateActions.add(AggregateActionID.SHOOT);
             } else if (health.size() <= DAMAGE_BEFORE_SECOND_ADRENALINA) {
-                aggregateActions.add(new AggregateAction(3, false, false, false));
-                aggregateActions.add(new AggregateAction(2, true, false, false));
-                aggregateActions.add(new AggregateAction(0, false, true, false));
+                aggregateActions.add(AggregateActionID.MOVE_MOVE_MOVE);
+                aggregateActions.add(AggregateActionID.MOVE_MOVE_GRAB);
+                aggregateActions.add(AggregateActionID.SHOOT);
             } else {
-                aggregateActions.add(new AggregateAction(1, false, true, false));
+                aggregateActions.add(AggregateActionID.MOVE_MOVE_MOVE);
+                aggregateActions.add(AggregateActionID.MOVE_MOVE_GRAB);
+                aggregateActions.add(AggregateActionID.MOVE_SHOOT);
             }
         }
         return aggregateActions;
