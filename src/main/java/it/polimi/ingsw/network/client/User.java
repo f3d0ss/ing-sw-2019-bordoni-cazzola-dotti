@@ -1,12 +1,11 @@
 package it.polimi.ingsw.network.client;
 
-import com.google.gson.Gson;
-import it.polimi.ingsw.gui.GuiManager;
 import it.polimi.ingsw.network.Message;
 import it.polimi.ingsw.network.Protocol;
+import it.polimi.ingsw.utils.Parser;
+import it.polimi.ingsw.view.gui.GuiManager;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static java.lang.StrictMath.random;
@@ -23,7 +22,8 @@ public class User {
         List<String> answers = new ArrayList<>();
         answers.add("GUI");
         answers.add("CLI");
-        uiChoice = client.manageMessage(new Gson().toJson(new Message(Protocol.CHOOSE_UI, "", answers, 0)));
+        Parser parser = new Parser();
+        uiChoice = client.manageMessage(parser.serialize(new Message(Protocol.CHOOSE_UI, "", answers, 0)));
         if (uiChoice.equals("GUI")) {
             Gui gui = new Gui();
             new Thread(gui).start();
@@ -42,10 +42,10 @@ public class User {
         answers = new ArrayList<>();
         answers.add("Socket");
         answers.add("RMI");
-        connectionType = client.manageMessage(new Gson().toJson(new Message(Protocol.CHOOSE_CONNECTION, "", answers, 0)));
-        ip = client.manageMessage(new Gson().toJson(new Message(Protocol.INSERT_IP, "", Arrays.asList("string"), 0)));
-        while(!isValidIp(ip)){
-            ip = client.manageMessage(new Gson().toJson(new Message(Protocol.INSERT_IP_AGAIN, "", Arrays.asList("string"), 0)));
+        connectionType = client.manageMessage(parser.serialize(new Message(Protocol.CHOOSE_CONNECTION, "", answers, 0)));
+        ip = client.manageMessage(parser.serialize(new Message(Protocol.INSERT_IP, "", null, 0)));
+        while (!isValidIp(ip)) {
+            ip = client.manageMessage(parser.serialize(new Message(Protocol.INSERT_IP_AGAIN, "", null, 0)));
         }
         System.out.println("Avvio client");
         if (connectionType.equals("Socket"))

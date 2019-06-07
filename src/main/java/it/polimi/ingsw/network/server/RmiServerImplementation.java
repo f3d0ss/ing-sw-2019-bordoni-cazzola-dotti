@@ -29,9 +29,8 @@ public class RmiServerImplementation implements RmiServerInterface {
         try {
             return addressee.sendMessageAndGetAnswer(message);
         } catch (RemoteException e) {
-            System.out.println("Impossibile raggiungere il client. " + e.getMessage());
             server.unregistry(addressee);
+            return "Impossibile raggiungere il client. " + e.getMessage();
         }
-        return "Answer missing";
     }
 }

@@ -33,8 +33,9 @@ public class GameCountDown extends Thread {
             } catch (InterruptedException e) {
             }
             seconds--;
+            System.out.println(seconds);
         }
         if (!stopped)
-            serverManager.startNewGame();
+            serverManager.checkAllConnections();
     }
 }

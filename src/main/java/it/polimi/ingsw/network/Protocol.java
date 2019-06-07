@@ -1,82 +1,147 @@
 package it.polimi.ingsw.network;
 
 public enum Protocol {
-
-    ACK {
-        public String getQuestion() {
-            return Character.toString((char) 3);
-        }
-    },
     CHOOSE_UI {
         public String getQuestion() {
             return "Quale tipo di user interface vuoi usare?";
         }
-    },
-    CHOOSE_CONNECTION {
+
+        public boolean requiresAnswer() {
+            return true;
+        }
+    }, CHOOSE_CONNECTION {
         public String getQuestion() {
             return "Scegli la tecnologia di connessione.";
         }
-    },
-    INSERT_IP {
+
+        public boolean requiresAnswer() {
+            return true;
+        }
+    }, INSERT_IP {
         public String getQuestion() {
             return "Inserisci l'indirizzo ip del server.";
         }
-    },
-    INSERT_IP_AGAIN {
+
+        public boolean requiresAnswer() {
+            return true;
+        }
+    }, INSERT_IP_AGAIN {
         public String getQuestion() {
             return "Ip non valido. Riprova.";
         }
-    },
-    WELCOME {
+
+        public boolean requiresAnswer() {
+            return true;
+        }
+    }, WELCOME {
         public String getQuestion() {
             return "Benvenuto su Adrenalina!\nSei stato accettato con il codice %s.\nMemorizzalo per riconnetterti a seguito di disconnessioni impreviste.";
         }
-    },
-    LOGIN_FIRST {
+
+        public boolean requiresAnswer() {
+            return false;
+        }
+    }, LOGIN_FIRST {
         public String getQuestion() {
             return "Sei il primo giocatore; digita il tuo nickname:";
         }
-    },
-    LOGIN_OTHERS {
+
+        public boolean requiresAnswer() {
+            return true;
+        }
+    }, LOGIN_OTHERS {
         public String getQuestion() {
             return "Sono in attesa di una nuova partita: %sdigita il tuo nickname:";
         }
-    },
-    LOGIN_REPEAT {
+
+        public boolean requiresAnswer() {
+            return true;
+        }
+    }, LOGIN_REPEAT {
         public String getQuestion() {
             return "Questo nickname è già in uso, scegline un altro:";
         }
-    },
-    NEW_ENTRY {
+
+        public boolean requiresAnswer() {
+            return true;
+        }
+    }, NEW_ENTRY {
         public String getQuestion() {
             return "%s si è appena registrato.";
         }
-    },
-    LOGIN_CONFIRM {
+
+        public boolean requiresAnswer() {
+            return false;
+        }
+    }, NEW_CONNECTION {
+        public String getQuestion() {
+            return "Nuova connessione al server.";
+        }
+
+        public boolean requiresAnswer() {
+            return false;
+        }
+    }, LOGIN_CONFIRM {
         public String getQuestion() {
             return "Iscrizione riuscita! Ora attendi che altri giocatori si connettano.";
         }
-    },
-    COUNTDOWN {
+
+        public boolean requiresAnswer() {
+            return false;
+        }
+    }, WAIT_FOR_PLAYERS {
+        public String getQuestion() {
+            return "Mancano %s giocatori per l'avvio della partita.";
+        }
+
+        public boolean requiresAnswer() {
+            return false;
+        }
+    }, REMOVAL {
+        public String getQuestion() {
+            return "%s si è disconnesso.";
+        }
+
+        public boolean requiresAnswer() {
+            return false;
+        }
+    }, COUNTDOWN {
         public String getQuestion() {
             return "Il gioco inizierà entro %s secondi.";
         }
-    },
-    ARE_YOU_READY {
-        public String getQuestion() {
-            return "L'attesa è finita. Preparati a combattere!";
+
+        public boolean requiresAnswer() {
+            return false;
         }
-    },
-    CHOOSE_BOARD {
+    }, ARE_YOU_READY {
+        public String getQuestion() {
+            return "Attendi...";
+        }
+
+        public boolean requiresAnswer() {
+            return false;
+        }
+    }, CHOOSE_BOARD {
         public String getQuestion() {
             return "Scegli l'arena di gioco:";
         }
-    },
-    TRY {
+
+        public boolean requiresAnswer() {
+            return true;
+        }
+    }, TRY {
         public String getQuestion() {
             return "Messaggio di prova.";
         }
+
+        public boolean requiresAnswer() {
+            return false;
+        }
     };
+    public static final String ack = Character.toString((char) 3);
+    public static final String ping = Character.toString((char) 4);
 
     public abstract String getQuestion();
+
+    public abstract boolean requiresAnswer();
 }
