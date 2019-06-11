@@ -156,7 +156,7 @@
                                 <HBox id="playerBoard" fx:id="playerBoard" prefHeight="${mainPane.height*125/925}"
                                       prefWidth="${mainPane.width*500/1850}">
                                     <children>
-                                        <VBox prefWidth="45">
+                                        <VBox prefWidth="${playerBoard.width*45/700}">
                                             <children>
                                                 <HBox prefHeight="${playerBoard.height*32/175}"/> <!-- spacing -->
                                                 <HBox id="playerAggregateActionMMM" fx:id="playerAggregateActionMMM"
@@ -174,34 +174,34 @@
                                         <VBox prefHeight="${playerBoard.height}"
                                               prefWidth="${playerBoard.width*475/700}">
                                             <children>
-                                                <HBox prefHeight="${playerBoard.width*30/925}"
+                                                <HBox prefHeight="${playerBoard.height*30/175}"
                                                       prefWidth="${playerBoard.width*475/700}">
                                                     <children>
-                                                        <HBox prefHeight="${playerBoard.width*30/925}" prefWidth="270"/>
+                                                        <HBox prefHeight="${playerBoard.height*30/175}" prefWidth="${playerBoard.width*270/700}"/>
                                                         <HBox id="playerMarks" fx:id="playerMarks"
-                                                              prefHeight="${playerBoard.width*30/925}"
-                                                              prefWidth="205"/>
+                                                              prefHeight="${playerBoard.width*30/175}"
+                                                              prefWidth="${playerBoard.width*205/700}"/>
                                                     </children>
                                                 </HBox>
-                                                <HBox prefHeight="${playerBoard.width*30/925}"
+                                                <HBox prefHeight="${playerBoard.height*30/175}"
                                                       prefWidth="${playerBoard.width*475/700}">
                                                     <children>
-                                                        <HBox prefHeight="${playerBoard.width*30/925}" prefWidth="80"/>
+                                                        <HBox prefHeight="${playerBoard.height*30/175}" prefWidth="${playerBoard.width*80/700}"/>
                                                         <HBox id="playerAggregateActionMMG"
                                                               fx:id="playerAggregateActionMMG"
-                                                              prefHeight="${playerBoard.width*30/925}"
-                                                              prefWidth="55"/>
-                                                        <HBox prefHeight="${playerBoard.width*30/925}" prefWidth="65"/>
+                                                              prefHeight="${playerBoard.height*30/175}"
+                                                              prefWidth="${playerBoard.width*55/700}"/>
+                                                        <HBox prefHeight="${playerBoard.height*30/175}" prefWidth="${playerBoard.width*65/700}"/>
                                                         <HBox id="playerAggregateActionMS"
                                                               fx:id="playerAggregateActionMS"
-                                                              prefHeight="${playerBoard.width*30/925}"
-                                                              prefWidth="55"/>
-                                                        <HBox prefHeight="${playerBoard.width*30/925}" prefWidth="220"/>
+                                                              prefHeight="${playerBoard.height*30/175}"
+                                                              prefWidth="${playerBoard.width*55/700}"/>
+                                                        <HBox prefHeight="${playerBoard.height*30/175}" prefWidth="${playerBoard.width*220/700}"/>
                                                     </children>
                                                 </HBox>
-                                                <HBox prefHeight="55" prefWidth="${playerBoard.width*475/700}">
+                                                <HBox prefHeight="${playerBoard.height*55/175}" prefWidth="${playerBoard.width*475/700}">
                                                     <children>
-                                                        <GridPane id="playerHealthGrid" fx:id="playerHealthGrid">
+                                                        <GridPane id="playerHealthGrid" fx:id="playerHealthGrid" prefHeight="${playerBoard.height*30/175}">
                                                             <columnConstraints>
                                                                 <ColumnConstraints hgrow="SOMETIMES"
                                                                                    prefWidth="100"/>
@@ -229,17 +229,17 @@
                                                                                    prefWidth="100"/>
                                                             </columnConstraints>
                                                             <rowConstraints>
-                                                                <RowConstraints prefHeight="30"
+                                                                <RowConstraints prefHeight="${playerBoard.height*30/175}"
                                                                                 vgrow="SOMETIMES"/>
                                                             </rowConstraints>
                                                         </GridPane>
                                                     </children>
                                                 </HBox>
-                                                <HBox prefHeight="60" prefWidth="${playerBoard.width*475/700}">
+                                                <HBox prefHeight="${playerBoard.height*60/175}" prefWidth="${playerBoard.width*475/700}">
                                                     <children>
-                                                        <HBox prefHeight="60" prefWidth="85"/>
+                                                        <HBox prefHeight="${playerBoard.height*60/175}" prefWidth="${playerBoard.width*85/700}"/>
                                                         <GridPane id="playerDeathsGrid" fx:id="playerDeathsGrid"
-                                                                  prefHeight="60" prefWidth="224">
+                                                                  prefHeight="${playerBoard.height*60/175}" prefWidth="${playerBoard.width*224/700}">
                                                             <columnConstraints>
                                                                 <ColumnConstraints hgrow="SOMETIMES"
                                                                                    prefWidth="100"/>
@@ -255,7 +255,7 @@
                                                                                    prefWidth="100"/>
                                                             </columnConstraints>
                                                             <rowConstraints>
-                                                                <RowConstraints prefHeight="30"
+                                                                <RowConstraints prefHeight="${playerBoard.height*30/175}"
                                                                                 vgrow="SOMETIMES"/>
                                                             </rowConstraints>
                                                         </GridPane>
@@ -263,12 +263,12 @@
                                                 </HBox>
                                             </children>
                                         </VBox>
-                                        <VBox prefHeight="${mainPane.height*125/925}" prefWidth="15"/> <!-- spacing -->
-                                        <VBox prefHeight="${mainPane.height*125/925}" prefWidth="150">
+                                        <VBox prefHeight="${playerBoard.height}" prefWidth="${playerBoard.width*15/700}"/> <!-- spacing -->
+                                        <VBox prefHeight="${playerBoard.height}" prefWidth="${playerBoard.width*150/700}">
                                             <children>
-                                                <HBox prefHeight="100" prefWidth="200"/>
-                                                <HBox prefHeight="100" prefWidth="200"/>
-                                                <HBox prefHeight="100" prefWidth="200"/>
+                                                <HBox fx:id="playerBlueAmmo" prefHeight="${playerBoard.height/3}" prefWidth="${playerBoard.width*150/700}"/>
+                                                <HBox fx:id="playerRedAmmo" prefHeight="${playerBoard.height/3}" prefWidth="${playerBoard.width*150/700}"/>
+                                                <HBox fx:id="playerYellowAmmo" prefHeight="${playerBoard.height/3}" prefWidth="${playerBoard.width*150/700}"/>
                                             </children>
                                         </VBox>
                                     </children>
