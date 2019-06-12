@@ -1,7 +1,7 @@
 package it.polimi.ingsw.network.client;
 
-import com.google.gson.Gson;
 import it.polimi.ingsw.network.Message;
+import it.polimi.ingsw.utils.Parser;
 
 import java.io.IOException;
 import java.rmi.NotBoundException;
@@ -26,8 +26,8 @@ public class Client implements Runnable {
     }
 
     public String manageMessage(String gsonCoded) {
-        Gson gson = new Gson();
-        Message fromServer = gson.fromJson(gsonCoded, Message.class);
+        Parser parser = new Parser();
+        Message fromServer = parser.deserialize(gsonCoded, Message.class);
         return ui.showMessage(String.format(fromServer.type.getQuestion(), fromServer.getStringInQuestion()), fromServer.getPossibleAnswer(), fromServer.type.requiresAnswer());
     }
 

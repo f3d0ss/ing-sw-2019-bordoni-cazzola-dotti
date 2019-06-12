@@ -1,6 +1,5 @@
 package it.polimi.ingsw.model;
 
-import com.google.gson.annotations.Expose;
 import it.polimi.ingsw.model.command.*;
 import it.polimi.ingsw.model.playerstate.ChoosingWeaponOptionState;
 import it.polimi.ingsw.model.playerstate.ReadyToShootState;
@@ -13,15 +12,10 @@ import java.util.stream.IntStream;
  * This class represents a weapon
  */
 public class Weapon {
-    @Expose
     private String name;
-    @Expose
     private String description;
-    @Expose
     private Map<Color, Integer> reloadingCost;
-    @Expose
     private Map<Color, Integer> buyCost;
-    @Expose
     private List<WeaponMode> weaponModes;
     private boolean extraMoveToDo = false;
     private boolean loaded = true;

@@ -1,8 +1,6 @@
 package it.polimi.ingsw.model;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import it.polimi.ingsw.utils.RuntimeTypeAdapterFactory;
+import it.polimi.ingsw.utils.Parser;
 import it.polimi.ingsw.view.ViewInterface;
 
 import java.io.File;
@@ -29,30 +27,22 @@ public class Match {
     private List<ViewInterface> views;
 
     public Match(int gameBoardNumber) {
-        initializeGameBoard(gameBoardNumber);
+        Parser parser = new Parser();
+        initializeGameBoard(gameBoardNumber, parser);
         killshotTrack = new ArrayList();
         currentPlayers = new ArrayList();
         firstPlayerPlayedLastTurn = false;
-        initializeAmmoTiles();
-        initializeWeapons();
+        initializeAmmoTiles(parser);
+        initializeWeapons(parser);
     }
 
     public Match() {
         this(1);
     }
 
-    private void initializeGameBoard(int gameBoardNumber) {
-        RuntimeTypeAdapterFactory<Square> runtimeTypeAdapterFactory = RuntimeTypeAdapterFactory
-                .of(Square.class, "type")
-                .registerSubtype(SpawnSquare.class, "spawn")
-                .registerSubtype(TurretSquare.class, "turret");
-
-        Gson gson = new GsonBuilder()
-                .registerTypeAdapterFactory(runtimeTypeAdapterFactory)
-                .create();
-
+    private void initializeGameBoard(int gameBoardNumber, Parser parser) {
         try {
-            board = gson.fromJson(new FileReader("src/resources/gameboards/gameboard_" +
+            board = parser.deserialize(new FileReader("src/resources/gameboards/gameboard_" +
                     String.format("%03d", gameBoardNumber) + ".json"), GameBoard.class);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -62,10 +52,9 @@ public class Match {
     }
 
 
-    private void initializeAmmoTiles() {
-        Gson gson = new Gson();
+    private void initializeAmmoTiles(Parser parser) {
         try {
-            currentAmmoTileDeck = gson.fromJson(new FileReader("src/resources/cards/default_ammo_tiles_deck.json"), AmmoTileDeck.class);
+            currentAmmoTileDeck = parser.deserialize(new FileReader("src/resources/cards/default_ammo_tiles_deck.json"), AmmoTileDeck.class);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
@@ -75,14 +64,13 @@ public class Match {
         }
     }
 
-    private void initializeWeapons() {
-        Gson gson = new Gson();
+    private void initializeWeapons(Parser parser) {
         List<Weapon> weaponList = new ArrayList<>();
         File file = new File("src/resources/weapons/");
         File[] files = file.listFiles();
         for (File f : files) {
             try {
-                weaponList.add(gson.fromJson(new FileReader(f.getPath()), Weapon.class));
+                weaponList.add(parser.deserialize(new FileReader(f.getPath()), Weapon.class));
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }

@@ -2,6 +2,9 @@ package it.polimi.ingsw.model.command;
 
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.playerstate.*;
+import it.polimi.ingsw.view.commandmessage.CommandMessage;
+import it.polimi.ingsw.view.commandmessage.CommandType;
+import it.polimi.ingsw.view.commandmessage.SimpleCommandMessage;
 
 /**
  * This command change the player state from currentState to nextState
@@ -103,5 +106,10 @@ public class DoneCommand implements Command {
     @Override
     public boolean isUndoable() {
         return undoable;
+    }
+
+    @Override
+    public CommandMessage createCommandMessage() {
+        return new SimpleCommandMessage(CommandType.DONE);
     }
 }

@@ -1,8 +1,8 @@
 package it.polimi.ingsw.network.server;
 
-import com.google.gson.Gson;
 import it.polimi.ingsw.network.Message;
 import it.polimi.ingsw.network.Protocol;
+import it.polimi.ingsw.utils.Parser;
 
 import java.net.Socket;
 import java.util.*;
@@ -29,6 +29,7 @@ public class ServerManager implements Runnable {
     private Map<Integer, String> lobby = new HashMap<>();
     private List<Integer> connected = new ArrayList<>();
     private GameCountDown countDown;
+    private Parser parser = new Parser();
     private int chosenBoard = 0;
 
     public ServerManager(int seconds) {
@@ -276,13 +277,12 @@ public class ServerManager implements Runnable {
             }
         }
         answerReady.put(number, false);
-        Gson gson = new Gson();
-        String json = gson.toJson(message);
+        String serializedMessage = parser.serialize(message);
         if (socketClients.containsKey(number))
-            new Thread(new SocketCommunication(json, socketClients.get(number), socketServer, number, this)).start();
+            new Thread(new SocketCommunication(serializedMessage, socketClients.get(number), socketServer, number, this)).start();
         else if (rmiClients.containsKey(number))
-            new Thread(new RmiCommunication(json, rmiClients.get(number), rmiServer, number, this)).start();
-        else {
+            new Thread(new RmiCommunication(serializedMessage, rmiClients.get(number), rmiServer, number, this)).start();
+        else{
             System.out.println("Client non registrato");
             return Protocol.ERR;
         }

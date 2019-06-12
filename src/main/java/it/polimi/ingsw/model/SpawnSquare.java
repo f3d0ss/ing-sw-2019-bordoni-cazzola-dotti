@@ -10,8 +10,8 @@ import java.util.List;
 public class SpawnSquare extends Square {
 
     public static final int MAX_WEAPON = 3;
-    private ArrayList<Weapon> weapons;
-    private ArrayList<PlayerId> spawnPointTrack;
+    private List<Weapon> weapons;
+    private List<PlayerId> spawnPointTrack;
 
     public SpawnSquare(Connection northConnection, Connection eastConnection, Connection southConnection, Connection westConnection, int row, int col, Color color) {
         super(northConnection, eastConnection, southConnection, westConnection, row, col, color, "spawn");

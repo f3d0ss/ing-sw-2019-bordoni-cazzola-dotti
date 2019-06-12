@@ -3,6 +3,9 @@ package it.polimi.ingsw.model.command;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.PowerUp;
 import it.polimi.ingsw.model.playerstate.PendingPaymentState;
+import it.polimi.ingsw.view.commandmessage.CommandMessage;
+import it.polimi.ingsw.view.commandmessage.CommandType;
+import it.polimi.ingsw.view.commandmessage.PowerUpCommandMessage;
 
 /**
  * This command represent the action of select a power up for a payment
@@ -12,9 +15,10 @@ public class SelectPowerUpPaymentCommand extends SelectPaymentCommand {
 
     /**
      * This constructor create a command for select a power up for a payment
-     * @param player is the player who select the power up
+     *
+     * @param player       is the player who select the power up
      * @param currentState is the current state
-     * @param powerUp is the power up selected
+     * @param powerUp      is the power up selected
      */
     public SelectPowerUpPaymentCommand(Player player, PendingPaymentState currentState, PowerUp powerUp) {
         super(player, currentState);
@@ -43,5 +47,10 @@ public class SelectPowerUpPaymentCommand extends SelectPaymentCommand {
     @Override
     public boolean isUndoable() {
         return true;
+    }
+
+    @Override
+    public CommandMessage createCommandMessage() {
+        return new PowerUpCommandMessage(CommandType.SELECT_POWER_UP_PAYMENT, powerUp.getType(), powerUp.getColor());
     }
 }
