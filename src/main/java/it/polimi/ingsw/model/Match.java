@@ -32,7 +32,6 @@ public class Match {
         killshotTrack = new ArrayList();
         currentPlayers = new ArrayList();
         views = new ArrayList<>();
-        currentPowerUpDeck = new PowerUpDeck();
         firstPlayerPlayedLastTurn = false;
         initializeAmmoTiles(parser);
         initializeWeapons(parser);
