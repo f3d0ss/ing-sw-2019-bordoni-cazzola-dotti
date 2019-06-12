@@ -6,7 +6,9 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 
 public interface RmiServerInterface extends Remote {
-    /*dichiara qui tutti i metodi che possono essere chiamati in remoto dal client*/
+
+    String NAME = "adrenaline";
+
     void registry(RmiClientInterface client) throws RemoteException;
 
     void unregistry(RmiClientInterface client) throws RemoteException;

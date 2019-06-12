@@ -6,6 +6,7 @@ import javafx.application.Platform;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
@@ -19,17 +20,19 @@ import java.util.List;
 
 public class LoginWindow extends GridPane {
 
-    private static final String ERROR_STYLE = "-fx-font: normal bold 12px 'sans-serif'; -fx-text-fill: #FF0000;";
     private static final String BUTTON_STYLE = "-fx-background-color: #222222; -fx-text-fill: white;";
-    static ComboBox<String> comboBox;
+    private static ComboBox<String> comboBox;
+    private static String oldMessage = "";
 
     public LoginWindow(Stage stage, Gui gui, String message, List<String> answers, String defaultOption, boolean isAnswerRequired) {
-        Text text = new Text(message);
+        Text text = new Text(oldMessage + message);
+        if(!isAnswerRequired)
+            oldMessage = message + "\n";
+        else
+            oldMessage = "";
         DropShadow shadow = new DropShadow();
-        Text wait = new Text("Attendi...");
         TextField textField = new TextField();
         Button buttonNext = new Button("Next");
-        Button buttonQuit = new Button("Quit");
 
         shadow.setSpread(0.6);
         shadow.setColor(Color.BLACK);
@@ -40,23 +43,53 @@ public class LoginWindow extends GridPane {
 
         Platform.setImplicitExit(false);
 
+        stage.setOnCloseRequest(e -> {
+            Text secondLabel = new Text("Sicuro di voler uscire?\nLa tua registrazione andrà persa.");
+            secondLabel.setTextAlignment(TextAlignment.CENTER);
+            GridPane secondaryLayout = new GridPane();
+            Button buttonQuit = new Button("Esci");
+            buttonQuit.setStyle(BUTTON_STYLE);
+            buttonQuit.setMinWidth(100);
+            Button buttonCancel = new Button("Annulla");
+            buttonCancel.setStyle(BUTTON_STYLE);
+            buttonCancel.setMinWidth(100);
+
+            Stage secondStage = new Stage();
+
+            buttonQuit.setOnAction(a -> System.exit(1));
+            buttonCancel.setOnAction(a -> secondStage.close());
+
+            secondaryLayout.add(secondLabel, 0, 0);
+            secondaryLayout.add(buttonCancel, 0, 1);
+            secondaryLayout.add(buttonQuit, 0, 2);
+
+            Scene secondScene = new Scene(secondaryLayout, 300, 200);
+
+            secondaryLayout.setAlignment(Pos.CENTER);
+            secondaryLayout.setHalignment(secondLabel, HPos.CENTER);
+            secondaryLayout.setHalignment(buttonCancel, HPos.CENTER);
+            secondaryLayout.setHalignment(buttonQuit, HPos.CENTER);
+            secondaryLayout.setVgap(10);
+
+            secondStage.setTitle("Confirm Exit");
+            secondStage.setScene(secondScene);
+
+            secondStage.show();
+            e.consume();
+        });
+
         comboBox = new ComboBox<>();
         setHalignment(comboBox, HPos.CENTER);
 
-        wait.setStyle(ERROR_STYLE);
-        wait.setVisible(false);
-
         buttonNext.setStyle(BUTTON_STYLE);
         buttonNext.setMinWidth(100);
-        buttonQuit.setStyle(BUTTON_STYLE);
-        buttonQuit.setMinWidth(100);
 
         setMinSize(730, 510);
 
         setPadding(new Insets(10, 10, 10, 10));
 
         setVgap(10);
-        setHgap(100);
+        //setHgap(100);
 
         add(text, 0, 0);
         if (isAnswerRequired) {
@@ -68,32 +101,46 @@ public class LoginWindow extends GridPane {
                 add(comboBox, 0, 1);
             }
         }
-        add(wait, 0, 2);
-        add(buttonNext, 0, 3);
-        add(buttonQuit, 0, 4);
+        add(buttonNext, 0, 2);
 
-        buttonNext.setOnAction(e -> {
-            if (!isAnswerRequired)
-                gui.setAnswer(Protocol.ack);
-            else if (answers == null)
-                gui.setAnswer(textField.getText());
-            else
-                gui.setAnswer(comboBox.getValue());
+        //TODO: remove next button if user action is not required
+
+        if(!isAnswerRequired) {
+            gui.setAnswer(Protocol.ACK);
             gui.setInputReady(true);
-            comboBox.setVisible(false);
-            textField.setVisible(false);
-            buttonNext.setVisible(false);
-            wait.setVisible(true);
-        });
+            buttonNext.setText("Attendi");
+            buttonNext.setDisable(true);
+        } else {
+            textField.setOnAction(e -> {
+                if (answers == null)
+                    gui.setAnswer(textField.getText());
+                else
+                    gui.setAnswer(comboBox.getValue());
+                gui.setInputReady(true);
+                comboBox.setDisable(false);
+                textField.setDisable(false);
+                buttonNext.setText("Attendi");
+                buttonNext.setDisable(true);
+            });
 
-        buttonQuit.setOnAction(e -> System.exit(1));
+            buttonNext.setOnAction(e -> {
+                if (answers == null)
+                    gui.setAnswer(textField.getText());
+                else
+                    gui.setAnswer(comboBox.getValue());
+                gui.setInputReady(true);
+                comboBox.setDisable(false);
+                textField.setDisable(false);
+                buttonNext.setText("Attendi");
+                buttonNext.setDisable(true);
+            });
+        }
 
         setAlignment(Pos.CENTER);
         setHalignment(text, HPos.CENTER);
         setHalignment(buttonNext, HPos.CENTER);
-        setHalignment(buttonQuit, HPos.CENTER);
 
-        setStyle("-fx-background-image: url('https://www.meeplemountain.com/wp-content/uploads/2017/11/adrenaline.jpg')");
+        setStyle("-fx-background-image: url('file:src/resources/images/other/loginscreen.jpg')");
     }
 
     public void setMessage(String string) {

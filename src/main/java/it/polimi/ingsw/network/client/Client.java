@@ -5,12 +5,12 @@ import it.polimi.ingsw.utils.Parser;
 
 import java.io.IOException;
 import java.rmi.NotBoundException;
-import java.util.List;
 
 public class Client implements Runnable {
 
     private String type;
     private Ui ui;
+    protected Parser parser = new Parser();
 
     public Client(Ui ui) {
         this.ui = ui;
@@ -27,14 +27,8 @@ public class Client implements Runnable {
     }
 
     public String manageMessage(String gsonCoded) {
-        Parser parser = new Parser();
         Message fromServer = parser.deserialize(gsonCoded, Message.class);
-        String mainMessage = fromServer.type.getQuestion();
-        String subMessage = fromServer.getStringInQuestion();
-        String completeMessage = String.format(mainMessage, subMessage);
-        List<String> possibleAnswers = fromServer.getPossibleAnswer();
-        boolean isAnswerRequired = fromServer.type.requiresAnswer();
-        return ui.showMessage(completeMessage, possibleAnswers, isAnswerRequired);
+        return ui.showMessage(String.format(fromServer.type.getQuestion(), fromServer.getStringInQuestion()), fromServer.getPossibleAnswer(), fromServer.type.requiresAnswer());
     }
 
     public String getType() {
@@ -43,5 +37,9 @@ public class Client implements Runnable {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public static boolean isValidIp(String input) {
+        return input.matches("^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?).(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?).(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?).(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$");
     }
 }
