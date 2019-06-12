@@ -46,7 +46,8 @@ public class GuiManager extends Application {
         window = new LoginWindow(stage, gui, "", null, "", false);
         Scene scene = new Scene(window);
         stage.setTitle("Login");
-        stage.setResizable(false);
+        //TODO: fix
+        //stage.setResizable(false);
         stage.setScene(scene);
         gui.setGuiReady(true);
     }
