@@ -16,12 +16,15 @@ import static java.lang.Thread.sleep;
 
 public class RmiClient extends Client {
 
-    int port;
+    private int port;
     private String ip;
-    private String serverName = "adrenaline";
     private RmiClientImplementation rmiClientImplementation;
     private RmiServerInterface rmiServerInterface;
     private RmiClientInterface stub;
+    private final static int RMI_PORT = 1099;
+    private final static int TEST_ALIVENESS_TIME = 2000;
+    private boolean keepAlive = true;
+    private final static String TYPE = "Socket";
 
     public RmiClient(String ip, int port, Ui ui) {
         super(ui);
@@ -38,44 +41,36 @@ public class RmiClient extends Client {
     }
 
     public String printMessageAndGetAnswer(String message) {
-        //TODO: to be corrected
-        if (message == Protocol.ping)
-            return Protocol.ack;
         return manageMessage(message);
-        /*if (answer.equals("quit")) {
-            System.out.println("Disconnessione in corso.");
-            closeClient();
-        }
-        return answer;*/
     }
 
+    //TODO: can a client be closed while running?
     private void closeClient() {
         try {
             rmiServerInterface.unregistry(stub);
         } catch (RemoteException e) {
             System.out.println(e.getMessage());
         }
-        return;
     }
 
     public void startClient() throws RemoteException, NotBoundException {
-        System.out.println("Connessione al RMI server in corso...");
-        try {
-            Registry registry = LocateRegistry.getRegistry(ip, 1099);
-            rmiServerInterface = (RmiServerInterface) registry.lookup(RmiServerInterface.NAME);
-            rmiClientImplementation = new RmiClientImplementation(this);
-            stub = (RmiClientInterface) UnicastRemoteObject.exportObject(rmiClientImplementation, port);
-            rmiServerInterface.registry(stub);
-            System.out.println("Connessione stabilita.");
-        } catch (ConnectException e) {
-            System.out.println(e.getMessage());
-            ip = manageMessage(new Gson().toJson(new Message(Protocol.INSERT_IP_AGAIN, "", null, 0)));
-            startClient();
-            return;
-        }
-        while (true) {
+        while(true) {
+            manageMessage(new Gson().toJson(new Message(Protocol.CONNECTING, TYPE, null, 0)));
             try {
-                sleep(2000);
+                Registry registry = LocateRegistry.getRegistry(ip, RMI_PORT);
+                rmiServerInterface = (RmiServerInterface) registry.lookup(RmiServerInterface.NAME);
+                rmiClientImplementation = new RmiClientImplementation(this);
+                stub = (RmiClientInterface) UnicastRemoteObject.exportObject(rmiClientImplementation, port);
+                rmiServerInterface.registry(stub);
+                break;
+            } catch (ConnectException e) {
+                //System.out.println(e.getMessage());
+                ip = manageMessage(new Gson().toJson(new Message(Protocol.INSERT_IP_AGAIN, "", null, 0)));
+            }
+        }
+        while (keepAlive) {
+            try {
+                sleep(TEST_ALIVENESS_TIME);
             } catch (InterruptedException e) {
                 break;
             }

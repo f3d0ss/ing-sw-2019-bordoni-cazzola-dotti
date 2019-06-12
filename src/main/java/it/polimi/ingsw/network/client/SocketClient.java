@@ -20,6 +20,7 @@ public class SocketClient extends Client {
     private Scanner fromServer;
     private PrintWriter toServer;
     private String input;
+    private final static String TYPE = "Socket";
 
     public SocketClient(String ip, int port, Ui ui) {
         super(ui);
@@ -36,18 +37,16 @@ public class SocketClient extends Client {
     }
 
     public void startClient() throws IOException {
-        System.out.println("Connessione al Socket server in corso...");
         while(true) {
+            manageMessage(new Gson().toJson(new Message(Protocol.CONNECTING, TYPE, null, 0)));
             try {
                 socket = new Socket(ip, port);
                 fromServer = new Scanner(socket.getInputStream());
-                //System.out.println("Connessione stabilita. Digitare quit per uscire");
                 toServer = new PrintWriter(socket.getOutputStream(), true);
                 break;
             } catch (SocketException e) {
-                System.out.println(e.getMessage());
+                //System.out.println(e.getMessage());
                 ip = manageMessage(new Gson().toJson(new Message(Protocol.INSERT_IP_AGAIN, "", null, 0)));
-                run();
             }
         }
         while (keepAlive) {
@@ -56,11 +55,7 @@ public class SocketClient extends Client {
             } catch (NoSuchElementException e) {
                 break;
             }
-            //TODO: to be corrected
-            if (input == Protocol.ping)
-                toServer.println(Protocol.ack);
-            else
-                toServer.println(manageMessage(input));
+            toServer.println(manageMessage(input));
         }
         manageMessage(new Gson().toJson(new Message(Protocol.UNREACHABLE_SERVER, "", null, 0)));
         toServer.close();

@@ -106,7 +106,7 @@ public class LoginWindow extends GridPane {
         //TODO: remove next button if user action is not required
 
         if(!isAnswerRequired) {
-            gui.setAnswer(Protocol.ack);
+            gui.setAnswer(Protocol.ACK);
             gui.setInputReady(true);
             buttonNext.setText("Attendi");
             buttonNext.setDisable(true);

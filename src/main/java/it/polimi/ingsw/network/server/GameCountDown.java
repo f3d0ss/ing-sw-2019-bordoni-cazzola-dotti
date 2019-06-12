@@ -14,31 +14,36 @@ public class GameCountDown extends Thread {
         seconds = secondsToWait;
     }
 
-    public void reset() {
+    public void stopCount() {
         stopped = true;
-        seconds = 0;
+        seconds = secondsToWait;
     }
-
+ /*
     public void restore() {
         stopped = false;
         seconds = secondsToWait;
-    }
+    }*/
 
     public int getTimeLeft() {
         return seconds;
     }
 
+    public boolean isRunning(){
+        return seconds < secondsToWait;
+    }
+
     public void run() {
         while (seconds > 0 && !stopped) {
+            seconds--;
+            System.out.println(seconds);
             try {
                 sleep(MILLIS_IN_SECOND);
             } catch (InterruptedException e) {
                 break;
             }
-            seconds--;
-            System.out.println(seconds);
         }
         if (!stopped)
             serverManager.checkAllConnections();
+        stopped = false;
     }
 }

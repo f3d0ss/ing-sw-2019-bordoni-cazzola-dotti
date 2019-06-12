@@ -13,21 +13,20 @@ public class Gui implements Ui, Runnable {
     private String answer = "";
     private boolean ready = false;
     private boolean inputReady = false;
-    private String type;
-    private String name;
+    private final static int TIME_TO_SLEEP = 100;
 
     public String showMessage(String toBeShown, List<String> possibleAnswers, boolean isAnswerRequired) {
         inputReady = false;
-        System.out.println(toBeShown);//to be removed
+        System.out.println(toBeShown);//it show message even on cli
         Platform.runLater(() -> GuiManager.setMessageAndShow(toBeShown, possibleAnswers, isAnswerRequired));
         while (!inputReady) {
             try {
-                sleep(100);
+                sleep(TIME_TO_SLEEP);
             } catch (InterruptedException e) {
             }
         }
         GuiManager.setInputReady(false);
-        System.out.println(answer);
+        System.out.println(answer);//it show answer even on cli
         return answer;
     }
 
@@ -39,29 +38,13 @@ public class Gui implements Ui, Runnable {
         return ready;
     }
 
-    public void setReady(boolean ready) {
+    public void setGuiReady(boolean ready) {
         this.ready = ready;
     }
 
     @Override
     public void run() {
         Application.launch(GuiManager.class);
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public void setInputReady(boolean inputReady) {

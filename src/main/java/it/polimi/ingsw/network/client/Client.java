@@ -5,7 +5,6 @@ import it.polimi.ingsw.network.Message;
 
 import java.io.IOException;
 import java.rmi.NotBoundException;
-import java.util.List;
 
 public class Client implements Runnable {
 
@@ -29,12 +28,7 @@ public class Client implements Runnable {
     public String manageMessage(String gsonCoded) {
         Gson gson = new Gson();
         Message fromServer = gson.fromJson(gsonCoded, Message.class);
-        String mainMessage = fromServer.type.getQuestion();
-        String subMessage = fromServer.getStringInQuestion();
-        String completeMessage = String.format(mainMessage, subMessage);
-        List<String> possibleAnswers = fromServer.getPossibleAnswer();
-        boolean isAnswerRequired = fromServer.type.requiresAnswer();
-        return ui.showMessage(completeMessage, possibleAnswers, isAnswerRequired);
+        return ui.showMessage(String.format(fromServer.type.getQuestion(), fromServer.getStringInQuestion()), fromServer.getPossibleAnswer(), fromServer.type.requiresAnswer());
     }
 
     public String getType() {

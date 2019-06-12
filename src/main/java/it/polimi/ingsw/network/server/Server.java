@@ -1,8 +1,5 @@
 package it.polimi.ingsw.network.server;
 
-import it.polimi.ingsw.network.Message;
-import it.polimi.ingsw.network.Protocol;
-
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Scanner;
@@ -28,7 +25,7 @@ public class Server {
             System.out.println("local ip: unknown");
         }
         System.out.println("Specifica il numero di secondi del timeout dopo la terza connessione:");
-    seconds = stdin.nextInt();
+        seconds = stdin.nextInt();
         serverManager = new ServerManager(seconds);
         serverManager.run();
         while (!serverManager.allServerReady()) {
@@ -38,6 +35,7 @@ public class Server {
             }
         }
         while (keepAlive) {
+            /*
             System.out.printf("Clients attivi: [");
             serverManager.printClients();
             System.out.println("] Scrivi con quale client vuoi comunicare, " + INPUT_UPDATE + " per aggiornare la lista.");
@@ -56,12 +54,8 @@ public class Server {
                 System.out.println("Scrivi il messaggio:");
                 message = stdin.nextLine();
                 serverManager.sendMessageAndWaitForAnswer(client, new Message(Protocol.TRY, message, null, 0));
-            }
+            }*/
         }
-        serverManager.shutDownAllServers();
-    }
-
-    public void shutDown() {
-        keepAlive = false;
+        //serverManager.shutDownAllServers();
     }
 }

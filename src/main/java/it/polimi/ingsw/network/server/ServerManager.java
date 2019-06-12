@@ -15,6 +15,8 @@ public class ServerManager implements Runnable {
     private final static int MAX_PLAYERS = 5;
     private final static int DEFAULT_BOARD = 1;
     private final static int MILLIS_TO_WAIT = 100;
+    private final static String RECONNECT = "Reconnect";
+    private final static String NEW_GAME = "New game";
     private Map<Integer, Socket> socketClients = new HashMap<>();
     private Map<Integer, RmiClientInterface> rmiClients = new HashMap<>();
     private Map<Integer, String> answers = new HashMap<>();
@@ -50,12 +52,12 @@ public class ServerManager implements Runnable {
         String code;
         int oldId;
         while (true) {
-            String reconnect = sendMessageAndWaitForAnswer(temporaryId, new Message(Protocol.RECONNECT, "", Arrays.asList("New game", "Reconnect"), 0));
-            if (reconnect.equals(Protocol.err))
+            String reconnect = sendMessageAndWaitForAnswer(temporaryId, new Message(Protocol.RECONNECT, "", Arrays.asList(NEW_GAME, RECONNECT), 0));
+            if (reconnect.equals(Protocol.ERR))
                 break;
-            else if (reconnect.equals("Reconnect")) {
+            else if (reconnect.equals(RECONNECT)) {
                 code = sendMessageAndWaitForAnswer(temporaryId, new Message(Protocol.INSERT_OLD_CODE, "", null, 0));
-                if (code.equals(Protocol.err))
+                if (code.equals(Protocol.ERR))
                     break;
                 oldId = Integer.parseInt(code);
                 if (switchClientId(oldId, temporaryId)) {
@@ -105,45 +107,37 @@ public class ServerManager implements Runnable {
         login(id);
         connected.remove((Object) id);
         if (lobby.size() == MIN_PLAYERS) {
-            countDown.restore();
-            new Thread(countDown).start();
+            //countDown.restore();
+            if(!countDown.isRunning())
+                new Thread(countDown).start();
             //notifyTimeLeft();
         } else if (lobby.size() == MAX_PLAYERS) {
-            countDown.reset();
+            countDown.stopCount();
             checkAllConnections();
         }
     }
 
-    /*
-    public boolean reconnect(String code) {
-        if (socketClients.containsKey(Integer.parseInt(code)) || rmiClients.containsKey(Integer.parseInt(code))) {
-            //TODO: call controller of game of player
-            return true;
-        }
-        return false;
-    }*/
-
     private void login(int id) {
         String name;
-        if (sendMessageAndWaitForAnswer(id, new Message(Protocol.WELCOME, String.valueOf(id), null, 0)).equals(Protocol.err))
+        if (sendMessageAndWaitForAnswer(id, new Message(Protocol.WELCOME, String.valueOf(id), null, 0)).equals(Protocol.ERR))
             return;
         notifyNewConnection(id);
         name = sendMessageAndWaitForAnswer(id, new Message(Protocol.LOGIN_FIRST, "", null, 0));
-        if (name.equals(Protocol.err))
+        if (name.equals(Protocol.ERR))
             return;
         while (lobby.containsValue(name)) {
             name = sendMessageAndWaitForAnswer(id, new Message(Protocol.LOGIN_REPEAT, "", null, 0));
-            if (name.equals(Protocol.err))
+            if (name.equals(Protocol.ERR))
                 return;
         }
         lobby.put(id, name);
         notifyNewEntry(id, name);
-        if (sendMessageAndWaitForAnswer(id, new Message(Protocol.LOGIN_CONFIRM, name, null, 0)).equals(Protocol.err))
+        if (sendMessageAndWaitForAnswer(id, new Message(Protocol.LOGIN_CONFIRM, name, null, 0)).equals(Protocol.ERR))
             return;
         if (chosenBoard == 0) {
             chosenBoard = DEFAULT_BOARD;
             String ans = sendMessageAndWaitForAnswer(id, new Message(Protocol.CHOOSE_BOARD, "", Arrays.asList("Board1", "Board2", "Board3", "Board4"), 0));
-            if (ans.equals(Protocol.err))
+            if (ans.equals(Protocol.ERR))
                 return;
             else
                 try {
@@ -195,11 +189,6 @@ public class ServerManager implements Runnable {
             sendMessageAndWaitForAnswer(i, new Message(Protocol.LET_US_START, "", null, 0));
     }
 
-    private void chooseBoard(int id) {
-        sendMessageAndWaitForAnswer(id, new Message(Protocol.CHOOSE_BOARD, "", Arrays.asList("Board1", "Board2", "Board3", "Board4"), 0));
-        //TODO:
-    }
-
     public void checkAllConnections() {
         lastCheckBeforeGameStarting();
         if (lobby.size() >= MIN_PLAYERS) {
@@ -237,7 +226,7 @@ public class ServerManager implements Runnable {
     }
 
     public void setAnswer(int client, String answer) {
-        if (!answer.equals(Protocol.ack))
+        if (!answer.equals(Protocol.ACK))
             answers.put(client, answer);
         answerReady.put(client, true);
     }
@@ -264,8 +253,8 @@ public class ServerManager implements Runnable {
     private void removeClientFromLobby(int number) {
         String name = lobby.get(number);
         lobby.remove(number);
-        if (lobby.size() < MIN_PLAYERS && countDown.isAlive())
-            countDown.reset();
+        if (lobby.size() < MIN_PLAYERS)
+            countDown.stopCount();
         Integer[] clients = lobby.keySet().toArray(new Integer[0]);
         for (int i : clients) {
             sendMessageAndWaitForAnswer(i, new Message(Protocol.REMOVAL, name, null, 0));
@@ -295,7 +284,7 @@ public class ServerManager implements Runnable {
             new Thread(new RmiCommunication(json, rmiClients.get(number), rmiServer, number, this)).start();
         else {
             System.out.println("Client non registrato");
-            return Protocol.err;
+            return Protocol.ERR;
         }
         while (!answerReady.get(number)) {
             try {
@@ -306,15 +295,6 @@ public class ServerManager implements Runnable {
         }
         return answers.get(number);
     }
-/*
-    public void sendPing(int number) {
-        if (socketClients.containsKey(number))
-            socketServer.sendMessageAndGetAnswer(socketClients.get(number), Protocol.ping);
-        else if (rmiClients.containsKey(number))
-            rmiServer.getImplementation().sendMessageAndGetAnswer(rmiClients.get(number), Protocol.ping);
-        else
-            System.out.println("Client non registrato");
-    }*/
 
     public void shutDownAllServers() {
         socketServer.stopServer();
@@ -327,15 +307,5 @@ public class ServerManager implements Runnable {
         rmiServer = new RmiServer(this);
         new Thread(socketServer).start();
         new Thread(rmiServer).start();
-        /*while (true) {
-            try {
-                sleep(5000);
-            } catch (InterruptedException e) {
-                break;
-            }
-            Integer[] clients = lobby.keySet().toArray(new Integer[0]);
-            for (int i : clients)
-                if (answerReady.get(i))
-                    sendPing(i);*/
         }
     }

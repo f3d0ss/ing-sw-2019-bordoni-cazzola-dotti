@@ -9,7 +9,6 @@ public interface RmiServerInterface extends Remote {
 
     String NAME = "adrenaline";
 
-    /*dichiara qui tutti i metodi che possono essere chiamati in remoto dal client*/
     void registry(RmiClientInterface client) throws RemoteException;
 
     void unregistry(RmiClientInterface client) throws RemoteException;

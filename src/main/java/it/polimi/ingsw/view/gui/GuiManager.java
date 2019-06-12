@@ -48,6 +48,6 @@ public class GuiManager extends Application {
         stage.setTitle("Login");
         stage.setResizable(false);
         stage.setScene(scene);
-        gui.setReady(true);
+        gui.setGuiReady(true);
     }
 }

@@ -33,6 +33,14 @@ public enum Protocol {
         public boolean requiresAnswer() {
             return true;
         }
+    }, CONNECTING {
+        public String getQuestion() {
+            return "Connessione al server (%s) in corso...";
+        }
+
+        public boolean requiresAnswer() {
+            return false;
+        }
     }, RECONNECT {
         public String getQuestion() {
             return "Vuoi iniziare un nuovo gioco o riconnetterti a un gioco esistente?";
@@ -178,10 +186,10 @@ public enum Protocol {
             return false;
         }
     };
-    //TODO: rename
-    public static final String ack = Character.toString((char) 3);
-    public static final String ping = Character.toString((char) 4);//to be removed
-    public static final String err = Character.toString((char) 5);
+
+    public static final String ACK = Character.toString((char) 3);
+    //public static final String ping = Character.toString((char) 4);
+    public static final String ERR = Character.toString((char) 5);
 
     public abstract String getQuestion();
 
