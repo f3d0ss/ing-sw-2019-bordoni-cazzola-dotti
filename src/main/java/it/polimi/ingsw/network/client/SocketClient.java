@@ -1,6 +1,5 @@
 package it.polimi.ingsw.network.client;
 
-import com.google.gson.Gson;
 import it.polimi.ingsw.network.Message;
 import it.polimi.ingsw.network.Protocol;
 
@@ -38,7 +37,7 @@ public class SocketClient extends Client {
 
     public void startClient() throws IOException {
         while(true) {
-            manageMessage(new Gson().toJson(new Message(Protocol.CONNECTING, TYPE, null, 0)));
+            manageMessage(parser.serialize(new Message(Protocol.CONNECTING, TYPE, null, 0)));
             try {
                 socket = new Socket(ip, port);
                 fromServer = new Scanner(socket.getInputStream());
@@ -46,7 +45,9 @@ public class SocketClient extends Client {
                 break;
             } catch (SocketException e) {
                 //System.out.println(e.getMessage());
-                ip = manageMessage(new Gson().toJson(new Message(Protocol.INSERT_IP_AGAIN, "", null, 0)));
+                do
+                    ip = manageMessage(parser.serialize(new Message(Protocol.INSERT_IP_AGAIN, "", null, 0)));
+                while(!isValidIp(ip));
             }
         }
         while (keepAlive) {
@@ -57,7 +58,7 @@ public class SocketClient extends Client {
             }
             toServer.println(manageMessage(input));
         }
-        manageMessage(new Gson().toJson(new Message(Protocol.UNREACHABLE_SERVER, "", null, 0)));
+        manageMessage(parser.serialize(new Message(Protocol.UNREACHABLE_SERVER, "", null, 0)));
         toServer.close();
         fromServer.close();
         socket.close();

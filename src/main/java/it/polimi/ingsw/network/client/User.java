@@ -45,7 +45,7 @@ public class User {
         }
         connectionType = client.manageMessage(parser.serialize(new Message(Protocol.CHOOSE_CONNECTION, "", Arrays.asList(SOCKET, RMI), 0)));
         ip = client.manageMessage(parser.serialize(new Message(Protocol.INSERT_IP, "", null, 0)));
-        while (!isValidIp(ip)) {
+        while (!client.isValidIp(ip)) {
             ip = client.manageMessage(parser.serialize(new Message(Protocol.INSERT_IP_AGAIN, "", null, 0)));
         }
         if (connectionType.equals(SOCKET))
@@ -55,9 +55,5 @@ public class User {
             client = new RmiClient(ip, (int) (random() * RMI_PORT), ui);
         }
         new Thread(client).start();
-    }
-
-    private static boolean isValidIp(String input) {
-        return input.matches("^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?).(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?).(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?).(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$");
     }
 }

@@ -3,7 +3,6 @@ package it.polimi.ingsw.network.client;
 import it.polimi.ingsw.network.Message;
 import it.polimi.ingsw.network.Protocol;
 import it.polimi.ingsw.network.server.RmiClientInterface;
-import it.polimi.ingsw.utils.Parser;
 
 import java.rmi.ConnectException;
 import java.rmi.NotBoundException;
@@ -25,7 +24,6 @@ public class RmiClient extends Client {
     private final static int TEST_ALIVENESS_TIME = 2000;
     private boolean keepAlive = true;
     private final static String TYPE = "Socket";
-    private Parser parser = new Parser();
 
     public RmiClient(String ip, int port, Ui ui) {
         super(ui);
@@ -66,8 +64,9 @@ public class RmiClient extends Client {
                 break;
             } catch (ConnectException e) {
                 //System.out.println(e.getMessage());
-                ip = manageMessage(parser.serialize(new Message(Protocol.INSERT_IP_AGAIN, "", null, 0)));
-            }
+                do
+                    ip = manageMessage(parser.serialize(new Message(Protocol.INSERT_IP_AGAIN, "", null, 0)));
+                while(!isValidIp(ip));            }
         }
         while (keepAlive) {
             try {
