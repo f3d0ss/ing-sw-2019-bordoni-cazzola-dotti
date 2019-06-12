@@ -8,4 +8,8 @@ public class WeaponView {
         this.name = name;
         this.loaded = loaded;
     }
+
+    public boolean isLoaded() {
+        return loaded;
+    }
 }

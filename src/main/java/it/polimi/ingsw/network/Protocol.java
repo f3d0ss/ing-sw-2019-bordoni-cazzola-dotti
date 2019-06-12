@@ -177,9 +177,17 @@ public enum Protocol {
         public boolean requiresAnswer() {
             return true;
         }
-    }, TRY {
+    }, UPDATE_PLAYER {
         public String getQuestion() {
-            return "Messaggio di prova.";
+            return "";
+        }
+
+        public boolean requiresAnswer() {
+            return false;
+        }
+    }, UPDATE_SQUARE {
+        public String getQuestion() {
+            return "";
         }
 
         public boolean requiresAnswer() {

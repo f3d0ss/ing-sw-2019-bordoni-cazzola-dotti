@@ -1,13 +1,20 @@
 package it.polimi.ingsw.network.client;
 
+import it.polimi.ingsw.model.PlayerId;
 import it.polimi.ingsw.network.Protocol;
+import it.polimi.ingsw.view.MatchView;
+import it.polimi.ingsw.view.PlayerView;
+import it.polimi.ingsw.view.SquareView;
+import it.polimi.ingsw.view.cli.CliManager;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 public class Cli implements Ui {
 
     private Scanner stdin = new Scanner(System.in);
+    private CliManager cliManager = new CliManager();
 
     public String showMessage(String toBeShown, List<String> possibleAnswers, boolean isAnswerRequired) {
         System.out.println(toBeShown);
@@ -30,6 +37,9 @@ public class Cli implements Ui {
 
     @Override
     public void run() {
+    }
 
+    public void showGame(SquareView[][] board, MatchView match, PlayerView me, Map<PlayerId, PlayerView> enemies){
+        cliManager.displayAll(board, match, me, enemies);
     }
 }

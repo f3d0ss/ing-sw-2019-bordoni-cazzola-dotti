@@ -1,8 +1,11 @@
 package it.polimi.ingsw.network.server;
 
+import it.polimi.ingsw.controller.MatchController;
 import it.polimi.ingsw.network.Message;
 import it.polimi.ingsw.network.Protocol;
 import it.polimi.ingsw.utils.Parser;
+import it.polimi.ingsw.view.ViewInterface;
+import it.polimi.ingsw.view.VirtualView;
 
 import java.net.Socket;
 import java.util.*;
@@ -31,6 +34,7 @@ public class ServerManager implements Runnable {
     private GameCountDown countDown;
     private Parser parser = new Parser();
     private int chosenBoard = 0;
+    private List<MatchController> activeMatches = new ArrayList<>();
 
     public ServerManager(int seconds) {
         countDown = new GameCountDown(this, seconds);
@@ -194,10 +198,18 @@ public class ServerManager implements Runnable {
         lastCheckBeforeGameStarting();
         if (lobby.size() >= MIN_PLAYERS) {
             notifyGameStarting();
-            //TODO: create a new game (controller)
+            createNewGame();
             chosenBoard = 0;
             lobby.clear();
         }
+    }
+
+    private void createNewGame(){
+        Map<String, ViewInterface> gamers = new HashMap<>();
+        lobby.keySet().forEach(i -> gamers.put(lobby.get(i), new VirtualView(this, i)));
+        MatchController match = new MatchController(gamers, chosenBoard);
+        activeMatches.add(match);
+        match.runMatch();
     }
 
     public boolean allServerReady() {
@@ -268,7 +280,8 @@ public class ServerManager implements Runnable {
         rmiClients.forEach((integer, rmi) -> System.out.printf("%d ", integer));
     }
 
-    public String sendMessageAndWaitForAnswer(int number, Message message) {
+    public String sendMessageAndWaitForAnswer(int number, Message message){
+        String serializedMessage = parser.serialize(message);
         while (!answerReady.get(number)) {
             try {
                 sleep(MILLIS_TO_WAIT);
@@ -277,7 +290,6 @@ public class ServerManager implements Runnable {
             }
         }
         answerReady.put(number, false);
-        String serializedMessage = parser.serialize(message);
         if (socketClients.containsKey(number))
             new Thread(new SocketCommunication(serializedMessage, socketClients.get(number), socketServer, number, this)).start();
         else if (rmiClients.containsKey(number))
