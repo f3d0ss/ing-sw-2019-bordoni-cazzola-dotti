@@ -31,13 +31,17 @@ public class ServerManager implements Runnable {
     private int idClient = 12345;
     private Map<Integer, String> lobby = new HashMap<>();
     private List<Integer> connected = new ArrayList<>();
+    private List<Integer> awayFromKeyboardOrDisconnected = new ArrayList<>();
+    private Map<Integer, String> nicknames = new HashMap<>();
     private GameCountDown countDown;
     private Parser parser = new Parser();
     private int chosenBoard = 0;
-    private List<MatchController> activeMatches = new ArrayList<>();
+    private int secondsDuringTurn;
+    private Map<Integer, MatchController> activeMatches = new HashMap<>();
 
-    public ServerManager(int seconds) {
-        countDown = new GameCountDown(this, seconds);
+    public ServerManager(int secondsAfterThirdConnection, int secondsDuringTurn) {
+        countDown = new GameCountDown(this, secondsAfterThirdConnection);
+        this.secondsDuringTurn = secondsDuringTurn;
     }
 
     public void addClient(Socket client) {
@@ -67,7 +71,7 @@ public class ServerManager implements Runnable {
                 oldId = Integer.parseInt(code);
                 if (switchClientId(oldId, temporaryId)) {
                     sendMessageAndWaitForAnswer(oldId, new Message(Protocol.WELCOME_BACK, "", null, 0));
-                    //TODO: call controller of game of player
+                    activeMatches.get(oldId).reconnect(nicknames.get(oldId));
                     break;
                 } else
                     sendMessageAndWaitForAnswer(temporaryId, new Message(Protocol.INVALID_OLD_CODE, "", null, 0));
@@ -79,29 +83,32 @@ public class ServerManager implements Runnable {
     }
 
     private boolean switchClientId(int oldId, int temporaryId) {
+        //TODO: to be removed
         if (oldId == temporaryId)
             return true;
-        if (socketClients.containsKey(oldId)) {
-            if (socketClients.containsKey(temporaryId)) {
-                socketClients.put(oldId, socketClients.get(temporaryId));
-                socketClients.remove(temporaryId);
+        if (activeMatches.containsKey(oldId)) {
+            if (socketClients.containsKey(oldId)) {
+                if (socketClients.containsKey(temporaryId)) {
+                    socketClients.put(oldId, socketClients.get(temporaryId));
+                    socketClients.remove(temporaryId);
+                    return true;
+                }
+                socketClients.remove(oldId);
+                rmiClients.put(oldId, rmiClients.get(temporaryId));
+                rmiClients.remove(temporaryId);
                 return true;
             }
-            socketClients.remove(oldId);
-            rmiClients.put(oldId, rmiClients.get(temporaryId));
-            rmiClients.remove(temporaryId);
-            return true;
-        }
-        if (rmiClients.containsKey(oldId)) {
-            if (socketClients.containsKey(temporaryId)) {
-                rmiClients.remove(oldId);
-                socketClients.put(oldId, socketClients.get(temporaryId));
-                socketClients.remove(temporaryId);
+            if (rmiClients.containsKey(oldId)) {
+                if (socketClients.containsKey(temporaryId)) {
+                    rmiClients.remove(oldId);
+                    socketClients.put(oldId, socketClients.get(temporaryId));
+                    socketClients.remove(temporaryId);
+                    return true;
+                }
+                rmiClients.put(oldId, rmiClients.get(temporaryId));
+                rmiClients.remove(temporaryId);
                 return true;
             }
-            rmiClients.put(oldId, rmiClients.get(temporaryId));
-            rmiClients.remove(temporaryId);
-            return true;
         }
         return false;
     }
@@ -113,7 +120,7 @@ public class ServerManager implements Runnable {
         connected.remove((Object) id);
         if (lobby.size() == MIN_PLAYERS) {
             //countDown.restore();
-            if(!countDown.isRunning())
+            if (!countDown.isRunning())
                 new Thread(countDown).start();
             //notifyTimeLeft();
         } else if (lobby.size() == MAX_PLAYERS) {
@@ -204,11 +211,15 @@ public class ServerManager implements Runnable {
         }
     }
 
-    private void createNewGame(){
+    private void createNewGame() {
         Map<String, ViewInterface> gamers = new HashMap<>();
-        lobby.keySet().forEach(i -> gamers.put(lobby.get(i), new VirtualView(this, i)));
         MatchController match = new MatchController(gamers, chosenBoard);
-        activeMatches.add(match);
+        lobby.keySet().forEach(i -> {
+            gamers.put(lobby.get(i), new VirtualView(this, i));
+            activeMatches.put(i, match);
+            nicknames.put(i, lobby.get(i));
+        });
+
         match.runMatch();
     }
 
@@ -252,14 +263,22 @@ public class ServerManager implements Runnable {
         int number = getNumber(client);
         socketClients.remove(number);
         //socketServer.unregistry(client);
-        removeClientFromLobby(number);
-        System.out.println("Client " + number + " rimosso.");
+        removeClient(number);
     }
 
     public synchronized void removeClient(RmiClientInterface client) {
         int number = getNumber(client);
         rmiClients.remove(number);
-        removeClientFromLobby(number);
+        removeClient(number);
+    }
+
+    private void removeClient(int number) {
+        if (lobby.containsKey(number))
+            removeClientFromLobby(number);
+        else if (activeMatches.containsKey(number)){
+            awayFromKeyboardOrDisconnected.add(number);
+            activeMatches.get(number).disconnect(nicknames.get(number));
+        }
         System.out.println("Client " + number + " rimosso.");
     }
 
@@ -280,7 +299,7 @@ public class ServerManager implements Runnable {
         rmiClients.forEach((integer, rmi) -> System.out.printf("%d ", integer));
     }
 
-    public String sendMessageAndWaitForAnswer(int number, Message message){
+    public String sendMessageAndWaitForAnswer(int number, Message message) {
         String serializedMessage = parser.serialize(message);
         while (!answerReady.get(number)) {
             try {
@@ -290,20 +309,36 @@ public class ServerManager implements Runnable {
             }
         }
         answerReady.put(number, false);
-        if (socketClients.containsKey(number))
-            new Thread(new SocketCommunication(serializedMessage, socketClients.get(number), socketServer, number, this)).start();
-        else if (rmiClients.containsKey(number))
-            new Thread(new RmiCommunication(serializedMessage, rmiClients.get(number), rmiServer, number, this)).start();
-        else{
+        SingleCommunication communication;
+        if (socketClients.containsKey(number)) {
+            communication = new SocketCommunication(serializedMessage, socketClients.get(number), socketServer, number, this);
+            new Thread(communication).start();
+        } else if (rmiClients.containsKey(number)) {
+            communication = new RmiCommunication(serializedMessage, rmiClients.get(number), rmiServer, number, this);
+            new Thread(communication).start();
+        } else {
             System.out.println("Client non registrato");
             return Protocol.ERR;
         }
+        boolean isTimeExceeded = false;
+        int counter = 0;
         while (!answerReady.get(number)) {
             try {
                 sleep(MILLIS_TO_WAIT);
+                counter++;
             } catch (InterruptedException e) {
                 break;
             }
+            if (counter > secondsDuringTurn * 10) {
+                isTimeExceeded = true;
+                break;
+            }
+        }
+        if (isTimeExceeded) {
+            communication.setTimeExceeded();
+            awayFromKeyboardOrDisconnected.add(number);
+            return Protocol.ERR;
+            //TODO: notify controller
         }
         return answers.get(number);
     }
@@ -319,5 +354,5 @@ public class ServerManager implements Runnable {
         rmiServer = new RmiServer(this);
         new Thread(socketServer).start();
         new Thread(rmiServer).start();
-        }
     }
+}

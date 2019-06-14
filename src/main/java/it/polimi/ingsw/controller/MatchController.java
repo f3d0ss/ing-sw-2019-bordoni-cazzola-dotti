@@ -35,6 +35,14 @@ public class MatchController {
         players = match.getCurrentPlayers();
     }
 
+    public void reconnect(String username){
+        //TODO:
+    }
+
+    public void disconnect(String username){
+        //TODO:
+    }
+
     /**
      * This method orders a map following the official rules:
      * If multiple players dealt the same amount of damage, break the tie in favor of the player whose damage landed first
