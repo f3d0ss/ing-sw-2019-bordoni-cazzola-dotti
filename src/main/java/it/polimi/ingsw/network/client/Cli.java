@@ -7,12 +7,12 @@ import java.util.Scanner;
 
 public class Cli implements Ui {
 
-    Scanner stdin = new Scanner(System.in);
+    private Scanner stdin = new Scanner(System.in);
 
     public String showMessage(String toBeShown, List<String> possibleAnswers, boolean isAnswerRequired) {
         System.out.println(toBeShown);
         if (!isAnswerRequired)
-            return Protocol.ack;
+            return Protocol.ACK;
         else if (possibleAnswers == null)
             return stdin.nextLine();
         int choice;

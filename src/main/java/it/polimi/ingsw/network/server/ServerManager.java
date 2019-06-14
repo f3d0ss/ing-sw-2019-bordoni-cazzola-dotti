@@ -11,6 +11,12 @@ import static java.lang.Thread.sleep;
 
 public class ServerManager implements Runnable {
 
+    private final static int MIN_PLAYERS = 3;
+    private final static int MAX_PLAYERS = 5;
+    private final static int DEFAULT_BOARD = 1;
+    private final static int MILLIS_TO_WAIT = 100;
+    private final static String RECONNECT = "Reconnect";
+    private final static String NEW_GAME = "New game";
     private Map<Integer, Socket> socketClients = new HashMap<>();
     private Map<Integer, RmiClientInterface> rmiClients = new HashMap<>();
     private Map<Integer, String> answers = new HashMap<>();
@@ -22,8 +28,13 @@ public class ServerManager implements Runnable {
     private int idClient = 12345;
     private Map<Integer, String> lobby = new HashMap<>();
     private List<Integer> connected = new ArrayList<>();
-    private GameCountDown countDown = new GameCountDown(this, 20);
+    private GameCountDown countDown;
     private Parser parser = new Parser();
+    private int chosenBoard = 0;
+
+    public ServerManager(int seconds) {
+        countDown = new GameCountDown(this, seconds);
+    }
 
     public void addClient(Socket client) {
         socketClients.put(idClient, client);
@@ -37,87 +48,155 @@ public class ServerManager implements Runnable {
         idClient++;
     }
 
+    public void addClientToLog(int temporaryId) {
+        connected.add(temporaryId);
+        String code;
+        int oldId;
+        while (true) {
+            String reconnect = sendMessageAndWaitForAnswer(temporaryId, new Message(Protocol.RECONNECT, "", Arrays.asList(NEW_GAME, RECONNECT), 0));
+            if (reconnect.equals(Protocol.ERR))
+                break;
+            else if (reconnect.equals(RECONNECT)) {
+                code = sendMessageAndWaitForAnswer(temporaryId, new Message(Protocol.INSERT_OLD_CODE, "", null, 0));
+                if (code.equals(Protocol.ERR))
+                    break;
+                oldId = Integer.parseInt(code);
+                if (switchClientId(oldId, temporaryId)) {
+                    sendMessageAndWaitForAnswer(oldId, new Message(Protocol.WELCOME_BACK, "", null, 0));
+                    //TODO: call controller of game of player
+                    break;
+                } else
+                    sendMessageAndWaitForAnswer(temporaryId, new Message(Protocol.INVALID_OLD_CODE, "", null, 0));
+            } else {
+                addClientToLobby(temporaryId);
+                break;
+            }
+        }
+    }
+
+    private boolean switchClientId(int oldId, int temporaryId) {
+        if (oldId == temporaryId)
+            return true;
+        if (socketClients.containsKey(oldId)) {
+            if (socketClients.containsKey(temporaryId)) {
+                socketClients.put(oldId, socketClients.get(temporaryId));
+                socketClients.remove(temporaryId);
+                return true;
+            }
+            socketClients.remove(oldId);
+            rmiClients.put(oldId, rmiClients.get(temporaryId));
+            rmiClients.remove(temporaryId);
+            return true;
+        }
+        if (rmiClients.containsKey(oldId)) {
+            if (socketClients.containsKey(temporaryId)) {
+                rmiClients.remove(oldId);
+                socketClients.put(oldId, socketClients.get(temporaryId));
+                socketClients.remove(temporaryId);
+                return true;
+            }
+            rmiClients.put(oldId, rmiClients.get(temporaryId));
+            rmiClients.remove(temporaryId);
+            return true;
+        }
+        return false;
+    }
+
     public void addClientToLobby(int id) {
+        //lobby.put(id, "");
         connected.add(id);
-        lobby.put(id, "");
         login(id);
-        if (lobby.size() == 3) {
-            countDown.restore();
-            new Thread(countDown).start();
+        connected.remove((Object) id);
+        if (lobby.size() == MIN_PLAYERS) {
+            //countDown.restore();
+            if(!countDown.isRunning())
+                new Thread(countDown).start();
             //notifyTimeLeft();
-        } else if (lobby.size() == 5) {
-            countDown.reset();
+        } else if (lobby.size() == MAX_PLAYERS) {
+            countDown.stopCount();
             checkAllConnections();
         }
     }
 
     private void login(int id) {
-        sendMessageAndWaitForAnswer(id, new Message(Protocol.WELCOME, String.valueOf(id), null, 0));
+        String name;
+        if (sendMessageAndWaitForAnswer(id, new Message(Protocol.WELCOME, String.valueOf(id), null, 0)).equals(Protocol.ERR))
+            return;
         notifyNewConnection(id);
-        if (lobby.size() == 1) {
-            sendMessageAndWaitForAnswer(id, new Message(Protocol.LOGIN_FIRST, "", null, 0));
-        } else {
-            String playerAlreadyIn = "";
-            List<String> players = new ArrayList<>();
-            for (int i : lobby.keySet())
-                if (!lobby.get(i).equals("")) {
-                    playerAlreadyIn = playerAlreadyIn + lobby.get(i) + "; ";
-                    players.add(lobby.get(i));
-                }
-            sendMessageAndWaitForAnswer(id, new Message(Protocol.LOGIN_OTHERS, playerAlreadyIn, null, 0));
-            while (lobby.containsValue(answers.get(id))) {
-                sendMessageAndWaitForAnswer(id, new Message(Protocol.LOGIN_REPEAT, "", null, 0));
-            }
+        name = sendMessageAndWaitForAnswer(id, new Message(Protocol.LOGIN_FIRST, "", null, 0));
+        if (name.equals(Protocol.ERR))
+            return;
+        while (lobby.containsValue(name)) {
+            name = sendMessageAndWaitForAnswer(id, new Message(Protocol.LOGIN_REPEAT, "", null, 0));
+            if (name.equals(Protocol.ERR))
+                return;
         }
-        String name = answers.get(id);
         lobby.put(id, name);
-        sendMessageAndWaitForAnswer(id, new Message(Protocol.LOGIN_CONFIRM, "", null, 0));
-        if (lobby.size() == 1)
-            chooseBoard(id);
         notifyNewEntry(id, name);
+        if (sendMessageAndWaitForAnswer(id, new Message(Protocol.LOGIN_CONFIRM, name, null, 0)).equals(Protocol.ERR))
+            return;
+        if (chosenBoard == 0) {
+            chosenBoard = DEFAULT_BOARD;
+            String ans = sendMessageAndWaitForAnswer(id, new Message(Protocol.CHOOSE_BOARD, "", Arrays.asList("Board1", "Board2", "Board3", "Board4"), 0));
+            if (ans.equals(Protocol.ERR))
+                return;
+            else
+                try {
+                    chosenBoard = Integer.parseInt(ans.substring(5, 6));
+                } catch (NumberFormatException e) {
+                    chosenBoard = DEFAULT_BOARD;
+                }
+            notifyTimeLeft(id, lobby.size());
+        }
     }
 
     private void notifyNewEntry(int id, String newEntry) {
         Integer[] clients = lobby.keySet().toArray(new Integer[0]);
         for (int i : clients) {
-            if (i != id)
-                sendMessageAndWaitForAnswer(i, new Message(Protocol.NEW_ENTRY, newEntry, null, 0));
-            notifyTimeLeft(i, clients.length);
+            if (answerReady.get(i)) {
+                if (i != id)
+                    sendMessageAndWaitForAnswer(i, new Message(Protocol.NEW_ENTRY, newEntry, null, 0));
+                notifyTimeLeft(i, clients.length);
+            }
         }
     }
 
     private void notifyNewConnection(int id) {
         Integer[] clients = lobby.keySet().toArray(new Integer[0]);
         for (int i : clients) {
-            if (i != id)
+            if (i != id && answerReady.getOrDefault(i, false)) {
                 sendMessageAndWaitForAnswer(i, new Message(Protocol.NEW_CONNECTION, "", null, 0));
-            notifyTimeLeft(i, clients.length);
+                //notifyTimeLeft(i, clients.length);
+            }
         }
     }
 
     private void notifyTimeLeft(int id, int size) {
-        if (size < 3)
-            sendMessageAndWaitForAnswer(id, new Message(Protocol.WAIT_FOR_PLAYERS, String.valueOf(3 - size), null, 0));
+        if (size < MIN_PLAYERS)
+            sendMessageAndWaitForAnswer(id, new Message(Protocol.WAIT_FOR_PLAYERS, String.valueOf(MIN_PLAYERS - size), null, 0));
         else
             sendMessageAndWaitForAnswer(id, new Message(Protocol.COUNTDOWN, String.valueOf(countDown.getTimeLeft()), null, 0));
     }
 
-    private void notifyGameStarting() {
+    private void lastCheckBeforeGameStarting() {
         Integer[] clients = lobby.keySet().toArray(new Integer[0]);
         for (int i : clients)
             sendMessageAndWaitForAnswer(i, new Message(Protocol.ARE_YOU_READY, "", null, 0));
     }
 
-    private void chooseBoard(int id) {
-        sendMessageAndWaitForAnswer(id, new Message(Protocol.CHOOSE_BOARD, "", Arrays.asList("Board1", "Board2", "Board3", "Board4"), 0));
-        //TODO:
+    private void notifyGameStarting() {
+        Integer[] clients = lobby.keySet().toArray(new Integer[0]);
+        for (int i : clients)
+            sendMessageAndWaitForAnswer(i, new Message(Protocol.LET_US_START, "", null, 0));
     }
 
     public void checkAllConnections() {
-        notifyGameStarting();
-        if (lobby.size() >= 3) {
-            lobby.clear();
+        lastCheckBeforeGameStarting();
+        if (lobby.size() >= MIN_PLAYERS) {
+            notifyGameStarting();
             //TODO: create a new game (controller)
+            chosenBoard = 0;
+            lobby.clear();
         }
     }
 
@@ -148,7 +227,7 @@ public class ServerManager implements Runnable {
     }
 
     public void setAnswer(int client, String answer) {
-        if (!answer.equals(Protocol.ack))
+        if (!answer.equals(Protocol.ACK))
             answers.put(client, answer);
         answerReady.put(client, true);
     }
@@ -175,12 +254,12 @@ public class ServerManager implements Runnable {
     private void removeClientFromLobby(int number) {
         String name = lobby.get(number);
         lobby.remove(number);
-        if (lobby.size() < 3 && countDown.isAlive())
-            countDown.reset();
+        if (lobby.size() < MIN_PLAYERS)
+            countDown.stopCount();
         Integer[] clients = lobby.keySet().toArray(new Integer[0]);
         for (int i : clients) {
             sendMessageAndWaitForAnswer(i, new Message(Protocol.REMOVAL, name, null, 0));
-            notifyTimeLeft(i, clients.length);
+            notifyTimeLeft(i, clients.length);//to be removed?
         }
     }
 
@@ -192,7 +271,7 @@ public class ServerManager implements Runnable {
     public String sendMessageAndWaitForAnswer(int number, Message message) {
         while (!answerReady.get(number)) {
             try {
-                sleep(1000);
+                sleep(MILLIS_TO_WAIT);
             } catch (InterruptedException e) {
                 break;
             }
@@ -203,26 +282,19 @@ public class ServerManager implements Runnable {
             new Thread(new SocketCommunication(serializedMessage, socketClients.get(number), socketServer, number, this)).start();
         else if (rmiClients.containsKey(number))
             new Thread(new RmiCommunication(serializedMessage, rmiClients.get(number), rmiServer, number, this)).start();
-        else
+        else{
             System.out.println("Client non registrato");
+            return Protocol.ERR;
+        }
         while (!answerReady.get(number)) {
             try {
-                sleep(1000);
+                sleep(MILLIS_TO_WAIT);
             } catch (InterruptedException e) {
                 break;
             }
         }
         return answers.get(number);
     }
-/*
-    public void sendPing(int number) {
-        if (socketClients.containsKey(number))
-            socketServer.sendMessageAndGetAnswer(socketClients.get(number), Protocol.ping);
-        else if (rmiClients.containsKey(number))
-            rmiServer.getImplementation().sendMessageAndGetAnswer(rmiClients.get(number), Protocol.ping);
-        else
-            System.out.println("Client non registrato");
-    }*/
 
     public void shutDownAllServers() {
         socketServer.stopServer();
@@ -235,17 +307,5 @@ public class ServerManager implements Runnable {
         rmiServer = new RmiServer(this);
         new Thread(socketServer).start();
         new Thread(rmiServer).start();
-        while (true) {
-            try {
-                sleep(5000);
-            } catch (InterruptedException e) {
-                break;
-            }
-            /*
-            Integer[] clients = lobby.keySet().toArray(new Integer[0]);
-            for (int i : clients)
-                if (answerReady.get(i))
-                    sendPing(i);*/
         }
     }
-}

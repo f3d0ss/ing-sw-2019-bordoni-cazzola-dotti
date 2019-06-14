@@ -5,13 +5,20 @@ import it.polimi.ingsw.network.Protocol;
 import it.polimi.ingsw.utils.Parser;
 import it.polimi.ingsw.view.gui.GuiManager;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
 
 import static java.lang.StrictMath.random;
 import static java.lang.Thread.sleep;
 
 public class User {
+
+    private final static String CLI = "CLI";
+    private final static String GUI = "GUI";
+    private final static String SOCKET = "Socket";
+    private final static String RMI = "RMI";
+    private final static int SOCKET_PORT = 9000;
+    private final static int RMI_PORT = 10000;
+    private final static int MILLIS_IN_SECOND = 1000;
 
     public static void main(String[] args) {
         String connectionType;
@@ -19,19 +26,16 @@ public class User {
         Ui ui = new Cli();
         String ip;
         Client client = new Client(ui);
-        List<String> answers = new ArrayList<>();
-        answers.add("GUI");
-        answers.add("CLI");
         Parser parser = new Parser();
-        uiChoice = client.manageMessage(parser.serialize(new Message(Protocol.CHOOSE_UI, "", answers, 0)));
-        if (uiChoice.equals("GUI")) {
+        uiChoice = client.manageMessage(parser.serialize(new Message(Protocol.CHOOSE_UI, "", Arrays.asList(CLI, GUI), 0)));
+        if (uiChoice.equals(GUI)) {
             Gui gui = new Gui();
             new Thread(gui).start();
             GuiManager.setGui(gui);
             System.out.printf("Avvio Gui in corso.");
             while (!gui.isReady()) {
                 try {
-                    sleep(1000);
+                    sleep(MILLIS_IN_SECOND);
                 } catch (InterruptedException e) {
                 }
                 System.out.printf(".");
@@ -39,24 +43,17 @@ public class User {
             client.setUi(gui);
             ui = gui;
         }
-        answers = new ArrayList<>();
-        answers.add("Socket");
-        answers.add("RMI");
-        connectionType = client.manageMessage(parser.serialize(new Message(Protocol.CHOOSE_CONNECTION, "", answers, 0)));
+        connectionType = client.manageMessage(parser.serialize(new Message(Protocol.CHOOSE_CONNECTION, "", Arrays.asList(SOCKET, RMI), 0)));
         ip = client.manageMessage(parser.serialize(new Message(Protocol.INSERT_IP, "", null, 0)));
-        while (!isValidIp(ip)) {
+        while (!client.isValidIp(ip)) {
             ip = client.manageMessage(parser.serialize(new Message(Protocol.INSERT_IP_AGAIN, "", null, 0)));
         }
-        System.out.println("Avvio client");
-        if (connectionType.equals("Socket"))
-            client = new SocketClient(ip, 9000, ui);
+        if (connectionType.equals(SOCKET))
+            client = new SocketClient(ip, SOCKET_PORT, ui);
         else {
-            client = new RmiClient(ip, (int) (random() * 10000), ui);
+            //TODO: resolve in another way port conflicts
+            client = new RmiClient(ip, (int) (random() * RMI_PORT), ui);
         }
         new Thread(client).start();
-    }
-
-    private static boolean isValidIp(String input) {
-        return input.matches("^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?).(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?).(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?).(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$");
     }
 }

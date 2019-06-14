@@ -44,13 +44,13 @@ public class SocketServer implements Runnable {
         }
     }
 
-    public synchronized void registry(Socket client) throws IOException {
+    public void registry(Socket client) throws IOException {
         serverManager.addClient(client);
         fromClient.put(client, new Scanner(client.getInputStream()));
         toClient.put(client, new PrintWriter(client.getOutputStream(), true));
         int number = serverManager.getNumber(client);
         System.out.println("User " + number + " accettato sul SocketServer");
-        serverManager.addClientToLobby(number);
+        new Thread(new ClientReception(serverManager, number)).start();
     }
 
     public void unregistry(Socket client) {
