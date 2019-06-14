@@ -140,7 +140,7 @@ public class LoginWindow extends GridPane {
         setHalignment(text, HPos.CENTER);
         setHalignment(buttonNext, HPos.CENTER);
 
-        setStyle("-fx-background-image: url('file:src/resources/images/other/loginscreen.jpg')");
+        setStyle("-fx-background-image: url('/images/other/loginscreen.jpg')");
     }
 
     public void setMessage(String string) {
