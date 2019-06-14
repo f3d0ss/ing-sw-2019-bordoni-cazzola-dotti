@@ -2,6 +2,7 @@ package it.polimi.ingsw.network.server;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 import static java.lang.Thread.sleep;
@@ -11,13 +12,18 @@ public class Server {
     private static boolean keepAlive = true;
     private final static int MILLIS_TO_WAIT = 100;
     private final static int INPUT_UPDATE = -1;
+    private final static int MIN_CONNECTION_TIME = 5;
+    private final static int MAX_CONNECTION_TIME = 5000;
+    private final static int MIN_TURN_TIME = 5;
+    private final static int MAX_TURN_TIME = 5000;
 
     public static void main(String[] args) {
         ServerManager serverManager;
         Scanner stdin = new Scanner(System.in);
         String message;
         int client;
-        int seconds;
+        int secondsAfterThirdConnection;
+        int secondsDuringTurn;
         System.out.println("Avvio servers in corso...");
         try {
             System.out.println("local ip: " + InetAddress.getLocalHost().getHostAddress());
@@ -25,8 +31,10 @@ public class Server {
             System.out.println("local ip: unknown");
         }
         System.out.println("Specifica il numero di secondi del timeout dopo la terza connessione:");
-        seconds = stdin.nextInt();
-        serverManager = new ServerManager(seconds);
+        secondsAfterThirdConnection = manageIntInput(stdin, MIN_CONNECTION_TIME, MAX_CONNECTION_TIME);
+        System.out.println("Specifica il numero di secondi concessi ai giocatori per ogni mossa:");
+        secondsDuringTurn = manageIntInput(stdin, MIN_TURN_TIME, MAX_TURN_TIME);
+        serverManager = new ServerManager(secondsAfterThirdConnection, secondsDuringTurn);
         serverManager.run();
         while (!serverManager.allServerReady()) {
             try {
@@ -57,5 +65,25 @@ public class Server {
             }*/
         }
         //serverManager.shutDownAllServers();
+    }
+
+    private static int manageIntInput(Scanner stdin, int minValue, int maxValue) {
+        int output;
+        try {
+            output = stdin.nextInt();
+        } catch (InputMismatchException e) {
+            output = minValue - 1;
+            stdin.nextLine();
+        }
+        while (output > maxValue || output < minValue) {
+            System.out.println("Il valore deve essere compreso fra " + minValue + " e " + maxValue + ". Riprova:");
+            try {
+                output = stdin.nextInt();
+            } catch (InputMismatchException e) {
+                output = minValue - 1;
+                stdin.nextLine();
+            }
+        }
+        return output;
     }
 }
