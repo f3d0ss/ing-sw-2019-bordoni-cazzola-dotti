@@ -5,10 +5,7 @@ import it.polimi.ingsw.model.PlayerId;
 import it.polimi.ingsw.model.command.Command;
 import it.polimi.ingsw.view.ViewInterface;
 
-import java.util.ArrayDeque;
-import java.util.Deque;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * This class manages a single turn
@@ -16,11 +13,14 @@ import java.util.Map;
 class TurnController {
 
     private final Player currentPlayer;
+    private final List<Player> otherPlayers;
     private final Map<PlayerId, ViewInterface> virtualViews;
     private final Deque<Command> commandStack = new ArrayDeque<>();
 
-    TurnController(Player player, Map<PlayerId, ViewInterface> virtualViews) {
+    TurnController(Player player, List<Player> players, Map<PlayerId, ViewInterface> virtualViews) {
         this.currentPlayer = player;
+        this.otherPlayers = new ArrayList<>(players);
+        otherPlayers.remove(player);
         this.virtualViews = virtualViews;
     }
 
@@ -29,10 +29,17 @@ class TurnController {
         List<Command> possibleCommands = currentPlayer.getPossibleCommands();
         while (possibleCommands != null) {
             int numberOfCommandPicked = virtualViews.get(currentPlayer.getId()).sendCommands(possibleCommands, !commandStack.isEmpty());
-            //get n of cmd to exec
-            //exec cmd
             Command commandToExecute = possibleCommands.get(numberOfCommandPicked);
             commandToExecute.execute();
+            for (Player p : otherPlayers) {
+                if (!p.isDisconnected()) {
+                    List<Command> commands = p.getPossibleCommands();
+                    while (commands != null && commands.isEmpty()) {
+                        int i = virtualViews.get(p.getId()).sendCommands(commands, false);
+                        commands.get(i).execute();
+                    }
+                }
+            }
             //add to stack if undoable
             if (commandToExecute.isUndoable())
                 commandStack.push(commandToExecute);

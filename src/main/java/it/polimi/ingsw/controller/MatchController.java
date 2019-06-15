@@ -35,12 +35,14 @@ public class MatchController {
         players = match.getCurrentPlayers();
     }
 
-    public void reconnect(String username){
-        //TODO:
+    public void reconnect(String username) {
+        for (Player player : players)
+            if (player.getNickname().equals(username)) player.setDisconnected(false);
     }
 
-    public void disconnect(String username){
-        //TODO:
+    public void disconnect(String username) {
+        for (Player player : players)
+            if (player.getNickname().equals(username)) player.setDisconnected(true);
     }
 
     /**
@@ -99,7 +101,7 @@ public class MatchController {
     private void firstTurn() {
         players.stream().filter(currentPlayer -> !currentPlayer.isDisconnected()).forEachOrdered(currentPlayer -> {
             spawnFirstTime(currentPlayer);
-            new TurnController(currentPlayer, virtualViews).runTurn();
+            new TurnController(currentPlayer, players, virtualViews).runTurn();
             endTurnControls(currentPlayer);
         });
     }
@@ -113,7 +115,7 @@ public class MatchController {
         while (!match.isLastTurn()) {
             Player currentPlayer = players.get(currentPlayerIndex);
             if (!currentPlayer.isDisconnected()) {
-                new TurnController(currentPlayer, virtualViews).runTurn();
+                new TurnController(currentPlayer, players, virtualViews).runTurn();
                 endTurnControls(currentPlayer);
             }
             currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
@@ -156,7 +158,7 @@ public class MatchController {
                 match.firstPlayerPlayedLastTurn();
             Player currentPlayer = players.get(currentPlayerIndex);
             if (!currentPlayer.isDisconnected()) {
-                new TurnController(currentPlayer, virtualViews);
+                new TurnController(currentPlayer, players, virtualViews);
                 endTurnControls(currentPlayer);
             }
             currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
@@ -183,6 +185,7 @@ public class MatchController {
         Map<PlayerId, Long> leaderBoard = players.stream()
                 .collect(Collectors.toMap(Player::getId, player -> (long) player.getPoints(), (a, b) -> b, LinkedHashMap::new));
         leaderBoard = sort(leaderBoard, killShootTrackLeaderBoard);
+        //TODO send final leaderboard
         //virtualViews.forEach(ViewInterface::update(leaderBoard));
     }
 
@@ -205,7 +208,7 @@ public class MatchController {
     }
 
     private void endMatch() {
-        //TODO send leaderboard and end-game message
+        //TODO send end-game message
     }
 
     /**
@@ -219,8 +222,6 @@ public class MatchController {
             Objects.requireNonNull(getPlayerById(track.get(0))).addPoints(POINTS_PER_FIRST_BLOOD);
         //marks for 12th dmg
         //extra token on killshottrack for 12th dmg
-
-
         PlayerId playerId11thDamage = track.get(Player.MAX_DAMAGE - 2);
         match.addKillshot(playerId11thDamage);
         if (track.get(Player.MAX_DAMAGE - 1) != null) {
@@ -294,8 +295,12 @@ public class MatchController {
      */
     private void respawn(Player currentPlayer) {
         List<Command> commands = new ArrayList<>(currentPlayer.getRespawnCommands());
-        int selectedCommand = virtualViews.get(currentPlayer.getId()).sendCommands(commands, false);
-        commands.get(selectedCommand).execute();
+        if (currentPlayer.isDisconnected())
+            commands.get(new Random().nextInt(commands.size())).execute();
+        else {
+            int selectedCommand = virtualViews.get(currentPlayer.getId()).sendCommands(commands, false);
+            commands.get(selectedCommand).execute();
+        }
     }
 
     /**
