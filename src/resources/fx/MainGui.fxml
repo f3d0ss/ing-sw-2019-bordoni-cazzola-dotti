@@ -67,13 +67,13 @@
                                               prefWidth="${mainPane.width*400/1850}">
                                             <children>
                                                 <HBox prefWidth="${mainPane.width*18/1850}"/>
-                                                <Pane prefHeight="${mainPane.height*200/1850}"
+                                                <Pane prefHeight="${mainPane.height*200/925}"
                                                       prefWidth="${mainPane.width*103/1850}" styleClass="spawnWeapon"/>
                                                 <HBox prefWidth="${mainPane.width*25/1850}"/>
-                                                <Pane prefHeight="${mainPane.height*200/1850}"
+                                                <Pane prefHeight="${mainPane.height*200/925}"
                                                       prefWidth="${mainPane.width*103/1850}" styleClass="spawnWeapon"/>
                                                 <HBox prefWidth="${mainPane.width*28/1850}"/>
-                                                <Pane prefHeight="${mainPane.height*200/1850}"
+                                                <Pane prefHeight="${mainPane.height*200/925}"
                                                       prefWidth="${mainPane.width*103/1850}" styleClass="spawnWeapon"/>
                                             </children>
                                         </HBox>
@@ -82,13 +82,13 @@
                                               prefWidth="${mainPane.width*400/1850}">
                                             <children>
                                                 <HBox prefWidth="${mainPane.width*18/1850}"/>
-                                                <Pane prefHeight="${mainPane.height*200/1850}"
+                                                <Pane prefHeight="${mainPane.height*200/925}"
                                                       prefWidth="${mainPane.width*103/1850}" styleClass="spawnWeapon"/>
                                                 <HBox prefWidth="${mainPane.width*25/1850}"/>
-                                                <Pane prefHeight="${mainPane.height*200/1850}"
+                                                <Pane prefHeight="${mainPane.height*200/925}"
                                                       prefWidth="${mainPane.width*103/1850}" styleClass="spawnWeapon"/>
                                                 <HBox prefWidth="${mainPane.width*28/1850}"/>
-                                                <Pane prefHeight="${mainPane.height*200/1850}"
+                                                <Pane prefHeight="${mainPane.height*200/925}"
                                                       prefWidth="${mainPane.width*103/1850}" styleClass="spawnWeapon"/>
                                             </children>
                                         </HBox>
@@ -97,14 +97,29 @@
                                               prefWidth="${mainPane.width*400/1850}">
                                             <children>
                                                 <HBox prefWidth="${mainPane.width*18/1850}"/>
-                                                <Pane prefHeight="${mainPane.height*200/1850}"
-                                                      prefWidth="${mainPane.width*103/1850}" styleClass="spawnWeapon"/>
+                                                <Pane prefHeight="${mainPane.height*200/925}"
+                                                      prefWidth="${mainPane.width*103/1850}" styleClass="spawnWeapon">
+                                                    <children>
+                                                        <Pane prefHeight="${mainPane.height*200/925}"
+                                                              prefWidth="${mainPane.width*103/1850}"/>
+                                                    </children>
+                                                </Pane>
                                                 <HBox prefWidth="${mainPane.width*25/1850}"/>
-                                                <Pane prefHeight="${mainPane.height*200/1850}"
-                                                      prefWidth="${mainPane.width*103/1850}" styleClass="spawnWeapon"/>
+                                                <Pane prefHeight="${mainPane.height*200/925}"
+                                                      prefWidth="${mainPane.width*103/1850}" styleClass="spawnWeapon">
+                                                    <children>
+                                                        <Pane prefHeight="${mainPane.height*200/925}"
+                                                              prefWidth="${mainPane.width*103/1850}"/>
+                                                    </children>
+                                                </Pane>
                                                 <HBox prefWidth="${mainPane.width*28/1850}"/>
-                                                <Pane prefHeight="${mainPane.height*200/1850}"
-                                                      prefWidth="${mainPane.width*103/1850}" styleClass="spawnWeapon"/>
+                                                <Pane prefHeight="${mainPane.height*200/925}"
+                                                      prefWidth="${mainPane.width*103/1850}" styleClass="spawnWeapon">
+                                                    <children>
+                                                        <Pane prefHeight="${mainPane.height*200/925}"
+                                                              prefWidth="${mainPane.width*103/1850}"/>
+                                                    </children>
+                                                </Pane>
                                             </children>
                                         </HBox>
                                         <HBox id="otherPlayerContainer" fx:id="otherPlayerContainer"

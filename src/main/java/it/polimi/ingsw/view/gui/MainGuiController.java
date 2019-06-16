@@ -86,12 +86,6 @@ public class MainGuiController {
         yellowWeapons[1] = (Pane) yellowSpawnWeapons.getChildren().get(3);
         yellowWeapons[2] = (Pane) yellowSpawnWeapons.getChildren().get(5);
 
-//        TODO: find a way to highlight wepon in respawn
-//        yellowWeaponsOverlay = new Pane[3];
-//        for (int i = 0; i < yellowWeapons.length; i++) {
-//            yellowWeaponsOverlay[i] = new Pane();
-//            yellowWeapons[i].getChildren().add(yellowWeaponsOverlay[i]);
-//        }
 //
 //
 //        for (Pane redWeapon : redWeapons) {
