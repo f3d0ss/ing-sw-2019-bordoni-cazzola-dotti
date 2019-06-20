@@ -20,6 +20,8 @@ public class ServerManager implements Runnable {
     private final static int MILLIS_TO_WAIT = 100;
     private final static String RECONNECT = "Reconnect";
     private final static String NEW_GAME = "New game";
+    private int socketPort;
+    private int rmiPort;
     private Map<Integer, Socket> socketClients = new HashMap<>();
     private Map<Integer, RmiClientInterface> rmiClients = new HashMap<>();
     private Map<Integer, String> answers = new HashMap<>();
@@ -39,9 +41,11 @@ public class ServerManager implements Runnable {
     private int secondsDuringTurn;
     private Map<Integer, MatchController> activeMatches = new HashMap<>();
 
-    public ServerManager(int secondsAfterThirdConnection, int secondsDuringTurn) {
+    public ServerManager(int secondsAfterThirdConnection, int secondsDuringTurn, int socketPort, int rmiPort) {
         countDown = new GameCountDown(this, secondsAfterThirdConnection);
         this.secondsDuringTurn = secondsDuringTurn;
+        this.socketPort = socketPort;
+        this.rmiPort = rmiPort;
     }
 
     public void addClient(Socket client) {
@@ -350,8 +354,8 @@ public class ServerManager implements Runnable {
 
     @Override
     public void run() {
-        socketServer = new SocketServer(this);
-        rmiServer = new RmiServer(this);
+        socketServer = new SocketServer(this, socketPort);
+        rmiServer = new RmiServer(this, rmiPort);
         new Thread(socketServer).start();
         new Thread(rmiServer).start();
     }
