@@ -3,9 +3,8 @@ package it.polimi.ingsw.model;
 import it.polimi.ingsw.utils.Parser;
 import it.polimi.ingsw.view.ViewInterface;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
+import java.io.*;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -29,9 +28,9 @@ public class Match {
     public Match(int gameBoardNumber) {
         Parser parser = new Parser();
         initializeGameBoard(gameBoardNumber, parser);
-        killshotTrack = new ArrayList();
-        currentPlayers = new ArrayList();
         views = new ArrayList<>();
+        killshotTrack = new ArrayList<>();
+        currentPlayers = new ArrayList<>();
         firstPlayerPlayedLastTurn = false;
         initializeAmmoTiles(parser);
         initializeWeapons(parser);
@@ -42,23 +41,14 @@ public class Match {
     }
 
     private void initializeGameBoard(int gameBoardNumber, Parser parser) {
-        try {
-            board = parser.deserialize(new FileReader("src/resources/gameboards/gameboard_" +
-                    String.format("%03d", gameBoardNumber) + ".json"), GameBoard.class);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-
+        board = parser.deserialize(new InputStreamReader(getClass().getResourceAsStream("/gameboards/gameboard_" +
+                String.format("%03d", gameBoardNumber) + ".json")), GameBoard.class);
         board.initialize();
     }
 
-
     private void initializeAmmoTiles(Parser parser) {
-        try {
-            currentAmmoTileDeck = parser.deserialize(new FileReader("src/resources/cards/default_ammo_tiles_deck.json"), AmmoTileDeck.class);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+        InputStream in = getClass().getResourceAsStream("/cards/default_ammo_tiles_deck.json");
+        currentAmmoTileDeck = parser.deserialize(new InputStreamReader(in), AmmoTileDeck.class);
         usedAmmoTileDeck = new AmmoTileDeck();
         for (TurretSquare turretSquare : getBoard().getTurrets()) {
             turretSquare.setAmmoTile(currentAmmoTileDeck.drawAmmoTile());
@@ -67,7 +57,8 @@ public class Match {
 
     private void initializeWeapons(Parser parser) {
         List<Weapon> weaponList = new ArrayList<>();
-        File file = new File("src/resources/weapons/");
+        URL url = getClass().getResource("/weapons/");
+        File file = new File(url.getPath());
         File[] files = file.listFiles();
         for (File f : files) {
             try {
