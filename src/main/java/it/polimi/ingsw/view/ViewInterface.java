@@ -5,7 +5,8 @@ import it.polimi.ingsw.model.command.Command;
 import java.util.List;
 
 public interface ViewInterface {
-    void update(WeaponView wp);
+
+    void update(MatchView mw);
 
     void update(SquareView sw);
 

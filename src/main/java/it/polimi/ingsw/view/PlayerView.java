@@ -30,4 +30,36 @@ public class PlayerView {
         this.availableAggregateActionCounter = availableAggregateActionCounter;
         this.flippedBoard = flippedBoard;
     }
+
+    public PlayerId getId() {
+        return id;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public int getDeaths() {
+        return deaths;
+    }
+
+    public List<WeaponView> getWeapons() {
+        return weapons;
+    }
+
+    public List<PowerUpView> getPowerUps() {
+        return powerUps;
+    }
+
+    public Map<Color, Integer> getAmmo() {
+        return ammo;
+    }
+
+    public List<PlayerId> getHealth() {
+        return health;
+    }
+
+    public Map<PlayerId, Integer> getMarks() {
+        return marks;
+    }
 }

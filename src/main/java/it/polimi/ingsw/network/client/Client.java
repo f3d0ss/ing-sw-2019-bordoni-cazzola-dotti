@@ -1,7 +1,11 @@
 package it.polimi.ingsw.network.client;
 
 import it.polimi.ingsw.network.Message;
+import it.polimi.ingsw.network.PlayerViewTransfer;
+import it.polimi.ingsw.network.Protocol;
+import it.polimi.ingsw.network.SquareViewTransfer;
 import it.polimi.ingsw.utils.Parser;
+import it.polimi.ingsw.view.ConcreteView;
 
 import java.io.IOException;
 import java.rmi.NotBoundException;
@@ -11,6 +15,7 @@ public class Client implements Runnable {
     private String type;
     private Ui ui;
     protected Parser parser = new Parser();
+    protected ConcreteView view;
 
     public Client(Ui ui) {
         this.ui = ui;
@@ -28,6 +33,16 @@ public class Client implements Runnable {
 
     public String manageMessage(String gsonCoded) {
         Message fromServer = parser.deserialize(gsonCoded, Message.class);
+        if (fromServer.type == Protocol.UPDATE_PLAYER) {
+            view.update(((PlayerViewTransfer)fromServer).getAttachment());
+            return Protocol.ACK;
+        }
+        if (fromServer.type == Protocol.UPDATE_SQUARE) {
+            view.update(((SquareViewTransfer)fromServer).getAttachment());
+            return Protocol.ACK;
+        }
+        if (fromServer.type == Protocol.ARE_YOU_READY)
+            view = new ConcreteView(ui);
         return ui.showMessage(String.format(fromServer.type.getQuestion(), fromServer.getStringInQuestion()), fromServer.getPossibleAnswer(), fromServer.type.requiresAnswer());
     }
 

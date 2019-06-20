@@ -23,7 +23,7 @@ public class RmiClient extends Client {
     private final static int RMI_PORT = 1099;
     private final static int TEST_ALIVENESS_TIME = 2000;
     private boolean keepAlive = true;
-    private final static String TYPE = "Socket";
+    private final static String TYPE = "RMI";
 
     public RmiClient(String ip, int port, Ui ui) {
         super(ui);
