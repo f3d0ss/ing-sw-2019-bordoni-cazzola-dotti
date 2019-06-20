@@ -6,7 +6,7 @@ import java.util.List;
 public class PowerUpDeck implements Deck {
     private List<PowerUp> powerUps;
 
-    public PowerUpDeck(List<PowerUp> powerUps) {
+    PowerUpDeck(List<PowerUp> powerUps) {
         this.powerUps = powerUps;
     }
 
@@ -15,7 +15,7 @@ public class PowerUpDeck implements Deck {
         Collections.shuffle(powerUps);
     }
 
-    public PowerUp drawPowerUp() {
+    PowerUp drawPowerUp() {
         return powerUps.isEmpty() ? null : powerUps.remove(0);
     }
 

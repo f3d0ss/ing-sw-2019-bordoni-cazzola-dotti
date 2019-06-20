@@ -1,0 +1,100 @@
+{
+  "powerUps": [
+    {
+      "type": "TAGBACK_GRENADE",
+      "color": "BLUE"
+    },
+    {
+      "type": "TAGBACK_GRENADE",
+      "color": "BLUE"
+    },
+    {
+      "type": "TARGETING_SCOPE",
+      "color": "BLUE"
+    },
+    {
+      "type": "TARGETING_SCOPE",
+      "color": "BLUE"
+    },
+    {
+      "type": "TELEPORTER",
+      "color": "BLUE"
+    },
+    {
+      "type": "TELEPORTER",
+      "color": "BLUE"
+    },
+    {
+      "type": "NEWTON",
+      "color": "BLUE"
+    },
+    {
+      "type": "NEWTON",
+      "color": "BLUE"
+    },
+    {
+      "type": "TAGBACK_GRENADE",
+      "color": "RED"
+    },
+    {
+      "type": "TAGBACK_GRENADE",
+      "color": "RED"
+    },
+    {
+      "type": "TARGETING_SCOPE",
+      "color": "RED"
+    },
+    {
+      "type": "TARGETING_SCOPE",
+      "color": "RED"
+    },
+    {
+      "type": "TELEPORTER",
+      "color": "RED"
+    },
+    {
+      "type": "TELEPORTER",
+      "color": "RED"
+    },
+    {
+      "type": "NEWTON",
+      "color": "RED"
+    },
+    {
+      "type": "NEWTON",
+      "color": "RED"
+    },
+    {
+      "type": "TAGBACK_GRENADE",
+      "color": "YELLOW"
+    },
+    {
+      "type": "TAGBACK_GRENADE",
+      "color": "YELLOW"
+    },
+    {
+      "type": "TARGETING_SCOPE",
+      "color": "YELLOW"
+    },
+    {
+      "type": "TARGETING_SCOPE",
+      "color": "YELLOW"
+    },
+    {
+      "type": "TELEPORTER",
+      "color": "YELLOW"
+    },
+    {
+      "type": "TELEPORTER",
+      "color": "YELLOW"
+    },
+    {
+      "type": "NEWTON",
+      "color": "YELLOW"
+    },
+    {
+      "type": "NEWTON",
+      "color": "YELLOW"
+    }
+  ]
+}

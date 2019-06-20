@@ -33,6 +33,7 @@ public class Match {
         firstPlayerPlayedLastTurn = false;
         initializeAmmoTiles(parser);
         initializeWeapons(parser);
+        initializePowerUps(parser);
     }
 
     public Match() {
@@ -72,6 +73,13 @@ public class Match {
                 board.getSpawn(color).addWeapon(weaponList.remove(0));
         }
         currentWeaponDeck = new WeaponDeck(weaponList);
+    }
+
+    private void initializePowerUps(Parser parser) {
+        currentPowerUpDeck = parser.deserialize(new InputStreamReader(
+                        getClass().getResourceAsStream("/cards/default_powerup_deck.json")),
+                PowerUpDeck.class);
+        currentPowerUpDeck.shuffle();
     }
 
     public Player getPlayer(PlayerId id) {
