@@ -1,24 +1,30 @@
 package it.polimi.ingsw.network.server;
 
-public class RmiCommunication implements Runnable {
-    private String message;
+import it.polimi.ingsw.network.Message;
+import it.polimi.ingsw.network.Protocol;
+import it.polimi.ingsw.utils.Parser;
+
+public class RmiCommunication extends SingleCommunication {
+
     private RmiClientInterface client;
     private RmiServer rmiServer;
-    private int number;
-    private ServerManager serverManager;
 
     public RmiCommunication(String message, RmiClientInterface client, RmiServer rmiServer, int number, ServerManager serverManager) {
-        this.message = message;
+        super(number, serverManager, message);
         this.client = client;
         this.rmiServer = rmiServer;
-        this.number = number;
-        this.serverManager = serverManager;
     }
 
     @Override
     public void run() {
         String answer = rmiServer.getImplementation().sendMessageAndGetAnswer(client, message);
         serverManager.setAnswer(number, answer);
-        System.out.println("User %d" + number + ": " + answer);//it shows answer on server log
+        System.out.println("User " + number + ": " + answer);//it shows answer on server log
+        if(timeExceeded) {
+            answer = rmiServer.getImplementation().sendMessageAndGetAnswer(client, new Parser().serialize(new Message(Protocol.TIME_EXCEEDED, "", null, 0)));
+            serverManager.setAnswer(number, answer);
+            System.out.println("User " + number + ": " + answer);
+            rmiServer.unregistry(client);
+        }
     }
 }

@@ -177,9 +177,25 @@ public enum Protocol {
         public boolean requiresAnswer() {
             return true;
         }
-    }, TRY {
+    }, TIME_EXCEEDED {
         public String getQuestion() {
-            return "Messaggio di prova.";
+            return "Tempo scaduto. Disconnessione in corso. Riconnettiti al server per riprendere il gioco.";
+        }
+
+        public boolean requiresAnswer() {
+            return false;
+        }
+    }, UPDATE_PLAYER {
+        public String getQuestion() {
+            return "";
+        }
+
+        public boolean requiresAnswer() {
+            return false;
+        }
+    }, UPDATE_SQUARE {
+        public String getQuestion() {
+            return "";
         }
 
         public boolean requiresAnswer() {
@@ -187,9 +203,9 @@ public enum Protocol {
         }
     };
 
-    public static final String ACK = Character.toString((char) 3);
-    //public static final String ping = Character.toString((char) 4);
-    public static final String ERR = Character.toString((char) 5);
+    public static final String ACK = Character.toString((char) 3) + "ack";
+    public static final String AFK = Character.toString((char) 4) + "afk";
+    public static final String ERR = Character.toString((char) 5) + "err";
 
     public abstract String getQuestion();
 

@@ -4,17 +4,17 @@ import it.polimi.ingsw.network.client.Client;
 import it.polimi.ingsw.network.client.Gui;
 import javafx.application.Application;
 import javafx.scene.Scene;
-import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
 import java.util.List;
 
 public class GuiManager extends Application {
 
+    private static final double WIDTH = 730.0;
+    private static final double HEIGHT = 510.0;
     private static Client client;
     private static Gui gui;
     private static Stage stage;
-    private static GridPane gridPane;
     private static LoginWindow window;
     private static boolean inputReady;
 
@@ -46,6 +46,10 @@ public class GuiManager extends Application {
         window = new LoginWindow(stage, gui, "", null, "", false);
         Scene scene = new Scene(window);
         stage.setTitle("Login");
+        stage.setMinWidth(WIDTH);
+        stage.setMaxWidth(WIDTH);
+        stage.setMinHeight(HEIGHT);
+        stage.setMaxHeight(HEIGHT);
         stage.setScene(scene);
         gui.setGuiReady(true);
     }

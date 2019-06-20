@@ -28,6 +28,7 @@ public class Match {
     public Match(int gameBoardNumber) {
         Parser parser = new Parser();
         initializeGameBoard(gameBoardNumber, parser);
+        views = new ArrayList<>();
         killshotTrack = new ArrayList<>();
         currentPlayers = new ArrayList<>();
         firstPlayerPlayedLastTurn = false;

@@ -1,37 +1,40 @@
 package it.polimi.ingsw.view.cli;
 
 import it.polimi.ingsw.model.*;
+import it.polimi.ingsw.view.*;
 
-public class Cli {
+import java.util.List;
+import java.util.Map;
+
+public class CliManager {
 
     private final static int INNERWIDTH = 11;
-    private int height;
-    private int width;
-    private Match match;
-    private PlayerId client;
+    private final static String VERTICAL_WALL = "║";
+    private final static String HORIZONTAL_WALL = "═";
+    private final static String CORNER_BOTTOM_RIGHT = "╝";
+    private final static String CORNER_BOTTOM_LEFT = "╚";
+    private final static String CORNER_TOP_RIGHT = "╗";
+    private final static String CORNER_TOP_LEFT = "╔";
+    private final static int SQUARE_HEIGHT = 5;
 
-    public Cli(int height, int width, Match match, PlayerId client) {
-        this.height = height;
-        this.width = width;
-        this.match = match;
-        this.client = client;
-    }
-
-    private void displayBoard() {
-        int squareHeight = 5;
+    public void displayAll(SquareView[][] board, MatchView match, PlayerView me, Map<PlayerId, PlayerView> enemies) {
+        int width = board[0].length;
+        int height = board.length/width;
         for (int i = 0; i < height; i++)
-            for (int k = 0; k < squareHeight; k++) {
+            for (int k = 0; k < SQUARE_HEIGHT; k++) {
                 for (int j = 0; j < width; j++) {
-                    displaySquare(match.getBoard().getSquare(i, j), k);
+                    displaySquare(board[i][j], k);
                     System.out.printf(" ");
                 }
                 System.out.printf(" ");
-                displayRightSideInformation(i * squareHeight + k);
+                displayRightSideInformation(i * SQUARE_HEIGHT + k, match, me);
                 System.out.printf("%n");
             }
+        for (PlayerView player : enemies.values())
+            displayEnemiesInformation(player);
     }
 
-    private void displaySquare(Square square, int squareRow) {
+    private void displaySquare(SquareView square, int squareRow) {
         boolean isMiddle = false;
         if (square == null) {
             for (int i = 0; i < INNERWIDTH + 2; i++)
@@ -40,7 +43,7 @@ public class Cli {
         }
         switch (squareRow) {
             case 0:
-                displayHorizontalConnection(square.getConnection(CardinalDirection.NORTH));
+                displayTopHorizontalConnection(square.getConnection(CardinalDirection.NORTH));
                 break;
             case 2:
                 isMiddle = true;
@@ -51,40 +54,48 @@ public class Cli {
                 displayVerticalConnection(square.getConnection(CardinalDirection.EAST), isMiddle);
                 break;
             case 4:
-                displayHorizontalConnection(square.getConnection(CardinalDirection.SOUTH));
+                displayBottomHorizontalConnection(square.getConnection(CardinalDirection.SOUTH));
                 break;
         }
     }
 
+    private void displayTopHorizontalConnection(Connection side) {
+        System.out.printf(CORNER_TOP_LEFT);
+        displayHorizontalConnection(side);
+        System.out.printf(CORNER_TOP_RIGHT);
+    }
+
+    private void displayBottomHorizontalConnection(Connection side) {
+        System.out.printf(CORNER_BOTTOM_LEFT);
+        displayHorizontalConnection(side);
+        System.out.printf(CORNER_BOTTOM_RIGHT);
+    }
+
     private void displayHorizontalConnection(Connection side) {
-        System.out.printf("+");
         for (int i = 0; i < INNERWIDTH; i++)
             switch (side) {
                 case WALL:
-                    System.out.printf("-");
+                    System.out.printf(HORIZONTAL_WALL);
                     break;
                 case MAP_BORDER:
-                    System.out.printf("=");
+                    System.out.printf(HORIZONTAL_WALL);
                     break;
                 case SAME_ROOM:
                     System.out.printf(" ");
                     break;
                 case DOOR:
                     if (i < INNERWIDTH / 2 - 1 || i > INNERWIDTH / 2 + 1)
-                        System.out.printf("-");
+                        System.out.printf(HORIZONTAL_WALL);
                     else
                         System.out.printf(" ");
             }
-        System.out.printf("+");
     }
 
     private void displayVerticalConnection(Connection side, boolean door) {
         switch (side) {
             case WALL:
-                System.out.printf("|");
-                break;
             case MAP_BORDER:
-                System.out.printf("H");
+                System.out.printf(VERTICAL_WALL);
                 break;
             case SAME_ROOM:
                 System.out.printf(" ");
@@ -93,21 +104,21 @@ public class Cli {
                 if (door)
                     System.out.printf(" ");
                 else
-                    System.out.printf("|");
+                    System.out.printf(VERTICAL_WALL);
         }
     }
 
-    private String displaySquareInformation(Square square, int row) {
+    private String displaySquareInformation(SquareView square, int row) {
         switch (row) {
             case 1:
                 if (square.getColor() != null)
                     return " " + square.getColor().colorName() + "Spawn";
-                TurretSquare turret = (TurretSquare) square;
+                TurretSquareView turret = (TurretSquareView) square;
                 return " Ammo: " + turret.getAmmoTile().toString();
             case 2:
                 String out = "";
-                for (Player p : square.getHostedPlayers())
-                    out = out + " " + p.getId().playerIdName().substring(0, 1);
+                for (PlayerId p : square.getHostedPlayers())
+                    out = out + " " + p.playerIdName().substring(0, 1);
                 return out;
         }
         return " ";
@@ -115,19 +126,20 @@ public class Cli {
 
     //TODO: implement SpawnSquare.getWeapons
 
-    private void displayRightSideInformation(int row) {
+    private void displayRightSideInformation(int row, MatchView match, PlayerView me) {
+        Map<Color,List<WeaponView>> weaponsOnSpawn = match.getWeaponsOnSpawn();
         switch (row) {
             case 1:
                 System.out.printf("BlueSpawn weapons: ");
-                match.getBoard().getSpawn(Color.BLUE).getWeapons().forEach(weapon -> System.out.printf(weapon.toString() + ", "));
+                weaponsOnSpawn.get(Color.BLUE).forEach(weapon -> System.out.printf(weapon.toString() + "; "));
                 break;
             case 2:
                 System.out.printf("RedSpawn weapons: ");
-                match.getBoard().getSpawn(Color.RED).getWeapons().forEach(weapon -> System.out.printf(weapon.toString() + ", "));
+                weaponsOnSpawn.get(Color.RED).forEach(weapon -> System.out.printf(weapon.toString() + "; "));
                 break;
             case 3:
                 System.out.printf("YellowSpawn weapons: ");
-                match.getBoard().getSpawn(Color.YELLOW).getWeapons().forEach(weapon -> System.out.printf(weapon.toString() + ", "));
+                weaponsOnSpawn.get(Color.YELLOW).forEach(weapon -> System.out.printf(weapon.toString() + "; "));
                 break;
             case 4:
                 //System.out.printf("Skulls: " + match.getDeathsCounter());
@@ -138,28 +150,29 @@ public class Cli {
                 System.out.printf("(" + match.getDeathsCounter() + " skulls left)");
                 break;
             case 7:
-                System.out.printf(client.playerIdName().toUpperCase() + " (" + match.getPlayer(client).toString() + ")");
+                System.out.printf(me.getId().playerIdName().toUpperCase() + " (" + me.getNickname() + ")");
                 break;
             case 8:
-                System.out.printf("Dead " + match.getPlayer(client).getDeaths() + " times");
+                System.out.printf("Dead " + me.getDeaths() + " times");
                 break;
             case 9:
                 System.out.printf("Weapons: ");
-                match.getPlayer(client).getWeapons().forEach(weapon -> System.out.printf(weapon.toString() + (weapon.isLoaded() ? ", " : "(UNLOADED), ")));
+                me.getWeapons().forEach(weapon -> System.out.printf(weapon.toString() + (weapon.isLoaded() ? "; " : "(UNLOADED), ")));
                 break;
             case 10:
                 System.out.printf("Powerups: ");
-                match.getPlayer(client).getPowerUps().forEach(powerUp -> System.out.printf(powerUp.toString() + " "));
+                me.getPowerUps().forEach(powerUp -> System.out.printf(powerUp.toString() + " "));
                 break;
             case 11:
                 System.out.printf("Ammos: ");
-                match.getPlayer(client).getAmmo().forEach((color, value) -> System.out.printf(value + " " + color.colorName() + ", "));
+                me.getAmmo().forEach((color, value) -> System.out.printf(value + " " + color.colorName() + "; "));
                 break;
             case 12:
                 System.out.printf("Damages: ");
-                match.getPlayer(client).getHealth().forEach(id -> System.out.printf(id.playerIdName().substring(0, 1)));
-                if (match.getPlayer(client).getHealth().size() > 2)
-                    if (match.getPlayer(client).getHealth().size() > 5)
+                me.getHealth().forEach(id -> System.out.printf(id.playerIdName().substring(0, 1)));
+                //TODO: how remove hardcoded information about adrenalinic actions?
+                if (me.getHealth().size() > 2)
+                    if (me.getHealth().size() > 5)
                         System.out.printf(" (azioni adrenaliniche lv 2 sbloccate)");
                     else
                         System.out.printf(" (azioni adrenaliniche lv 1 sbloccate)");
@@ -168,11 +181,11 @@ public class Cli {
                 break;
             case 13:
                 System.out.printf("Marks: ");
-                match.getPlayer(client).getMarks().forEach((id, n) -> System.out.printf(n + " from " + id.playerIdName() + ", "));
+                me.getMarks().forEach((id, n) -> System.out.printf(n + " from " + id.playerIdName() + "; "));
         }
     }
 
-    private void displayEnemiesInformation(Player enemy) {
+    private void displayEnemiesInformation(PlayerView enemy) {
         System.out.printf("\n" + enemy.getId().playerIdName().toUpperCase() + " (" + enemy.toString() + ") has " + enemy.getPowerUps().size() + " poweups.");
         System.out.printf(" Ammos: ");
         enemy.getAmmo().forEach((color, value) -> System.out.printf(value + " " + color.colorName() + ", "));
@@ -185,12 +198,7 @@ public class Cli {
         System.out.printf("(dead " + enemy.getDeaths() + " times)");
     }
 
-    public void update(String message) {
+    public void displayMessage(String message){
         System.out.println(message);
-        displayBoard();
-        for (Player player : match.getCurrentPlayers())
-            if (player != match.getPlayer(client))
-                displayEnemiesInformation(player);
     }
-
 }
