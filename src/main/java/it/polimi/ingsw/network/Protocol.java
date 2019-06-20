@@ -27,7 +27,7 @@ public enum Protocol {
         }
     }, INSERT_PORT {
         public String getQuestion() {
-            return "Inserisci il numero della porta che vuoi usare per la comunicazione.";
+            return "Inserisci il numero della porta del server.";
         }
 
         public boolean requiresAnswer() {
