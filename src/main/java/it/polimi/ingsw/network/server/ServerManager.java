@@ -240,14 +240,14 @@ public class ServerManager implements Runnable {
     }
 
     public int getNumber(Socket client) {
-        for (int i = 0; i < idClient; i++)
+        for (int i : socketClients.keySet())
             if (socketClients.get(i) == client)
                 return i;
         throw new NoSuchElementException();
     }
 
     public int getNumber(RmiClientInterface client) {
-        for (int i = 0; i < idClient; i++)
+        for (int i : rmiClients.keySet())
             if (rmiClients.get(i) == client)
                 return i;
         throw new NoSuchElementException();
@@ -264,16 +264,21 @@ public class ServerManager implements Runnable {
     }
 
     public synchronized void removeClient(Socket client) {
-        int number = getNumber(client);
-        socketClients.remove(number);
-        //socketServer.unregistry(client);
-        removeClient(number);
+        try {
+            int number = getNumber(client);
+            socketClients.remove(number);
+            removeClient(number);
+        } catch (NoSuchElementException e) {
+        }
     }
 
     public synchronized void removeClient(RmiClientInterface client) {
-        int number = getNumber(client);
-        rmiClients.remove(number);
-        removeClient(number);
+        try {
+            int number = getNumber(client);
+            rmiClients.remove(number);
+            removeClient(number);
+        } catch (NoSuchElementException e) {
+        }
     }
 
     private void removeClient(int number) {

@@ -80,6 +80,6 @@ public class RmiClient extends Client {
             }
         }
         manageMessage(parser.serialize(new Message(Protocol.UNREACHABLE_SERVER, "", null, 0)));
-        System.exit(-1);
+        System.exit(0);
     }
 }
