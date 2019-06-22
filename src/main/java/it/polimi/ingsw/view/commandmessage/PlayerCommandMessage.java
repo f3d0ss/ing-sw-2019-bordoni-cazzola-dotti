@@ -9,4 +9,8 @@ public class PlayerCommandMessage extends CommandMessage {
         super(type);
         this.playerId = playerId;
     }
+
+    public PlayerId getPlayerId() {
+        return playerId;
+    }
 }

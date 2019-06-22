@@ -9,4 +9,8 @@ public class AggregateActionCommandMessage extends CommandMessage {
         super(type);
         this.aggregateActionID = aggregateActionID;
     }
+
+    public AggregateActionID getAggregateActionID() {
+        return aggregateActionID;
+    }
 }

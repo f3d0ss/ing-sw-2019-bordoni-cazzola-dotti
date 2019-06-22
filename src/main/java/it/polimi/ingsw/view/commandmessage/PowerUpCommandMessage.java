@@ -12,4 +12,12 @@ public class PowerUpCommandMessage extends CommandMessage {
         this.powerUpID = powerUpID;
         this.color = color;
     }
+
+    public PowerUpID getPowerUpID() {
+        return powerUpID;
+    }
+
+    public Color getColor() {
+        return color;
+    }
 }
