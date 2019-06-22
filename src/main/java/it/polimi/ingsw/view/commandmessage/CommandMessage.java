@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 public abstract class CommandMessage implements Serializable {
     private CommandType type;
-    private String jsonType = getClass().getSimpleName();
+    private transient String jsonType = getClass().getSimpleName();
 
     public CommandMessage(CommandType type) {
         this.type = type;
