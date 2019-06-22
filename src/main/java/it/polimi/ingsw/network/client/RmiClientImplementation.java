@@ -13,4 +13,8 @@ public class RmiClientImplementation implements RmiClientInterface {
     public String sendMessageAndGetAnswer(String message) {
         return client.printMessageAndGetAnswer(message);
     }
+
+    public boolean testAliveness() {
+        return true;
+    }
 }

@@ -25,6 +25,14 @@ public enum Protocol {
         public boolean requiresAnswer() {
             return true;
         }
+    }, INSERT_PORT {
+        public String getQuestion() {
+            return "Inserisci il numero della porta del server.";
+        }
+
+        public boolean requiresAnswer() {
+            return true;
+        }
     }, INSERT_IP_AGAIN {
         public String getQuestion() {
             return "Server non raggiungibile. Reimmetti l'indirizzo ip o riprova più tardi.";

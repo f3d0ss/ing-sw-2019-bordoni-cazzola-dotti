@@ -12,8 +12,6 @@ import java.util.Scanner;
 
 public class SocketClient extends Client {
 
-    private String ip;
-    private int port;
     private boolean keepAlive = true;
     private Socket socket;
     private Scanner fromServer;
@@ -36,7 +34,7 @@ public class SocketClient extends Client {
     }
 
     public void startClient() throws IOException {
-        while(true) {
+        while (true) {
             manageMessage(parser.serialize(new Message(Protocol.CONNECTING, TYPE, null, 0)));
             try {
                 socket = new Socket(ip, port);
@@ -45,9 +43,9 @@ public class SocketClient extends Client {
                 break;
             } catch (SocketException e) {
                 //System.out.println(e.getMessage());
-                do
-                    ip = manageMessage(parser.serialize(new Message(Protocol.INSERT_IP_AGAIN, "", null, 0)));
-                while(!isValidIp(ip));
+                do {
+                    manageInvalidIpOrPort();
+                } while (!isValidIp(ip) || port < 0);
             }
         }
         while (keepAlive) {
