@@ -13,7 +13,7 @@ import static java.lang.Thread.sleep;
 
 public class SocketServer implements Runnable {
 
-    private int port = 9000;
+    private int port;
     private ServerManager serverManager;
     private ServerSocket serverSocket;
     private boolean keepAlive = true;
@@ -21,8 +21,9 @@ public class SocketServer implements Runnable {
     private Map<Socket, Scanner> fromClient = new HashMap<>();
     private Map<Socket, PrintWriter> toClient = new HashMap<>();
 
-    public SocketServer(ServerManager server) {
+    public SocketServer(ServerManager server, int port) {
         this.serverManager = server;
+        this.port = port;
     }
 
     public void run() {
