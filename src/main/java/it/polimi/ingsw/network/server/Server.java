@@ -35,13 +35,13 @@ public class Server {
             System.out.println("local ip: unknown");
         }
         System.out.println("Specifica il numero della porta per il SocketServer:");
-        socketPort = manageIntInput(stdin, MIN_PORT, MAX_PORT);
+        socketPort = manageIntInput(stdin, MIN_PORT, MAX_PORT, 0);
         System.out.println("Specifica il numero della porta per il RmiServer:");
-        rmiPort = manageIntInput(stdin, MIN_PORT, MAX_PORT);
+        rmiPort = manageIntInput(stdin, MIN_PORT, MAX_PORT, socketPort);
         System.out.println("Specifica il numero di secondi del timeout dopo la terza connessione:");
-        secondsAfterThirdConnection = manageIntInput(stdin, MIN_CONNECTION_TIME, MAX_CONNECTION_TIME);
+        secondsAfterThirdConnection = manageIntInput(stdin, MIN_CONNECTION_TIME, MAX_CONNECTION_TIME, 0);
         System.out.println("Specifica il numero di secondi concessi ai giocatori per ogni mossa:");
-        secondsDuringTurn = manageIntInput(stdin, MIN_TURN_TIME, MAX_TURN_TIME);
+        secondsDuringTurn = manageIntInput(stdin, MIN_TURN_TIME, MAX_TURN_TIME, 0);
         serverManager = new ServerManager(secondsAfterThirdConnection, secondsDuringTurn, socketPort, rmiPort);
         serverManager.run();
         while (!serverManager.allServerReady()) {
@@ -75,7 +75,7 @@ public class Server {
         //serverManager.shutDownAllServers();
     }
 
-    private static int manageIntInput(Scanner stdin, int minValue, int maxValue) {
+    private static int manageIntInput(Scanner stdin, int minValue, int maxValue, int forbiddenValue) {
         int output;
         try {
             output = stdin.nextInt();
@@ -83,7 +83,7 @@ public class Server {
             output = minValue - 1;
             stdin.nextLine();
         }
-        while (output > maxValue || output < minValue) {
+        while (output > maxValue || output < minValue || output == forbiddenValue) {
             System.out.println("Il valore deve essere compreso fra " + minValue + " e " + maxValue + ". Riprova:");
             try {
                 output = stdin.nextInt();
