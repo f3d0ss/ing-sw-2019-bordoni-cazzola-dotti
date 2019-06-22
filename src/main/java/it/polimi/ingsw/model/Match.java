@@ -81,6 +81,7 @@ public class Match {
                         getClass().getResourceAsStream("/cards/default_powerup_deck.json")),
                 PowerUpDeck.class);
         currentPowerUpDeck.shuffle();
+        usedPowerUpDeck = new PowerUpDeck(new ArrayList<>());
     }
 
     public Player getPlayer(PlayerId id) {
