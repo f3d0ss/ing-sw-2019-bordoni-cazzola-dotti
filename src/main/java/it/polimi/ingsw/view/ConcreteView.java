@@ -1,5 +1,6 @@
 package it.polimi.ingsw.view;
 
+import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.PlayerId;
 import it.polimi.ingsw.model.command.Command;
 import it.polimi.ingsw.network.client.Ui;
@@ -37,8 +38,6 @@ public class ConcreteView implements ViewInterface {
         int row = sw.getRow();
         int col = sw.getCol();
         board[row][col] = sw;
-        if (sw.getColor() != null)
-            match.updateSpawn(sw.getColor(), ((SpawnSquareView) sw).getWeapons());
         ui.showGame(board, match, me, enemies);
     }
 
@@ -53,5 +52,12 @@ public class ConcreteView implements ViewInterface {
     @Override
     public int sendCommands(List<Command> commands, boolean undo) {
         return 0;
+    }
+
+    public List<WeaponView> getWeaponsOnSpawn(Color color) {
+        switch (color){
+            //TODO: selct the right weapons
+        }
+        return null;
     }
 }

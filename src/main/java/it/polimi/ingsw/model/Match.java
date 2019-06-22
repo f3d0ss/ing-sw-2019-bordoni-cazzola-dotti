@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.utils.Parser;
+import it.polimi.ingsw.view.MatchView;
 import it.polimi.ingsw.view.ViewInterface;
 
 import java.io.*;
@@ -45,6 +46,7 @@ public class Match {
         board = parser.deserialize(new InputStreamReader(getClass().getResourceAsStream("/gameboards/gameboard_" +
                 String.format("%03d", gameBoardNumber) + ".json")), GameBoard.class);
         board.initialize();
+        board.getSquareList().forEach(square -> square.setMatch(this));
     }
 
     private void initializeAmmoTiles(Parser parser) {
@@ -116,6 +118,7 @@ public class Match {
             return false;
         }
         this.deathsCounter--;
+        update();
         return true;
     }
 
@@ -134,6 +137,7 @@ public class Match {
 
     public void addKillshot(PlayerId player) {
         killshotTrack.add(player);
+        update();
     }
 
     private AmmoTile drawAmmoTileCard() {
@@ -208,6 +212,10 @@ public class Match {
 
     public List<ViewInterface> getVirtualViews() {
         return views;
+    }
+
+    private void update() {
+        views.forEach(viewInterface -> viewInterface.update(new MatchView(killshotTrack, deathsCounter)));
     }
 
 }

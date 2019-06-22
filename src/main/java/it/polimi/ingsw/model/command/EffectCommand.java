@@ -35,9 +35,7 @@ public class EffectCommand {
     public void execute() {
         player.addDamage(damage, shooter);
         player.addMarks(marks, shooter);
-        player.getPosition().removePlayer(player);
         player.move(arrivalSquare);
-        player.getPosition().addPlayer(player);
     }
 
     /**
