@@ -142,6 +142,7 @@ public class ServerManager implements Runnable {
             if (name.equals(Protocol.ERR))
                 return;
         }
+        //TODO: correct error from delay during board choice
         lobby.put(id, name);
         notifyNewEntry(id, name);
         if (sendMessageAndWaitForAnswer(id, new Message(Protocol.LOGIN_CONFIRM, name, null, 0)).equals(Protocol.ERR))
