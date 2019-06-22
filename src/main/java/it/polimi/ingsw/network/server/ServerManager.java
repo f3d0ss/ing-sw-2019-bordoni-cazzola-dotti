@@ -8,6 +8,7 @@ import it.polimi.ingsw.view.ViewInterface;
 import it.polimi.ingsw.view.VirtualView;
 
 import java.net.Socket;
+import java.rmi.RemoteException;
 import java.util.*;
 
 import static java.lang.Thread.sleep;
@@ -20,6 +21,8 @@ public class ServerManager implements Runnable {
     private final static int MILLIS_TO_WAIT = 100;
     private final static String RECONNECT = "Reconnect";
     private final static String NEW_GAME = "New game";
+    private int socketPort;
+    private int rmiPort;
     private Map<Integer, Socket> socketClients = new HashMap<>();
     private Map<Integer, RmiClientInterface> rmiClients = new HashMap<>();
     private Map<Integer, String> answers = new HashMap<>();
@@ -39,9 +42,11 @@ public class ServerManager implements Runnable {
     private int secondsDuringTurn;
     private Map<Integer, MatchController> activeMatches = new HashMap<>();
 
-    public ServerManager(int secondsAfterThirdConnection, int secondsDuringTurn) {
+    public ServerManager(int secondsAfterThirdConnection, int secondsDuringTurn, int socketPort, int rmiPort) {
         countDown = new GameCountDown(this, secondsAfterThirdConnection);
         this.secondsDuringTurn = secondsDuringTurn;
+        this.socketPort = socketPort;
+        this.rmiPort = rmiPort;
     }
 
     public void addClient(Socket client) {
@@ -214,13 +219,12 @@ public class ServerManager implements Runnable {
 
     private void createNewGame() {
         Map<String, ViewInterface> gamers = new HashMap<>();
+        lobby.keySet().forEach(i -> gamers.put(lobby.get(i), new VirtualView(this, i)));
         MatchController match = new MatchController(gamers, chosenBoard);
         lobby.keySet().forEach(i -> {
-            gamers.put(lobby.get(i), new VirtualView(this, i));
             activeMatches.put(i, match);
             nicknames.put(i, lobby.get(i));
         });
-
         match.runMatch();
     }
 
@@ -237,14 +241,14 @@ public class ServerManager implements Runnable {
     }
 
     public int getNumber(Socket client) {
-        for (int i = 0; i < idClient; i++)
+        for (int i : socketClients.keySet())
             if (socketClients.get(i) == client)
                 return i;
         throw new NoSuchElementException();
     }
 
     public int getNumber(RmiClientInterface client) {
-        for (int i = 0; i < idClient; i++)
+        for (int i : rmiClients.keySet())
             if (rmiClients.get(i) == client)
                 return i;
         throw new NoSuchElementException();
@@ -261,22 +265,27 @@ public class ServerManager implements Runnable {
     }
 
     public synchronized void removeClient(Socket client) {
-        int number = getNumber(client);
-        socketClients.remove(number);
-        //socketServer.unregistry(client);
-        removeClient(number);
+        try {
+            int number = getNumber(client);
+            socketClients.remove(number);
+            removeClient(number);
+        } catch (NoSuchElementException e) {
+        }
     }
 
     public synchronized void removeClient(RmiClientInterface client) {
-        int number = getNumber(client);
-        rmiClients.remove(number);
-        removeClient(number);
+        try {
+            int number = getNumber(client);
+            rmiClients.remove(number);
+            removeClient(number);
+        } catch (NoSuchElementException e) {
+        }
     }
 
     private void removeClient(int number) {
         if (lobby.containsKey(number))
             removeClientFromLobby(number);
-        else if (activeMatches.containsKey(number)){
+        else if (activeMatches.containsKey(number)) {
             awayFromKeyboardOrDisconnected.add(number);
             activeMatches.get(number).disconnect(nicknames.get(number));
         }
@@ -301,6 +310,8 @@ public class ServerManager implements Runnable {
     }
 
     public String sendMessageAndWaitForAnswer(int number, Message message) {
+        boolean isSocket = socketClients.containsKey(number);
+        boolean isRmi = rmiClients.containsKey(number);
         String serializedMessage = parser.serialize(message);
         while (!answerReady.get(number)) {
             try {
@@ -311,10 +322,10 @@ public class ServerManager implements Runnable {
         }
         answerReady.put(number, false);
         SingleCommunication communication;
-        if (socketClients.containsKey(number)) {
+        if (isSocket) {
             communication = new SocketCommunication(serializedMessage, socketClients.get(number), socketServer, number, this);
             new Thread(communication).start();
-        } else if (rmiClients.containsKey(number)) {
+        } else if (isRmi) {
             communication = new RmiCommunication(serializedMessage, rmiClients.get(number), rmiServer, number, this);
             new Thread(communication).start();
         } else {
@@ -327,6 +338,16 @@ public class ServerManager implements Runnable {
             try {
                 sleep(MILLIS_TO_WAIT);
                 counter++;
+                if (counter % 10 == 0 && rmiClients.containsKey(number)) {
+                    try {
+                        //System.out.println("test rmi");
+                        rmiClients.get(number).testAliveness();
+                    } catch (RemoteException e) {
+                        System.out.println("Impossibile raggiungere il client. " + e.getMessage());
+                        rmiServer.unregistry(rmiClients.get(number));
+                        return Protocol.ERR;
+                    }
+                }
             } catch (InterruptedException e) {
                 break;
             }
@@ -351,8 +372,8 @@ public class ServerManager implements Runnable {
 
     @Override
     public void run() {
-        socketServer = new SocketServer(this);
-        rmiServer = new RmiServer(this);
+        socketServer = new SocketServer(this, socketPort);
+        rmiServer = new RmiServer(this, rmiPort);
         new Thread(socketServer).start();
         new Thread(rmiServer).start();
     }
