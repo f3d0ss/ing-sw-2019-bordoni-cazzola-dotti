@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import it.polimi.ingsw.model.SpawnSquare;
 import it.polimi.ingsw.model.Square;
 import it.polimi.ingsw.model.TurretSquare;
+import it.polimi.ingsw.view.commandmessage.*;
 
 import java.io.Reader;
 
@@ -22,8 +23,20 @@ public class Parser {
                 .registerSubtype(SpawnSquare.class, "spawn")
                 .registerSubtype(TurretSquare.class, "turret");
 
+        RuntimeTypeAdapterFactory<CommandMessage> commandMessageRuntimeTypeAdapterFactory = RuntimeTypeAdapterFactory
+                .of(CommandMessage.class, "jsonType")
+                .registerSubtype(AggregateActionCommandMessage.class, AggregateActionCommandMessage.class.getSimpleName())
+                .registerSubtype(ColorCommandMessage.class, ColorCommandMessage.class.getSimpleName())
+                .registerSubtype(PlayerCommandMessage.class, PlayerCommandMessage.class.getSimpleName())
+                .registerSubtype(PowerUpCommandMessage.class, PowerUpCommandMessage.class.getSimpleName())
+                .registerSubtype(SimpleCommandMessage.class, SimpleCommandMessage.class.getSimpleName())
+                .registerSubtype(SquareCommandMessage.class, SquareCommandMessage.class.getSimpleName())
+                .registerSubtype(WeaponCommandMessage.class, WeaponCommandMessage.class.getSimpleName())
+                .registerSubtype(WeaponModeCommandMessage.class, WeaponModeCommandMessage.class.getSimpleName());
+
         gson = new GsonBuilder()
                 .registerTypeAdapterFactory(runtimeTypeAdapterFactory)
+                .registerTypeAdapterFactory(commandMessageRuntimeTypeAdapterFactory)
                 .create();
     }
 
