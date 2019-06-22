@@ -64,7 +64,7 @@ public class Player {
         powerUps.forEach(powerUp -> pvs.add(new PowerUpView(powerUp.getType(), powerUp.getColor())));
 //        TODO: decide if view need to know
 //        playerState.updatePlayerView(playerView);
-        return new PlayerView(id, health, deaths, marks, nickname, wvs, pvs, ammo, availableAggregateActionCounter, flippedBoard);
+        return new PlayerView(id, health, deaths, marks, nickname, wvs, pvs, ammo, availableAggregateActionCounter, flippedBoard, disconnected);
     }
 
     public Map<Color, Integer> getAmmo() {
@@ -299,6 +299,7 @@ public class Player {
 
     public void setDisconnected(boolean disconnected) {
         this.disconnected = disconnected;
+        update();
     }
 
     public String getNickname() {

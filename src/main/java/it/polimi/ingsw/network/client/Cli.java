@@ -1,15 +1,11 @@
 package it.polimi.ingsw.network.client;
 
-import it.polimi.ingsw.model.PlayerId;
 import it.polimi.ingsw.network.Protocol;
-import it.polimi.ingsw.view.MatchView;
-import it.polimi.ingsw.view.PlayerView;
-import it.polimi.ingsw.view.SquareView;
+import it.polimi.ingsw.view.ModelView;
 import it.polimi.ingsw.view.cli.CliManager;
 
 import java.util.InputMismatchException;
 import java.util.List;
-import java.util.Map;
 import java.util.Scanner;
 
 public class Cli implements Ui {
@@ -49,7 +45,7 @@ public class Cli implements Ui {
     public void run() {
     }
 
-    public void showGame(SquareView[][] board, MatchView match, PlayerView me, Map<PlayerId, PlayerView> enemies){
-        cliManager.displayAll(board, match, me, enemies);
+    public void showGame(ModelView modelView) {
+        cliManager.displayAll(modelView);
     }
 }
