@@ -1,15 +1,13 @@
 package it.polimi.ingsw.network.client;
 
-import it.polimi.ingsw.model.PlayerId;
-import it.polimi.ingsw.view.MatchView;
-import it.polimi.ingsw.view.PlayerView;
-import it.polimi.ingsw.view.SquareView;
+import it.polimi.ingsw.view.ConcreteView;
+import it.polimi.ingsw.view.commandmessage.CommandMessage;
 
 import java.util.List;
-import java.util.Map;
 
 public interface Ui {
     String showMessage(String toBeShown, List<String> possibleAnswers, boolean isAnswerRequired);
-    void showGame(SquareView[][] board, MatchView match, PlayerView me, Map<PlayerId, PlayerView> enemies);
+    void refreshView(ConcreteView concreteView);
+    int manageCommandChoice(List<CommandMessage> commands, boolean undo);
     void run();
 }

@@ -1,15 +1,12 @@
 package it.polimi.ingsw.network.client;
 
-import it.polimi.ingsw.model.PlayerId;
-import it.polimi.ingsw.view.MatchView;
-import it.polimi.ingsw.view.PlayerView;
-import it.polimi.ingsw.view.SquareView;
+import it.polimi.ingsw.view.ConcreteView;
+import it.polimi.ingsw.view.commandmessage.CommandMessage;
 import it.polimi.ingsw.view.gui.GuiManager;
 import javafx.application.Application;
 import javafx.application.Platform;
 
 import java.util.List;
-import java.util.Map;
 
 import static java.lang.Thread.sleep;
 
@@ -35,7 +32,7 @@ public class Gui implements Ui, Runnable {
         return answer;
     }
 
-    public void showGame(SquareView[][] board, MatchView match, PlayerView me, Map<PlayerId, PlayerView> enemies){
+    public void refreshView(ConcreteView concreteView){
         //TODO:
     }
 
@@ -58,6 +55,11 @@ public class Gui implements Ui, Runnable {
 
     public void setInputReady(boolean inputReady) {
         this.inputReady = inputReady;
+    }
+
+    public int manageCommandChoice(List<CommandMessage> commands, boolean undo){
+        //TODO:
+        return 0;
     }
 
     public void showBoard(){
