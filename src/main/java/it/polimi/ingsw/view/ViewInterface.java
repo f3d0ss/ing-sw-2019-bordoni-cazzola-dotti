@@ -1,6 +1,6 @@
 package it.polimi.ingsw.view;
 
-import it.polimi.ingsw.model.command.Command;
+import it.polimi.ingsw.view.commandmessage.CommandMessage;
 
 import java.util.List;
 
@@ -12,5 +12,5 @@ public interface ViewInterface {
 
     void update(PlayerView pw);
 
-    int sendCommands(List<Command> commands, boolean undo);
+    int sendCommands(List<CommandMessage> commands, boolean undo);
 }
