@@ -38,8 +38,14 @@
     -fx-background-size: 100%;
 }
 
-#playerBoard {
-    -fx-background-image: url("../images/playerboards/blue_board.png");
+#aggregateActionBox {
+    -fx-background-image: url("../images/playerboards/blue_aggregate_action.png");
+    -fx-background-repeat: no-repeat;
+    -fx-background-size: 100%;
+}
+
+#boardWithoutAggregateAction {
+    -fx-background-image: url("../images/playerboards/blue_board_without_aggregate_action.png");
     -fx-background-repeat: no-repeat;
     -fx-background-size: 100%;
 }
