@@ -15,12 +15,9 @@ import static java.lang.Thread.sleep;
 
 public class RmiClient extends Client {
 
-    private int port;
-    private String ip;
     private RmiClientImplementation rmiClientImplementation;
     private RmiServerInterface rmiServerInterface;
     private RmiClientInterface stub;
-    private final static int RMI_PORT = 1099;
     private final static int TEST_ALIVENESS_TIME = 2000;
     private boolean keepAlive = true;
     private final static String TYPE = "RMI";
@@ -56,17 +53,18 @@ public class RmiClient extends Client {
         while(true) {
             manageMessage(parser.serialize(new Message(Protocol.CONNECTING, TYPE, null, 0)));
             try {
-                Registry registry = LocateRegistry.getRegistry(ip, RMI_PORT);
+                Registry registry = LocateRegistry.getRegistry(ip, port);
                 rmiServerInterface = (RmiServerInterface) registry.lookup(RmiServerInterface.NAME);
                 rmiClientImplementation = new RmiClientImplementation(this);
-                stub = (RmiClientInterface) UnicastRemoteObject.exportObject(rmiClientImplementation, port);
+                stub = (RmiClientInterface) UnicastRemoteObject.exportObject(rmiClientImplementation, 0);
                 rmiServerInterface.registry(stub);
                 break;
             } catch (ConnectException e) {
                 //System.out.println(e.getMessage());
-                do
-                    ip = manageMessage(parser.serialize(new Message(Protocol.INSERT_IP_AGAIN, "", null, 0)));
-                while(!isValidIp(ip));            }
+                do {
+                    manageInvalidIpOrPort();
+                }while(!isValidIp(ip) || port < 0);
+            }
         }
         while (keepAlive) {
             try {
@@ -82,6 +80,6 @@ public class RmiClient extends Client {
             }
         }
         manageMessage(parser.serialize(new Message(Protocol.UNREACHABLE_SERVER, "", null, 0)));
-        System.exit(-1);
+        System.exit(0);
     }
 }

@@ -14,11 +14,11 @@ public class RmiServer implements Runnable {
 
     private RmiServerImplementation server;
     private ServerManager serverManager;
-    private final static int STUB_PORT = 39000;
-    private final static int REGISTRY_PORT = 1099;
+    private int port;
 
-    public RmiServer(ServerManager serverManager) {
+    public RmiServer(ServerManager serverManager, int port) {
         this.serverManager = serverManager;
+        this.port = port;
     }
 
     public void run() {
@@ -50,9 +50,9 @@ public class RmiServer implements Runnable {
         } catch (UnknownHostException e) {
         }
         server = new RmiServerImplementation(this);
-        RmiServerInterface stub = (RmiServerInterface) UnicastRemoteObject.exportObject(server, STUB_PORT);
-        LocateRegistry.createRegistry(REGISTRY_PORT);
-        Registry registry = LocateRegistry.getRegistry(REGISTRY_PORT);
+        RmiServerInterface stub = (RmiServerInterface) UnicastRemoteObject.exportObject(server, 0);
+        LocateRegistry.createRegistry(port);
+        Registry registry = LocateRegistry.getRegistry(port);
         registry.bind(RmiServerInterface.NAME, stub);
         System.out.println("RmiServer avviato.");
         serverManager.setRmiReady();

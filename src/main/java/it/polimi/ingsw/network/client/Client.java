@@ -16,6 +16,9 @@ public class Client implements Runnable {
     private Ui ui;
     protected Parser parser = new Parser();
     protected ConcreteView view;
+    protected String ip;
+    protected int port;
+    protected String portString;
 
     public Client(Ui ui) {
         this.ui = ui;
@@ -54,7 +57,25 @@ public class Client implements Runnable {
         this.type = type;
     }
 
-    public static boolean isValidIp(String input) {
+    protected static boolean isValidIp(String input) {
         return input.matches("^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?).(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?).(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?).(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$");
+    }
+
+    protected static int isValidPort(String port){
+        int number;
+        try {
+            number = Integer.parseInt(port);
+        } catch (NumberFormatException e) {
+            return -1;
+        }
+        if(number < 0 || number > 50000)
+            return -1;
+        return number;
+    }
+
+    protected void manageInvalidIpOrPort(){
+        ip = manageMessage(parser.serialize(new Message(Protocol.INSERT_IP_AGAIN, "", null, 0)));
+        portString = manageMessage(parser.serialize(new Message(Protocol.INSERT_PORT, "", null, 0)));
+        port = isValidPort(portString);
     }
 }
