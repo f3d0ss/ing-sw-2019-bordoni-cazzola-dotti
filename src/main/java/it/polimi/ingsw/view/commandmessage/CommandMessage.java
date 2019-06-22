@@ -1,10 +1,8 @@
 package it.polimi.ingsw.view.commandmessage;
 
-import java.io.Serializable;
-
-public abstract class CommandMessage implements Serializable {
+public abstract class CommandMessage {
     private CommandType type;
-    private transient String jsonType = getClass().getSimpleName();
+    private String jsonType = getClass().getSimpleName();
 
     public CommandMessage(CommandType type) {
         this.type = type;
@@ -13,10 +11,12 @@ public abstract class CommandMessage implements Serializable {
     public CommandType getType() {
         return type;
     }
+
     /**
      * This method must be called before serialize this object
      */
     public void preSerialization() {
         jsonType = getClass().getSimpleName();
     }
+
 }
