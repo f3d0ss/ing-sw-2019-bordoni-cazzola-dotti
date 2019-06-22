@@ -298,7 +298,9 @@ public class MatchController {
         if (currentPlayer.isDisconnected())
             commands.get(new Random().nextInt(commands.size())).execute();
         else {
-            int selectedCommand = virtualViews.get(currentPlayer.getId()).sendCommands(commands, false);
+            int selectedCommand = virtualViews.get(currentPlayer.getId()).sendCommands(commands.stream()
+                    .map(c -> c.createCommandMessage())
+                    .collect(Collectors.toList()), false);
             commands.get(selectedCommand).execute();
         }
     }
@@ -310,7 +312,9 @@ public class MatchController {
      */
     private void spawnFirstTime(Player currentPlayer) {
         List<Command> commands = new ArrayList<>(currentPlayer.getSpawnCommands());
-        int selectedCommand = virtualViews.get(currentPlayer.getId()).sendCommands(commands, false);
+        int selectedCommand = virtualViews.get(currentPlayer.getId()).sendCommands(commands.stream()
+                .map(c -> c.createCommandMessage())
+                .collect(Collectors.toList()), false);
         commands.get(selectedCommand).execute();
     }
 
