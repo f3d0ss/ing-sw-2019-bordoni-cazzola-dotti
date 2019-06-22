@@ -74,4 +74,15 @@ public class Parser {
     public String serialize(Object object) {
         return gson.toJson(object);
     }
+
+    /**
+     * This method serializes the object representation.     *
+     *
+     * @param commandMessage Object to serialize
+     * @return String representing the serialized object
+     */
+    public String serialize(CommandMessage commandMessage) {
+        commandMessage.preSerialization();
+        return gson.toJson(commandMessage);
+    }
 }
