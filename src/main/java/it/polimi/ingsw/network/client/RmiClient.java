@@ -51,7 +51,7 @@ public class RmiClient extends Client {
 
     public void startClient() throws RemoteException, NotBoundException {
         while(true) {
-            manageMessage(parser.serialize(new Message(Protocol.CONNECTING, TYPE, null, 0)));
+            manageMessage(parser.serialize(new Message(Protocol.CONNECTING, TYPE, null)));
             try {
                 Registry registry = LocateRegistry.getRegistry(ip, port);
                 rmiServerInterface = (RmiServerInterface) registry.lookup(RmiServerInterface.NAME);
@@ -79,7 +79,7 @@ public class RmiClient extends Client {
                 break;
             }
         }
-        manageMessage(parser.serialize(new Message(Protocol.UNREACHABLE_SERVER, "", null, 0)));
+        manageMessage(parser.serialize(new Message(Protocol.UNREACHABLE_SERVER, "", null)));
         System.exit(0);
     }
 }

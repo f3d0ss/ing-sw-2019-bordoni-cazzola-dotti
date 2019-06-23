@@ -21,7 +21,7 @@ public class RmiCommunication extends SingleCommunication {
         serverManager.setAnswer(number, answer);
         System.out.println("User " + number + ": " + answer);//it shows answer on server log
         if(timeExceeded) {
-            answer = rmiServer.getImplementation().sendMessageAndGetAnswer(client, new Parser().serialize(new Message(Protocol.TIME_EXCEEDED, "", null, 0)));
+            answer = rmiServer.getImplementation().sendMessageAndGetAnswer(client, new Parser().serialize(new Message(Protocol.TIME_EXCEEDED, "", null)));
             serverManager.setAnswer(number, answer);
             System.out.println("User " + number + ": " + answer);
             rmiServer.unregistry(client);

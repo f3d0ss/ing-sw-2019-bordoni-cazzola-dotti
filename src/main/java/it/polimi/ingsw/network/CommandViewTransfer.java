@@ -10,7 +10,7 @@ public class CommandViewTransfer extends Message {
     private boolean undo;
 
     public CommandViewTransfer(List<CommandMessage> commands, boolean undo) {
-        super(Protocol.SEND_COMMANDS, "", null, null);
+        super(Protocol.SEND_COMMANDS, "", null);
         attachedCommand = commands;
         this.undo = undo;
     }

@@ -35,7 +35,7 @@ public class SocketClient extends Client {
 
     public void startClient() throws IOException {
         while (true) {
-            manageMessage(parser.serialize(new Message(Protocol.CONNECTING, TYPE, null, 0)));
+            manageMessage(parser.serialize(new Message(Protocol.CONNECTING, TYPE, null)));
             try {
                 socket = new Socket(ip, port);
                 fromServer = new Scanner(socket.getInputStream());
@@ -56,7 +56,7 @@ public class SocketClient extends Client {
             }
             toServer.println(manageMessage(input));
         }
-        manageMessage(parser.serialize(new Message(Protocol.UNREACHABLE_SERVER, "", null, 0)));
+        manageMessage(parser.serialize(new Message(Protocol.UNREACHABLE_SERVER, "", null)));
         toServer.close();
         fromServer.close();
         socket.close();

@@ -23,7 +23,7 @@ public class SocketCommunication extends SingleCommunication {
         serverManager.setAnswer(number, answer);
         System.out.println("User " + number + ": " + answer);
         if(timeExceeded) {
-            answer = socketServer.sendMessageAndGetAnswer(client, new Parser().serialize(new Message(Protocol.TIME_EXCEEDED, "", null, 0)));
+            answer = socketServer.sendMessageAndGetAnswer(client, new Parser().serialize(new Message(Protocol.TIME_EXCEEDED, "", null)));
             serverManager.setAnswer(number, answer);
             System.out.println("User " + number + ": " + answer);
             socketServer.unregistry(client);

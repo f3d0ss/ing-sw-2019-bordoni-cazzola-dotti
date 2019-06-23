@@ -8,13 +8,11 @@ public class Message {
     private String stringInQuestion;
     private List<String> possibleAnswers;
     private String jType = getClass().getSimpleName();
-    //private Object attachment;//TODO: is attachment necessary?
 
-    public Message(Protocol type, String stringInQuestion, List<String> possibleAnswers, Object attachment) {
+    public Message(Protocol type, String stringInQuestion, List<String> possibleAnswers) {
         this.type = type;
         this.stringInQuestion = stringInQuestion;
         this.possibleAnswers = possibleAnswers;
-        // this.attachment = attachment;
     }
 
     public List<String> getPossibleAnswer() {

@@ -75,8 +75,8 @@ public class Client implements Runnable {
     }
 
     protected void manageInvalidIpOrPort(){
-        ip = manageMessage(parser.serialize(new Message(Protocol.INSERT_IP_AGAIN, "", null, 0)));
-        portString = manageMessage(parser.serialize(new Message(Protocol.INSERT_PORT, "", null, 0)));
+        ip = manageMessage(parser.serialize(new Message(Protocol.INSERT_IP_AGAIN, "", null)));
+        portString = manageMessage(parser.serialize(new Message(Protocol.INSERT_PORT, "", null)));
         port = isValidPort(portString);
     }
 }

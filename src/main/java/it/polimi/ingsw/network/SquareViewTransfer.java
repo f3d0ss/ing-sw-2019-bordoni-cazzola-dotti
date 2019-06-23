@@ -7,7 +7,7 @@ public class SquareViewTransfer extends Message {
     private SquareView attachment;
 
     public SquareViewTransfer(SquareView sw) {
-        super(Protocol.UPDATE_SQUARE, "", null, null);
+        super(Protocol.UPDATE_SQUARE, "", null);
         attachment = sw;
     }
 

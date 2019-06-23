@@ -7,7 +7,7 @@ public class PlayerViewTransfer extends Message {
     private PlayerView attachment;
 
     public PlayerViewTransfer(PlayerView pw) {
-        super(Protocol.UPDATE_PLAYER, "", null, null);
+        super(Protocol.UPDATE_PLAYER, "", null);
         attachment = pw;
     }
 
