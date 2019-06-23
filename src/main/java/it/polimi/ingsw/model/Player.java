@@ -64,7 +64,7 @@ public class Player {
         powerUps.forEach(powerUp -> pvs.add(new PowerUpView(powerUp.getType(), powerUp.getColor())));
 //        TODO: decide if view need to know
 //        playerState.updatePlayerView(playerView);
-        return new PlayerView(id, health, deaths, marks, nickname, wvs, pvs, ammo, availableAggregateActionCounter, flippedBoard);
+        return new PlayerView(id, health, deaths, marks, nickname, wvs, pvs, ammo, availableAggregateActionCounter, flippedBoard, disconnected);
     }
 
     public Map<Color, Integer> getAmmo() {
@@ -104,13 +104,15 @@ public class Player {
     }
 
     public void untracedMove(Square square) {
-        position.removePlayer(this);
+        position.untracedRemovePlayer(this);
         position = square;
-        position.addPlayer(this);
+        position.untracedAddPlayer(this);
     }
 
     public void move(Square square) {
-        untracedMove(square);
+        position.removePlayer(this);
+        position = square;
+        position.addPlayer(this);
     }
 
     private void addAmmo(Color color, Integer number) {
@@ -135,6 +137,7 @@ public class Player {
     public void addAmmoTile(AmmoTile ammoTile) {
         ammoTile.getAmmo().forEach(this::addAmmo);
         addPowerUp(ammoTile.getPowerUp());
+        update();
     }
 
     public void addDamage(int damage, PlayerId color) {
@@ -153,6 +156,7 @@ public class Player {
         }
         marks.put(color, 0);
         lastShooter = color;
+        update();
     }
 
     public void addMarks(int marks, PlayerId color) {
@@ -163,7 +167,7 @@ public class Player {
             this.marks.put(color, this.marks.getOrDefault(color, 0) + 1);
             possibleMarks--;
         }
-
+        update();
     }
 
     public Square getPosition() {
@@ -178,6 +182,7 @@ public class Player {
         health = new ArrayList<>();
         if (match.isLastTurn())
             flippedBoard = true;
+        update();
     }
 
     public List<Command> getPossibleCommands() {
@@ -198,6 +203,7 @@ public class Player {
 
     private void addExtraPowerUp() {
         this.powerUps.add(match.drawPowerUpCard());
+        update();
     }
 
     public List<AggregateActionID> getPossibleAggregateAction() {
@@ -241,11 +247,12 @@ public class Player {
         if (ammo.getOrDefault(color, 0) < amount)
             throw new IllegalStateException();
         ammo.put(color, ammo.get(color) - amount);
+        update();
     }
-
 
     public void refund(Color color, Integer amount) {
         addAmmo(color, amount);
+        update();
     }
 
     public void refund(PowerUp powerUp) {
@@ -253,16 +260,19 @@ public class Player {
         if (powerUps.size() >= MAX_POWERUP)
             throw new IllegalStateException();
         powerUps.add(powerUp);
+        update();
     }
 
     public void addWeapon(Weapon weapon) {
         if (weapons.size() >= MAX_WEAPONS)
             throw new IllegalStateException();
         weapons.add(weapon);
+        update();
     }
 
     public void removeWeapon(Weapon selectedWeapon) {
         weapons.remove(selectedWeapon);
+        update();
     }
 
     public boolean hasScope() {
@@ -271,10 +281,12 @@ public class Player {
 
     public void selectAggregateAction() {
         availableAggregateActionCounter--;
+        update();
     }
 
     public void deselectAggregateAction() {
         availableAggregateActionCounter++;
+        update();
     }
 
     public Player getLastShooter() {
@@ -287,6 +299,7 @@ public class Player {
 
     public void setDisconnected(boolean disconnected) {
         this.disconnected = disconnected;
+        update();
     }
 
     public String getNickname() {
@@ -300,6 +313,7 @@ public class Player {
     public void addDeaths() {
         deaths++;
         match.decreaseDeathsCounter();
+        update();
     }
 
     public int getPoints() {
@@ -322,6 +336,7 @@ public class Player {
      */
     public void flipBoard() {
         this.flippedBoard = true;
+        update();
     }
 
 
@@ -347,5 +362,6 @@ public class Player {
             availableAggregateActionCounter = 1;
         else
             availableAggregateActionCounter = 2;
+        update();
     }
 }

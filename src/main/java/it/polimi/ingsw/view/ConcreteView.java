@@ -4,50 +4,43 @@ import it.polimi.ingsw.model.PlayerId;
 import it.polimi.ingsw.model.command.Command;
 import it.polimi.ingsw.network.client.Ui;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class ConcreteView implements ViewInterface {
 
-    private final static int HEIGHT = 3;
-    private final static int WIDTH = 4;
-    private SquareView[][] board = new SquareView[HEIGHT][WIDTH];
     private Ui ui;
-    private MatchView match;
-    private PlayerView me;
-    private PlayerId myId;
-    private Map<PlayerId, PlayerView> enemies = new HashMap<>();
+    private ModelView modelView;
 
     public ConcreteView(Ui ui) {
         this.ui = ui;
+        modelView = new ModelView();
     }
 
     public void setMyId(PlayerId myId) {
-        this.myId = myId;
+        modelView.setMyId(myId);
     }
 
     @Override
     public void update(MatchView mw) {
-        match = mw;
+        modelView.setMatch(mw);
     }
 
     @Override
     public void update(SquareView sw) {
         int row = sw.getRow();
         int col = sw.getCol();
-        board[row][col] = sw;
+        modelView.setSquareBoard(row, col, sw);
         if (sw.getColor() != null)
-            match.updateSpawn(sw.getColor(), ((SpawnSquareView) sw).getWeapons());
-        ui.showGame(board, match, me, enemies);
+            modelView.setWeaponsOnSpawn(sw.getColor(), ((SpawnSquareView) sw).getWeapons());
+        ui.showGame(modelView);
     }
 
     @Override
     public void update(PlayerView pw) {
-        if (pw.getId() == myId)
-            me = pw;
+        if (pw.getId() == modelView.getMyId())
+            modelView.setMe(pw);
         else
-            enemies.put(pw.getId(), pw);
+            modelView.setEnemie(pw.getId(), pw);
     }
 
     @Override

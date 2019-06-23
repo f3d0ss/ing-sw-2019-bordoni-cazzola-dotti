@@ -15,7 +15,18 @@ public abstract class Square {
     private Color color;
     private List<Player> hostedPlayers;
     private String type;
+    protected Match match;
 
+    /**
+     * @param northConnection is the north connection
+     * @param eastConnection  is the east connection
+     * @param southConnection is the south connection
+     * @param westConnection  is the west connection
+     * @param row             is the row of the square
+     * @param col             is the column of the square
+     * @param color           is the color of the square
+     * @param type            is the type of the square used for deserialization
+     */
     public Square(Connection northConnection, Connection eastConnection, Connection southConnection, Connection westConnection, int row, int col, Color color, String type) {
         this.type = type;
         connection = new EnumMap<>(CardinalDirection.class);
@@ -29,8 +40,14 @@ public abstract class Square {
         this.color = color;
     }
 
+    protected abstract void update();
+
     public Connection getConnection(CardinalDirection direction) {
         return connection.get(direction);
+    }
+
+    protected Map<CardinalDirection, Connection> getConnections() {
+        return connection;
     }
 
     public int getRow() {
@@ -45,11 +62,25 @@ public abstract class Square {
         return color;
     }
 
+    public void setMatch(Match match) {
+        this.match = match;
+    }
+
     public void addPlayer(Player player) {
+        this.hostedPlayers.add(player);
+        update();
+    }
+
+    public void untracedAddPlayer(Player player) {
         this.hostedPlayers.add(player);
     }
 
-    public boolean removePlayer(Player player) {
+    public void removePlayer(Player player) {
+        this.hostedPlayers.remove(player);
+        update();
+    }
+
+    public boolean untracedRemovePlayer(Player player) {
         return this.hostedPlayers.remove(player);
     }
 
