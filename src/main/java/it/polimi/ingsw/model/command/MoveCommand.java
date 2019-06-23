@@ -5,7 +5,7 @@ import it.polimi.ingsw.model.Square;
 import it.polimi.ingsw.model.playerstate.*;
 import it.polimi.ingsw.view.commandmessage.CommandMessage;
 import it.polimi.ingsw.view.commandmessage.CommandType;
-import it.polimi.ingsw.view.commandmessage.SimpleCommandMessage;
+import it.polimi.ingsw.view.commandmessage.SquareCommandMessage;
 
 /**
  * This command represents a move action
@@ -89,6 +89,6 @@ public class MoveCommand implements Command {
 
     @Override
     public CommandMessage createCommandMessage() {
-        return new SimpleCommandMessage(CommandType.MOVE);
+        return new SquareCommandMessage(CommandType.MOVE, newPosition.getRow(), newPosition.getCol());
     }
 }

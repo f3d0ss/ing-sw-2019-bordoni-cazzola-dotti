@@ -85,7 +85,8 @@ public class Cli implements Ui {
             return ((WeaponCommandMessage)command).getWeapon();
         if(command.getType() == CommandType.SELECT_TARGET_PLAYER)
             return ((PlayerCommandMessage)command).getPlayerId().playerIdName();
-        if(command.getType() == CommandType.SELECT_TARGET_SQUARE)
+        if(command.getType() == CommandType.SELECT_TARGET_SQUARE
+                || command.getType() == CommandType.MOVE)
             return ((SquareCommandMessage)command).getRow() + " " + ((SquareCommandMessage)command).getCol();
         if(command.getType() == CommandType.SELECT_WEAPON_MODE)
             return ((WeaponModeCommandMessage)command).getWeaponMode();
