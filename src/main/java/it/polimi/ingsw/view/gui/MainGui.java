@@ -12,6 +12,7 @@ public class MainGui extends Application {
 
     private Stage primaryStage;
     private Pane base;
+    MainGuiController controller;
 
     @Override
     public void start(Stage stage) {
@@ -28,6 +29,7 @@ public class MainGui extends Application {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        controller = fxmlLoader.getController();
         Scene scene = new Scene(base);
         primaryStage.setScene(scene);
         primaryStage.setFullScreen(true);

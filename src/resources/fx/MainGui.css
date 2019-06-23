@@ -1,5 +1,5 @@
 #mainLeftBox {
-     -fx-background-color: black;
+    -fx-background-color: black;
 }
 
 #gameBoard {
@@ -53,15 +53,6 @@
 .otherPlayer {
     -fx-background-color: #ddd;
     -fx-border-color: black;
-}
-
-#base {
-    -fx-maxHeight: 1025px;
-    -fx-maxWidth: 1400px;
-    -fx-minHeight: 1025px;
-    -fx-minWidth: 1400px;
-    -fx-prefHeight: 1025px;
-    -fx-prefWidth: 1400px;
 }
 
 .playerPowerUPTest {

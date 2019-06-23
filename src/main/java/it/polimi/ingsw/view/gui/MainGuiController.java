@@ -1,12 +1,16 @@
 package it.polimi.ingsw.view.gui;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -62,10 +66,10 @@ public class MainGuiController {
         buttons.forEach(this::handlePlayerButton);
         squares = new Pane[gameBoard.getColumnCount()][gameBoard.getRowCount()];
         //inizialize squares
-        for (int i = 0; i < gameBoard.getColumnCount(); i++){
-            for (int j = 0; j < gameBoard.getRowCount(); j++){
+        for (int i = 0; i < gameBoard.getColumnCount(); i++) {
+            for (int j = 0; j < gameBoard.getRowCount(); j++) {
                 squares[i][j] = new Pane();
-                gameBoard.add(squares[i][j],i,j);
+                gameBoard.add(squares[i][j], i, j);
             }
         }
 
@@ -107,7 +111,18 @@ public class MainGuiController {
     private void handlePlayerButton(Button button) {
         button.setOnAction(actionEvent -> {
 
-            if (!button.getText().equals("Paolo")){
+            try {
+                FXMLLoader fxmlLoader = new FXMLLoader();
+                fxmlLoader.setLocation(MainGuiController.class.getResource("/fx/PlayerBoard.fxml"));
+                Parent root1 = fxmlLoader.load();
+                Stage stage = new Stage();
+                stage.setScene(new Scene(root1));
+                stage.show();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            if (!button.getText().equals("Paolo")) {
                 button.setText("Paolo");
 //                JUST FOR TEST
 //                setNodeClickable(squares[0][0]);
@@ -122,8 +137,7 @@ public class MainGuiController {
 //                setNodeClickable(playerAggregateActionMS);
 //                setNodeClickable(playerHealthGrid);
 
-            }
-            else{
+            } else {
                 button.setText("Commit");
 //                JUST FOR TEST
 //                setNodeUnClickable(squares[0][0]);
@@ -135,6 +149,7 @@ public class MainGuiController {
         node.setStyle("-fx-background-color: yellow; -fx-background-radius: 10; -fx-opacity: 0.5");
         node.setOnMouseClicked(null);
     }
+
     public void setNodeUnClickable(Node node) {
         node.setStyle("-fx-background-color: yellow; -fx-background-radius: 10; -fx-opacity: 0");
         node.setOnMouseClicked(null);
