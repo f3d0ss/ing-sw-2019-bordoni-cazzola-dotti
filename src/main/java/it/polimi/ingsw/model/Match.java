@@ -216,7 +216,16 @@ public class Match {
     }
 
     private void update() {
-        views.forEach(viewInterface -> viewInterface.update(new MatchView(killshotTrack, deathsCounter)));
+        views.forEach(viewInterface -> viewInterface.update(new MatchView(killshotTrack, deathsCounter, board.getId())));
+    }
+
+    /**
+     * This method sends the current state of the Model to the views (must be called at the start to initialize clients)
+     */
+    public void updateAllModel() {
+        update();
+        currentPlayers.forEach(Player::update);
+        board.getSquareList().forEach(Square::update);
     }
 
 }

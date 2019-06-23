@@ -1,7 +1,5 @@
 package it.polimi.ingsw.view;
 
-import it.polimi.ingsw.model.Color;
-import it.polimi.ingsw.model.PlayerId;
 import it.polimi.ingsw.network.client.Ui;
 import it.polimi.ingsw.view.commandmessage.CommandMessage;
 

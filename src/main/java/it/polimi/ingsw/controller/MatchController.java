@@ -33,6 +33,7 @@ public class MatchController {
             virtualViews.put(values[i], lobby.get(nickname));
         }
         players = match.getCurrentPlayers();
+        match.updateAllModel();
     }
 
     public void reconnect(String username) {

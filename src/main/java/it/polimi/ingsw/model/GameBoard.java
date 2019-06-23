@@ -397,4 +397,7 @@ public class GameBoard {
         return spawns.values().stream().collect(Collectors.toList());
     }
 
+    public int getId() {
+        return gameBoardId;
+    }
 }
