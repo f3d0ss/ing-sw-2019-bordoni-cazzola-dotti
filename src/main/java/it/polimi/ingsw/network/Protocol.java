@@ -193,6 +193,14 @@ public enum Protocol {
         public boolean requiresAnswer() {
             return false;
         }
+    }, UPDATE_MATCH {
+        public String getQuestion() {
+            return "";
+        }
+
+        public boolean requiresAnswer() {
+            return false;
+        }
     }, UPDATE_PLAYER {
         public String getQuestion() {
             return "";

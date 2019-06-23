@@ -33,6 +33,10 @@ public class Client implements Runnable {
 
     public String manageMessage(String gsonCoded) {
         Message fromServer = parser.deserialize(gsonCoded, Message.class);
+        if (fromServer.type == Protocol.UPDATE_MATCH) {
+            view.update(((MatchViewTransfer)fromServer).getAttachment());
+            return Protocol.ACK;
+        }
         if (fromServer.type == Protocol.UPDATE_PLAYER) {
             view.update(((PlayerViewTransfer)fromServer).getAttachment());
             return Protocol.ACK;

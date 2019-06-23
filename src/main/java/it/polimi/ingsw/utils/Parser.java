@@ -5,10 +5,7 @@ import com.google.gson.GsonBuilder;
 import it.polimi.ingsw.model.SpawnSquare;
 import it.polimi.ingsw.model.Square;
 import it.polimi.ingsw.model.TurretSquare;
-import it.polimi.ingsw.network.CommandViewTransfer;
-import it.polimi.ingsw.network.Message;
-import it.polimi.ingsw.network.PlayerViewTransfer;
-import it.polimi.ingsw.network.SquareViewTransfer;
+import it.polimi.ingsw.network.*;
 import it.polimi.ingsw.view.commandmessage.*;
 
 import java.io.Reader;
@@ -42,6 +39,7 @@ public class Parser {
         RuntimeTypeAdapterFactory<Message> messageRuntimeTypeAdapterFactory = RuntimeTypeAdapterFactory
                 .of(Message.class, "jType")
                 .registerSubtype(CommandViewTransfer.class, CommandViewTransfer.class.getSimpleName())
+                .registerSubtype(MatchViewTransfer.class, MatchViewTransfer.class.getSimpleName())
                 .registerSubtype(PlayerViewTransfer.class, PlayerViewTransfer.class.getSimpleName())
                 .registerSubtype(SquareViewTransfer.class, SquareViewTransfer.class.getSimpleName())
                 .registerSubtype(Message.class, Message.class.getSimpleName());
