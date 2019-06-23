@@ -15,7 +15,7 @@ public class Gui implements Ui, Runnable {
     private String answer = "";
     private boolean ready = false;
     private boolean inputReady = false;
-    private final static int TIME_TO_SLEEP = 100;
+    private static final int TIME_TO_SLEEP = 100;
 
     public String showMessage(String toBeShown, List<String> possibleAnswers, boolean isAnswerRequired) {
         inputReady = false;
@@ -60,9 +60,5 @@ public class Gui implements Ui, Runnable {
     public int manageCommandChoice(List<CommandMessage> commands, boolean undo){
         //TODO:
         return 0;
-    }
-
-    public void showBoard(){
-        //TODO:
     }
 }

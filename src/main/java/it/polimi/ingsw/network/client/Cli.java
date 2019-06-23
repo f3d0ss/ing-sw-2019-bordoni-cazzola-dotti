@@ -67,29 +67,29 @@ public class Cli implements Ui {
         return choice;
     }
 
-    private String getParameter(CommandMessage command){
-        if(command.getType() == CommandType.RESPAWN
+    private String getParameter(CommandMessage command) {
+        if (command.getType() == CommandType.RESPAWN
                 || command.getType() == CommandType.SELECT_POWER_UP
                 || command.getType() == CommandType.SELECT_POWER_UP_PAYMENT
                 || command.getType() == CommandType.SELECT_SCOPE
                 || command.getType() == CommandType.USE_TAGBACK_GRENADE)
-            return ((PowerUpCommandMessage)command).getPowerUpID().powerUpName() + " " + ((PowerUpCommandMessage)command).getColor().colorName();
-        if(command.getType() == CommandType.SELECT_AGGREGATE_ACTION)
-            return ((AggregateActionCommandMessage)command).getAggregateActionID().toString();
-        if(command.getType() == CommandType.SELECT_AMMO_PAYMENT)
-            return ((ColorCommandMessage)command).getColor().colorName();
-        if(command.getType() == CommandType.SELECT_BUYING_WEAPON
+            return ((PowerUpCommandMessage) command).getPowerUpID().powerUpName() + " " + ((PowerUpCommandMessage) command).getColor().colorName();
+        if (command.getType() == CommandType.SELECT_AGGREGATE_ACTION)
+            return ((AggregateActionCommandMessage) command).getAggregateActionID().toString();
+        if (command.getType() == CommandType.SELECT_AMMO_PAYMENT)
+            return ((ColorCommandMessage) command).getColor().colorName();
+        if (command.getType() == CommandType.SELECT_BUYING_WEAPON
                 || command.getType() == CommandType.SELECT_DISCARD_WEAPON
                 || command.getType() == CommandType.SELECT_RELOADING_WEAPON
                 || command.getType() == CommandType.SELECT_WEAPON)
-            return ((WeaponCommandMessage)command).getWeapon();
-        if(command.getType() == CommandType.SELECT_TARGET_PLAYER)
-            return ((PlayerCommandMessage)command).getPlayerId().playerIdName();
-        if(command.getType() == CommandType.SELECT_TARGET_SQUARE
+            return ((WeaponCommandMessage) command).getWeapon();
+        if (command.getType() == CommandType.SELECT_TARGET_PLAYER)
+            return ((PlayerCommandMessage) command).getPlayerId().playerIdName();
+        if (command.getType() == CommandType.SELECT_TARGET_SQUARE
                 || command.getType() == CommandType.MOVE)
-            return ((SquareCommandMessage)command).getRow() + " " + ((SquareCommandMessage)command).getCol();
-        if(command.getType() == CommandType.SELECT_WEAPON_MODE)
-            return ((WeaponModeCommandMessage)command).getWeaponMode();
+            return ((SquareCommandMessage) command).getRow() + " " + ((SquareCommandMessage) command).getCol();
+        if (command.getType() == CommandType.SELECT_WEAPON_MODE)
+            return ((WeaponModeCommandMessage) command).getWeaponMode();
         return "";
     }
 }

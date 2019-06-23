@@ -4,10 +4,10 @@ import it.polimi.ingsw.model.CardinalDirection;
 import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.Connection;
 import it.polimi.ingsw.model.PlayerId;
-import it.polimi.ingsw.view.ConcreteView;
 import it.polimi.ingsw.view.PlayerView;
 import it.polimi.ingsw.view.SquareView;
 import it.polimi.ingsw.view.TurretSquareView;
+import it.polimi.ingsw.view.*;
 
 public class CliManager {
 
@@ -20,18 +20,18 @@ public class CliManager {
     private final static String CORNER_TOP_LEFT = "╔";
     private final static int SQUARE_HEIGHT = 5;
 
-    public void displayAll(ConcreteView concreteView) {
-        for (int i = 0; i < concreteView.HEIGHT; i++)
+    public void displayAll(ModelView modelView) {
+        for (int i = 0; i < ModelView.HEIGHT; i++)
             for (int k = 0; k < SQUARE_HEIGHT; k++) {
-                for (int j = 0; j < concreteView.WIDTH; j++) {
-                    displaySquare(concreteView.getSquare(i, j), k);
+                for (int j = 0; j < ModelView.WIDTH; j++) {
+                    displaySquare(modelView.getSquareBoard(i, j), k);
                     System.out.printf(" ");
                 }
                 System.out.printf(" ");
-                displayRightSideInformation(i * SQUARE_HEIGHT + k, concreteView);
+                displayRightSideInformation(i * SQUARE_HEIGHT + k, modelView);
                 System.out.printf("%n");
             }
-        for (PlayerView player : concreteView.getEnemies().values())
+        for (PlayerView player : modelView.getEnemies().values())
             displayEnemiesInformation(player);
     }
 
@@ -127,52 +127,52 @@ public class CliManager {
 
     //TODO: implement SpawnSquare.getWeapons
 
-    private void displayRightSideInformation(int row, ConcreteView concreteView) {
+    private void displayRightSideInformation(int row, ModelView modelView) {
         switch (row) {
             case 1:
                 System.out.printf("BlueSpawn weapons: ");
-                concreteView.getWeaponsOnSpawn().get(Color.BLUE).forEach(weapon -> System.out.printf(weapon.toString() + "; "));
+                modelView.getWeaponsOnSpawn(Color.BLUE).forEach(weapon -> System.out.printf(weapon.toString() + "; "));
                 break;
             case 2:
                 System.out.printf("RedSpawn weapons: ");
-                concreteView.getWeaponsOnSpawn().get(Color.RED).forEach(weapon -> System.out.printf(weapon.toString() + "; "));
+                modelView.getWeaponsOnSpawn(Color.RED).forEach(weapon -> System.out.printf(weapon.toString() + "; "));
                 break;
             case 3:
                 System.out.printf("YellowSpawn weapons: ");
-                concreteView.getWeaponsOnSpawn().get(Color.YELLOW).forEach(weapon -> System.out.printf(weapon.toString() + "; "));
+                modelView.getWeaponsOnSpawn(Color.YELLOW).forEach(weapon -> System.out.printf(weapon.toString() + "; "));
                 break;
             case 4:
                 //System.out.printf("Skulls: " + match.getDeathsCounter());
                 break;
             case 5:
                 System.out.printf("Killshots: ");
-                concreteView.getMatch().getKillshotTrack().forEach(id -> System.out.printf(id.playerIdName().substring(0, 1) + " "));
-                System.out.printf("(" + concreteView.getMatch().getDeathsCounter() + " skulls left)");
+                modelView.getMatch().getKillshotTrack().forEach(id -> System.out.printf(id.playerIdName().substring(0, 1) + " "));
+                System.out.printf("(" + modelView.getMatch().getDeathsCounter() + " skulls left)");
                 break;
             case 7:
-                System.out.printf(concreteView.getMe().getId().playerIdName().toUpperCase() + " (" + concreteView.getMe().getNickname() + ")");
+                System.out.printf(modelView.getMe().getId().playerIdName().toUpperCase() + " (" + modelView.getMe().getNickname() + ")");
                 break;
             case 8:
-                System.out.printf("Dead " + concreteView.getMe().getDeaths() + " times");
+                System.out.printf("Dead " + modelView.getMe().getDeaths() + " times");
                 break;
             case 9:
                 System.out.printf("Weapons: ");
-                concreteView.getMe().getWeapons().forEach(weapon -> System.out.printf(weapon.toString() + (weapon.isLoaded() ? "; " : "(UNLOADED), ")));
+                modelView.getMe().getWeapons().forEach(weapon -> System.out.printf(weapon.toString() + (weapon.isLoaded() ? "; " : "(UNLOADED), ")));
                 break;
             case 10:
                 System.out.printf("Powerups: ");
-                concreteView.getMe().getPowerUps().forEach(powerUp -> System.out.printf(powerUp.toString() + " "));
+                modelView.getMe().getPowerUps().forEach(powerUp -> System.out.printf(powerUp.toString() + " "));
                 break;
             case 11:
                 System.out.printf("Ammos: ");
-                concreteView.getMe().getAmmo().forEach((color, value) -> System.out.printf(value + " " + color.colorName() + "; "));
+                modelView.getMe().getAmmo().forEach((color, value) -> System.out.printf(value + " " + color.colorName() + "; "));
                 break;
             case 12:
                 System.out.printf("Damages: ");
-                concreteView.getMe().getHealth().forEach(id -> System.out.printf(id.playerIdName().substring(0, 1)));
+                modelView.getMe().getHealth().forEach(id -> System.out.printf(id.playerIdName().substring(0, 1)));
                 //TODO: how remove hardcoded information about adrenalinic actions?
-                if (concreteView.getMe().getHealth().size() > 2)
-                    if (concreteView.getMe().getHealth().size() > 5)
+                if (modelView.getMe().getHealth().size() > 2)
+                    if (modelView.getMe().getHealth().size() > 5)
                         System.out.printf(" (azioni adrenaliniche lv 2 sbloccate)");
                     else
                         System.out.printf(" (azioni adrenaliniche lv 1 sbloccate)");
@@ -181,7 +181,7 @@ public class CliManager {
                 break;
             case 13:
                 System.out.printf("Marks: ");
-                concreteView.getMe().getMarks().forEach((id, n) -> System.out.printf(n + " from " + id.playerIdName() + "; "));
+                modelView.getMe().getMarks().forEach((id, n) -> System.out.printf(n + " from " + id.playerIdName() + "; "));
         }
     }
 
