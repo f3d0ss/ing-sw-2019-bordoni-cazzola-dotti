@@ -27,7 +27,7 @@ public class ConcreteView implements ViewInterface {
         modelView.setSquareBoard(row, col, sw);
         if (sw.getColor() != null)
             modelView.setWeaponsOnSpawn(sw.getColor(), ((SpawnSquareView) sw).getWeapons());
-        ui.refreshView(this);
+        ui.refreshView(modelView);
     }
 
     @Override

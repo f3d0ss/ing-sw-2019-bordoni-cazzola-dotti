@@ -1,6 +1,6 @@
 package it.polimi.ingsw.network.client;
 
-import it.polimi.ingsw.view.ConcreteView;
+import it.polimi.ingsw.view.ModelView;
 import it.polimi.ingsw.view.commandmessage.CommandMessage;
 import it.polimi.ingsw.view.gui.GuiManager;
 import javafx.application.Application;
@@ -32,7 +32,7 @@ public class Gui implements Ui, Runnable {
         return answer;
     }
 
-    public void refreshView(ConcreteView concreteView){
+    public void refreshView(ModelView modelView){
         //TODO:
     }
 

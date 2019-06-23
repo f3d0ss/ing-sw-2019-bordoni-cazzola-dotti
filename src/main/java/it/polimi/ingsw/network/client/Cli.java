@@ -1,7 +1,7 @@
 package it.polimi.ingsw.network.client;
 
 import it.polimi.ingsw.network.Protocol;
-import it.polimi.ingsw.view.ConcreteView;
+import it.polimi.ingsw.view.ModelView;
 import it.polimi.ingsw.view.cli.CliManager;
 import it.polimi.ingsw.view.commandmessage.*;
 
@@ -30,8 +30,8 @@ public class Cli implements Ui {
     public void run() {
     }
 
-    public void refreshView(ConcreteView concreteView){
-        cliManager.displayAll(concreteView);
+    public void refreshView(ModelView modelView){
+        cliManager.displayAll(modelView);
     }
 
     public int manageCommandChoice(List<CommandMessage> commands, boolean undo){
