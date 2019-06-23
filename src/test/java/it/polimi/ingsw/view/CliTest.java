@@ -1,8 +1,7 @@
 package it.polimi.ingsw.view;
 
 import it.polimi.ingsw.model.*;
-import it.polimi.ingsw.view.cli.Cli;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 
@@ -37,7 +36,8 @@ public class CliTest {
         player.addWeapon(new Weapon());
         enemy1.addWeapon(new Weapon());
         match.restoreCards();
-        Cli cli = new Cli(match.getBoard().getHeight(), match.getBoard().getWidth(), match, client);
-        cli.update("Test");
+        //TODO: remake cli test
+        //CliManager cli = new CliManager(match.getBoard().getHeight(), match.getBoard().getWidth(), match, client);
+        //cli.update("Test");
     }
 }

@@ -1,11 +1,12 @@
 package it.polimi.ingsw.model;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 
 public class PlayerTest {
 
@@ -24,7 +25,7 @@ public class PlayerTest {
         int colorcubes;
         int addingammo = 5;
 //        Map<Color,Integer> resources;
-        Player player = new Player(null, null, null);
+        Player player = new Player(new Match(), null, null);
         for (Color c : Color.values()) {
             ammo.put(c, 1);
             AmmoTile tile = new AmmoTile(0, ammo);
@@ -56,7 +57,7 @@ public class PlayerTest {
 
     @Test
     public void testAddDamage() {
-        Player player = new Player(null, null, null);
+        Player player = new Player(new Match(), null, null);
         assertEquals(player.isDead(), false);
         for (int i = 1; i < MAX_DAMAGE - 1; i++) {
             player.addDamage(1, PlayerId.GREEN);
@@ -74,7 +75,7 @@ public class PlayerTest {
         int marks;
 
         for (marks = 1; marks <= MAX_MARK; marks++) {
-            Player player = new Player(null, null, null);
+            Player player = new Player(new Match(), null, null);
             player.addMarks(marks, PlayerId.VIOLET);
             assertEquals(player.isDead(), false);
             for (int i = 1; i < MAX_DAMAGE - 1 - marks; i++) {
@@ -85,7 +86,7 @@ public class PlayerTest {
             assertEquals(player.isDead(), true);
         }
 
-        Player player = new Player(null, null, null);
+        Player player = new Player(new Match(), null, null);
         player.addMarks(marks, PlayerId.VIOLET);
         assertEquals(player.isDead(), false);
         for (int i = 1; i < MAX_DAMAGE - 1 - MAX_MARK; i++) {

@@ -4,6 +4,9 @@ import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.Weapon;
 import it.polimi.ingsw.model.playerstate.ChoosingWeaponOptionState;
 import it.polimi.ingsw.model.playerstate.ChoosingWeaponState;
+import it.polimi.ingsw.view.commandmessage.CommandMessage;
+import it.polimi.ingsw.view.commandmessage.CommandType;
+import it.polimi.ingsw.view.commandmessage.WeaponCommandMessage;
 
 /**
  * This command represent the action of select a weapon
@@ -48,5 +51,10 @@ public class SelectWeaponCommand implements Command {
     @Override
     public boolean isUndoable() {
         return true;
+    }
+
+    @Override
+    public CommandMessage createCommandMessage() {
+        return new WeaponCommandMessage(CommandType.SELECT_WEAPON, weapon.getName());
     }
 }

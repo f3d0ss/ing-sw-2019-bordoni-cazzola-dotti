@@ -3,12 +3,11 @@ package it.polimi.ingsw.model.command;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.PlayerId;
 import it.polimi.ingsw.model.Square;
-import it.polimi.ingsw.model.exception.IllegalUndoException;
 
 /**
  * This command represent an effect that a weapon can have on a single player
  */
-public class EffectCommand implements Command {
+public class EffectCommand {
     private Player player;
     private int damage;
     private int marks;
@@ -33,29 +32,10 @@ public class EffectCommand implements Command {
     /**
      * This method execute the single effect of the shoot
      */
-    @Override
     public void execute() {
         player.addDamage(damage, shooter);
         player.addMarks(marks, shooter);
-        player.getPosition().removePlayer(player);
         player.move(arrivalSquare);
-        player.getPosition().addPlayer(player);
-    }
-
-    /**
-     * This method throw an exception because after a shoot you can't go back
-     */
-    @Override
-    public void undo() {
-        throw new IllegalUndoException();
-    }
-
-    /**
-     * @return true if the command is undoable
-     */
-    @Override
-    public boolean isUndoable() {
-        return false;
     }
 
     /**

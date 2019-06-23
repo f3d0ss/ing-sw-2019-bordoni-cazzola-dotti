@@ -5,6 +5,9 @@ import it.polimi.ingsw.model.exception.IllegalUndoException;
 import it.polimi.ingsw.model.playerstate.ManageTurnState;
 import it.polimi.ingsw.model.playerstate.ReadyToShootState;
 import it.polimi.ingsw.model.playerstate.ScopeState;
+import it.polimi.ingsw.view.commandmessage.CommandMessage;
+import it.polimi.ingsw.view.commandmessage.CommandType;
+import it.polimi.ingsw.view.commandmessage.SimpleCommandMessage;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -66,5 +69,10 @@ public class ShootCommand implements WeaponCommand {
     @Override
     public boolean isUndoable() {
         return false;
+    }
+
+    @Override
+    public CommandMessage createCommandMessage() {
+        return new SimpleCommandMessage(CommandType.SHOOT);
     }
 }

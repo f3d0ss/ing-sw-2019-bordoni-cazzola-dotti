@@ -3,6 +3,9 @@ package it.polimi.ingsw.model.command;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.playerstate.ChoosingWeaponState;
 import it.polimi.ingsw.model.playerstate.SelectedAggregateActionState;
+import it.polimi.ingsw.view.commandmessage.CommandMessage;
+import it.polimi.ingsw.view.commandmessage.CommandType;
+import it.polimi.ingsw.view.commandmessage.SimpleCommandMessage;
 
 /**
  * This command represent the action of select a shoot action
@@ -44,5 +47,10 @@ public class SelectShootActionCommand implements Command {
     @Override
     public boolean isUndoable() {
         return true;
+    }
+
+    @Override
+    public CommandMessage createCommandMessage() {
+        return new SimpleCommandMessage(CommandType.SELECT_SHOOT_ACTION);
     }
 }

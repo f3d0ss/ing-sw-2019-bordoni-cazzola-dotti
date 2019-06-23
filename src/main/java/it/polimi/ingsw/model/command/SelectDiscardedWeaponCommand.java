@@ -4,6 +4,9 @@ import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.Weapon;
 import it.polimi.ingsw.model.playerstate.DiscardingWeaponState;
 import it.polimi.ingsw.model.playerstate.PendingPaymentWeaponState;
+import it.polimi.ingsw.view.commandmessage.CommandMessage;
+import it.polimi.ingsw.view.commandmessage.CommandType;
+import it.polimi.ingsw.view.commandmessage.WeaponCommandMessage;
 
 /**
  * This command represent the action of discard a weapon used only when a player has already 3 weapons
@@ -58,5 +61,10 @@ public class SelectDiscardedWeaponCommand implements Command {
     @Override
     public boolean isUndoable() {
         return true;
+    }
+
+    @Override
+    public CommandMessage createCommandMessage() {
+        return new WeaponCommandMessage(CommandType.SELECT_DISCARD_WEAPON, weaponToDiscard.getName());
     }
 }

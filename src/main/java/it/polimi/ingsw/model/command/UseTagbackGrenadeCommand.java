@@ -4,6 +4,9 @@ import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.PowerUp;
 import it.polimi.ingsw.model.exception.IllegalUndoException;
 import it.polimi.ingsw.model.playerstate.IdleState;
+import it.polimi.ingsw.view.commandmessage.CommandMessage;
+import it.polimi.ingsw.view.commandmessage.CommandType;
+import it.polimi.ingsw.view.commandmessage.PowerUpCommandMessage;
 
 /**
  * This command represent the action of use a tagback grenade
@@ -47,5 +50,10 @@ public class UseTagbackGrenadeCommand implements Command {
     @Override
     public boolean isUndoable() {
         return false;
+    }
+
+    @Override
+    public CommandMessage createCommandMessage() {
+        return new PowerUpCommandMessage(CommandType.USE_TAGBACK_GRENADE, grenade.getType(), grenade.getColor());
     }
 }

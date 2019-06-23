@@ -2,6 +2,9 @@ package it.polimi.ingsw.model.command;
 
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.playerstate.TargetingPlayerState;
+import it.polimi.ingsw.view.commandmessage.CommandMessage;
+import it.polimi.ingsw.view.commandmessage.CommandType;
+import it.polimi.ingsw.view.commandmessage.PlayerCommandMessage;
 
 /**
  * This command represent the action of select a player as target
@@ -43,5 +46,10 @@ public class SelectTargetPlayerCommand implements WeaponCommand {
     @Override
     public boolean isUndoable() {
         return true;
+    }
+
+    @Override
+    public CommandMessage createCommandMessage() {
+        return new PlayerCommandMessage(CommandType.SELECT_TARGET_PLAYER, targetPlayer.getId());
     }
 }

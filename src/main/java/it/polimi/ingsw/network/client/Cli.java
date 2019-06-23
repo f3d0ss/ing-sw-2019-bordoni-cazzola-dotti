@@ -1,35 +1,51 @@
 package it.polimi.ingsw.network.client;
 
 import it.polimi.ingsw.network.Protocol;
+import it.polimi.ingsw.view.ModelView;
+import it.polimi.ingsw.view.cli.CliManager;
 
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
 public class Cli implements Ui {
 
-    Scanner stdin = new Scanner(System.in);
+    private Scanner stdin = new Scanner(System.in);
+    private CliManager cliManager = new CliManager();
+    private final static int FIRST_CHOICE_NUMBER = 1;
 
     public String showMessage(String toBeShown, List<String> possibleAnswers, boolean isAnswerRequired) {
         System.out.println(toBeShown);
         if (!isAnswerRequired)
-            return Protocol.ack;
-        else if (possibleAnswers == null)
+            return Protocol.ACK;
+        if (possibleAnswers == null)
             return stdin.nextLine();
         int choice;
         for (int i = 0; i < possibleAnswers.size(); i++)
-            System.out.println("(" + (i + 1) + ") " + possibleAnswers.get(i));
-        choice = stdin.nextInt();
-        stdin.nextLine();
-        while (choice > possibleAnswers.size() || choice < 1) {
-            System.out.println("Risposta non valida. Riprova:");
+            System.out.println("(" + (i + FIRST_CHOICE_NUMBER) + ") " + possibleAnswers.get(i));
+        try {
             choice = stdin.nextInt();
             stdin.nextLine();
+        } catch (InputMismatchException e) {
+            choice = FIRST_CHOICE_NUMBER - 1;
         }
-        return possibleAnswers.get(choice - 1);
+        while (choice >= possibleAnswers.size() + FIRST_CHOICE_NUMBER || choice < FIRST_CHOICE_NUMBER) {
+            System.out.println("Risposta non valida. Riprova:");
+            try {
+                choice = stdin.nextInt();
+                stdin.nextLine();
+            } catch (InputMismatchException e) {
+                choice = FIRST_CHOICE_NUMBER - 1;
+            }
+        }
+        return possibleAnswers.get(choice - FIRST_CHOICE_NUMBER);
     }
 
     @Override
     public void run() {
+    }
 
+    public void showGame(ModelView modelView) {
+        cliManager.displayAll(modelView);
     }
 }

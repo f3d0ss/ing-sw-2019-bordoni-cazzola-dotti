@@ -3,6 +3,9 @@ package it.polimi.ingsw.model.command;
 import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.playerstate.PendingPaymentState;
+import it.polimi.ingsw.view.commandmessage.ColorCommandMessage;
+import it.polimi.ingsw.view.commandmessage.CommandMessage;
+import it.polimi.ingsw.view.commandmessage.CommandType;
 
 /**
  * This command represent the action of select an ammo for a payment
@@ -45,4 +48,11 @@ public class SelectAmmoPaymentCommand extends SelectPaymentCommand {
     public boolean isUndoable() {
         return true;
     }
+
+    @Override
+    public CommandMessage createCommandMessage() {
+        return new ColorCommandMessage(CommandType.SELECT_AMMO_PAYMENT, color);
+    }
+
+
 }

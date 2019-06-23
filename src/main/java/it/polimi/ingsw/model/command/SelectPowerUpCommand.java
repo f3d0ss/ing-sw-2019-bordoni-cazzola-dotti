@@ -6,6 +6,9 @@ import it.polimi.ingsw.model.PowerUpID;
 import it.polimi.ingsw.model.playerstate.ManageTurnState;
 import it.polimi.ingsw.model.playerstate.SelectedNewtonState;
 import it.polimi.ingsw.model.playerstate.SelectedTeleporterState;
+import it.polimi.ingsw.view.commandmessage.CommandMessage;
+import it.polimi.ingsw.view.commandmessage.CommandType;
+import it.polimi.ingsw.view.commandmessage.PowerUpCommandMessage;
 
 /**
  * This command represent the action of select a power up
@@ -55,5 +58,10 @@ public class SelectPowerUpCommand implements Command {
     @Override
     public boolean isUndoable() {
         return true;
+    }
+
+    @Override
+    public CommandMessage createCommandMessage() {
+        return new PowerUpCommandMessage(CommandType.SELECT_POWER_UP, powerUp.getType(), powerUp.getColor());
     }
 }

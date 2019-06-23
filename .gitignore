@@ -31,3 +31,8 @@ target/
 
 # dolphin
 *.directory
+
+# Eclipse
+.classpath
+.project
+.settings/

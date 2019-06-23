@@ -4,6 +4,9 @@ import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.PowerUp;
 import it.polimi.ingsw.model.playerstate.PendingPaymentScopeState;
 import it.polimi.ingsw.model.playerstate.ScopeState;
+import it.polimi.ingsw.view.commandmessage.CommandMessage;
+import it.polimi.ingsw.view.commandmessage.CommandType;
+import it.polimi.ingsw.view.commandmessage.PowerUpCommandMessage;
 
 /**
  * This command represent the action of select a scope
@@ -50,5 +53,10 @@ public class SelectScopeCommand implements Command {
     @Override
     public boolean isUndoable() {
         return true;
+    }
+
+    @Override
+    public CommandMessage createCommandMessage() {
+        return new PowerUpCommandMessage(CommandType.SELECT_SCOPE, powerUp.getType(), powerUp.getColor());
     }
 }

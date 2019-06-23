@@ -12,11 +12,13 @@ import java.rmi.server.UnicastRemoteObject;
 
 public class RmiServer implements Runnable {
 
-    RmiServerImplementation server;
+    private RmiServerImplementation server;
     private ServerManager serverManager;
+    private int port;
 
-    public RmiServer(ServerManager serverManager) {
+    public RmiServer(ServerManager serverManager, int port) {
         this.serverManager = serverManager;
+        this.port = port;
     }
 
     public void run() {
@@ -31,7 +33,7 @@ public class RmiServer implements Runnable {
         serverManager.addClient(client);
         int number = serverManager.getNumber(client);
         System.out.println("User " + number + " accettato sul RmiServer.");
-        serverManager.addClientToLobby(number);
+        new Thread(new ClientReception(serverManager, number)).start();
     }
 
     public void unregistry(RmiClientInterface client) {
@@ -48,10 +50,10 @@ public class RmiServer implements Runnable {
         } catch (UnknownHostException e) {
         }
         server = new RmiServerImplementation(this);
-        RmiServerInterface stub = (RmiServerInterface) UnicastRemoteObject.exportObject(server, 39000);
-        LocateRegistry.createRegistry(1099);
-        Registry registry = LocateRegistry.getRegistry(1099);
-        registry.bind("adrenaline", stub);
+        RmiServerInterface stub = (RmiServerInterface) UnicastRemoteObject.exportObject(server, 0);
+        LocateRegistry.createRegistry(port);
+        Registry registry = LocateRegistry.getRegistry(port);
+        registry.bind(RmiServerInterface.NAME, stub);
         System.out.println("RmiServer avviato.");
         serverManager.setRmiReady();
     }
