@@ -61,6 +61,10 @@ public class ServerManager implements Runnable {
         idClient++;
     }
 
+    public String getNickname(int playerId){
+        return nicknames.get(playerId);
+    }
+
     public void addClientToLog(int temporaryId) {
         connected.add(temporaryId);
         String code;
@@ -225,6 +229,7 @@ public class ServerManager implements Runnable {
             activeMatches.put(i, match);
             nicknames.put(i, lobby.get(i));
         });
+        gamers.values().forEach(v -> ((VirtualView)v).setController(match));
         match.runMatch();
     }
 
