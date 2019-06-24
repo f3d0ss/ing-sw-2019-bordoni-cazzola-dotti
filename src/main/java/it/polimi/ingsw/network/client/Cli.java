@@ -48,7 +48,7 @@ public class Cli implements Ui {
         commands.forEach(c -> possibleAnswers.add(c.getType().getString() + getParameter(c)));
         System.out.println("Scegli una delle seguenti opzioni:");
         showPossibleAnswers(possibleAnswers);
-        return askChoiceByNumber(possibleAnswers.size());
+        return askChoiceByNumber(possibleAnswers.size()) - FIRST_CHOICE_NUMBER;
     }
 
     private void showPossibleAnswers(List<String> possibleAnswers){

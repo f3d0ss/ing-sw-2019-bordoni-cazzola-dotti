@@ -11,4 +11,8 @@ public class PowerUpView {
         this.type = type;
         this.color = color;
     }
+
+    public String getName() {
+        return type.powerUpName();
+    }
 }

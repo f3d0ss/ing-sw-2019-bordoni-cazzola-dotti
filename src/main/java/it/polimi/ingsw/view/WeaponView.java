@@ -12,4 +12,8 @@ public class WeaponView {
     public boolean isLoaded() {
         return loaded;
     }
+
+    public String getName() {
+        return name;
+    }
 }
