@@ -10,7 +10,8 @@ public class ManageTurnState implements PlayerState {
     @Override
     public List<Command> getPossibleCommands(Player player) {
         List<Command> commands = new ArrayList<>();
-        player.getPossibleAggregateAction().forEach(aggregateAction -> commands.add(new SelectAggregateActionCommand(player, aggregateAction, this)));
+        if (player.getAvailableAggregateActionCounter() > 0)
+            player.getPossibleAggregateAction().forEach(aggregateAction -> commands.add(new SelectAggregateActionCommand(player, aggregateAction, this)));
         if (commands.isEmpty()) {
             commands.add(new DoneCommand(player, this));
             player.getWeapons().forEach(weapon -> {

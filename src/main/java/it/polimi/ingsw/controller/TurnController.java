@@ -40,19 +40,7 @@ class TurnController {
             else {
                 Command commandToExecute = possibleCommands.get(numberOfCommandPicked);
                 commandToExecute.execute();
-                for (Player p : otherPlayers) {
-                    if (!p.isDisconnected()) {
-                        List<Command> commands = p.getPossibleCommands();
-                        while (commands != null && !commands.isEmpty()) {
-                            int i = virtualViews.get(p.getId()).sendCommands(commands.stream()
-                                    .map(Command::createCommandMessage)
-                                    .collect(Collectors.toList()), false);
-                            if (i == -1)
-                                break;
-                            commands.get(i).execute();
-                        }
-                    }
-                }
+                //TODO fix handleOtherPlayersCommands();
                 //add to stack if undoable
                 if (commandToExecute.isUndoable())
                     commandStack.push(commandToExecute);
@@ -61,6 +49,22 @@ class TurnController {
             }
             //get new commands
             possibleCommands = currentPlayer.getPossibleCommands();
+        }
+    }
+
+    private void handleOtherPlayersCommands() {
+        for (Player p : otherPlayers) {
+            if (!p.isDisconnected()) {
+                List<Command> commands = p.getPossibleCommands();
+                while (commands != null && !commands.isEmpty()) {
+                    int i = virtualViews.get(p.getId()).sendCommands(commands.stream()
+                            .map(Command::createCommandMessage)
+                            .collect(Collectors.toList()), false);
+                    if (i == -1)
+                        break;
+                    commands.get(i).execute();
+                }
+            }
         }
     }
 }
