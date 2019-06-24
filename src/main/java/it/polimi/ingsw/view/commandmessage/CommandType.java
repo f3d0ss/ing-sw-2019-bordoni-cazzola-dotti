@@ -93,6 +93,10 @@ public enum CommandType {
         public String getString() {
             return "Usa il teletrasporto";
         }
+    }, UNDO {
+        public String getString() {
+            return "Annulla";
+        }
     };
 
     public abstract String getString();
