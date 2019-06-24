@@ -18,6 +18,8 @@ public class ConcreteView implements ViewInterface {
     @Override
     public void update(MatchView mw) {
         modelView.setMatch(mw);
+        if(ui.isViewInitializationDone())
+            ui.refreshView(modelView);
     }
 
     @Override
@@ -27,6 +29,8 @@ public class ConcreteView implements ViewInterface {
         modelView.setSquareBoard(row, col, sw);
         if (sw.getColor() != null)
             modelView.setWeaponsOnSpawn(sw.getColor(), ((SpawnSquareView) sw).getWeapons());
+        if(ui.isViewInitializationDone())
+            ui.refreshView(modelView);
     }
 
     @Override
@@ -35,6 +39,8 @@ public class ConcreteView implements ViewInterface {
             modelView.setMe(pw);
         else
             modelView.setEnemie(pw.getId(), pw);
+        if(ui.isViewInitializationDone())
+            ui.refreshView(modelView);
     }
 
     @Override
