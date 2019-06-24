@@ -12,7 +12,7 @@ public class SpawnSquareView extends SquareView {
     private List<WeaponView> weapons;
 
     public SpawnSquareView(int row, int col, Map<CardinalDirection, Connection> connection, Color color, List<WeaponView> weapons, List<PlayerId> hostedPlayers) {
-        super(row, col, connection, color, hostedPlayers);
+        super(row, col, connection, color, hostedPlayers, "spawn");
         this.weapons = weapons;
     }
 

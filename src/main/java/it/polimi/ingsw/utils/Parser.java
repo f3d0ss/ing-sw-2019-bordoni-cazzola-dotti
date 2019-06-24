@@ -6,6 +6,9 @@ import it.polimi.ingsw.model.SpawnSquare;
 import it.polimi.ingsw.model.Square;
 import it.polimi.ingsw.model.TurretSquare;
 import it.polimi.ingsw.network.*;
+import it.polimi.ingsw.view.SpawnSquareView;
+import it.polimi.ingsw.view.SquareView;
+import it.polimi.ingsw.view.TurretSquareView;
 import it.polimi.ingsw.view.commandmessage.*;
 
 import java.io.Reader;
@@ -24,6 +27,11 @@ public class Parser {
                 .of(Square.class, "type")
                 .registerSubtype(SpawnSquare.class, "spawn")
                 .registerSubtype(TurretSquare.class, "turret");
+
+        RuntimeTypeAdapterFactory<SquareView> squareRuntimeTypeAdapterFactory= RuntimeTypeAdapterFactory
+                .of(SquareView.class, "type")
+                .registerSubtype(SpawnSquareView.class, "spawn")
+                .registerSubtype(TurretSquareView.class, "turret");
 
         RuntimeTypeAdapterFactory<CommandMessage> commandMessageRuntimeTypeAdapterFactory = RuntimeTypeAdapterFactory
                 .of(CommandMessage.class, "jsonType")
@@ -46,6 +54,7 @@ public class Parser {
 
         gson = new GsonBuilder()
                 .registerTypeAdapterFactory(runtimeTypeAdapterFactory)
+                .registerTypeAdapterFactory(squareRuntimeTypeAdapterFactory)
                 .registerTypeAdapterFactory(commandMessageRuntimeTypeAdapterFactory)
                 .registerTypeAdapterFactory(messageRuntimeTypeAdapterFactory)
                 .create();

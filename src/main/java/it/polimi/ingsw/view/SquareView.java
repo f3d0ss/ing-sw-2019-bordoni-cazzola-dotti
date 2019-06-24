@@ -14,13 +14,15 @@ public abstract class SquareView {
     private final Map<CardinalDirection, Connection> connection;
     private final Color color;
     private final List<PlayerId> hostedPlayers;
+    private final String type;
 
-    public SquareView(int row, int col, Map<CardinalDirection, Connection> connection, Color color, List<PlayerId> hostedPlayers) {
+    public SquareView(int row, int col, Map<CardinalDirection, Connection> connection, Color color, List<PlayerId> hostedPlayers, String type) {
         this.row = row;
         this.col = col;
         this.connection = connection;
         this.color = color;
         this.hostedPlayers = hostedPlayers;
+        this.type = type;
     }
 
     public int getRow() {

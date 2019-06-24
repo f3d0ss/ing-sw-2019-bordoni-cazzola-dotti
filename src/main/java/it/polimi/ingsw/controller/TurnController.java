@@ -31,8 +31,10 @@ class TurnController {
         while (possibleCommands != null) {
             int numberOfCommandPicked = virtualViews.get(currentPlayer.getId())
                     .sendCommands(possibleCommands.stream()
-                            .map(c -> c.createCommandMessage())
+                            .map(Command::createCommandMessage)
                             .collect(Collectors.toList()), !commandStack.isEmpty());
+            if (numberOfCommandPicked == -1)
+                break;
             Command commandToExecute = possibleCommands.get(numberOfCommandPicked);
             commandToExecute.execute();
             for (Player p : otherPlayers) {
@@ -40,8 +42,10 @@ class TurnController {
                     List<Command> commands = p.getPossibleCommands();
                     while (commands != null && commands.isEmpty()) {
                         int i = virtualViews.get(p.getId()).sendCommands(commands.stream()
-                                .map(c -> c.createCommandMessage())
+                                .map(Command::createCommandMessage)
                                 .collect(Collectors.toList()), false);
+                        if (i == -1)
+                            break;
                         commands.get(i).execute();
                     }
                 }

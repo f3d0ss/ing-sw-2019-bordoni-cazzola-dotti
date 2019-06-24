@@ -11,7 +11,7 @@ public class TurretSquareView extends SquareView {
     private final AmmoTileView ammoTile;
 
     public TurretSquareView(int row, int col, Map<CardinalDirection, Connection> connection, AmmoTileView ammoTile, List<PlayerId> hostedPlayers) {
-        super(row, col, connection, null, hostedPlayers);
+        super(row, col, connection, null, hostedPlayers, "turret");
         this.ammoTile = ammoTile;
     }
 

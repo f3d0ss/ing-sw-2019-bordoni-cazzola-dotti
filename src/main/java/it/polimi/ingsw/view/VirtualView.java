@@ -24,21 +24,21 @@ public class VirtualView implements ViewInterface {
 
     @Override
     public void update(MatchView mw) {
-        if(serverManager.sendMessageAndWaitForAnswer(playerId, new MatchViewTransfer(mw)).equals(Protocol.ERR)) {
+        if (serverManager.sendMessageAndWaitForAnswer(playerId, new MatchViewTransfer(mw)).equals(Protocol.ERR)) {
             controller.disconnect(serverManager.getNickname(playerId));
         }
     }
 
     @Override
     public void update(SquareView sw) {
-        if(serverManager.sendMessageAndWaitForAnswer(playerId, new SquareViewTransfer(sw)).equals(Protocol.ERR)) {
+        if (serverManager.sendMessageAndWaitForAnswer(playerId, new SquareViewTransfer(sw)).equals(Protocol.ERR)) {
             controller.disconnect(serverManager.getNickname(playerId));
         }
     }
 
     @Override
     public void update(PlayerView pw) {
-        if(serverManager.sendMessageAndWaitForAnswer(playerId, new PlayerViewTransfer(pw)).equals(Protocol.ERR)) {
+        if (serverManager.sendMessageAndWaitForAnswer(playerId, new PlayerViewTransfer(pw)).equals(Protocol.ERR)) {
             controller.disconnect(serverManager.getNickname(playerId));
         }
     }
@@ -47,14 +47,17 @@ public class VirtualView implements ViewInterface {
     public int sendCommands(List<CommandMessage> commands, boolean undo) {
         int answer;
         String choice = serverManager.sendMessageAndWaitForAnswer(playerId, new CommandViewTransfer(commands, undo));
-        if(choice.equals(Protocol.ERR)) {
+        if (choice.equals(Protocol.ERR)) {
+            System.out.println("VV ERRORE");
             controller.disconnect(serverManager.getNickname(playerId));
-            return 1;//TODO: is the default choice the first one?
+            System.out.println("VV DISCONNESSO");
+            return -1;//TODO maybe throw exception
         }
-        try{
+        try {
+            //useless
             answer = Integer.parseInt(choice);
-        }catch (NumberFormatException e){
-            answer = 1;
+        } catch (NumberFormatException e) {
+            answer = -1;
         }
         return answer;
     }

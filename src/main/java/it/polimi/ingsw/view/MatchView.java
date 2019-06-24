@@ -23,4 +23,8 @@ public class MatchView {
     public List<PlayerId> getKillshotTrack() {
         return killshotTrack;
     }
+
+    public int getGameBoardId() {
+        return gameBoardId;
+    }
 }
