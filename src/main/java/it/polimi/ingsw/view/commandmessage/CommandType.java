@@ -11,7 +11,7 @@ public enum CommandType {
         }
     }, MOVE {
         public String getString() {
-            return "Muovi";
+            return "Muovi in ";
         }
     }, PAY {
         public String getString() {
@@ -19,11 +19,11 @@ public enum CommandType {
         }
     }, RESPAWN {
         public String getString() {
-            return "Rigenera";
+            return "Rigenera usando ";
         }
     }, SELECT_AGGREGATE_ACTION {
         public String getString() {
-            return "Scegli la tua mossa";
+            return "";
         }
     }, SELECT_AMMO_PAYMENT {
         public String getString() {
@@ -39,7 +39,7 @@ public enum CommandType {
         }
     }, SELECT_POWER_UP {
         public String getString() {
-            return "Seleziona il potenziamento che vuoi usare";
+            return "Usa il potenziamento ";
         }
     }, SELECT_POWER_UP_PAYMENT {
         public String getString() {
