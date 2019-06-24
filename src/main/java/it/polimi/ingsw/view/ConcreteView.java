@@ -27,19 +27,25 @@ public class ConcreteView implements ViewInterface {
         modelView.setSquareBoard(row, col, sw);
         if (sw.getColor() != null)
             modelView.setWeaponsOnSpawn(sw.getColor(), ((SpawnSquareView) sw).getWeapons());
-        ui.refreshView(modelView);
     }
 
     @Override
     public void update(PlayerView pw) {
-        if (pw.getId() == modelView.getMyId())
+        if (pw.isMe())
             modelView.setMe(pw);
         else
             modelView.setEnemie(pw.getId(), pw);
     }
 
     @Override
+    public void setViewInitializationDone() {
+        ui.setViewInitializationDone();
+    }
+
+    @Override
     public int sendCommands(List<CommandMessage> commands, boolean undo) {
+        if(ui.isViewInitializationDone())
+            ui.refreshView(modelView);
         return ui.manageCommandChoice(commands, undo);
     }
 }

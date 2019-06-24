@@ -12,5 +12,7 @@ public interface ViewInterface {
 
     void update(PlayerView pw);
 
+    void setViewInitializationDone();
+
     int sendCommands(List<CommandMessage> commands, boolean undo);
 }

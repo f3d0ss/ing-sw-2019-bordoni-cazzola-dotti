@@ -15,6 +15,7 @@ public class Gui implements Ui, Runnable {
     private String answer = "";
     private boolean ready = false;
     private boolean inputReady = false;
+    private boolean initializationDone = false;
     private static final int TIME_TO_SLEEP = 100;
 
     public String showMessage(String toBeShown, List<String> possibleAnswers, boolean isAnswerRequired) {
@@ -34,6 +35,14 @@ public class Gui implements Ui, Runnable {
 
     public void refreshView(ModelView modelView){
         //TODO:
+    }
+
+    public void setViewInitializationDone() {
+        initializationDone = true;
+    }
+
+    public boolean isViewInitializationDone() {
+        return initializationDone;
     }
 
     public void setAnswer(String answer) {

@@ -14,6 +14,7 @@ public class Cli implements Ui {
 
     private Scanner stdin = new Scanner(System.in);
     private CliManager cliManager = new CliManager();
+    private boolean initializationDone = false;
     private final static int FIRST_CHOICE_NUMBER = 1;
 
     public String showMessage(String toBeShown, List<String> possibleAnswers, boolean isAnswerRequired) {
@@ -32,6 +33,14 @@ public class Cli implements Ui {
 
     public void refreshView(ModelView modelView){
         cliManager.displayAll(modelView);
+    }
+
+    public void setViewInitializationDone() {
+        initializationDone = true;
+    }
+
+    public boolean isViewInitializationDone() {
+        return initializationDone;
     }
 
     public int manageCommandChoice(List<CommandMessage> commands, boolean undo){
