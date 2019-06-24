@@ -8,6 +8,7 @@ import java.util.Map;
 
 public class PlayerView {
     private final PlayerId id;
+    private final boolean isMe;
     private final List<PlayerId> health;
     private final int deaths;
     private final Map<PlayerId, Integer> marks;
@@ -19,8 +20,9 @@ public class PlayerView {
     private final boolean flippedBoard;
     private final boolean disconnected;
 
-    public PlayerView(PlayerId id, List<PlayerId> health, int deaths, Map<PlayerId, Integer> marks, String nickname, List<WeaponView> weapons, List<PowerUpView> powerUps, Map<Color, Integer> ammo, int availableAggregateActionCounter, boolean flippedBoard, boolean disconnected) {
+    public PlayerView(PlayerId id, boolean isMe, List<PlayerId> health, int deaths, Map<PlayerId, Integer> marks, String nickname, List<WeaponView> weapons, List<PowerUpView> powerUps, Map<Color, Integer> ammo, int availableAggregateActionCounter, boolean flippedBoard, boolean disconnected) {
         this.id = id;
+        this.isMe = isMe;
         this.health = health;
         this.deaths = deaths;
         this.marks = marks;
@@ -35,6 +37,10 @@ public class PlayerView {
 
     public PlayerId getId() {
         return id;
+    }
+
+    public boolean isMe() {
+        return isMe;
     }
 
     public String getNickname() {
