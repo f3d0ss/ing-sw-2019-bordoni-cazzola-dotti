@@ -318,20 +318,11 @@
                                       prefHeight="${mainPane.height*125/925}"
                                       prefWidth="700">
                                     <children>
-                                        <HBox id="playerPowerUpContainer" fx:id="playerPowerUpContainer">
+                                        <HBox id="playerPowerUpContainer" fx:id="playerPowerUpContainer"
+                                              prefHeight="${playerCardContainer.height}"
+                                              prefWidth="${mainPane.width*500/1645*452/700}">
                                             <children>
-                                                <HBox prefHeight="${playerCardContainer.height}"
-                                                      prefWidth="${mainPane.width*500/1645*113/700}"
-                                                      styleClass="playerPowerUPTest"/>
-                                                <HBox prefHeight="${playerCardContainer.height}"
-                                                      prefWidth="${mainPane.width*500/1645*113/700}"
-                                                      styleClass="playerPowerUPTest"/>
-                                                <HBox prefHeight="${playerCardContainer.height}"
-                                                      prefWidth="${mainPane.width*500/1645*113/700}"
-                                                      styleClass="playerPowerUPTest"/>
-                                                <HBox prefHeight="${playerCardContainer.height}"
-                                                      prefWidth="${mainPane.width*500/1645*113/700}"
-                                                      styleClass="playerPowerUPTest"/>
+
                                             </children>
                                         </HBox>
                                         <HBox id="playerWeaponContainer" fx:id="playerWeaponContainer">

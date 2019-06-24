@@ -18,6 +18,7 @@ public class PlayerView {
     private final Map<Color, Integer> ammo;
     private final int availableAggregateActionCounter;
     private final boolean flippedBoard;
+
     private final boolean disconnected;
 
     public PlayerView(PlayerId id, boolean isMe, List<PlayerId> health, int deaths, Map<PlayerId, Integer> marks, String nickname, List<WeaponView> weapons, List<PowerUpView> powerUps, Map<Color, Integer> ammo, int availableAggregateActionCounter, boolean flippedBoard, boolean disconnected) {
@@ -69,5 +70,9 @@ public class PlayerView {
 
     public Map<PlayerId, Integer> getMarks() {
         return marks;
+    }
+
+    public boolean isFlippedBoard() {
+        return flippedBoard;
     }
 }

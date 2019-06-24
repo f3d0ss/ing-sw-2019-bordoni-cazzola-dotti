@@ -15,6 +15,11 @@ public enum Color {
         public String colorName() {
             return "Blue";
         }
+
+        @Override
+        public String colorID() {
+            return "blue";
+        }
     },
 
     /**
@@ -24,6 +29,11 @@ public enum Color {
         @Override
         public String colorName() {
             return "Red";
+        }
+
+        @Override
+        public String colorID() {
+            return "red";
         }
     },
 
@@ -35,7 +45,14 @@ public enum Color {
         public String colorName() {
             return "Yellow";
         }
+
+        @Override
+        public String colorID() {
+            return "yellow";
+        }
     };
 
     public abstract String colorName();
+
+    public abstract String colorID();
 }

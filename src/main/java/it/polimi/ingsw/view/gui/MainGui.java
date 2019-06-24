@@ -33,6 +33,7 @@ public class MainGui extends Application {
         Scene scene = new Scene(base);
         primaryStage.setScene(scene);
         primaryStage.setFullScreen(true);
+        //controller.serModelView(modelView);
         primaryStage.show();
     }
 
