@@ -19,7 +19,7 @@ public class TurretSquare extends Square {
 
     @Override
     protected void update() {
-        match.getVirtualViews().forEach(viewInterface -> viewInterface.update(new TurretSquareView(getRow(), getCol(), getConnections(), new AmmoTileView(ammoTile.getPowerUp(), ammoTile.getAmmo()), getHostedPlayers().stream().map(Player::getId).collect(Collectors.toList()))));
+        match.getAllVirtualViews().forEach(viewInterface -> viewInterface.update(new TurretSquareView(getRow(), getCol(), getConnections(), new AmmoTileView(ammoTile.getPowerUp(), ammoTile.getAmmo()), getHostedPlayers().stream().map(Player::getId).collect(Collectors.toList()))));
     }
 
     @Override
