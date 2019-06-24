@@ -15,7 +15,7 @@ public class ModelView {
     private PlayerView me;
     private PlayerId myId;
     private Map<PlayerId, PlayerView> enemies = new HashMap<>();
-    private Map<Color, List<WeaponView>> weaponsOnSpawn;
+    private Map<Color, List<WeaponView>> weaponsOnSpawn = new HashMap<>();
     private SquareView[][] board = new SquareView[HEIGHT][WIDTH];
 
     public MatchView getMatch() {
@@ -48,10 +48,6 @@ public class ModelView {
 
     public void setEnemie(PlayerId playerId, PlayerView enemie) {
         this.enemies.put(playerId, enemie);
-    }
-
-    public Map<Color, List<WeaponView>> getWeaponsOnSpawn() {
-        return weaponsOnSpawn;
     }
 
     public List<WeaponView> getWeaponsOnSpawn(Color color) {
