@@ -55,6 +55,10 @@ public class ServerManager implements Runnable {
         idClient++;
     }
 
+    public boolean isAwayFromKeyboardOrDisconnected(int code) {
+        return awayFromKeyboardOrDisconnected.contains(code);
+    }
+
     public void addClient(RmiClientInterface client) {
         rmiClients.put(idClient, client);
         answerReady.put(idClient, true);
