@@ -10,13 +10,14 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import static it.polimi.ingsw.network.server.ServerManager.MIN_PLAYERS;
+
 /**
  * This class manages an entire match
  */
 public class MatchController {
     private static final int[] POINTS_PER_KILL = {8, 6, 4, 2, 1};
     private static final int[] POINTS_PER_KILL_FLIPPED_BOARD = {2, 1};
-    private static final int MIN_PLAYERS = 3;
     private static final int POINTS_PER_FIRST_BLOOD = 1;
     private final Match match;
     private final Map<PlayerId, ViewInterface> virtualViews = new LinkedHashMap<>();
@@ -300,7 +301,7 @@ public class MatchController {
             commands.get(new Random().nextInt(commands.size())).execute();
         else {
             int selectedCommand = virtualViews.get(currentPlayer.getId()).sendCommands(commands.stream()
-                    .map(c -> c.createCommandMessage())
+                    .map(Command::createCommandMessage)
                     .collect(Collectors.toList()), false);
             commands.get(selectedCommand).execute();
         }
@@ -314,7 +315,7 @@ public class MatchController {
     private void spawnFirstTime(Player currentPlayer) {
         List<Command> commands = new ArrayList<>(currentPlayer.getSpawnCommands());
         int selectedCommand = virtualViews.get(currentPlayer.getId()).sendCommands(commands.stream()
-                .map(c -> c.createCommandMessage())
+                .map(Command::createCommandMessage)
                 .collect(Collectors.toList()), false);
         commands.get(selectedCommand).execute();
     }
