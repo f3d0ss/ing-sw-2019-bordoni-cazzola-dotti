@@ -26,7 +26,7 @@ public class User {
         int port;
         Client client = new Client(ui);
         Parser parser = new Parser();
-        uiChoice = client.manageMessage(parser.serialize(new Message(Protocol.CHOOSE_UI, "", Arrays.asList(CLI, GUI), 0)));
+        uiChoice = client.manageMessage(parser.serialize(new Message(Protocol.CHOOSE_UI, "", Arrays.asList(CLI, GUI))));
         if (uiChoice.equals(GUI)) {
             Gui gui = new Gui();
             new Thread(gui).start();
@@ -42,13 +42,13 @@ public class User {
             client.setUi(gui);
             ui = gui;
         }
-        connectionType = client.manageMessage(parser.serialize(new Message(Protocol.CHOOSE_CONNECTION, "", Arrays.asList(SOCKET, RMI), 0)));
-        ip = client.manageMessage(parser.serialize(new Message(Protocol.INSERT_IP, "", null, 0)));
+        connectionType = client.manageMessage(parser.serialize(new Message(Protocol.CHOOSE_CONNECTION, "", Arrays.asList(SOCKET, RMI))));
+        ip = client.manageMessage(parser.serialize(new Message(Protocol.INSERT_IP, "", null)));
         while (!client.isValidIp(ip)) {
-            ip = client.manageMessage(parser.serialize(new Message(Protocol.INSERT_IP_AGAIN, "", null, 0)));
+            ip = client.manageMessage(parser.serialize(new Message(Protocol.INSERT_IP_AGAIN, "", null)));
         }
         do {
-            portString = client.manageMessage(parser.serialize(new Message(Protocol.INSERT_PORT, "", null, 0)));
+            portString = client.manageMessage(parser.serialize(new Message(Protocol.INSERT_PORT, "", null)));
             port = client.isValidPort(portString);
         } while (port < 0);
         if (connectionType.equals(SOCKET))

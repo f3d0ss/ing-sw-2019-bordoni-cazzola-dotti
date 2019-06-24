@@ -1,6 +1,7 @@
 package it.polimi.ingsw.network.client;
 
 import it.polimi.ingsw.view.ModelView;
+import it.polimi.ingsw.view.commandmessage.CommandMessage;
 import it.polimi.ingsw.view.gui.GuiManager;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -14,6 +15,7 @@ public class Gui implements Ui, Runnable {
     private String answer = "";
     private boolean ready = false;
     private boolean inputReady = false;
+    private boolean initializationDone = false;
     private static final int TIME_TO_SLEEP = 100;
 
     public String showMessage(String toBeShown, List<String> possibleAnswers, boolean isAnswerRequired) {
@@ -31,8 +33,16 @@ public class Gui implements Ui, Runnable {
         return answer;
     }
 
-    public void showGame(ModelView modelView) {
+    public void refreshView(ModelView modelView){
         //TODO:
+    }
+
+    public void setViewInitializationDone() {
+        initializationDone = true;
+    }
+
+    public boolean isViewInitializationDone() {
+        return initializationDone;
     }
 
     public void setAnswer(String answer) {
@@ -56,7 +66,8 @@ public class Gui implements Ui, Runnable {
         this.inputReady = inputReady;
     }
 
-    public void showBoard() {
+    public int manageCommandChoice(List<CommandMessage> commands, boolean undo){
         //TODO:
+        return 0;
     }
 }

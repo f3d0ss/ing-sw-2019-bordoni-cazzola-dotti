@@ -6,6 +6,7 @@ import it.polimi.ingsw.model.command.Command;
 import it.polimi.ingsw.view.ViewInterface;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * This class manages a single turn
@@ -28,14 +29,23 @@ class TurnController {
         currentPlayer.initialize();
         List<Command> possibleCommands = currentPlayer.getPossibleCommands();
         while (possibleCommands != null) {
-            int numberOfCommandPicked = virtualViews.get(currentPlayer.getId()).sendCommands(possibleCommands, !commandStack.isEmpty());
+            int numberOfCommandPicked = virtualViews.get(currentPlayer.getId())
+                    .sendCommands(possibleCommands.stream()
+                            .map(Command::createCommandMessage)
+                            .collect(Collectors.toList()), !commandStack.isEmpty());
+            if (numberOfCommandPicked == -1)
+                break;
             Command commandToExecute = possibleCommands.get(numberOfCommandPicked);
             commandToExecute.execute();
             for (Player p : otherPlayers) {
                 if (!p.isDisconnected()) {
                     List<Command> commands = p.getPossibleCommands();
                     while (commands != null && commands.isEmpty()) {
-                        int i = virtualViews.get(p.getId()).sendCommands(commands, false);
+                        int i = virtualViews.get(p.getId()).sendCommands(commands.stream()
+                                .map(Command::createCommandMessage)
+                                .collect(Collectors.toList()), false);
+                        if (i == -1)
+                            break;
                         commands.get(i).execute();
                     }
                 }

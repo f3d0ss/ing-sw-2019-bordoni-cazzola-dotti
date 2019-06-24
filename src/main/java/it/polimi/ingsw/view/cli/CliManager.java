@@ -4,10 +4,10 @@ import it.polimi.ingsw.model.CardinalDirection;
 import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.Connection;
 import it.polimi.ingsw.model.PlayerId;
+import it.polimi.ingsw.view.PlayerView;
+import it.polimi.ingsw.view.SquareView;
+import it.polimi.ingsw.view.TurretSquareView;
 import it.polimi.ingsw.view.*;
-
-import java.util.List;
-import java.util.Map;
 
 public class CliManager {
 
@@ -21,11 +21,9 @@ public class CliManager {
     private final static int SQUARE_HEIGHT = 5;
 
     public void displayAll(ModelView modelView) {
-        int width = ModelView.WIDTH;
-        int height = ModelView.HEIGHT;
-        for (int i = 0; i < height; i++)
+        for (int i = 0; i < ModelView.HEIGHT; i++)
             for (int k = 0; k < SQUARE_HEIGHT; k++) {
-                for (int j = 0; j < width; j++) {
+                for (int j = 0; j < ModelView.WIDTH; j++) {
                     displaySquare(modelView.getSquareBoard(i, j), k);
                     System.out.printf(" ");
                 }
@@ -133,15 +131,15 @@ public class CliManager {
         switch (row) {
             case 1:
                 System.out.printf("BlueSpawn weapons: ");
-                modelView.getWeaponsOnSpawn(Color.BLUE).forEach(weapon -> System.out.printf(weapon.toString() + "; "));
+                modelView.getWeaponsOnSpawn(Color.BLUE).forEach(weapon -> System.out.printf(weapon.getName() + "; "));
                 break;
             case 2:
                 System.out.printf("RedSpawn weapons: ");
-                modelView.getWeaponsOnSpawn(Color.RED).forEach(weapon -> System.out.printf(weapon.toString() + "; "));
+                modelView.getWeaponsOnSpawn(Color.RED).forEach(weapon -> System.out.printf(weapon.getName() + "; "));
                 break;
             case 3:
                 System.out.printf("YellowSpawn weapons: ");
-                modelView.getWeaponsOnSpawn(Color.YELLOW).forEach(weapon -> System.out.printf(weapon.toString() + "; "));
+                modelView.getWeaponsOnSpawn(Color.YELLOW).forEach(weapon -> System.out.printf(weapon.getName() + "; "));
                 break;
             case 4:
                 //System.out.printf("Skulls: " + match.getDeathsCounter());
@@ -159,11 +157,11 @@ public class CliManager {
                 break;
             case 9:
                 System.out.printf("Weapons: ");
-                modelView.getMe().getWeapons().forEach(weapon -> System.out.printf(weapon.toString() + (weapon.isLoaded() ? "; " : "(UNLOADED), ")));
+                modelView.getMe().getWeapons().forEach(weapon -> System.out.printf(weapon.getName() + (weapon.isLoaded() ? "; " : "(UNLOADED), ")));
                 break;
             case 10:
                 System.out.printf("Powerups: ");
-                modelView.getMe().getPowerUps().forEach(powerUp -> System.out.printf(powerUp.toString() + " "));
+                modelView.getMe().getPowerUps().forEach(powerUp -> System.out.printf(powerUp.getName() + " "));
                 break;
             case 11:
                 System.out.printf("Ammos: ");
@@ -188,16 +186,16 @@ public class CliManager {
     }
 
     private void displayEnemiesInformation(PlayerView enemy) {
-        System.out.printf("\n" + enemy.getId().playerIdName().toUpperCase() + " (" + enemy.toString() + ") has " + enemy.getPowerUps().size() + " poweups.");
+        System.out.printf("\n" + enemy.getId().playerIdName().toUpperCase() + " (" + enemy.getNickname() + ") has " + enemy.getPowerUps().size() + " poweups.");
         System.out.printf(" Ammos: ");
-        enemy.getAmmo().forEach((color, value) -> System.out.printf(value + " " + color.colorName() + ", "));
+        enemy.getAmmo().forEach((color, value) -> System.out.printf(value + " " + color.colorName() + "; "));
         System.out.printf("\n     Weapons: ");
-        enemy.getWeapons().forEach(weapon -> System.out.printf(weapon.isLoaded() ? "XXXXXX, " : weapon.toString() + ", "));
+        enemy.getWeapons().forEach(weapon -> System.out.printf(weapon.isLoaded() ? "XXXXXX; " : weapon.getName() + "; "));
         System.out.printf("\n     Damages: ");
         enemy.getHealth().forEach(id -> System.out.printf(id.playerIdName().substring(0, 1) + " "));
         System.out.printf("Marks: ");
         enemy.getMarks().forEach((id, n) -> System.out.printf(n + " from " + id.playerIdName() + " "));
-        System.out.printf("(dead " + enemy.getDeaths() + " times)");
+        System.out.println("(dead " + enemy.getDeaths() + " times)");
     }
 
     public void displayMessage(String message) {

@@ -22,7 +22,7 @@ public class SpawnSquare extends Square {
 
     @Override
     protected void update() {
-        match.getVirtualViews().forEach(viewInterface -> viewInterface.update(new SpawnSquareView(getRow(), getCol(), getConnections(), getColor(), weapons.stream().map(weapon -> new WeaponView(weapon.getName(), weapon.isLoaded())).collect(Collectors.toList()), getHostedPlayers().stream().map(Player::getId).collect(Collectors.toList()))));
+        match.getAllVirtualViews().forEach(viewInterface -> viewInterface.update(new SpawnSquareView(getRow(), getCol(), getConnections(), getColor(), weapons.stream().map(weapon -> new WeaponView(weapon.getName(), weapon.isLoaded())).collect(Collectors.toList()), getHostedPlayers().stream().map(Player::getId).collect(Collectors.toList()))));
     }
 
     @Override

@@ -54,17 +54,18 @@ public class Player {
     }
 
     public void update() {
-        match.getVirtualViews().forEach(view -> view.update(getPlayerView()));
+        match.getVirtualViews().forEach((playerId, view) -> view.update(getPlayerView(id == playerId)));
+
     }
 
-    public PlayerView getPlayerView() {
+    public PlayerView getPlayerView(boolean isMe) {
         List<WeaponView> wvs = new ArrayList<>();
         List<PowerUpView> pvs = new ArrayList<>();
         weapons.forEach(weapon -> wvs.add(new WeaponView(weapon.getName(), weapon.isLoaded())));
         powerUps.forEach(powerUp -> pvs.add(new PowerUpView(powerUp.getType(), powerUp.getColor())));
 //        TODO: decide if view need to know
 //        playerState.updatePlayerView(playerView);
-        return new PlayerView(id, health, deaths, marks, nickname, wvs, pvs, ammo, availableAggregateActionCounter, flippedBoard, disconnected);
+        return new PlayerView(id, isMe, health, deaths, marks, nickname, wvs, pvs, ammo, availableAggregateActionCounter, flippedBoard, disconnected);
     }
 
     public Map<Color, Integer> getAmmo() {

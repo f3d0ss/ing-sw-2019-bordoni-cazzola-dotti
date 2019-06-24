@@ -7,4 +7,8 @@ public class WeaponModeCommandMessage extends CommandMessage {
         super(type);
         this.weaponMode = weaponMode;
     }
+
+    public String getWeaponMode() {
+        return weaponMode;
+    }
 }

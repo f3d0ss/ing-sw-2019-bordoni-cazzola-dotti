@@ -6,9 +6,7 @@ import it.polimi.ingsw.view.ViewInterface;
 
 import java.io.*;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public class Match {
 
@@ -24,12 +22,12 @@ public class Match {
     private List<Player> currentPlayers;
     private GameBoard board;
     private boolean firstPlayerPlayedLastTurn;
-    private List<ViewInterface> views;
+    private Map<PlayerId, ViewInterface> views;
 
     public Match(int gameBoardNumber) {
         Parser parser = new Parser();
         initializeGameBoard(gameBoardNumber, parser);
-        views = new ArrayList<>();
+        views = new HashMap<>();
         killshotTrack = new ArrayList<>();
         currentPlayers = new ArrayList<>();
         firstPlayerPlayedLastTurn = false;
@@ -83,6 +81,7 @@ public class Match {
                         getClass().getResourceAsStream("/cards/default_powerup_deck.json")),
                 PowerUpDeck.class);
         currentPowerUpDeck.shuffle();
+        usedPowerUpDeck = new PowerUpDeck(new ArrayList<>());
     }
 
     public Player getPlayer(PlayerId id) {
@@ -132,7 +131,7 @@ public class Match {
 
     public void addPlayer(Player player, ViewInterface viewInterface) {
         currentPlayers.add(player);
-        views.add(viewInterface);
+        views.put(player.getId(), viewInterface);
     }
 
     public void addKillshot(PlayerId player) {
@@ -210,12 +209,26 @@ public class Match {
         this.firstPlayerPlayedLastTurn = true;
     }
 
-    public List<ViewInterface> getVirtualViews() {
+    public List<ViewInterface> getAllVirtualViews() {
+        return new ArrayList<>(views.values());
+    }
+
+    public Map<PlayerId, ViewInterface> getVirtualViews() {
         return views;
     }
 
     private void update() {
-        views.forEach(viewInterface -> viewInterface.update(new MatchView(killshotTrack, deathsCounter)));
+        views.values().forEach(viewInterface -> viewInterface.update(new MatchView(killshotTrack, deathsCounter, board.getId())));
+    }
+
+    /**
+     * This method sends the current state of the Model to the views (must be called at the start to initialize clients)
+     */
+    public void updateAllModel() {
+        update();
+        currentPlayers.forEach(Player::update);
+        board.getSquareList().forEach(Square::update);
+        views.values().forEach(ViewInterface::setViewInitializationDone);
     }
 
 }

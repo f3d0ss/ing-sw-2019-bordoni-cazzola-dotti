@@ -1,9 +1,6 @@
 package it.polimi.ingsw.network.client;
 
-import it.polimi.ingsw.network.Message;
-import it.polimi.ingsw.network.PlayerViewTransfer;
-import it.polimi.ingsw.network.Protocol;
-import it.polimi.ingsw.network.SquareViewTransfer;
+import it.polimi.ingsw.network.*;
 import it.polimi.ingsw.utils.Parser;
 import it.polimi.ingsw.view.ConcreteView;
 
@@ -36,6 +33,10 @@ public class Client implements Runnable {
 
     public String manageMessage(String gsonCoded) {
         Message fromServer = parser.deserialize(gsonCoded, Message.class);
+        if (fromServer.type == Protocol.UPDATE_MATCH) {
+            view.update(((MatchViewTransfer)fromServer).getAttachment());
+            return Protocol.ACK;
+        }
         if (fromServer.type == Protocol.UPDATE_PLAYER) {
             view.update(((PlayerViewTransfer)fromServer).getAttachment());
             return Protocol.ACK;
@@ -43,6 +44,14 @@ public class Client implements Runnable {
         if (fromServer.type == Protocol.UPDATE_SQUARE) {
             view.update(((SquareViewTransfer)fromServer).getAttachment());
             return Protocol.ACK;
+        }
+        if (fromServer.type == Protocol.INITIALIZATION_DONE) {
+            view.setViewInitializationDone();
+            return Protocol.ACK;
+        }
+        if (fromServer.type == Protocol.SEND_COMMANDS) {
+            CommandViewTransfer commandViewTransfer = (CommandViewTransfer) fromServer;
+            return String.valueOf(view.sendCommands(commandViewTransfer.getAttachment(), commandViewTransfer.isUndo()));
         }
         if (fromServer.type == Protocol.ARE_YOU_READY)
             view = new ConcreteView(ui);
@@ -74,8 +83,8 @@ public class Client implements Runnable {
     }
 
     protected void manageInvalidIpOrPort(){
-        ip = manageMessage(parser.serialize(new Message(Protocol.INSERT_IP_AGAIN, "", null, 0)));
-        portString = manageMessage(parser.serialize(new Message(Protocol.INSERT_PORT, "", null, 0)));
+        ip = manageMessage(parser.serialize(new Message(Protocol.INSERT_IP_AGAIN, "", null)));
+        portString = manageMessage(parser.serialize(new Message(Protocol.INSERT_PORT, "", null)));
         port = isValidPort(portString);
     }
 }

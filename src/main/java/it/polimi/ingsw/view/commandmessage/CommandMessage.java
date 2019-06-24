@@ -8,10 +8,15 @@ public abstract class CommandMessage {
         this.type = type;
     }
 
+    public CommandType getType() {
+        return type;
+    }
+
     /**
      * This method must be called before serialize this object
      */
     public void preSerialization() {
         jsonType = getClass().getSimpleName();
     }
+
 }

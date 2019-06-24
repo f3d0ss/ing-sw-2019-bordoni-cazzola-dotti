@@ -15,7 +15,7 @@ import static java.lang.Thread.sleep;
 
 public class ServerManager implements Runnable {
 
-    private final static int MIN_PLAYERS = 3;
+    public final static int MIN_PLAYERS = 2;
     private final static int MAX_PLAYERS = 5;
     private final static int DEFAULT_BOARD = 1;
     private final static int MILLIS_TO_WAIT = 100;
@@ -55,10 +55,18 @@ public class ServerManager implements Runnable {
         idClient++;
     }
 
+    public boolean isAwayFromKeyboardOrDisconnected(int code) {
+        return awayFromKeyboardOrDisconnected.contains(code);
+    }
+
     public void addClient(RmiClientInterface client) {
         rmiClients.put(idClient, client);
         answerReady.put(idClient, true);
         idClient++;
+    }
+
+    public String getNickname(int playerId){
+        return nicknames.get(playerId);
     }
 
     public void addClientToLog(int temporaryId) {
@@ -66,20 +74,20 @@ public class ServerManager implements Runnable {
         String code;
         int oldId;
         while (true) {
-            String reconnect = sendMessageAndWaitForAnswer(temporaryId, new Message(Protocol.RECONNECT, "", Arrays.asList(NEW_GAME, RECONNECT), 0));
+            String reconnect = sendMessageAndWaitForAnswer(temporaryId, new Message(Protocol.RECONNECT, "", Arrays.asList(NEW_GAME, RECONNECT)));
             if (reconnect.equals(Protocol.ERR))
                 break;
             else if (reconnect.equals(RECONNECT)) {
-                code = sendMessageAndWaitForAnswer(temporaryId, new Message(Protocol.INSERT_OLD_CODE, "", null, 0));
+                code = sendMessageAndWaitForAnswer(temporaryId, new Message(Protocol.INSERT_OLD_CODE, "", null));
                 if (code.equals(Protocol.ERR))
                     break;
                 oldId = Integer.parseInt(code);
                 if (switchClientId(oldId, temporaryId)) {
-                    sendMessageAndWaitForAnswer(oldId, new Message(Protocol.WELCOME_BACK, "", null, 0));
+                    sendMessageAndWaitForAnswer(oldId, new Message(Protocol.WELCOME_BACK, "", null));
                     activeMatches.get(oldId).reconnect(nicknames.get(oldId));
                     break;
                 } else
-                    sendMessageAndWaitForAnswer(temporaryId, new Message(Protocol.INVALID_OLD_CODE, "", null, 0));
+                    sendMessageAndWaitForAnswer(temporaryId, new Message(Protocol.INVALID_OLD_CODE, "", null));
             } else {
                 addClientToLobby(temporaryId);
                 break;
@@ -136,24 +144,25 @@ public class ServerManager implements Runnable {
 
     private void login(int id) {
         String name;
-        if (sendMessageAndWaitForAnswer(id, new Message(Protocol.WELCOME, String.valueOf(id), null, 0)).equals(Protocol.ERR))
+        if (sendMessageAndWaitForAnswer(id, new Message(Protocol.WELCOME, String.valueOf(id), null)).equals(Protocol.ERR))
             return;
         notifyNewConnection(id);
-        name = sendMessageAndWaitForAnswer(id, new Message(Protocol.LOGIN_FIRST, "", null, 0));
+        name = sendMessageAndWaitForAnswer(id, new Message(Protocol.LOGIN_FIRST, "", null));
         if (name.equals(Protocol.ERR))
             return;
         while (lobby.containsValue(name)) {
-            name = sendMessageAndWaitForAnswer(id, new Message(Protocol.LOGIN_REPEAT, "", null, 0));
+            name = sendMessageAndWaitForAnswer(id, new Message(Protocol.LOGIN_REPEAT, "", null));
             if (name.equals(Protocol.ERR))
                 return;
         }
+        //TODO: correct error from delay during board choice
         lobby.put(id, name);
         notifyNewEntry(id, name);
-        if (sendMessageAndWaitForAnswer(id, new Message(Protocol.LOGIN_CONFIRM, name, null, 0)).equals(Protocol.ERR))
+        if (sendMessageAndWaitForAnswer(id, new Message(Protocol.LOGIN_CONFIRM, name, null)).equals(Protocol.ERR))
             return;
         if (chosenBoard == 0) {
             chosenBoard = DEFAULT_BOARD;
-            String ans = sendMessageAndWaitForAnswer(id, new Message(Protocol.CHOOSE_BOARD, "", Arrays.asList("Board1", "Board2", "Board3", "Board4"), 0));
+            String ans = sendMessageAndWaitForAnswer(id, new Message(Protocol.CHOOSE_BOARD, "", Arrays.asList("Board1", "Board2", "Board3", "Board4")));
             if (ans.equals(Protocol.ERR))
                 return;
             else
@@ -171,7 +180,7 @@ public class ServerManager implements Runnable {
         for (int i : clients) {
             if (answerReady.get(i)) {
                 if (i != id)
-                    sendMessageAndWaitForAnswer(i, new Message(Protocol.NEW_ENTRY, newEntry, null, 0));
+                    sendMessageAndWaitForAnswer(i, new Message(Protocol.NEW_ENTRY, newEntry, null));
                 notifyTimeLeft(i, clients.length);
             }
         }
@@ -181,7 +190,7 @@ public class ServerManager implements Runnable {
         Integer[] clients = lobby.keySet().toArray(new Integer[0]);
         for (int i : clients) {
             if (i != id && answerReady.getOrDefault(i, false)) {
-                sendMessageAndWaitForAnswer(i, new Message(Protocol.NEW_CONNECTION, "", null, 0));
+                sendMessageAndWaitForAnswer(i, new Message(Protocol.NEW_CONNECTION, "", null));
                 //notifyTimeLeft(i, clients.length);
             }
         }
@@ -189,21 +198,21 @@ public class ServerManager implements Runnable {
 
     private void notifyTimeLeft(int id, int size) {
         if (size < MIN_PLAYERS)
-            sendMessageAndWaitForAnswer(id, new Message(Protocol.WAIT_FOR_PLAYERS, String.valueOf(MIN_PLAYERS - size), null, 0));
+            sendMessageAndWaitForAnswer(id, new Message(Protocol.WAIT_FOR_PLAYERS, String.valueOf(MIN_PLAYERS - size), null));
         else
-            sendMessageAndWaitForAnswer(id, new Message(Protocol.COUNTDOWN, String.valueOf(countDown.getTimeLeft()), null, 0));
+            sendMessageAndWaitForAnswer(id, new Message(Protocol.COUNTDOWN, String.valueOf(countDown.getTimeLeft()), null));
     }
 
     private void lastCheckBeforeGameStarting() {
         Integer[] clients = lobby.keySet().toArray(new Integer[0]);
         for (int i : clients)
-            sendMessageAndWaitForAnswer(i, new Message(Protocol.ARE_YOU_READY, "", null, 0));
+            sendMessageAndWaitForAnswer(i, new Message(Protocol.ARE_YOU_READY, "", null));
     }
 
     private void notifyGameStarting() {
         Integer[] clients = lobby.keySet().toArray(new Integer[0]);
         for (int i : clients)
-            sendMessageAndWaitForAnswer(i, new Message(Protocol.LET_US_START, "", null, 0));
+            sendMessageAndWaitForAnswer(i, new Message(Protocol.LET_US_START, "", null));
     }
 
     public void checkAllConnections() {
@@ -224,7 +233,8 @@ public class ServerManager implements Runnable {
             activeMatches.put(i, match);
             nicknames.put(i, lobby.get(i));
         });
-        match.runMatch();
+        gamers.values().forEach(v -> ((VirtualView)v).setController(match));
+        new Thread(match).start();
     }
 
     public boolean allServerReady() {
@@ -298,7 +308,7 @@ public class ServerManager implements Runnable {
             countDown.stopCount();
         Integer[] clients = lobby.keySet().toArray(new Integer[0]);
         for (int i : clients) {
-            sendMessageAndWaitForAnswer(i, new Message(Protocol.REMOVAL, name, null, 0));
+            sendMessageAndWaitForAnswer(i, new Message(Protocol.REMOVAL, name, null));
             notifyTimeLeft(i, clients.length);//to be removed?
         }
     }

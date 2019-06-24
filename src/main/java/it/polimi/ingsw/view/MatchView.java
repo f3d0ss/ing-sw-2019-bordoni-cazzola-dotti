@@ -1,18 +1,19 @@
 package it.polimi.ingsw.view;
 
-import it.polimi.ingsw.model.*;
+import it.polimi.ingsw.model.PlayerId;
 
 import java.util.List;
-import java.util.Map;
 
 public class MatchView {
 
     private final List<PlayerId> killshotTrack;
     private final int deathsCounter;
+    private final int gameBoardId;
 
-    public MatchView(List<PlayerId> killshotTrack, int deathsCounter) {
+    public MatchView(List<PlayerId> killshotTrack, int deathsCounter, int gameBoardId) {
         this.killshotTrack = killshotTrack;
         this.deathsCounter = deathsCounter;
+        this.gameBoardId = gameBoardId;
     }
 
     public int getDeathsCounter() {
@@ -21,5 +22,9 @@ public class MatchView {
 
     public List<PlayerId> getKillshotTrack() {
         return killshotTrack;
+    }
+
+    public int getGameBoardId() {
+        return gameBoardId;
     }
 }

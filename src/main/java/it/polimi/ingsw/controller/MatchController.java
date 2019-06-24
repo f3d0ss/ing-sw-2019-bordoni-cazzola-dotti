@@ -10,13 +10,14 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import static it.polimi.ingsw.network.server.ServerManager.MIN_PLAYERS;
+
 /**
  * This class manages an entire match
  */
-public class MatchController {
+public class MatchController implements Runnable {
     private static final int[] POINTS_PER_KILL = {8, 6, 4, 2, 1};
     private static final int[] POINTS_PER_KILL_FLIPPED_BOARD = {2, 1};
-    private static final int MIN_PLAYERS = 3;
     private static final int POINTS_PER_FIRST_BLOOD = 1;
     private final Match match;
     private final Map<PlayerId, ViewInterface> virtualViews = new LinkedHashMap<>();
@@ -33,6 +34,7 @@ public class MatchController {
             virtualViews.put(values[i], lobby.get(nickname));
         }
         players = match.getCurrentPlayers();
+        match.updateAllModel();
     }
 
     public void reconnect(String username) {
@@ -109,7 +111,7 @@ public class MatchController {
     /**
      * This method starts the match
      */
-    public void runMatch() {
+    public void run() {
         firstTurn();
         int currentPlayerIndex = 0;
         while (!match.isLastTurn()) {
@@ -298,7 +300,9 @@ public class MatchController {
         if (currentPlayer.isDisconnected())
             commands.get(new Random().nextInt(commands.size())).execute();
         else {
-            int selectedCommand = virtualViews.get(currentPlayer.getId()).sendCommands(commands, false);
+            int selectedCommand = virtualViews.get(currentPlayer.getId()).sendCommands(commands.stream()
+                    .map(Command::createCommandMessage)
+                    .collect(Collectors.toList()), false);
             commands.get(selectedCommand).execute();
         }
     }
@@ -310,7 +314,9 @@ public class MatchController {
      */
     private void spawnFirstTime(Player currentPlayer) {
         List<Command> commands = new ArrayList<>(currentPlayer.getSpawnCommands());
-        int selectedCommand = virtualViews.get(currentPlayer.getId()).sendCommands(commands, false);
+        int selectedCommand = virtualViews.get(currentPlayer.getId()).sendCommands(commands.stream()
+                .map(Command::createCommandMessage)
+                .collect(Collectors.toList()), false);
         commands.get(selectedCommand).execute();
     }
 

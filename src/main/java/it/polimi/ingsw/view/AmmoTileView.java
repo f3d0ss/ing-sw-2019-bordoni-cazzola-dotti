@@ -12,4 +12,15 @@ public class AmmoTileView {
         this.powerUp = powerUp;
         this.ammo = ammo;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder string = new StringBuilder();
+        if (powerUp > 0)
+            string = new StringBuilder("P");
+        for (Map.Entry<Color, Integer> entry : ammo.entrySet())
+            for (int i = 0; i < entry.getValue(); i++)
+                string.append(entry.getKey().colorName(), 0, 1);
+        return string.toString();
+    }
 }

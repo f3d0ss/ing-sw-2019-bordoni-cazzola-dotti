@@ -9,4 +9,8 @@ public class ColorCommandMessage extends CommandMessage {
         super(type);
         this.color = color;
     }
+
+    public Color getColor() {
+        return color;
+    }
 }

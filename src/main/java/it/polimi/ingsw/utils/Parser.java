@@ -5,6 +5,10 @@ import com.google.gson.GsonBuilder;
 import it.polimi.ingsw.model.SpawnSquare;
 import it.polimi.ingsw.model.Square;
 import it.polimi.ingsw.model.TurretSquare;
+import it.polimi.ingsw.network.*;
+import it.polimi.ingsw.view.SpawnSquareView;
+import it.polimi.ingsw.view.SquareView;
+import it.polimi.ingsw.view.TurretSquareView;
 import it.polimi.ingsw.view.commandmessage.*;
 
 import java.io.Reader;
@@ -16,12 +20,18 @@ import java.io.Reader;
 public class Parser {
 
     private Gson gson;
+    private Gson normal = new Gson();
 
     public Parser() {
         RuntimeTypeAdapterFactory<Square> runtimeTypeAdapterFactory = RuntimeTypeAdapterFactory
                 .of(Square.class, "type")
                 .registerSubtype(SpawnSquare.class, "spawn")
                 .registerSubtype(TurretSquare.class, "turret");
+
+        RuntimeTypeAdapterFactory<SquareView> squareRuntimeTypeAdapterFactory= RuntimeTypeAdapterFactory
+                .of(SquareView.class, "type")
+                .registerSubtype(SpawnSquareView.class, "spawn")
+                .registerSubtype(TurretSquareView.class, "turret");
 
         RuntimeTypeAdapterFactory<CommandMessage> commandMessageRuntimeTypeAdapterFactory = RuntimeTypeAdapterFactory
                 .of(CommandMessage.class, "jsonType")
@@ -34,9 +44,19 @@ public class Parser {
                 .registerSubtype(WeaponCommandMessage.class, WeaponCommandMessage.class.getSimpleName())
                 .registerSubtype(WeaponModeCommandMessage.class, WeaponModeCommandMessage.class.getSimpleName());
 
+        RuntimeTypeAdapterFactory<Message> messageRuntimeTypeAdapterFactory = RuntimeTypeAdapterFactory
+                .of(Message.class, "jType")
+                .registerSubtype(CommandViewTransfer.class, CommandViewTransfer.class.getSimpleName())
+                .registerSubtype(MatchViewTransfer.class, MatchViewTransfer.class.getSimpleName())
+                .registerSubtype(PlayerViewTransfer.class, PlayerViewTransfer.class.getSimpleName())
+                .registerSubtype(SquareViewTransfer.class, SquareViewTransfer.class.getSimpleName())
+                .registerSubtype(Message.class, Message.class.getSimpleName());
+
         gson = new GsonBuilder()
                 .registerTypeAdapterFactory(runtimeTypeAdapterFactory)
+                .registerTypeAdapterFactory(squareRuntimeTypeAdapterFactory)
                 .registerTypeAdapterFactory(commandMessageRuntimeTypeAdapterFactory)
+                .registerTypeAdapterFactory(messageRuntimeTypeAdapterFactory)
                 .create();
     }
 
@@ -72,7 +92,18 @@ public class Parser {
      * @return String representing the serialized object
      */
     public String serialize(Object object) {
-        return gson.toJson(object);
+        return normal.toJson(object);
+    }
+
+    /**
+     * This method serializes the object representation.     *
+     *
+     * @param message Object to serialize
+     * @return String representing the serialized object
+     */
+    public String serialize(Message message) {
+        message.preSerialization();
+        return normal.toJson(message);
     }
 
     /**
@@ -83,6 +114,6 @@ public class Parser {
      */
     public String serialize(CommandMessage commandMessage) {
         commandMessage.preSerialization();
-        return gson.toJson(commandMessage);
+        return normal.toJson(commandMessage);
     }
 }

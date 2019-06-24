@@ -1,19 +1,18 @@
 package it.polimi.ingsw.network;
 
-import java.io.Serializable;
 import java.util.List;
 
-public class Message implements Serializable {
+public class Message {
+
     public Protocol type;
     private String stringInQuestion;
     private List<String> possibleAnswers;
-    private Object attachment;//TODO: is attachment necessary?
+    private String jType = getClass().getSimpleName();
 
-    public Message(Protocol type, String stringInQuestion, List<String> possibleAnswers, Object attachment) {
+    public Message(Protocol type, String stringInQuestion, List<String> possibleAnswers) {
         this.type = type;
         this.stringInQuestion = stringInQuestion;
         this.possibleAnswers = possibleAnswers;
-        this.attachment = attachment;
     }
 
     public List<String> getPossibleAnswer() {
@@ -22,5 +21,9 @@ public class Message implements Serializable {
 
     public String getStringInQuestion() {
         return stringInQuestion;
+    }
+
+    public void preSerialization() {
+        jType = getClass().getSimpleName();
     }
 }
