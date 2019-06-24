@@ -15,7 +15,7 @@ import static it.polimi.ingsw.network.server.ServerManager.MIN_PLAYERS;
 /**
  * This class manages an entire match
  */
-public class MatchController {
+public class MatchController implements Runnable {
     private static final int[] POINTS_PER_KILL = {8, 6, 4, 2, 1};
     private static final int[] POINTS_PER_KILL_FLIPPED_BOARD = {2, 1};
     private static final int POINTS_PER_FIRST_BLOOD = 1;
@@ -111,7 +111,7 @@ public class MatchController {
     /**
      * This method starts the match
      */
-    public void runMatch() {
+    public void run() {
         firstTurn();
         int currentPlayerIndex = 0;
         while (!match.isLastTurn()) {

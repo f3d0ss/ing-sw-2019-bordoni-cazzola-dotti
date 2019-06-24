@@ -234,7 +234,7 @@ public class ServerManager implements Runnable {
             nicknames.put(i, lobby.get(i));
         });
         gamers.values().forEach(v -> ((VirtualView)v).setController(match));
-        match.runMatch();
+        new Thread(match).start();
     }
 
     public boolean allServerReady() {
