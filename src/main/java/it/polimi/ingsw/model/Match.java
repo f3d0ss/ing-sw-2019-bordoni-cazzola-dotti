@@ -65,7 +65,7 @@ public class Match {
         File[] files = file.listFiles();
         for (File f : files) {
             try {
-                weaponList.add(parser.deserialize(new FileReader(f.getPath()), Weapon.class));
+                weaponList.add(parser.deserialize(new FileReader(f.getPath())));
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }

@@ -69,20 +69,13 @@ public class PendingPaymentReloadWeaponState implements PendingPaymentState, Pla
         List<Command> commands = new ArrayList<>();
         Map<Color, Integer> totalPending = new EnumMap<>(Color.class);
         pendingCardPayment.forEach(powerUp -> totalPending.put(powerUp.getColor(), totalPending.getOrDefault(powerUp.getColor(), 0) + 1));
-        selectedReloadingWeapon.getReloadingCost().forEach((color, cost) -> {
-            if (cost > pendingAmmo.getOrDefault(color, 0) + totalPending.getOrDefault(color, 0)) {
-                if (player.getAmmo().getOrDefault(color, 0) > 0) {
-                    commands.add(new SelectAmmoPaymentCommand(player, this, color));
-                }
-                player.getPowerUps().forEach(powerUp -> {
-                    if (powerUp.getColor() == color)
-                        commands.add(new SelectPowerUpPaymentCommand(player, this, powerUp));
-                });
-            }
-        });
-        if (commands.isEmpty()) {
+        pendingAmmo.forEach((color, integer) -> totalPending.put(color, totalPending.getOrDefault(color, 0) + integer));
+
+        if (getSelectedReloadingWeapon().getReloadingCost().equals(totalPending)){
             commands.add(new PayReloadWeaponCommand(player, this));
+            return commands;
         }
-        return commands;
+        return PendingPaymentState.generateSelctPaymentCommand(totalPending, player, getSelectedReloadingWeapon().getReloadingCost(), this);
+
     }
 }

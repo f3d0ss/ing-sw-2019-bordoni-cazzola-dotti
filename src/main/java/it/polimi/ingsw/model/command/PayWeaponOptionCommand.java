@@ -1,8 +1,8 @@
 package it.polimi.ingsw.model.command;
 
 import it.polimi.ingsw.model.Player;
-import it.polimi.ingsw.model.playerstate.ChoosingWeaponOptionState;
 import it.polimi.ingsw.model.playerstate.PendingPaymentWeaponOptionState;
+import it.polimi.ingsw.model.playerstate.ReadyToShootState;
 import it.polimi.ingsw.view.commandmessage.CommandMessage;
 import it.polimi.ingsw.view.commandmessage.CommandType;
 import it.polimi.ingsw.view.commandmessage.SimpleCommandMessage;
@@ -24,9 +24,7 @@ public class PayWeaponOptionCommand implements Command {
      */
     @Override
     public void execute() {
-        currentState.getPendingAmmoPayment().forEach((color, amount) -> player.pay(color, amount));
-        currentState.getPendingCardPayment().forEach(powerUp -> player.pay(powerUp));
-        player.changeState(new ChoosingWeaponOptionState(currentState.getSelectedAggregateAction(), currentState.getSelectedWeapon()));
+        player.changeState(new ReadyToShootState(currentState.getSelectedAggregateAction(), currentState.getSelectedWeapon()));
     }
 
     /**
@@ -34,8 +32,6 @@ public class PayWeaponOptionCommand implements Command {
      */
     @Override
     public void undo() {
-        currentState.getPendingAmmoPayment().forEach((color, amount) -> player.refund(color, amount));
-        currentState.getPendingCardPayment().forEach(powerUp -> player.refund(powerUp));
         player.changeState(currentState);
     }
 
