@@ -38,9 +38,9 @@ public class SelectPowerUpCommand implements Command {
     public void execute() {
         player.pay(powerUp);
         if (powerUp.getType() == PowerUpID.TELEPORTER)
-            player.changeState(new SelectedTeleporterState(powerUp));
+            player.changeState(new SelectedTeleporterState());
         else if (powerUp.getType() == PowerUpID.NEWTON)
-            player.changeState(new SelectedNewtonState(powerUp));
+            player.changeState(new SelectedNewtonState());
     }
 
     /**
