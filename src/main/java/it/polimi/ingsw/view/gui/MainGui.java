@@ -1,5 +1,6 @@
 package it.polimi.ingsw.view.gui;
 
+import it.polimi.ingsw.view.ModelView;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -12,7 +13,8 @@ public class MainGui extends Application {
 
     private Stage primaryStage;
     private Pane base;
-    MainGuiController controller;
+    private MainGuiController controller;
+    private static ModelView modelView;
 
     @Override
     public void start(Stage stage) {
@@ -35,6 +37,10 @@ public class MainGui extends Application {
         primaryStage.setFullScreen(true);
         //controller.serModelView(modelView);
         primaryStage.show();
+    }
+
+    public static void setModelView(ModelView modelView) {
+        MainGui.modelView = modelView;
     }
 
     public static void main(String[] args) {

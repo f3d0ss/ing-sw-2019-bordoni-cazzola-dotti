@@ -325,17 +325,10 @@
 
                                             </children>
                                         </HBox>
-                                        <HBox id="playerWeaponContainer" fx:id="playerWeaponContainer">
+                                        <HBox id="playerWeaponContainer" fx:id="playerWeaponContainer"
+                                              prefHeight="${playerCardContainer.height}"
+                                              prefWidth="${mainPane.width*500/1645*309/700}">
                                             <children>
-                                                <HBox prefHeight="${playerCardContainer.height}"
-                                                      prefWidth="${mainPane.width*500/1645*103/700}"
-                                                      styleClass="playerWeaponTest"/>
-                                                <HBox prefHeight="${playerCardContainer.height}"
-                                                      prefWidth="${mainPane.width*500/1645*103/700}"
-                                                      styleClass="playerWeaponTest"/>
-                                                <HBox prefHeight="${playerCardContainer.height}"
-                                                      prefWidth="${mainPane.width*500/1645*103/700}"
-                                                      styleClass="playerWeaponTest"/>
                                             </children>
                                         </HBox>
                                     </children>

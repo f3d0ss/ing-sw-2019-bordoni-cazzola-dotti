@@ -3,7 +3,9 @@ package it.polimi.ingsw.view.gui;
 import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.PlayerId;
 import it.polimi.ingsw.model.PowerUpID;
+import it.polimi.ingsw.model.Weapon;
 import it.polimi.ingsw.view.ModelView;
+import it.polimi.ingsw.view.WeaponView;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
@@ -28,6 +30,7 @@ public class MainGuiController {
     public VBox aggregateActionBox;
     public Pane boardWithoutAggregateAction;
     public HBox playerPowerUpContainer;
+    public HBox playerWeaponContainer;
     @FXML
     private GridPane gameBoard;
     @FXML
@@ -68,16 +71,17 @@ public class MainGuiController {
     private Pane[] yellowWeapons;
     private Pane[] yellowWeaponsOverlay;
     private ModelView modelView;
-    private static String LANG = "IT";
-    private static String SPACE = "_";
-    private static String IMAGES_DIR = "/images/";
-    private static String IMAGE_EXTENSION = ".png";
-    private static String GAMEBOARD_IMAGES_DIR = IMAGES_DIR + "gameboards/GameBoard00";
-    private static String POWERUP_IMAGES_DIR = IMAGES_DIR + "cards/AD_powerups_" + LANG + SPACE;
-    private static String PLAYERBOARD_IMAGES_DIR = IMAGES_DIR + "playerboards/";
-    private static String AGGREGATE_ACTION_FILE_PATTERN = "_aggregate_action" + IMAGE_EXTENSION;
-    private static String AGGREGATE_ACTION_FLIPPED_FILE_PATTERN = "_aggregate_action_flipped" + IMAGE_EXTENSION;
-    private static String BOARD_FILE_PATTERN = "_board_without_aggregate_action" + IMAGE_EXTENSION;
+    private final static String LANG = "IT";
+    private final static String SPACE = "_";
+    private final static String IMAGES_DIR = "/images/";
+    private final static String IMAGE_EXTENSION = ".png";
+    private final static String GAMEBOARD_IMAGES_DIR = IMAGES_DIR + "gameboards/GameBoard00";
+    private final static String POWERUP_IMAGES_DIR = IMAGES_DIR + "cards/AD_powerups_" + LANG + SPACE;
+    private final static String WEAPON_IMAGES_DIR = IMAGES_DIR + "cards/AD_weapons_" + LANG + SPACE;
+    private final static String PLAYERBOARD_IMAGES_DIR = IMAGES_DIR + "playerboards/";
+    private final static String AGGREGATE_ACTION_FILE_PATTERN = "_aggregate_action" + IMAGE_EXTENSION;
+    private final static String AGGREGATE_ACTION_FLIPPED_FILE_PATTERN = "_aggregate_action_flipped" + IMAGE_EXTENSION;
+    private final static String BOARD_FILE_PATTERN = "_board_without_aggregate_action" + IMAGE_EXTENSION;
 
     public void initialize() {
         String gameboardImageURI = GAMEBOARD_IMAGES_DIR + 1/* modelView.getMatch().getGameBoardId() */ + IMAGE_EXTENSION;
@@ -116,6 +120,23 @@ public class MainGuiController {
             playerPowerUpContainer.setHgrow(cardHBox, Priority.ALWAYS);
         }               //TO BE DELETED
         /* }); */
+
+
+//         modelView.getMe().getWeapons().forEach(weaponView -> {
+        for (int i = 0; i < 3; i++) {  //TO BE DELTED
+            HBox cardHBox = new HBox();
+
+            cardHBox.setPrefHeight(playerWeaponContainer.getPrefHeight());
+            cardHBox.maxWidthProperty().bind(cardHBox.heightProperty().divide(406).multiply(240));
+            String weaponImageURI = WEAPON_IMAGES_DIR
+                    + /* weaponView.getType().weaponID() */ new WeaponView("Hellion", true).getID()
+                    + IMAGE_EXTENSION;
+            Image weaponImage = new Image(getClass().getResource(weaponImageURI).toExternalForm());
+            cardHBox.setBackground(new Background(new BackgroundFill(new ImagePattern(weaponImage), CornerRadii.EMPTY, Insets.EMPTY)));
+            playerWeaponContainer.getChildren().add(cardHBox);
+            playerWeaponContainer.setHgrow(cardHBox, Priority.ALWAYS);
+        }               //TO BE DELETED
+//         });
 
 
         List<Button> buttons = new ArrayList<>(Arrays.asList(otherPlayer1, otherPlayer3, otherPlayer2, otherPlayer4));
