@@ -20,6 +20,8 @@ public class ConcreteView implements ViewInterface {
         modelView.setMatch(mw);
         if(ui.isViewInitializationDone())
             ui.refreshView(modelView);
+        if(mw.getLeaderBoard() != null)
+            ui.showLeaderBoard(mw.getLeaderBoard());
     }
 
     @Override

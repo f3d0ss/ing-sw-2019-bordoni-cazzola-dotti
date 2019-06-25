@@ -1,13 +1,14 @@
 package it.polimi.ingsw.network.client;
 
+import it.polimi.ingsw.model.PlayerId;
 import it.polimi.ingsw.network.Protocol;
 import it.polimi.ingsw.view.ModelView;
 import it.polimi.ingsw.view.cli.CliManager;
 import it.polimi.ingsw.view.commandmessage.*;
 
 import java.util.ArrayList;
-import java.util.InputMismatchException;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 public class Cli implements Ui {
@@ -57,19 +58,20 @@ public class Cli implements Ui {
     }
 
     private int askChoiceByNumber(int size){
+        String input;
         int choice;
         try {
-            choice = stdin.nextInt();
-            stdin.nextLine();
-        } catch (InputMismatchException e) {
+            input = stdin.nextLine();
+            choice = Integer.parseInt(input);
+        } catch (NumberFormatException e) {
             choice = FIRST_CHOICE_NUMBER - 1;
         }
         while (choice >= size + FIRST_CHOICE_NUMBER || choice < FIRST_CHOICE_NUMBER) {
             System.out.println("Risposta non valida. Riprova:");
             try {
-                choice = stdin.nextInt();
-                stdin.nextLine();
-            } catch (InputMismatchException e) {
+                input = stdin.nextLine();
+                choice = Integer.parseInt(input);
+            } catch (NumberFormatException e) {
                 choice = FIRST_CHOICE_NUMBER - 1;
             }
         }
@@ -100,5 +102,14 @@ public class Cli implements Ui {
         if (command.getType() == CommandType.SELECT_WEAPON_MODE)
             return ((WeaponModeCommandMessage) command).getWeaponMode();
         return "";
+    }
+
+    public void showLeaderBoard(Map<PlayerId, Long> leaderBoard){
+        System.out.println("Partita conclusa");
+        int i = 1;
+        for(PlayerId p : leaderBoard.keySet()){
+            System.out.println(i + "° classificato: " + p.playerIdName() + " con " + leaderBoard.get(p) + " punti");
+            i++;
+        }
     }
 }

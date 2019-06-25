@@ -23,6 +23,7 @@ public class Match {
     private GameBoard board;
     private boolean firstPlayerPlayedLastTurn;
     private Map<PlayerId, ViewInterface> views;
+    private Map<PlayerId, Long> leaderBoard;
 
     public Match(int gameBoardNumber) {
         Parser parser = new Parser();
@@ -82,6 +83,11 @@ public class Match {
                 PowerUpDeck.class);
         currentPowerUpDeck.shuffle();
         usedPowerUpDeck = new PowerUpDeck(new ArrayList<>());
+    }
+
+    public void setLeaderBoard(Map<PlayerId, Long> leaderBoard) {
+        this.leaderBoard = leaderBoard;
+        update();
     }
 
     public Player getPlayer(PlayerId id) {
@@ -218,7 +224,7 @@ public class Match {
     }
 
     private void update() {
-        views.values().forEach(viewInterface -> viewInterface.update(new MatchView(killshotTrack, deathsCounter, board.getId())));
+        views.values().forEach(viewInterface -> viewInterface.update(new MatchView(killshotTrack, deathsCounter, board.getId(), leaderBoard)));
     }
 
     /**
