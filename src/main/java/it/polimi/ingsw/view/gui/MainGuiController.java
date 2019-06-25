@@ -5,7 +5,10 @@ import it.polimi.ingsw.model.PlayerId;
 import it.polimi.ingsw.model.PowerUpID;
 import it.polimi.ingsw.model.Weapon;
 import it.polimi.ingsw.view.ModelView;
+import it.polimi.ingsw.view.PlayerView;
 import it.polimi.ingsw.view.WeaponView;
+import it.polimi.ingsw.view.commandmessage.CommandMessage;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
@@ -18,11 +21,14 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.ImagePattern;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class MainGuiController {
+
+
     public HBox playerAggregateActionMMM;
     public HBox playerAggregateActionMG;
     public HBox playerAggregateActionS;
@@ -31,6 +37,8 @@ public class MainGuiController {
     public Pane boardWithoutAggregateAction;
     public HBox playerPowerUpContainer;
     public HBox playerWeaponContainer;
+    @FXML
+    private Pane mainPane;
     @FXML
     private GridPane gameBoard;
     @FXML
@@ -84,60 +92,6 @@ public class MainGuiController {
     private final static String BOARD_FILE_PATTERN = "_board_without_aggregate_action" + IMAGE_EXTENSION;
 
     public void initialize() {
-        String gameboardImageURI = GAMEBOARD_IMAGES_DIR + 1/* modelView.getMatch().getGameBoardId() */ + IMAGE_EXTENSION;
-        Image boardImage = new Image(getClass().getResource(gameboardImageURI).toExternalForm());
-        gameBoard.setBackground(new Background(new BackgroundFill(new ImagePattern(boardImage), CornerRadii.EMPTY, Insets.EMPTY)));
-
-
-        String aggregateActionImageURI = PLAYERBOARD_IMAGES_DIR
-                + /*modelView.getMe().getId().playerId() */ PlayerId.VIOLET.playerId()
-                + /*(modelView.getMe().isFlippedBoard() ? AGGREGATE_ACTION_FLIPPED_FILE_PATTERN : AGGREGATE_ACTION_FILE_PATTERN)*/  AGGREGATE_ACTION_FLIPPED_FILE_PATTERN;
-        Image aggregateActionImage = new Image(getClass().getResource(aggregateActionImageURI).toExternalForm());
-        aggregateActionBox.setBackground(new Background(new BackgroundFill(new ImagePattern(aggregateActionImage), CornerRadii.EMPTY, Insets.EMPTY)));
-
-//
-        String playerBoardImageURI = PLAYERBOARD_IMAGES_DIR
-                + /*modelView.getMe().getId().playerId() */ PlayerId.VIOLET.playerId()
-                + BOARD_FILE_PATTERN;
-        Image playerBoardImage = new Image(getClass().getResource(playerBoardImageURI).toExternalForm());
-        boardWithoutAggregateAction.setBackground(new Background(new BackgroundFill(new ImagePattern(playerBoardImage), CornerRadii.EMPTY, Insets.EMPTY)));
-
-
-        /* modelView.getMe().getPowerUps().forEach(powerUpView -> { */
-        for (int i = 0; i < 4; i++) {  //TO BE DELTED
-            HBox cardHBox = new HBox();
-
-            cardHBox.setPrefHeight(playerPowerUpContainer.getPrefHeight());
-            cardHBox.maxWidthProperty().bind(cardHBox.heightProperty().divide(264).multiply(169));
-            String powerUpImageURI = POWERUP_IMAGES_DIR
-                    + /* powerUpView.getColor().colorID() */ Color.BLUE.colorID()
-                    + SPACE
-                    + /* powerUpView.getType().powerUpID() */ PowerUpID.NEWTON.powerUpID()
-                    + IMAGE_EXTENSION;
-            Image powerUpImage = new Image(getClass().getResource(powerUpImageURI).toExternalForm());
-            cardHBox.setBackground(new Background(new BackgroundFill(new ImagePattern(powerUpImage), CornerRadii.EMPTY, Insets.EMPTY)));
-            playerPowerUpContainer.getChildren().add(cardHBox);
-            playerPowerUpContainer.setHgrow(cardHBox, Priority.ALWAYS);
-        }               //TO BE DELETED
-        /* }); */
-
-
-//         modelView.getMe().getWeapons().forEach(weaponView -> {
-        for (int i = 0; i < 3; i++) {  //TO BE DELTED
-            HBox cardHBox = new HBox();
-
-            cardHBox.setPrefHeight(playerWeaponContainer.getPrefHeight());
-            cardHBox.maxWidthProperty().bind(cardHBox.heightProperty().divide(406).multiply(240));
-            String weaponImageURI = WEAPON_IMAGES_DIR
-                    + /* weaponView.getType().weaponID() */ new WeaponView("Hellion", true).getID()
-                    + IMAGE_EXTENSION;
-            Image weaponImage = new Image(getClass().getResource(weaponImageURI).toExternalForm());
-            cardHBox.setBackground(new Background(new BackgroundFill(new ImagePattern(weaponImage), CornerRadii.EMPTY, Insets.EMPTY)));
-            playerWeaponContainer.getChildren().add(cardHBox);
-            playerWeaponContainer.setHgrow(cardHBox, Priority.ALWAYS);
-        }               //TO BE DELETED
-//         });
-
 
         List<Button> buttons = new ArrayList<>(Arrays.asList(otherPlayer1, otherPlayer3, otherPlayer2, otherPlayer4));
         buttons.forEach(this::handlePlayerButton);
@@ -185,8 +139,66 @@ public class MainGuiController {
 
     }
 
-    public void setModelView(ModelView modelView) {
+    public void updateModelView(ModelView modelView) {
         this.modelView = modelView;
+
+        String gameboardImageURI = GAMEBOARD_IMAGES_DIR + modelView.getMatch().getGameBoardId() + IMAGE_EXTENSION;
+        Image boardImage = new Image(getClass().getResource(gameboardImageURI).toExternalForm());
+        gameBoard.setBackground(new Background(new BackgroundFill(new ImagePattern(boardImage), CornerRadii.EMPTY, Insets.EMPTY)));
+
+        Platform.runLater(() -> {
+            printPlayerBoard(modelView.getMe());
+        });
+    }
+
+    private void printPlayerBoard(PlayerView playerView) {
+        String aggregateActionImageURI = PLAYERBOARD_IMAGES_DIR
+                + playerView.getId().playerId()
+                + SPACE
+                + (playerView.isFlippedBoard() ? AGGREGATE_ACTION_FLIPPED_FILE_PATTERN : AGGREGATE_ACTION_FILE_PATTERN);
+        Image aggregateActionImage = new Image(getClass().getResource(aggregateActionImageURI).toExternalForm());
+        aggregateActionBox.setBackground(new Background(new BackgroundFill(new ImagePattern(aggregateActionImage), CornerRadii.EMPTY, Insets.EMPTY)));
+
+
+        String playerBoardImageURI = PLAYERBOARD_IMAGES_DIR
+                + playerView.getId().playerId()
+                + BOARD_FILE_PATTERN;
+        Image playerBoardImage = new Image(getClass().getResource(playerBoardImageURI).toExternalForm());
+        boardWithoutAggregateAction.setBackground(new Background(new BackgroundFill(new ImagePattern(playerBoardImage), CornerRadii.EMPTY, Insets.EMPTY)));
+
+
+
+        playerView.getPowerUps().forEach(powerUpView -> {
+            HBox cardHBox = new HBox();
+
+            cardHBox.setPrefHeight(playerPowerUpContainer.getPrefHeight());
+            cardHBox.maxWidthProperty().bind(cardHBox.heightProperty().divide(264).multiply(169));
+            String powerUpImageURI = POWERUP_IMAGES_DIR
+                    + powerUpView.getColor().colorID()
+                    + SPACE
+                    + powerUpView.getType().powerUpID()
+                    + IMAGE_EXTENSION;
+            Image powerUpImage = new Image(getClass().getResource(powerUpImageURI).toExternalForm());
+            cardHBox.setBackground(new Background(new BackgroundFill(new ImagePattern(powerUpImage), CornerRadii.EMPTY, Insets.EMPTY)));
+            playerPowerUpContainer.getChildren().add(cardHBox);
+            playerPowerUpContainer.setHgrow(cardHBox, Priority.ALWAYS);
+        });
+
+
+        playerView.getWeapons().forEach(weaponView -> {
+            HBox cardHBox = new HBox();
+
+            cardHBox.setPrefHeight(playerWeaponContainer.getPrefHeight());
+            cardHBox.maxWidthProperty().bind(cardHBox.heightProperty().divide(406).multiply(240));
+            String weaponImageURI = WEAPON_IMAGES_DIR
+                    + weaponView.getID()
+                    + IMAGE_EXTENSION;
+            Image weaponImage = new Image(getClass().getResource(weaponImageURI).toExternalForm());
+            cardHBox.setBackground(new Background(new BackgroundFill(new ImagePattern(weaponImage), CornerRadii.EMPTY, Insets.EMPTY)));
+            playerWeaponContainer.getChildren().add(cardHBox);
+            playerWeaponContainer.setHgrow(cardHBox, Priority.ALWAYS);
+         });
+
     }
 
     private void handlePlayerButton(Button button) {
@@ -234,6 +246,33 @@ public class MainGuiController {
     public void setNodeUnClickable(Node node) {
         node.setStyle("-fx-background-color: yellow; -fx-background-radius: 10; -fx-opacity: 0");
         node.setOnMouseClicked(null);
+    }
+
+    public static MainGuiController getInstance(){
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        fxmlLoader.setLocation(MainGui.class.getResource("/fx/MainGui.fxml"));
+        try {
+            fxmlLoader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        MainGuiController controller = fxmlLoader.getController();
+        return  controller;
+    }
+
+    public Pane getRoot(){
+        return mainPane;
+    }
+
+
+    public void showCommand(CommandMessage commands){
+        Platform.runLater(() -> {
+
+        });
+    }
+
+    public void bidl(ModelView modelView){
+
     }
 
 }

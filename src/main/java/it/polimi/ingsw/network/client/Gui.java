@@ -3,6 +3,8 @@ package it.polimi.ingsw.network.client;
 import it.polimi.ingsw.view.ModelView;
 import it.polimi.ingsw.view.commandmessage.CommandMessage;
 import it.polimi.ingsw.view.gui.GuiManager;
+import it.polimi.ingsw.view.gui.MainGui;
+import it.polimi.ingsw.view.gui.MainGuiController;
 import javafx.application.Application;
 import javafx.application.Platform;
 
@@ -17,6 +19,7 @@ public class Gui implements Ui, Runnable {
     private boolean inputReady = false;
     private boolean initializationDone = false;
     private static final int TIME_TO_SLEEP = 100;
+    private MainGuiController controller;
 
     public String showMessage(String toBeShown, List<String> possibleAnswers, boolean isAnswerRequired) {
         inputReady = false;
@@ -34,11 +37,13 @@ public class Gui implements Ui, Runnable {
     }
 
     public void refreshView(ModelView modelView){
-        //TODO:
+        controller.updateModelView(modelView);
     }
 
     public void setViewInitializationDone() {
         initializationDone = true;
+        Application.launch(MainGui.class);
+        controller = MainGui.getController();
     }
 
     public boolean isViewInitializationDone() {
