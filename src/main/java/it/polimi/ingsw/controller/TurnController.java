@@ -40,7 +40,7 @@ class TurnController {
             else {
                 Command commandToExecute = possibleCommands.get(numberOfCommandPicked);
                 commandToExecute.execute();
-                //TODO fix handleOtherPlayersCommands();
+                handleOtherPlayersCommands();
                 //add to stack if undoable
                 if (commandToExecute.isUndoable())
                     commandStack.push(commandToExecute);
