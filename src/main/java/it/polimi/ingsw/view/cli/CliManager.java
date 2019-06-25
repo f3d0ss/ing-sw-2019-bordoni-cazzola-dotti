@@ -4,10 +4,10 @@ import it.polimi.ingsw.model.CardinalDirection;
 import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.Connection;
 import it.polimi.ingsw.model.PlayerId;
+import it.polimi.ingsw.view.ModelView;
 import it.polimi.ingsw.view.PlayerView;
 import it.polimi.ingsw.view.SquareView;
 import it.polimi.ingsw.view.TurretSquareView;
-import it.polimi.ingsw.view.*;
 
 public class CliManager {
 
@@ -161,7 +161,7 @@ public class CliManager {
                 break;
             case 10:
                 System.out.printf("Powerups: ");
-                modelView.getMe().getPowerUps().forEach(powerUp -> System.out.printf(powerUp.getName() + " "));
+                modelView.getMe().getPowerUps().forEach(powerUp -> System.out.printf(powerUp.getName() + " " + powerUp.getColorName() + "; "));
                 break;
             case 11:
                 System.out.printf("Ammos: ");
@@ -186,7 +186,7 @@ public class CliManager {
     }
 
     private void displayEnemiesInformation(PlayerView enemy) {
-        System.out.printf("\n" + enemy.getId().playerIdName().toUpperCase() + " (" + enemy.getNickname() + ") has " + enemy.getPowerUps().size() + " poweups.");
+        System.out.printf("\n" + enemy.getId().playerIdName().toUpperCase() + " (" + enemy.getNickname() + (enemy.isDisconnected() ? " - DISCONNESSO" : "") + ") has " + enemy.getPowerUps().size() + " poweups.");
         System.out.printf(" Ammos: ");
         enemy.getAmmo().forEach((color, value) -> System.out.printf(value + " " + color.colorName() + "; "));
         System.out.printf("\n     Weapons: ");
