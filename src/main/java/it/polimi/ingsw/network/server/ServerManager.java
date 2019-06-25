@@ -156,10 +156,6 @@ public class ServerManager implements Runnable {
                 return;
         }
         //TODO: correct error from delay during board choice
-        lobby.put(id, name);
-        notifyNewEntry(id, name);
-        if (sendMessageAndWaitForAnswer(id, new Message(Protocol.LOGIN_CONFIRM, name, null)).equals(Protocol.ERR))
-            return;
         if (chosenBoard == 0) {
             chosenBoard = DEFAULT_BOARD;
             String ans = sendMessageAndWaitForAnswer(id, new Message(Protocol.CHOOSE_BOARD, "", Arrays.asList("Board1", "Board2", "Board3", "Board4")));
@@ -171,8 +167,11 @@ public class ServerManager implements Runnable {
                 } catch (NumberFormatException e) {
                     chosenBoard = DEFAULT_BOARD;
                 }
-            notifyTimeLeft(id, lobby.size());
         }
+        lobby.put(id, name);
+        notifyNewEntry(id, name);
+        if (sendMessageAndWaitForAnswer(id, new Message(Protocol.LOGIN_CONFIRM, name, null)).equals(Protocol.ERR))
+            return;
     }
 
     private void notifyNewEntry(int id, String newEntry) {
@@ -319,8 +318,8 @@ public class ServerManager implements Runnable {
     }
 
     public String sendMessageAndWaitForAnswer(int number, Message message) {
-        boolean isSocket = socketClients.containsKey(number);
-        boolean isRmi = rmiClients.containsKey(number);
+        if(isAwayFromKeyboardOrDisconnected(number))
+            return Protocol.ERR;
         String serializedMessage = parser.serialize(message);
         while (!answerReady.get(number)) {
             try {
@@ -331,10 +330,10 @@ public class ServerManager implements Runnable {
         }
         answerReady.put(number, false);
         SingleCommunication communication;
-        if (isSocket) {
+        if (socketClients.containsKey(number)) {
             communication = new SocketCommunication(serializedMessage, socketClients.get(number), socketServer, number, this);
             new Thread(communication).start();
-        } else if (isRmi) {
+        } else if (rmiClients.containsKey(number)) {
             communication = new RmiCommunication(serializedMessage, rmiClients.get(number), rmiServer, number, this);
             new Thread(communication).start();
         } else {
