@@ -22,6 +22,10 @@ public class VirtualView implements ViewInterface {
         this.controller = controller;
     }
 
+    public void setGameOver(){
+        serverManager.removeGame(playerId);
+    }
+
     @Override
     public void update(MatchView mw) {
         if (!serverManager.isAwayFromKeyboardOrDisconnected(playerId))

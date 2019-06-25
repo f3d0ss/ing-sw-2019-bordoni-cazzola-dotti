@@ -3,6 +3,7 @@ package it.polimi.ingsw.model;
 import it.polimi.ingsw.utils.Parser;
 import it.polimi.ingsw.view.MatchView;
 import it.polimi.ingsw.view.ViewInterface;
+import it.polimi.ingsw.view.VirtualView;
 
 import java.io.*;
 import java.net.URL;
@@ -82,6 +83,12 @@ public class Match {
                 PowerUpDeck.class);
         currentPowerUpDeck.shuffle();
         usedPowerUpDeck = new PowerUpDeck(new ArrayList<>());
+    }
+
+    public void setLeaderBoard(Map<PlayerId, Long> leaderBoard) {
+        this.leaderBoard = leaderBoard;
+        views.values().forEach(v -> ((VirtualView)v).setGameOver());
+        update();
     }
 
     public Player getPlayer(PlayerId id) {

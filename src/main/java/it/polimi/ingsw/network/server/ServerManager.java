@@ -16,7 +16,7 @@ import static java.lang.Thread.sleep;
 public class ServerManager implements Runnable {
 
     public final static int MIN_PLAYERS = 2;
-    private final static int MAX_PLAYERS = 5;
+    private final static int MAX_PLAYERS = 3;
     private final static int DEFAULT_BOARD = 1;
     private final static int MILLIS_TO_WAIT = 100;
     private final static String RECONNECT = "Reconnect";
@@ -232,6 +232,10 @@ public class ServerManager implements Runnable {
         });
         gamers.values().forEach(v -> ((VirtualView)v).setController(match));
         new Thread(match).start();
+    }
+
+    public void removeGame(int playerId){
+        activeMatches.remove(playerId);
     }
 
     public boolean allServerReady() {
