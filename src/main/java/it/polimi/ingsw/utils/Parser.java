@@ -12,6 +12,7 @@ import it.polimi.ingsw.view.SquareView;
 import it.polimi.ingsw.view.TurretSquareView;
 import it.polimi.ingsw.view.commandmessage.*;
 
+import java.io.InputStreamReader;
 import java.io.Reader;
 
 /**
@@ -119,13 +120,12 @@ public class Parser {
     }
 
     /**
-     * This method deserializes the file read from the specified reader into an object of the
-     * specified class.
+     * This method deserializes the file read from the specified reader into a Weapon
      *
-     * @param reader the reader producing the char sequence from which the object is to be deserialized.
+     * @param reader the reader producing the char sequence from which the weapon is to be deserialized.
      * @return a Weapon from the string.
      */
-    public Weapon deserialize(Reader reader) {
+    public Weapon deserialize(InputStreamReader reader) {
         Weapon weapon = gson.fromJson(reader, Weapon.class);
         weapon.postDeserialization();
         return weapon;
