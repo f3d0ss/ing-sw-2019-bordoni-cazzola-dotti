@@ -4,7 +4,6 @@ import it.polimi.ingsw.model.AggregateAction;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.Weapon;
 import it.polimi.ingsw.model.command.Command;
-import it.polimi.ingsw.model.command.DoneCommand;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,11 +16,7 @@ public class ChoosingWeaponOptionState extends SelectedWeaponState {
 
     @Override
     public List<Command> getPossibleCommands(Player player) {
-        List<Command> commands = new ArrayList<>();
-        if (getSelectedWeapon().getSelectedWeaponMode() == null)
-            commands = new ArrayList<>(getSelectedWeapon().getSelectWeaponModeCommands(player, this));
-        else
-            commands.add(new DoneCommand(player, this));
-        return commands;
+        return new ArrayList<>(getSelectedWeapon().getSelectWeaponModeCommands(player, this));
+
     }
 }
