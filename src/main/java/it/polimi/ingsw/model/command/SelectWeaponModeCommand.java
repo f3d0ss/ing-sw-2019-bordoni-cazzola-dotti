@@ -35,8 +35,10 @@ public class SelectWeaponModeCommand implements Command {
     @Override
     public void execute() {
         currentState.getSelectedWeapon().setSelectedWeaponMode(weaponMode);
-        player.changeState(new PendingPaymentWeaponOptionState(currentState.getSelectedAggregateAction(), currentState.getSelectedWeapon(), weaponMode.getCost()));
-
+        if (weaponMode.getCost().size() > 0)
+            player.changeState(new PendingPaymentWeaponOptionState(currentState.getSelectedAggregateAction(), currentState.getSelectedWeapon(), weaponMode.getCost()));
+        else
+            player.changeState(new ChoosingWeaponOptionState(currentState.getSelectedAggregateAction(), currentState.getSelectedWeapon()));
     }
 
     /**
