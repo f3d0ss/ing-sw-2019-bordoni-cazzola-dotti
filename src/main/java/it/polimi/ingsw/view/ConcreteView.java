@@ -46,7 +46,7 @@ public class ConcreteView implements ViewInterface {
     @Override
     public void setViewInitializationDone() {
         ui.setViewInitializationDone();
-        ui.refreshView(modelView);
+//        ui.refreshView(modelView);
     }
 
     @Override

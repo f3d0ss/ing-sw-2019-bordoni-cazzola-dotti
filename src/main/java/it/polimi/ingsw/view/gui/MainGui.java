@@ -27,9 +27,6 @@ public class MainGui extends Application {
     }
 
 
-    public static MainGuiController getController(){
-        return controller;
-    }
 
     public static void main(String[] args) {
         launch(args);

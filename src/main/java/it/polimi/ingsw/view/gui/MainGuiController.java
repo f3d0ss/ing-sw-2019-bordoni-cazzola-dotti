@@ -154,7 +154,6 @@ public class MainGuiController {
     private void printPlayerBoard(PlayerView playerView) {
         String aggregateActionImageURI = PLAYERBOARD_IMAGES_DIR
                 + playerView.getId().playerId()
-                + SPACE
                 + (playerView.isFlippedBoard() ? AGGREGATE_ACTION_FLIPPED_FILE_PATTERN : AGGREGATE_ACTION_FILE_PATTERN);
         Image aggregateActionImage = new Image(getClass().getResource(aggregateActionImageURI).toExternalForm());
         aggregateActionBox.setBackground(new Background(new BackgroundFill(new ImagePattern(aggregateActionImage), CornerRadii.EMPTY, Insets.EMPTY)));

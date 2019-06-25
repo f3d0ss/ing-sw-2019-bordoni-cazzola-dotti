@@ -18,6 +18,8 @@ public class GuiManager extends Application {
     private static LoginWindow window;
     private static boolean inputReady;
 
+    private static MainGuiController controller;
+
     public static void setClient(Client c) {
         client = c;
     }
@@ -40,16 +42,28 @@ public class GuiManager extends Application {
         inputReady = input;
     }
 
+    public static void startMainGui() {
+        controller = MainGuiController.getInstance();
+
+        Scene scene = new Scene(controller.getRoot());
+        stage.setScene(scene);
+        stage.setFullScreen(true);
+        stage.show();
+    }
+
+    public static MainGuiController getController(){
+        return controller;
+    }
+
+
     @Override
     public void start(Stage inputStage) {
         stage = new Stage();
         window = new LoginWindow(stage, gui, "", null, "", false);
         Scene scene = new Scene(window);
         stage.setTitle("Login");
-        stage.setMinWidth(WIDTH);
-        stage.setMaxWidth(WIDTH);
-        stage.setMinHeight(HEIGHT);
-        stage.setMaxHeight(HEIGHT);
+        stage.setWidth(WIDTH);
+        stage.setHeight(HEIGHT);
         stage.setScene(scene);
         gui.setGuiReady(true);
     }

@@ -42,8 +42,10 @@ public class Gui implements Ui, Runnable {
 
     public void setViewInitializationDone() {
         initializationDone = true;
-        Application.launch(MainGui.class);
-        controller = MainGui.getController();
+        Platform.runLater(() -> {
+            GuiManager.startMainGui();
+            controller = GuiManager.getController();
+        });
     }
 
     public boolean isViewInitializationDone() {
