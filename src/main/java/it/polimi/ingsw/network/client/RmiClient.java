@@ -5,6 +5,7 @@ import it.polimi.ingsw.network.Protocol;
 import it.polimi.ingsw.network.server.RmiClientInterface;
 
 import java.rmi.ConnectException;
+import java.rmi.ConnectIOException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -59,7 +60,7 @@ public class RmiClient extends Client {
                 stub = (RmiClientInterface) UnicastRemoteObject.exportObject(rmiClientImplementation, 0);
                 rmiServerInterface.registry(stub);
                 break;
-            } catch (ConnectException e) {
+            } catch (ConnectException | ConnectIOException e) {
                 //System.out.println(e.getMessage());
                 do {
                     manageInvalidIpOrPort();
