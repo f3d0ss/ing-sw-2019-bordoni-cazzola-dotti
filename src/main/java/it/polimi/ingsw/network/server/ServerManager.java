@@ -96,9 +96,6 @@ public class ServerManager implements Runnable {
     }
 
     private boolean switchClientId(int oldId, int temporaryId) {
-        //TODO: to be removed
-        if (oldId == temporaryId)
-            return true;
         if (activeMatches.containsKey(oldId)) {
             if (socketClients.containsKey(oldId)) {
                 if (socketClients.containsKey(temporaryId)) {
@@ -221,6 +218,7 @@ public class ServerManager implements Runnable {
             createNewGame();
             chosenBoard = 0;
             lobby.clear();
+            countDown.restore();
         }
     }
 
