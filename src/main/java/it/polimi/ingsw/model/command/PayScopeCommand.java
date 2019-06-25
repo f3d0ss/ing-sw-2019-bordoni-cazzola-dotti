@@ -30,8 +30,6 @@ public class PayScopeCommand implements Command {
      */
     @Override
     public void execute() {
-        currentState.getPendingAmmoPayment().forEach((color, amount) -> player.pay(color, amount));
-        currentState.getPendingCardPayment().forEach(powerUp -> player.pay(powerUp));
         player.changeState(new SelectScopeTargetState(currentState.getSelectedAggregateAction(), currentState.getSelectedWeapon(), currentState.getShootedPlayers()));
     }
 
@@ -40,8 +38,6 @@ public class PayScopeCommand implements Command {
      */
     @Override
     public void undo() {
-        currentState.getPendingAmmoPayment().forEach((color, amount) -> player.refund(color, amount));
-        currentState.getPendingCardPayment().forEach(powerUp -> player.refund(powerUp));
         player.changeState(currentState);
     }
 
