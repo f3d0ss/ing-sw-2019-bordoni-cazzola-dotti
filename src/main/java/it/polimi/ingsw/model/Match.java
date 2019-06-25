@@ -24,6 +24,7 @@ public class Match {
     private GameBoard board;
     private boolean firstPlayerPlayedLastTurn;
     private Map<PlayerId, ViewInterface> views;
+    private Map<PlayerId, Long> leaderBoard;
 
     public Match(int gameBoardNumber) {
         Parser parser = new Parser();
@@ -225,7 +226,7 @@ public class Match {
     }
 
     private void update() {
-        views.values().forEach(viewInterface -> viewInterface.update(new MatchView(killshotTrack, deathsCounter, board.getId())));
+        views.values().forEach(viewInterface -> viewInterface.update(new MatchView(killshotTrack, deathsCounter, board.getId(), leaderBoard)));
     }
 
     /**

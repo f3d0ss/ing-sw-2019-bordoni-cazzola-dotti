@@ -27,11 +27,11 @@ public enum CommandType {
         }
     }, SELECT_AMMO_PAYMENT {
         public String getString() {
-            return "Seleziona le munizioni con cui vuoi pagare";
+            return "Paga con la munizione ";
         }
     }, SELECT_BUYING_WEAPON {
         public String getString() {
-            return "Seleziona l'arma che vuoi acquistare";
+            return "Acquista l'arma ";
         }
     }, SELECT_DISCARD_WEAPON {
         public String getString() {
@@ -43,7 +43,7 @@ public enum CommandType {
         }
     }, SELECT_POWER_UP_PAYMENT {
         public String getString() {
-            return "Seleziona un potenziamento per pagare";
+            return "Paga con il pontenziamento ";
         }
     }, SELECT_RELOADING_WEAPON {
         public String getString() {

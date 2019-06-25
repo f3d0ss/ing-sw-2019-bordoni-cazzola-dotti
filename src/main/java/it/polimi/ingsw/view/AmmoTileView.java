@@ -17,10 +17,11 @@ public class AmmoTileView {
     public String toString() {
         StringBuilder string = new StringBuilder();
         if (powerUp > 0)
-            string = new StringBuilder("P");
-        for (Map.Entry<Color, Integer> entry : ammo.entrySet())
-            for (int i = 0; i < entry.getValue(); i++)
-                string.append(entry.getKey().colorName(), 0, 1);
+            string.append("P");
+        if (ammo != null)
+            for (Map.Entry<Color, Integer> entry : ammo.entrySet())
+                for (int i = 0; i < entry.getValue(); i++)
+                    string.append(entry.getKey().colorName(), 0, 1);
         return string.toString();
     }
 }

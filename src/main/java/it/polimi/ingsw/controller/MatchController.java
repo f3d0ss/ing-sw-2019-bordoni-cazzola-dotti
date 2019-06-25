@@ -187,8 +187,7 @@ public class MatchController implements Runnable {
         Map<PlayerId, Long> leaderBoard = players.stream()
                 .collect(Collectors.toMap(Player::getId, player -> (long) player.getPoints(), (a, b) -> b, LinkedHashMap::new));
         leaderBoard = sort(leaderBoard, killShootTrackLeaderBoard);
-        //TODO send final leaderboard
-        //virtualViews.forEach(ViewInterface::update(leaderBoard));
+        match.setLeaderBoard(leaderBoard);
     }
 
     /**
