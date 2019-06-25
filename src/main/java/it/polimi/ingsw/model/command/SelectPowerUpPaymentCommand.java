@@ -30,6 +30,7 @@ public class SelectPowerUpPaymentCommand extends SelectPaymentCommand {
      */
     @Override
     public void execute() {
+        player.pay(powerUp);
         currentState.addPendingCard(powerUp);
     }
 
@@ -38,6 +39,7 @@ public class SelectPowerUpPaymentCommand extends SelectPaymentCommand {
      */
     @Override
     public void undo() {
+        player.refund(powerUp);
         currentState.removePendingCard(powerUp);
     }
 

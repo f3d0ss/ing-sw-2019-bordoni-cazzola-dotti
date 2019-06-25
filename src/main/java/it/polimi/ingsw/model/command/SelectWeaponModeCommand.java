@@ -4,6 +4,7 @@ import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.WeaponMode;
 import it.polimi.ingsw.model.playerstate.ChoosingWeaponOptionState;
 import it.polimi.ingsw.model.playerstate.PendingPaymentWeaponOptionState;
+import it.polimi.ingsw.model.playerstate.ReadyToShootState;
 import it.polimi.ingsw.view.commandmessage.CommandMessage;
 import it.polimi.ingsw.view.commandmessage.CommandType;
 import it.polimi.ingsw.view.commandmessage.WeaponModeCommandMessage;
@@ -35,8 +36,10 @@ public class SelectWeaponModeCommand implements Command {
     @Override
     public void execute() {
         currentState.getSelectedWeapon().setSelectedWeaponMode(weaponMode);
-        player.changeState(new PendingPaymentWeaponOptionState(currentState.getSelectedAggregateAction(), currentState.getSelectedWeapon(), weaponMode.getCost()));
-
+        if (weaponMode.getCost().size() > 0)
+            player.changeState(new PendingPaymentWeaponOptionState(currentState.getSelectedAggregateAction(), currentState.getSelectedWeapon(), weaponMode.getCost()));
+        else
+            player.changeState(new ReadyToShootState(currentState.getSelectedAggregateAction(), currentState.getSelectedWeapon()));
     }
 
     /**

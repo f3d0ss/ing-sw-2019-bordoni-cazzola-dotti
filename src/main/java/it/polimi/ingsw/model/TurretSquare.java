@@ -30,7 +30,8 @@ public class TurretSquare extends Square {
     @Override
     public List<GrabCommand> getGrabCommands(Player player, SelectedAggregateActionState state) {
         ArrayList<GrabCommand> commands = new ArrayList<>();
-        commands.add(new GrabTileCommand(player, ammoTile, this));
+        if (ammoTile != null)
+            commands.add(new GrabTileCommand(player, ammoTile, this));
         return commands;
     }
 

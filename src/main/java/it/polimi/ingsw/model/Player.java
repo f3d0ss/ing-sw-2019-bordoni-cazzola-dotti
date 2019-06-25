@@ -317,6 +317,10 @@ public class Player {
         update();
     }
 
+    public int getAvailableAggregateActionCounter() {
+        return availableAggregateActionCounter;
+    }
+
     public int getPoints() {
         return points;
     }

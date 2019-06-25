@@ -30,8 +30,6 @@ public class PayReloadWeaponCommand implements Command {
      */
     @Override
     public void execute() {
-        currentState.getPendingAmmoPayment().forEach((color, amount) -> player.pay(color, amount));
-        currentState.getPendingCardPayment().forEach(powerUp -> player.pay(powerUp));
         currentState.getSelectedReloadingWeapon().reload();
         player.changeState(new ManageTurnState());
     }
@@ -41,8 +39,6 @@ public class PayReloadWeaponCommand implements Command {
      */
     @Override
     public void undo() {
-        currentState.getPendingAmmoPayment().forEach((color, amount) -> player.refund(color, amount));
-        currentState.getPendingCardPayment().forEach(powerUp -> player.refund(powerUp));
         currentState.getSelectedReloadingWeapon().unload();
         player.changeState(currentState);
     }

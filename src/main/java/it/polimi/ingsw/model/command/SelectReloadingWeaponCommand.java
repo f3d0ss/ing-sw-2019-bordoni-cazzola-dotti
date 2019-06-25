@@ -26,6 +26,7 @@ public class SelectReloadingWeaponCommand implements Command {
     public SelectReloadingWeaponCommand(Player player, Weapon weapon, ChoosingWeaponState currentState) {
         this.player = player;
         this.currentState = currentState;
+        this.weapon = weapon;
         nextState = new PendingPaymentReloadBeforeShotState(currentState.getSelectedAggregateAction(), weapon);
     }
 
@@ -39,6 +40,7 @@ public class SelectReloadingWeaponCommand implements Command {
     public SelectReloadingWeaponCommand(Player player, Weapon weapon, ManageTurnState currentState) {
         this.player = player;
         this.currentState = currentState;
+        this.weapon = weapon;
         nextState = new PendingPaymentReloadWeaponState(weapon);
     }
 

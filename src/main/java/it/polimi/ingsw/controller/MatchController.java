@@ -111,6 +111,7 @@ public class MatchController implements Runnable {
     /**
      * This method starts the match
      */
+    @Override
     public void run() {
         firstTurn();
         int currentPlayerIndex = 0;
