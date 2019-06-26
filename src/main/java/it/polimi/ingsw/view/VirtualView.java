@@ -54,7 +54,7 @@ public class VirtualView implements ViewInterface {
 
     @Override
     public int sendCommands(List<CommandMessage> commands, boolean undo) {
-        int answer = 1;//TODO: is the default choice the first one?
+        int answer = -1;//TODO: is the default choice the first one?
         String choice = serverManager.sendMessageAndWaitForAnswer(playerId, new CommandViewTransfer(commands, undo));
         if (choice.equals(Protocol.ERR)) {
             System.out.println("VV ERRORE");

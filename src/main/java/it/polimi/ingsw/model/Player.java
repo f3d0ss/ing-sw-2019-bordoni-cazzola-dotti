@@ -300,6 +300,7 @@ public class Player {
 
     public void setDisconnected() {
         disconnected = true;
+        changeState(new IdleState());
         update();
     }
 

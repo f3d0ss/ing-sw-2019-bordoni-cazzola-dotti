@@ -34,6 +34,9 @@ public class MatchController implements Runnable {
             virtualViews.put(values[i], lobby.get(nickname));
         }
         players = match.getCurrentPlayers();
+    }
+
+    public void sendFirstStateOfModel(){
         match.updateAllModel();
     }
 
@@ -105,7 +108,8 @@ public class MatchController implements Runnable {
     private void firstTurn() {
         for (Player currentPlayer : players) {
             spawnFirstTime(currentPlayer);
-            new TurnController(currentPlayer, players, virtualViews).runTurn();
+            if (!currentPlayer.isDisconnected())
+                new TurnController(currentPlayer, players, virtualViews).runTurn();
             endTurnControls(currentPlayer);
         }
     }
@@ -307,7 +311,11 @@ public class MatchController implements Runnable {
             int selectedCommand = virtualViews.get(currentPlayer.getId()).sendCommands(commands.stream()
                     .map(Command::createCommandMessage)
                     .collect(Collectors.toList()), false);
-            commands.get(selectedCommand).execute();
+            if (selectedCommand != -1) {
+                commands.get(selectedCommand).execute();
+            } else {
+                commands.get(new Random().nextInt(commands.size())).execute();
+            }
         }
     }
 
@@ -319,10 +327,14 @@ public class MatchController implements Runnable {
     private void spawnFirstTime(Player currentPlayer) {
         List<Command> commands = new ArrayList<>(currentPlayer.getSpawnCommands());
         if (!currentPlayer.isDisconnected()) {
-            int selectedCommand = virtualViews.get(currentPlayer.getId()).sendCommands(commands.stream()
-                    .map(Command::createCommandMessage)
-                    .collect(Collectors.toList()), false);
-            commands.get(selectedCommand).execute();
+            int selectedCommand = virtualViews.get(currentPlayer.getId())
+                    .sendCommands(commands.stream()
+                            .map(Command::createCommandMessage)
+                            .collect(Collectors.toList()), false);
+            if (selectedCommand == -1)
+                commands.get(new Random().nextInt(commands.size())).execute();
+            else
+                commands.get(selectedCommand).execute();
         } else {
             commands.get(new Random().nextInt(commands.size())).execute();
         }
@@ -337,7 +349,8 @@ public class MatchController implements Runnable {
             if (!player.isDisconnected())
                 counter++;
         }
-        if (counter < MIN_PLAYERS) {
+        if (counter < MIN_PLAYERS -1) {
+            System.out.println("RAGEQUIT --- ENDING MATCH");
             //end match
             calculateFinalScores();
             endMatch();
