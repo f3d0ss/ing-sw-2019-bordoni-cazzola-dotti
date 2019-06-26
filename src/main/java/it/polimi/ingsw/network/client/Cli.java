@@ -6,10 +6,7 @@ import it.polimi.ingsw.view.ModelView;
 import it.polimi.ingsw.view.cli.CliManager;
 import it.polimi.ingsw.view.commandmessage.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 
 public class Cli implements Ui {
 
@@ -60,22 +57,21 @@ public class Cli implements Ui {
     }
 
     private int askChoiceByNumber(int size){
-        String input;
         int choice;
         try {
-            input = stdin.nextLine();
-            choice = Integer.parseInt(input);
-        } catch (NumberFormatException e) {
+            choice = stdin.nextInt();
+        } catch (InputMismatchException e) {
             choice = FIRST_CHOICE_NUMBER - 1;
         }
+        stdin.nextLine();
         while (choice >= size + FIRST_CHOICE_NUMBER || choice < FIRST_CHOICE_NUMBER) {
             System.out.println("Risposta non valida. Riprova:");
             try {
-                input = stdin.nextLine();
-                choice = Integer.parseInt(input);
-            } catch (NumberFormatException e) {
+                choice = stdin.nextInt();
+            } catch (InputMismatchException e) {
                 choice = FIRST_CHOICE_NUMBER - 1;
             }
+            stdin.nextLine();
         }
         return choice;
     }
@@ -99,7 +95,8 @@ public class Cli implements Ui {
         if (command.getType() == CommandType.SELECT_TARGET_PLAYER)
             return ((PlayerCommandMessage) command).getPlayerId().playerIdName();
         if (command.getType() == CommandType.SELECT_TARGET_SQUARE
-                || command.getType() == CommandType.MOVE)
+                || command.getType() == CommandType.MOVE
+                || command.getType() == CommandType.USE_TELEPORT)
             return ((SquareCommandMessage) command).getRow() + " " + ((SquareCommandMessage) command).getCol();
         if (command.getType() == CommandType.SELECT_WEAPON_MODE)
             return ((WeaponModeCommandMessage) command).getWeaponMode();
