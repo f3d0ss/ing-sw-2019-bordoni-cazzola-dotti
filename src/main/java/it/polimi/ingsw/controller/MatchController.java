@@ -34,17 +34,23 @@ public class MatchController implements Runnable {
             virtualViews.put(values[i], lobby.get(nickname));
         }
         players = match.getCurrentPlayers();
+    }
+
+
+    public void sendFirstStateOfModel() {
         match.updateAllModel();
     }
 
     public void reconnect(String username) {
         for (Player player : players)
-            if (player.getNickname().equals(username)) player.setDisconnected(false);
+            if (player.getNickname().equals(username))
+                player.setConnected();
     }
 
     public void disconnect(String username) {
         for (Player player : players)
-            if (player.getNickname().equals(username)) player.setDisconnected(true);
+            if (player.getNickname().equals(username))
+                player.setDisconnected();
     }
 
     /**
@@ -101,11 +107,12 @@ public class MatchController implements Runnable {
      * This method handles the first turn of each player
      */
     private void firstTurn() {
-        players.stream().filter(currentPlayer -> !currentPlayer.isDisconnected()).forEachOrdered(currentPlayer -> {
+        for (Player currentPlayer : players) {
             spawnFirstTime(currentPlayer);
-            new TurnController(currentPlayer, players, virtualViews).runTurn();
+            if (!currentPlayer.isDisconnected())
+                new TurnController(currentPlayer, players, virtualViews).runTurn();
             endTurnControls(currentPlayer);
-        });
+        }
     }
 
     /**
@@ -161,7 +168,7 @@ public class MatchController implements Runnable {
                 match.firstPlayerPlayedLastTurn();
             Player currentPlayer = players.get(currentPlayerIndex);
             if (!currentPlayer.isDisconnected()) {
-                new TurnController(currentPlayer, players, virtualViews);
+                new TurnController(currentPlayer, players, virtualViews).runTurn();
                 endTurnControls(currentPlayer);
             }
             currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
@@ -188,8 +195,7 @@ public class MatchController implements Runnable {
         Map<PlayerId, Long> leaderBoard = players.stream()
                 .collect(Collectors.toMap(Player::getId, player -> (long) player.getPoints(), (a, b) -> b, LinkedHashMap::new));
         leaderBoard = sort(leaderBoard, killShootTrackLeaderBoard);
-        //TODO send final leaderboard
-        //virtualViews.forEach(ViewInterface::update(leaderBoard));
+        match.setLeaderBoard(leaderBoard);
     }
 
     /**
@@ -221,17 +227,19 @@ public class MatchController implements Runnable {
      */
     private void calculateTrackScores(Player deadPlayer) {
         List<PlayerId> track = deadPlayer.getHealth();
-        if (!deadPlayer.isFlippedBoard())
-            Objects.requireNonNull(getPlayerById(track.get(0))).addPoints(POINTS_PER_FIRST_BLOOD);
-        //marks for 12th dmg
-        //extra token on killshottrack for 12th dmg
-        PlayerId playerId11thDamage = track.get(Player.MAX_DAMAGE - 2);
-        match.addKillshot(playerId11thDamage);
-        if (track.get(Player.MAX_DAMAGE - 1) != null) {
-            Objects.requireNonNull(getPlayerById(playerId11thDamage)).addMarks(1, deadPlayer.getId());
+        if (!track.isEmpty()) {
+            if (!deadPlayer.isFlippedBoard())
+                Objects.requireNonNull(getPlayerById(track.get(0))).addPoints(POINTS_PER_FIRST_BLOOD);
+            //marks for 12th dmg
+            //extra token on killshottrack for 12th dmg
+            PlayerId playerId11thDamage = track.get(track.size() - 1);
             match.addKillshot(playerId11thDamage);
+            if (track.size() == Player.MAX_DAMAGE) {
+                Objects.requireNonNull(getPlayerById(playerId11thDamage)).addMarks(1, deadPlayer.getId());
+                match.addKillshot(playerId11thDamage);
+            }
+            scoreTrackPoints(deadPlayer, sortByPoints(track));
         }
-        scoreTrackPoints(deadPlayer, sortByPoints(track));
     }
 
     /**
@@ -304,7 +312,11 @@ public class MatchController implements Runnable {
             int selectedCommand = virtualViews.get(currentPlayer.getId()).sendCommands(commands.stream()
                     .map(Command::createCommandMessage)
                     .collect(Collectors.toList()), false);
-            commands.get(selectedCommand).execute();
+            if (selectedCommand != -1) {
+                commands.get(selectedCommand).execute();
+            } else {
+                commands.get(new Random().nextInt(commands.size())).execute();
+            }
         }
     }
 
@@ -315,10 +327,18 @@ public class MatchController implements Runnable {
      */
     private void spawnFirstTime(Player currentPlayer) {
         List<Command> commands = new ArrayList<>(currentPlayer.getSpawnCommands());
-        int selectedCommand = virtualViews.get(currentPlayer.getId()).sendCommands(commands.stream()
-                .map(Command::createCommandMessage)
-                .collect(Collectors.toList()), false);
-        commands.get(selectedCommand).execute();
+        if (!currentPlayer.isDisconnected()) {
+            int selectedCommand = virtualViews.get(currentPlayer.getId())
+                    .sendCommands(commands.stream()
+                            .map(Command::createCommandMessage)
+                            .collect(Collectors.toList()), false);
+            if (selectedCommand == -1)
+                commands.get(new Random().nextInt(commands.size())).execute();
+            else
+                commands.get(selectedCommand).execute();
+        } else {
+            commands.get(new Random().nextInt(commands.size())).execute();
+        }
     }
 
     /**
@@ -331,6 +351,7 @@ public class MatchController implements Runnable {
                 counter++;
         }
         if (counter < MIN_PLAYERS) {
+            System.out.println("RAGEQUIT --- ENDING MATCH");
             //end match
             calculateFinalScores();
             endMatch();

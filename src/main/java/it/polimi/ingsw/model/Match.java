@@ -3,6 +3,7 @@ package it.polimi.ingsw.model;
 import it.polimi.ingsw.utils.Parser;
 import it.polimi.ingsw.view.MatchView;
 import it.polimi.ingsw.view.ViewInterface;
+import it.polimi.ingsw.view.VirtualView;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -11,7 +12,7 @@ import java.util.*;
 public class Match {
 
     private static final int SKULLS = 8;
-
+    //TODO param server
     private List<PlayerId> killshotTrack;
     private PowerUpDeck currentPowerUpDeck;
     private PowerUpDeck usedPowerUpDeck;
@@ -23,6 +24,7 @@ public class Match {
     private GameBoard board;
     private boolean firstPlayerPlayedLastTurn;
     private Map<PlayerId, ViewInterface> views;
+    private Map<PlayerId, Long> leaderBoard;
 
     public Match(int gameBoardNumber) {
         Parser parser = new Parser();
@@ -93,6 +95,12 @@ public class Match {
                 PowerUpDeck.class);
         currentPowerUpDeck.shuffle();
         usedPowerUpDeck = new PowerUpDeck(new ArrayList<>());
+    }
+
+    public void setLeaderBoard(Map<PlayerId, Long> leaderBoard) {
+        this.leaderBoard = leaderBoard;
+        views.values().forEach(v -> ((VirtualView) v).setGameOver());
+        update();
     }
 
     public Player getPlayer(PlayerId id) {
@@ -229,7 +237,7 @@ public class Match {
     }
 
     private void update() {
-        views.values().forEach(viewInterface -> viewInterface.update(new MatchView(killshotTrack, deathsCounter, board.getId())));
+        views.values().forEach(viewInterface -> viewInterface.update(new MatchView(killshotTrack, deathsCounter, board.getId(), leaderBoard)));
     }
 
     /**
@@ -240,6 +248,13 @@ public class Match {
         currentPlayers.forEach(Player::update);
         board.getSquareList().forEach(Square::update);
         views.values().forEach(ViewInterface::setViewInitializationDone);
+    }
+
+    public void sendModelAfterReconnection(PlayerId player) {
+        views.get(player).update(new MatchView(killshotTrack, deathsCounter, board.getId(), leaderBoard));
+        currentPlayers.forEach(p -> views.get(player).update(p.getPlayerView(p.getId() == player)));
+        board.getSquareList().forEach(s -> views.get(player).update(s.getSquareView()));
+        views.get(player).setViewInitializationDone();
     }
 
 }

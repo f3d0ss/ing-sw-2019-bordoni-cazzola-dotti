@@ -18,11 +18,11 @@ public class GameCountDown extends Thread {
         stopped = true;
         seconds = secondsToWait;
     }
- /*
+
     public void restore() {
         stopped = false;
         seconds = secondsToWait;
-    }*/
+    }
 
     public int getTimeLeft() {
         return seconds;
