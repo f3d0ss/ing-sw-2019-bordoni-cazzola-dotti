@@ -28,6 +28,10 @@ public class MainGuiController {
 
 
     private static final int MAX_SKULL_PLAYERBOARD = 6;
+    private static final int POWERUP_HEIGHT = 264;
+    private static final int POWERUP_WIDTH = 169;
+    private static final int WEAPON_HEIGHT = 406;
+    private static final int WEAPON_WIDTH = 240;
     public HBox playerAggregateActionMMM;
     public HBox playerAggregateActionMG;
     public HBox playerAggregateActionS;
@@ -148,8 +152,6 @@ public class MainGuiController {
 
     public void updateModelView(ModelView modelView) {
         this.modelView = modelView;
-
-
         Platform.runLater(() -> {
             printPlayerBoard(modelView.getMe());
         });
@@ -168,7 +170,7 @@ public class MainGuiController {
             HBox cardHBox = new HBox();
 
             cardHBox.setPrefHeight(playerPowerUpContainer.getPrefHeight());
-            cardHBox.maxWidthProperty().bind(cardHBox.heightProperty().divide(264).multiply(169));
+            cardHBox.maxWidthProperty().bind(cardHBox.heightProperty().divide(POWERUP_HEIGHT).multiply(POWERUP_WIDTH));
             String powerUpImageURI = POWERUP_IMAGES_DIR
                     + powerUpView.getColor().colorID()
                     + SPACE
@@ -185,7 +187,7 @@ public class MainGuiController {
             HBox cardHBox = new HBox();
 
             cardHBox.setPrefHeight(playerWeaponContainer.getPrefHeight());
-            cardHBox.maxWidthProperty().bind(cardHBox.heightProperty().divide(406).multiply(240));
+            cardHBox.maxWidthProperty().bind(cardHBox.heightProperty().divide(WEAPON_HEIGHT).multiply(WEAPON_WIDTH));
             String weaponImageURI = WEAPON_IMAGES_DIR
                     + weaponView.getID()
                     + IMAGE_EXTENSION;
