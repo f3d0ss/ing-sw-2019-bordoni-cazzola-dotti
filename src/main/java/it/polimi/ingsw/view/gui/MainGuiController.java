@@ -3,6 +3,7 @@ package it.polimi.ingsw.view.gui;
 import it.polimi.ingsw.utils.Lock;
 import it.polimi.ingsw.view.ModelView;
 import it.polimi.ingsw.view.PlayerView;
+import it.polimi.ingsw.view.commandmessage.AggregateActionCommandMessage;
 import it.polimi.ingsw.view.commandmessage.CommandMessage;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -312,10 +313,21 @@ public class MainGuiController {
 
     public void showCommand(List<CommandMessage> commands, Lock lock) {
         for (int i = 0; i < commands.size(); i++) {
-            Text commandText = new Text(commands.get(i).getType().getString());
-            int finalI = i;
-            commandText.setOnMouseClicked(actionEvent -> handleCommandClick(finalI, lock));
-            extraCommandContainer.getChildren().add(commandText);
+            switch (commands.get(i).getType()) {
+                case SELECT_AGGREGATE_ACTION: {
+                    Text commandText = new Text(((AggregateActionCommandMessage)commands.get(i)).getAggregateActionID().toString());
+                    int finalI = i;
+                    commandText.setOnMouseClicked(actionEvent -> handleCommandClick(finalI, lock));
+                    extraCommandContainer.getChildren().add(commandText);
+                }
+                default:{
+                    Text commandText = new Text(commands.get(i).getType().getString());
+                    int finalI = i;
+                    commandText.setOnMouseClicked(actionEvent -> handleCommandClick(finalI, lock));
+                    extraCommandContainer.getChildren().add(commandText);
+                }
+            }
+
         }
     }
 
