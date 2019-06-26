@@ -4,7 +4,6 @@ import it.polimi.ingsw.utils.Lock;
 import it.polimi.ingsw.view.ModelView;
 import it.polimi.ingsw.view.PlayerView;
 import it.polimi.ingsw.view.commandmessage.CommandMessage;
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
@@ -152,9 +151,7 @@ public class MainGuiController {
 
     public void updateModelView(ModelView modelView) {
         this.modelView = modelView;
-        Platform.runLater(() -> {
-            printPlayerBoard(modelView.getMe());
-        });
+        printPlayerBoard(modelView.getMe());
     }
 
     private void printPlayerBoard(PlayerView playerView) {
@@ -195,7 +192,7 @@ public class MainGuiController {
             cardHBox.setBackground(new Background(new BackgroundFill(new ImagePattern(weaponImage), CornerRadii.EMPTY, Insets.EMPTY)));
             playerWeaponContainer.getChildren().add(cardHBox);
             playerWeaponContainer.setHgrow(cardHBox, Priority.ALWAYS);
-         });
+        });
 
 
         playerMarks.getChildren().clear();
@@ -231,7 +228,7 @@ public class MainGuiController {
         });
 
         playerDeathsGrid.getChildren().clear();
-        for (int j = 0; j < playerView.getDeaths() && j < MAX_SKULL_PLAYERBOARD ; j++) {
+        for (int j = 0; j < playerView.getDeaths() && j < MAX_SKULL_PLAYERBOARD; j++) {
             HBox skullBox = new HBox();
             skullBox.setPrefHeight(playerDeathsGrid.getPrefHeight());
             skullBox.maxWidthProperty().bind(skullBox.heightProperty());
@@ -281,7 +278,7 @@ public class MainGuiController {
         });
     }
 
-    private void handleCommandClick(int index, Lock lock){
+    private void handleCommandClick(int index, Lock lock) {
         extraCommandContainer.getChildren().clear();
         selectedCommand = index;
         lock.unlock();
@@ -297,7 +294,7 @@ public class MainGuiController {
         node.setOnMouseClicked(null);
     }
 
-    public static MainGuiController getInstance(){
+    public static MainGuiController getInstance() {
         FXMLLoader fxmlLoader = new FXMLLoader();
         fxmlLoader.setLocation(MainGui.class.getResource("/fx/MainGui.fxml"));
         try {
@@ -308,20 +305,18 @@ public class MainGuiController {
         return fxmlLoader.getController();
     }
 
-    public Pane getRoot(){
+    public Pane getRoot() {
         return mainPane;
     }
 
 
-    public void showCommand(List<CommandMessage> commands, Lock lock){
-        Platform.runLater(() -> {
-            for (int i = 0; i < commands.size(); i++) {
-                Text commandText = new Text(commands.get(i).getType().getString());
-                int finalI = i;
-                commandText.setOnMouseClicked(actionEvent -> handleCommandClick(finalI, lock));
-                extraCommandContainer.getChildren().add(commandText);
-            }
-        });
+    public void showCommand(List<CommandMessage> commands, Lock lock) {
+        for (int i = 0; i < commands.size(); i++) {
+            Text commandText = new Text(commands.get(i).getType().getString());
+            int finalI = i;
+            commandText.setOnMouseClicked(actionEvent -> handleCommandClick(finalI, lock));
+            extraCommandContainer.getChildren().add(commandText);
+        }
     }
 
 

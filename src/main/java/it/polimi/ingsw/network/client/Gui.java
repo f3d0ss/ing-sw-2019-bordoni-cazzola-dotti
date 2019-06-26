@@ -9,7 +9,6 @@ import javafx.application.Application;
 import javafx.application.Platform;
 
 import java.util.List;
-import java.util.concurrent.locks.LockSupport;
 
 import static java.lang.Thread.sleep;
 
@@ -38,7 +37,9 @@ public class Gui implements Ui, Runnable {
     }
 
     public void refreshView(ModelView modelView) {
-        controller.updateModelView(modelView);
+        Platform.runLater(() -> {
+            controller.updateModelView(modelView);
+        });
     }
 
     public void setViewInitializationDone(ModelView modelView) {
