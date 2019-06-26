@@ -1,5 +1,6 @@
 package it.polimi.ingsw.network.client;
 
+import it.polimi.ingsw.model.PlayerId;
 import it.polimi.ingsw.utils.Lock;
 import it.polimi.ingsw.view.ModelView;
 import it.polimi.ingsw.view.commandmessage.CommandMessage;
@@ -9,6 +10,7 @@ import javafx.application.Application;
 import javafx.application.Platform;
 
 import java.util.List;
+import java.util.Map;
 
 import static java.lang.Thread.sleep;
 
@@ -87,5 +89,8 @@ public class Gui implements Ui, Runnable {
             e.printStackTrace();
         }
         return -1;
+    }
+
+    public void showLeaderBoard(Map<PlayerId, Long> leaderBoard) {
     }
 }

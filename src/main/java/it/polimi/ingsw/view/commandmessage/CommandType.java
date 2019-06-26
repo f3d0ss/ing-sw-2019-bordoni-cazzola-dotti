@@ -27,11 +27,11 @@ public enum CommandType {
         }
     }, SELECT_AMMO_PAYMENT {
         public String getString() {
-            return "Seleziona le munizioni con cui vuoi pagare";
+            return "Paga con la munizione ";
         }
     }, SELECT_BUYING_WEAPON {
         public String getString() {
-            return "Seleziona l'arma che vuoi acquistare";
+            return "Acquista l'arma ";
         }
     }, SELECT_DISCARD_WEAPON {
         public String getString() {
@@ -43,7 +43,7 @@ public enum CommandType {
         }
     }, SELECT_POWER_UP_PAYMENT {
         public String getString() {
-            return "Seleziona un potenziamento per pagare";
+            return "Paga con il pontenziamento ";
         }
     }, SELECT_RELOADING_WEAPON {
         public String getString() {
@@ -59,7 +59,7 @@ public enum CommandType {
         }
     }, SELECT_TARGET_PLAYER {
         public String getString() {
-            return "Scegli come bersaglio";
+            return "Spara a ";
         }
     }, SELECT_TARGET_SQUARE {
         public String getString() {
@@ -67,11 +67,11 @@ public enum CommandType {
         }
     }, SELECT_WEAPON {
         public String getString() {
-            return "Scegli un'arma";
+            return "Scegli l'arma ";
         }
     }, SELECT_WEAPON_MODE {
         public String getString() {
-            return "Scegli con quale modalità con cui vuoi usare l'arma";
+            return "Spara in modalità ";
         }
     }, SHOOT {
         public String getString() {
@@ -79,19 +79,23 @@ public enum CommandType {
         }
     }, USE_NEWTON {
         public String getString() {
-            return "Usa il Raggio Cinetico";
+            return "Usa il Raggio Cinetico su ";
         }
     }, USE_SCOPE {
         public String getString() {
-            return "Usa il Mirino";
+            return "Usa il Mirino contro ";
         }
     }, USE_TAGBACK_GRENADE {
         public String getString() {
-            return "Usa la Granata Venom";
+            return "Usa Granata Venom contro ";
         }
     }, USE_TELEPORT {
         public String getString() {
-            return "Usa il teletrasporto";
+            return "Teletrasportati in ";
+        }
+    }, UNDO {
+        public String getString() {
+            return "Annulla";
         }
     };
 

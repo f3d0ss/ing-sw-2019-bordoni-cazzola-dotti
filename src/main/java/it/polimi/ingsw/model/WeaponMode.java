@@ -1,7 +1,9 @@
 package it.polimi.ingsw.model;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * This class represents a weapon's mode
@@ -76,7 +78,7 @@ public class WeaponMode {
     }
 
     public Map<Color, Integer> getCost() {
-        return cost;
+        return Objects.requireNonNullElseGet(cost, LinkedHashMap::new);
     }
 
     public int getMaxNumberOfTargetPlayers() {
@@ -173,5 +175,15 @@ public class WeaponMode {
 
     public int getMaxShooterMove() {
         return maxShooterMove;
+    }
+
+    void postDeserialization() {
+        final int maxSteps = GameBoard.ROWS * GameBoard.COLUMNS - 1;
+        if (maxShooterMove > maxSteps)
+            maxShooterMove = maxSteps;
+        if (maxTargetDistance > maxSteps)
+            maxTargetDistance = maxSteps;
+        if (maxTargetMove > maxSteps)
+            maxTargetDistance = maxSteps;
     }
 }

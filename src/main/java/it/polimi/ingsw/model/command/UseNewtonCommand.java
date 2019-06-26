@@ -39,9 +39,7 @@ public class UseNewtonCommand implements Command {
     @Override
     public void execute() {
         oldSquare = targetPlayer.getPosition();
-        oldSquare.removePlayer(targetPlayer);
         targetPlayer.move(targetSquare);
-        targetPlayer.getPosition().addPlayer(targetPlayer);
         player.changeState(new ManageTurnState());
     }
 
@@ -50,9 +48,7 @@ public class UseNewtonCommand implements Command {
      */
     @Override
     public void undo() {
-        targetPlayer.getPosition().removePlayer(targetPlayer);
         targetPlayer.move(oldSquare);
-        targetPlayer.getPosition().addPlayer(targetPlayer);
         player.changeState(currentState);
     }
 

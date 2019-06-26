@@ -91,7 +91,7 @@ public enum Protocol {
         }
     }, WELCOME_BACK {
         public String getQuestion() {
-            return "Bentornato!";
+            return "Bentornato %s!";
         }
 
         public boolean requiresAnswer() {

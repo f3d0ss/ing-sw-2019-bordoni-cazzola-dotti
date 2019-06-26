@@ -5,12 +5,14 @@ import com.google.gson.GsonBuilder;
 import it.polimi.ingsw.model.SpawnSquare;
 import it.polimi.ingsw.model.Square;
 import it.polimi.ingsw.model.TurretSquare;
+import it.polimi.ingsw.model.Weapon;
 import it.polimi.ingsw.network.*;
 import it.polimi.ingsw.view.SpawnSquareView;
 import it.polimi.ingsw.view.SquareView;
 import it.polimi.ingsw.view.TurretSquareView;
 import it.polimi.ingsw.view.commandmessage.*;
 
+import java.io.InputStreamReader;
 import java.io.Reader;
 
 /**
@@ -28,7 +30,7 @@ public class Parser {
                 .registerSubtype(SpawnSquare.class, "spawn")
                 .registerSubtype(TurretSquare.class, "turret");
 
-        RuntimeTypeAdapterFactory<SquareView> squareRuntimeTypeAdapterFactory= RuntimeTypeAdapterFactory
+        RuntimeTypeAdapterFactory<SquareView> squareRuntimeTypeAdapterFactory = RuntimeTypeAdapterFactory
                 .of(SquareView.class, "type")
                 .registerSubtype(SpawnSquareView.class, "spawn")
                 .registerSubtype(TurretSquareView.class, "turret");
@@ -116,4 +118,17 @@ public class Parser {
         commandMessage.preSerialization();
         return normal.toJson(commandMessage);
     }
+
+    /**
+     * This method deserializes the file read from the specified reader into a Weapon
+     *
+     * @param reader the reader producing the char sequence from which the weapon is to be deserialized.
+     * @return a Weapon from the string.
+     */
+    public Weapon deserialize(InputStreamReader reader) {
+        Weapon weapon = gson.fromJson(reader, Weapon.class);
+        weapon.postDeserialization();
+        return weapon;
+    }
+
 }

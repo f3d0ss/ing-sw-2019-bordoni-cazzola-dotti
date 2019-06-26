@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class PendingPaymentWeaponState extends SelectedWeaponState implements PendingPaymentState {
     private Map<Color, Integer> pendingAmmo;
@@ -60,21 +61,14 @@ public class PendingPaymentWeaponState extends SelectedWeaponState implements Pe
         List<Command> commands = new ArrayList<>();
         Map<Color, Integer> totalPending = new EnumMap<>(Color.class);
         pendingCardPayment.forEach(powerUp -> totalPending.put(powerUp.getColor(), totalPending.getOrDefault(powerUp.getColor(), 0) + 1));
-        getSelectedWeapon().getWeaponBuyCost().forEach((color, cost) -> {
-            if (cost > pendingAmmo.getOrDefault(color, 0) + totalPending.getOrDefault(color, 0)) {
-                if (player.getAmmo().getOrDefault(color, 0) > 0) {
-                    commands.add(new SelectAmmoPaymentCommand(player, this, color));
-                }
-                player.getPowerUps().forEach(powerUp -> {
-                    if (powerUp.getColor() == color)
-                        commands.add(new SelectPowerUpPaymentCommand(player, this, powerUp));
-                });
-            }
-        });
-        if (commands.isEmpty()) {
+        pendingAmmo.forEach((color, integer) -> totalPending.put(color, totalPending.getOrDefault(color, 0) + integer));
+
+        if (getSelectedWeapon().getWeaponBuyCost().equals(totalPending)){
             commands.add(new PayWeaponCommand(player, this));
+            return commands;
         }
-        return commands;
+
+        return PendingPaymentState.generateSelctPaymentCommand(totalPending, player, getSelectedWeapon().getWeaponBuyCost(), this);
 
     }
 }

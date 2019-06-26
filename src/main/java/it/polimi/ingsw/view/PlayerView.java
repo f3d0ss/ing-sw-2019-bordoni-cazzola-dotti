@@ -44,6 +44,10 @@ public class PlayerView {
         return isMe;
     }
 
+    public boolean isDisconnected() {
+        return disconnected;
+    }
+
     public String getNickname() {
         return nickname;
     }

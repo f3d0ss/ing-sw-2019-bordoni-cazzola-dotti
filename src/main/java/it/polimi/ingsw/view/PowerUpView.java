@@ -24,4 +24,9 @@ public class PowerUpView {
     public Color getColor() {
         return color;
     }
+
+    public String getColorName() {
+        return color.colorName();
+
+    }
 }

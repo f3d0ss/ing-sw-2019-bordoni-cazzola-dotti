@@ -2,6 +2,7 @@ package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.model.command.GrabCommand;
 import it.polimi.ingsw.model.playerstate.SelectedAggregateActionState;
+import it.polimi.ingsw.view.SquareView;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
@@ -89,6 +90,8 @@ public abstract class Square {
     }
 
     public abstract List<GrabCommand> getGrabCommands(Player player, SelectedAggregateActionState state);
+
+    protected abstract SquareView getSquareView();
 
     /**
      * This method returns true if the square hosts at least another player

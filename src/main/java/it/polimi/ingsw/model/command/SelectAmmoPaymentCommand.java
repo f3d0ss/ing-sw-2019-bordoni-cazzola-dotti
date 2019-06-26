@@ -11,6 +11,7 @@ import it.polimi.ingsw.view.commandmessage.CommandType;
  * This command represent the action of select an ammo for a payment
  */
 public class SelectAmmoPaymentCommand extends SelectPaymentCommand {
+    private final static int MAX_AMMO_SELECTABLE = 1;
     private Color color;
 
     /**
@@ -30,6 +31,7 @@ public class SelectAmmoPaymentCommand extends SelectPaymentCommand {
      */
     @Override
     public void execute() {
+        player.pay(color, MAX_AMMO_SELECTABLE);
         currentState.addPendingAmmo(color);
     }
 
@@ -38,6 +40,7 @@ public class SelectAmmoPaymentCommand extends SelectPaymentCommand {
      */
     @Override
     public void undo() {
+        player.refund(color, MAX_AMMO_SELECTABLE);
         currentState.removePendingAmmo(color);
     }
 

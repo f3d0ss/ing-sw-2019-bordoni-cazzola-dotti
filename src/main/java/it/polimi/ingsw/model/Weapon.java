@@ -24,6 +24,7 @@ public class Weapon {
     private List<Square> targetSquares = new ArrayList<>();
     private int damageToDo;
 
+
     /**
      * This method returns the weapon's buy cost
      *
@@ -634,4 +635,9 @@ public class Weapon {
         targetSquares = new ArrayList<>();
     }
 
+    public void postDeserialization() {
+        resetTargetLists();
+        loaded = true;
+        weaponModes.forEach(WeaponMode::postDeserialization);
+    }
 }

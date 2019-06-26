@@ -4,6 +4,7 @@ import it.polimi.ingsw.model.AmmoTile;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.TurretSquare;
 import it.polimi.ingsw.model.exception.IllegalUndoException;
+import it.polimi.ingsw.model.playerstate.ManageTurnState;
 import it.polimi.ingsw.view.commandmessage.CommandMessage;
 import it.polimi.ingsw.view.commandmessage.CommandType;
 import it.polimi.ingsw.view.commandmessage.SimpleCommandMessage;
@@ -34,6 +35,7 @@ public class GrabTileCommand extends GrabCommand {
         player.addAmmoTile(ammoTile);
         square.remove(ammoTile);
         player.getMatch().discard(ammoTile);
+        player.changeState(new ManageTurnState());
     }
 
     /**

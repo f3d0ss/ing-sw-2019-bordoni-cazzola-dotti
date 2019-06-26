@@ -1,14 +1,12 @@
 package it.polimi.ingsw.network.client;
 
+import it.polimi.ingsw.model.PlayerId;
 import it.polimi.ingsw.network.Protocol;
 import it.polimi.ingsw.view.ModelView;
 import it.polimi.ingsw.view.cli.CliManager;
 import it.polimi.ingsw.view.commandmessage.*;
 
-import java.util.ArrayList;
-import java.util.InputMismatchException;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class Cli implements Ui {
 
@@ -47,6 +45,8 @@ public class Cli implements Ui {
     public int manageCommandChoice(List<CommandMessage> commands, boolean undo) {
         List<String> possibleAnswers = new ArrayList<>();
         commands.forEach(c -> possibleAnswers.add(c.getType().getString() + getParameter(c)));
+        if(undo)
+            possibleAnswers.add(CommandType.UNDO.getString());
         System.out.println("Scegli una delle seguenti opzioni:");
         showPossibleAnswers(possibleAnswers);
         return askChoiceByNumber(possibleAnswers.size()) - FIRST_CHOICE_NUMBER;
@@ -61,18 +61,18 @@ public class Cli implements Ui {
         int choice;
         try {
             choice = stdin.nextInt();
-            stdin.nextLine();
         } catch (InputMismatchException e) {
             choice = FIRST_CHOICE_NUMBER - 1;
         }
+        stdin.nextLine();
         while (choice >= size + FIRST_CHOICE_NUMBER || choice < FIRST_CHOICE_NUMBER) {
             System.out.println("Risposta non valida. Riprova:");
             try {
                 choice = stdin.nextInt();
-                stdin.nextLine();
             } catch (InputMismatchException e) {
                 choice = FIRST_CHOICE_NUMBER - 1;
             }
+            stdin.nextLine();
         }
         return choice;
     }
@@ -96,10 +96,20 @@ public class Cli implements Ui {
         if (command.getType() == CommandType.SELECT_TARGET_PLAYER)
             return ((PlayerCommandMessage) command).getPlayerId().playerIdName();
         if (command.getType() == CommandType.SELECT_TARGET_SQUARE
-                || command.getType() == CommandType.MOVE)
+                || command.getType() == CommandType.MOVE
+                || command.getType() == CommandType.USE_TELEPORT)
             return ((SquareCommandMessage) command).getRow() + " " + ((SquareCommandMessage) command).getCol();
         if (command.getType() == CommandType.SELECT_WEAPON_MODE)
             return ((WeaponModeCommandMessage) command).getWeaponMode();
         return "";
+    }
+
+    public void showLeaderBoard(Map<PlayerId, Long> leaderBoard){
+        System.out.println("Partita conclusa");
+        int i = 1;
+        for(PlayerId p : leaderBoard.keySet()){
+            System.out.println(i + "° classificato: " + p.playerIdName() + " con " + leaderBoard.get(p) + " punti");
+            i++;
+        }
     }
 }

@@ -298,8 +298,15 @@ public class Player {
         return disconnected;
     }
 
-    public void setDisconnected(boolean disconnected) {
-        this.disconnected = disconnected;
+    public void setDisconnected() {
+        disconnected = true;
+        changeState(new IdleState());
+        update();
+    }
+
+    public void setConnected() {
+        disconnected = false;
+        match.sendModelAfterReconnection(id);
         update();
     }
 
@@ -315,6 +322,10 @@ public class Player {
         deaths++;
         match.decreaseDeathsCounter();
         update();
+    }
+
+    public int getAvailableAggregateActionCounter() {
+        return availableAggregateActionCounter;
     }
 
     public int getPoints() {
