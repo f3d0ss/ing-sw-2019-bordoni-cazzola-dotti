@@ -220,17 +220,19 @@ public class MatchController implements Runnable {
      */
     private void calculateTrackScores(Player deadPlayer) {
         List<PlayerId> track = deadPlayer.getHealth();
-        if (!deadPlayer.isFlippedBoard())
-            Objects.requireNonNull(getPlayerById(track.get(0))).addPoints(POINTS_PER_FIRST_BLOOD);
-        //marks for 12th dmg
-        //extra token on killshottrack for 12th dmg
-        PlayerId playerId11thDamage = track.get(Player.MAX_DAMAGE - 2);
-        match.addKillshot(playerId11thDamage);
-        if (track.get(Player.MAX_DAMAGE - 1) != null) {
-            Objects.requireNonNull(getPlayerById(playerId11thDamage)).addMarks(1, deadPlayer.getId());
+        if (!track.isEmpty()) {
+            if (!deadPlayer.isFlippedBoard())
+                Objects.requireNonNull(getPlayerById(track.get(0))).addPoints(POINTS_PER_FIRST_BLOOD);
+            //marks for 12th dmg
+            //extra token on killshottrack for 12th dmg
+            PlayerId playerId11thDamage = track.get(Player.MAX_DAMAGE - 2);
             match.addKillshot(playerId11thDamage);
+            if (track.size() == Player.MAX_DAMAGE) {
+                Objects.requireNonNull(getPlayerById(playerId11thDamage)).addMarks(1, deadPlayer.getId());
+                match.addKillshot(playerId11thDamage);
+            }
+            scoreTrackPoints(deadPlayer, sortByPoints(track));
         }
-        scoreTrackPoints(deadPlayer, sortByPoints(track));
     }
 
     /**
