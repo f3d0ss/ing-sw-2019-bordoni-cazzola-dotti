@@ -36,6 +36,7 @@ public class MatchController implements Runnable {
         players = match.getCurrentPlayers();
     }
 
+
     public void sendFirstStateOfModel() {
         match.updateAllModel();
     }
