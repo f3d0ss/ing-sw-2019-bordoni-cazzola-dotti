@@ -8,8 +8,8 @@ import java.util.stream.Collectors;
 
 public class GameBoard {
 
-    private static final int ROWS = 3;
-    private static final int COLUMNS = 4;
+    static final int ROWS = 3;
+    static final int COLUMNS = 4;
     private int gameBoardId;
     private Square[][] board;
     private Map<Color, SpawnSquare> spawns = new LinkedHashMap<>();

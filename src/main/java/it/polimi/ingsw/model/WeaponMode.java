@@ -176,4 +176,14 @@ public class WeaponMode {
     public int getMaxShooterMove() {
         return maxShooterMove;
     }
+
+    void postDeserialization() {
+        final int maxSteps = GameBoard.ROWS * GameBoard.COLUMNS - 1;
+        if (maxShooterMove > maxSteps)
+            maxShooterMove = maxSteps;
+        if (maxTargetDistance > maxSteps)
+            maxTargetDistance = maxSteps;
+        if (maxTargetMove > maxSteps)
+            maxTargetDistance = maxSteps;
+    }
 }
