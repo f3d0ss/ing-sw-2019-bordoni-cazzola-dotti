@@ -103,11 +103,11 @@ public class MatchController implements Runnable {
      * This method handles the first turn of each player
      */
     private void firstTurn() {
-        players.stream().filter(currentPlayer -> !currentPlayer.isDisconnected()).forEachOrdered(currentPlayer -> {
+        for (Player currentPlayer : players) {
             spawnFirstTime(currentPlayer);
             new TurnController(currentPlayer, players, virtualViews).runTurn();
             endTurnControls(currentPlayer);
-        });
+        }
     }
 
     /**
@@ -318,10 +318,14 @@ public class MatchController implements Runnable {
      */
     private void spawnFirstTime(Player currentPlayer) {
         List<Command> commands = new ArrayList<>(currentPlayer.getSpawnCommands());
-        int selectedCommand = virtualViews.get(currentPlayer.getId()).sendCommands(commands.stream()
-                .map(Command::createCommandMessage)
-                .collect(Collectors.toList()), false);
-        commands.get(selectedCommand).execute();
+        if (!currentPlayer.isDisconnected()) {
+            int selectedCommand = virtualViews.get(currentPlayer.getId()).sendCommands(commands.stream()
+                    .map(Command::createCommandMessage)
+                    .collect(Collectors.toList()), false);
+            commands.get(selectedCommand).execute();
+        } else {
+            commands.get(new Random().nextInt(commands.size())).execute();
+        }
     }
 
     /**
