@@ -1,14 +1,15 @@
 package it.polimi.ingsw.network.client;
 
+import it.polimi.ingsw.utils.Lock;
 import it.polimi.ingsw.view.ModelView;
 import it.polimi.ingsw.view.commandmessage.CommandMessage;
 import it.polimi.ingsw.view.gui.GuiManager;
-import it.polimi.ingsw.view.gui.MainGui;
 import it.polimi.ingsw.view.gui.MainGuiController;
 import javafx.application.Application;
 import javafx.application.Platform;
 
 import java.util.List;
+import java.util.concurrent.locks.LockSupport;
 
 import static java.lang.Thread.sleep;
 
@@ -36,15 +37,16 @@ public class Gui implements Ui, Runnable {
         return answer;
     }
 
-    public void refreshView(ModelView modelView){
+    public void refreshView(ModelView modelView) {
         controller.updateModelView(modelView);
     }
 
-    public void setViewInitializationDone() {
-        initializationDone = true;
+    public void setViewInitializationDone(ModelView modelView) {
         Platform.runLater(() -> {
             GuiManager.startMainGui();
             controller = GuiManager.getController();
+            controller.setModelView(modelView);
+            initializationDone = true;
         });
     }
 
@@ -73,8 +75,16 @@ public class Gui implements Ui, Runnable {
         this.inputReady = inputReady;
     }
 
-    public int manageCommandChoice(List<CommandMessage> commands, boolean undo){
-        //TODO:
-        return 0;
+    public int manageCommandChoice(List<CommandMessage> commands, boolean undo) {
+        Lock lock = new Lock();
+        try {
+            lock.lock();
+            Platform.runLater(() -> controller.showCommand(commands, lock));
+            lock.lock();
+            return controller.getSelectedCommand();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return -1;
     }
 }

@@ -9,7 +9,7 @@ public interface Ui {
     String showMessage(String toBeShown, List<String> possibleAnswers, boolean isAnswerRequired);
     void refreshView(ModelView modelView);
     int manageCommandChoice(List<CommandMessage> commands, boolean undo);
-    void setViewInitializationDone();
+    void setViewInitializationDone(ModelView modelView);
     boolean isViewInitializationDone();
     void run();
 }

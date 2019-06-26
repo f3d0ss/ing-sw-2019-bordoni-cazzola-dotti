@@ -31,19 +31,20 @@ public class Cli implements Ui {
     public void run() {
     }
 
-    public void refreshView(ModelView modelView){
+    public void refreshView(ModelView modelView) {
         cliManager.displayAll(modelView);
     }
 
-    public void setViewInitializationDone() {
+    public void setViewInitializationDone(ModelView modelView) {
         initializationDone = true;
+        refreshView(modelView);
     }
 
     public boolean isViewInitializationDone() {
         return initializationDone;
     }
 
-    public int manageCommandChoice(List<CommandMessage> commands, boolean undo){
+    public int manageCommandChoice(List<CommandMessage> commands, boolean undo) {
         List<String> possibleAnswers = new ArrayList<>();
         commands.forEach(c -> possibleAnswers.add(c.getType().getString() + getParameter(c)));
         System.out.println("Scegli una delle seguenti opzioni:");
@@ -51,12 +52,12 @@ public class Cli implements Ui {
         return askChoiceByNumber(possibleAnswers.size()) - FIRST_CHOICE_NUMBER;
     }
 
-    private void showPossibleAnswers(List<String> possibleAnswers){
+    private void showPossibleAnswers(List<String> possibleAnswers) {
         for (int i = 0; i < possibleAnswers.size(); i++)
             System.out.println("(" + (i + FIRST_CHOICE_NUMBER) + ") " + possibleAnswers.get(i));
     }
 
-    private int askChoiceByNumber(int size){
+    private int askChoiceByNumber(int size) {
         int choice;
         try {
             choice = stdin.nextInt();

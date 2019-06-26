@@ -208,7 +208,7 @@
                                                               prefWidth="${mainPane.width*500/1645*475/700}">
                                                             <children>
                                                                 <HBox prefHeight="${mainPane.height*125/925*30/175}"
-                                                                      prefWidth="${mainPane.width*500/1645*80/700}"/>
+                                                                      prefWidth="${mainPane.width*500/1645*80/700}"/> <!-- spacing -->
                                                                 <HBox id="playerAggregateActionMMG"
                                                                       fx:id="playerAggregateActionMMG"
                                                                       prefHeight="${mainPane.height*125/925*30/175}"
@@ -220,7 +220,7 @@
                                                                       prefHeight="${mainPane.height*125/925*30/175}"
                                                                       prefWidth="${mainPane.width*500/1645*55/700}"/>
                                                                 <HBox prefHeight="${mainPane.height*125/925*30/175}"
-                                                                      prefWidth="${mainPane.width*500/1645*220/700}"/>
+                                                                      prefWidth="${mainPane.width*500/1645*220/700}"/>  <!-- spacing -->
                                                             </children>
                                                         </HBox>
                                                         <HBox prefHeight="${mainPane.height*125/925*55/175}"
