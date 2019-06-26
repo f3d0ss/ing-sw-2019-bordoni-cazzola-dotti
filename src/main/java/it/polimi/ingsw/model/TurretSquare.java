@@ -3,8 +3,7 @@ package it.polimi.ingsw.model;
 import it.polimi.ingsw.model.command.GrabCommand;
 import it.polimi.ingsw.model.command.GrabTileCommand;
 import it.polimi.ingsw.model.playerstate.SelectedAggregateActionState;
-import it.polimi.ingsw.view.AmmoTileView;
-import it.polimi.ingsw.view.TurretSquareView;
+import it.polimi.ingsw.view.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,12 +18,7 @@ public class TurretSquare extends Square {
 
     @Override
     protected void update() {
-        AmmoTileView ammoTileView;
-        if (ammoTile == null)
-            ammoTileView = new AmmoTileView(0, null);
-        else
-            ammoTileView = new AmmoTileView(ammoTile.getPowerUp(), ammoTile.getAmmo());
-        match.getAllVirtualViews().forEach(viewInterface -> viewInterface.update(new TurretSquareView(getRow(), getCol(), getConnections(), ammoTileView, getHostedPlayers().stream().map(Player::getId).collect(Collectors.toList()))));
+        match.getAllVirtualViews().forEach(viewInterface -> viewInterface.update(getSquareView()));
     }
 
     @Override
@@ -33,6 +27,16 @@ public class TurretSquare extends Square {
         if (ammoTile != null)
             commands.add(new GrabTileCommand(player, ammoTile, this));
         return commands;
+    }
+
+    @Override
+    protected SquareView getSquareView() {
+        AmmoTileView ammoTileView;
+        if (ammoTile == null)
+            ammoTileView = new AmmoTileView(0, null);
+        else
+            ammoTileView = new AmmoTileView(ammoTile.getPowerUp(), ammoTile.getAmmo());
+        return new TurretSquareView(getRow(), getCol(), getConnections(), ammoTileView, getHostedPlayers().stream().map(Player::getId).collect(Collectors.toList()));
     }
 
     public AmmoTile getAmmoTile() {

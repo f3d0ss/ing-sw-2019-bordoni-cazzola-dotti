@@ -8,8 +8,8 @@ import java.util.stream.Collectors;
 
 public class GameBoard {
 
-    private static final int ROWS = 3;
-    private static final int COLUMNS = 4;
+    static final int ROWS = 3;
+    static final int COLUMNS = 4;
     private int gameBoardId;
     private Square[][] board;
     private Map<Color, SpawnSquare> spawns = new LinkedHashMap<>();
@@ -301,17 +301,22 @@ public class GameBoard {
      * @return
      */
     public Square getThirdSquareInTheSameDirection(Square firstSquare, Square secondSquare, boolean ignoreWall) {
-        if (firstSquare.getRow() == secondSquare.getRow()) {
-            if (firstSquare.getCol() < secondSquare.getCol() && secondSquare.getConnection(CardinalDirection.WEST).isAccessible(ignoreWall))
-                return board[firstSquare.getRow()][secondSquare.getCol() + 1];
+        final int firstSquareRow = firstSquare.getRow();
+        final int firstSquareCol = firstSquare.getCol();
+        final int secondSquareRow = secondSquare.getRow();
+        final int secondSquareCol = secondSquare.getCol();
+        if (firstSquareRow == secondSquareRow) {
+            if (firstSquareCol < secondSquareCol && secondSquare.getConnection(CardinalDirection.WEST).isAccessible(ignoreWall)) {
+                return board[firstSquareRow][secondSquareCol + 1];
+            }
             if (secondSquare.getConnection(CardinalDirection.EAST).isAccessible(ignoreWall))
-                return board[firstSquare.getRow()][secondSquare.getCol() - 1];
+                return board[firstSquareRow][secondSquareCol - 1];
         }
-        if (firstSquare.getCol() == secondSquare.getCol()) {
-            if (firstSquare.getRow() < secondSquare.getRow() && secondSquare.getConnection(CardinalDirection.SOUTH).isAccessible(ignoreWall))
-                return board[secondSquare.getRow() + 1][firstSquare.getCol()];
+        if (firstSquareCol == secondSquareCol) {
+            if (firstSquareRow < secondSquareRow && secondSquare.getConnection(CardinalDirection.SOUTH).isAccessible(ignoreWall))
+                return board[secondSquareRow + 1][firstSquareCol];
             if (secondSquare.getConnection(CardinalDirection.NORTH).isAccessible(ignoreWall))
-                return board[secondSquare.getRow() - 1][firstSquare.getCol()];
+                return board[secondSquareRow - 1][firstSquareCol];
         }
         return null;
     }

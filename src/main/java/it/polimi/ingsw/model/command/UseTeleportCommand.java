@@ -6,7 +6,7 @@ import it.polimi.ingsw.model.playerstate.ManageTurnState;
 import it.polimi.ingsw.model.playerstate.SelectedTeleporterState;
 import it.polimi.ingsw.view.commandmessage.CommandMessage;
 import it.polimi.ingsw.view.commandmessage.CommandType;
-import it.polimi.ingsw.view.commandmessage.SimpleCommandMessage;
+import it.polimi.ingsw.view.commandmessage.SquareCommandMessage;
 
 /**
  * This command represent the action of use a teleport
@@ -36,9 +36,7 @@ public class UseTeleportCommand implements Command {
     @Override
     public void execute() {
         oldSquare = player.getPosition();
-        oldSquare.removePlayer(player);
         player.move(newPosition);
-        player.getPosition().addPlayer(player);
         player.changeState(new ManageTurnState());
     }
 
@@ -47,9 +45,7 @@ public class UseTeleportCommand implements Command {
      */
     @Override
     public void undo() {
-        player.getPosition().removePlayer(player);
         player.move(oldSquare);
-        player.getPosition().addPlayer(player);
         player.changeState(currentState);
     }
 
@@ -63,6 +59,6 @@ public class UseTeleportCommand implements Command {
 
     @Override
     public CommandMessage createCommandMessage() {
-        return new SimpleCommandMessage(CommandType.USE_TELEPORT);
+        return new SquareCommandMessage(CommandType.USE_TELEPORT, newPosition.getRow(), newPosition.getCol());
     }
 }

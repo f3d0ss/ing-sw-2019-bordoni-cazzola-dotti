@@ -6,6 +6,8 @@ public enum Connection {
     public boolean isAccessible(boolean ignoreWall) {
         if (this == SAME_ROOM || this == DOOR)
             return true;
+        if (this == MAP_BORDER)
+            return false;
         return ignoreWall && this == WALL;
     }
 

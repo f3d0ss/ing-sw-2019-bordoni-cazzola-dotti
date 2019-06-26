@@ -638,5 +638,6 @@ public class Weapon {
     public void postDeserialization() {
         resetTargetLists();
         loaded = true;
+        weaponModes.forEach(WeaponMode::postDeserialization);
     }
 }

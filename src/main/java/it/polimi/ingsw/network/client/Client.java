@@ -53,7 +53,7 @@ public class Client implements Runnable {
             CommandViewTransfer commandViewTransfer = (CommandViewTransfer) fromServer;
             return String.valueOf(view.sendCommands(commandViewTransfer.getAttachment(), commandViewTransfer.isUndo()));
         }
-        if (fromServer.type == Protocol.ARE_YOU_READY)
+        if (fromServer.type == Protocol.ARE_YOU_READY || fromServer.type == Protocol.WELCOME_BACK)
             view = new ConcreteView(ui);
         return ui.showMessage(String.format(fromServer.type.getQuestion(), fromServer.getStringInQuestion()), fromServer.getPossibleAnswer(), fromServer.type.requiresAnswer());
     }
