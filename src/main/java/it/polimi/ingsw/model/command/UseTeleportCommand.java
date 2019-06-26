@@ -35,6 +35,7 @@ public class UseTeleportCommand implements Command {
      */
     @Override
     public void execute() {
+        oldSquare = player.getPosition();
         player.move(newPosition);
         player.changeState(new ManageTurnState());
     }
