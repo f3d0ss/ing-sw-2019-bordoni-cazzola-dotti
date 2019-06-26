@@ -53,7 +53,7 @@ public class EffectCommand {
         this.marks = marks;
         this.arrivalSquare = arrivalSquare;
         this.shooter = shooter;
-        if (shooter.equals(player.getId())) {
+        if (shooter.equals(player.getId()) && (marks != 0 || damage != 0)) {
             throw new IllegalStateException();
         }
     }

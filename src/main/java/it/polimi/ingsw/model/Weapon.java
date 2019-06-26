@@ -152,7 +152,8 @@ public class Weapon {
      */
     private ShootCommand createShootCommandGetDamageZero(Player shooter, ReadyToShootState state) {
         LinkedHashSet<EffectCommand> effectCommands = new LinkedHashSet<>();
-        targetPlayers.stream().filter(player -> !player.getId().equals(shooter.getId()))
+        targetPlayers.stream()
+                .filter(player -> !player.getId().equals(shooter.getId()))
                 .forEach(player -> effectCommands.add(new EffectCommand(player, selectedWeaponMode.getDamage(0), selectedWeaponMode.getMarks(), player.getPosition(), shooter.getId())));
         return new ShootCommand(state, new ArrayList<>(effectCommands), shooter);
     }
@@ -303,7 +304,7 @@ public class Weapon {
         } else { //pick target players if not already selected (second call)
             List<Player> otherPlayersOnReachableSquares = gameboard.getOtherPlayersOnReachableSquares(targetSquares.get(0), selectedWeaponMode.getMaxTargetMove(), shooter);
             for (Player possibleTargetPlayer : otherPlayersOnReachableSquares)
-                if (!targetPlayers.contains(possibleTargetPlayer) && !possibleTargetPlayer.getId().equals(shooter.getId()))
+                if (!targetPlayers.contains(possibleTargetPlayer) /*&& !possibleTargetPlayer.getId().equals(shooter.getId())*/)
                     possibleCommands.add(new SelectTargetPlayerCommand(state, possibleTargetPlayer));
         }
         return possibleCommands;
