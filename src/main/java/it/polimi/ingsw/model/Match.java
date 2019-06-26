@@ -12,7 +12,7 @@ import java.util.*;
 public class Match {
 
     private static final int SKULLS = 8;
-
+    //TODO param server
     private List<PlayerId> killshotTrack;
     private PowerUpDeck currentPowerUpDeck;
     private PowerUpDeck usedPowerUpDeck;

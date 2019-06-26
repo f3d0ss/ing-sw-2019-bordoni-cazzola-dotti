@@ -36,7 +36,8 @@ public class MatchController implements Runnable {
         players = match.getCurrentPlayers();
     }
 
-    public void sendFirstStateOfModel(){
+
+    public void sendFirstStateOfModel() {
         match.updateAllModel();
     }
 
@@ -167,7 +168,7 @@ public class MatchController implements Runnable {
                 match.firstPlayerPlayedLastTurn();
             Player currentPlayer = players.get(currentPlayerIndex);
             if (!currentPlayer.isDisconnected()) {
-                new TurnController(currentPlayer, players, virtualViews);
+                new TurnController(currentPlayer, players, virtualViews).runTurn();
                 endTurnControls(currentPlayer);
             }
             currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
@@ -231,7 +232,7 @@ public class MatchController implements Runnable {
                 Objects.requireNonNull(getPlayerById(track.get(0))).addPoints(POINTS_PER_FIRST_BLOOD);
             //marks for 12th dmg
             //extra token on killshottrack for 12th dmg
-            PlayerId playerId11thDamage = track.get(Player.MAX_DAMAGE - 2);
+            PlayerId playerId11thDamage = track.get(track.size() - 1);
             match.addKillshot(playerId11thDamage);
             if (track.size() == Player.MAX_DAMAGE) {
                 Objects.requireNonNull(getPlayerById(playerId11thDamage)).addMarks(1, deadPlayer.getId());
@@ -349,7 +350,7 @@ public class MatchController implements Runnable {
             if (!player.isDisconnected())
                 counter++;
         }
-        if (counter < MIN_PLAYERS -1) {
+        if (counter < MIN_PLAYERS) {
             System.out.println("RAGEQUIT --- ENDING MATCH");
             //end match
             calculateFinalScores();
