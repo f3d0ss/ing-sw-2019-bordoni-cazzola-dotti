@@ -18,8 +18,8 @@ import java.util.Random;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-public class WeaponTest {
-    List<Weapon> allWeapons;
+class WeaponTest {
+    private List<Weapon> allWeapons;
 
     private List<Weapon> getAllWeapons() {
         Parser parser = new Parser();
@@ -199,26 +199,31 @@ public class WeaponTest {
     void getPossibleCommands() {
         Match match = new Match();
         GameBoard gameBoard = match.getBoard();
-        Square shooterSquare = getRandomSquare(gameBoard);
+        Square shooterSquare = gameBoard.getSpawnSquares().get(0);
         Player shooter = new Player(match, PlayerId.VIOLET, PlayerId.VIOLET.playerIdName());
         shooter.respawn(Color.BLUE);
         shooter.move(shooterSquare);
         match.addPlayer(shooter);
         shooterSquare.addPlayer(shooter);
 
-        for (PlayerId playerId : PlayerId.values()) {
-            if (!playerId.equals(shooter.getId())) {
-                Square square = getRandomSquare(gameBoard);
-                Player player = new Player(match, playerId, playerId.playerIdName());
-                player.respawn(Color.BLUE);
-                player.move(square);
-                match.addPlayer(player);
-                square.addPlayer(player);
-            }
-        }
+        Square square = shooterSquare;
+        Player player = new Player(match, PlayerId.GREEN, PlayerId.GREEN.playerIdName());
+        player.respawn(Color.BLUE);
+        player.move(square);
+        match.addPlayer(player);
+        square.addPlayer(player);
+
+        Player player1 = new Player(match, PlayerId.GREY, PlayerId.GREY.playerIdName());
+        player1.respawn(Color.BLUE);
+        player1.move(square);
+        match.addPlayer(player1);
+        square.addPlayer(player1);
+
+        System.out.println(match.getCurrentPlayers().size());
 
         for (Weapon weapon : allWeapons) {
             System.out.println(weapon.getName() + "------------");
+
             ReadyToShootState state = new ReadyToShootState(new AggregateAction(0, false, true, false), weapon);
             shooter.changeState(state);
             for (WeaponMode weaponMode : weapon.getWeaponModes()) {
@@ -245,19 +250,36 @@ public class WeaponTest {
                 }
                 System.out.println("Shoot: " + shoot + "| Move: " + move + " |TargetPlayer: " + targetPlayer + " |TargetSquare: " + targetSquare);
                 if (!selectTargetPlayerCommands.isEmpty()) {
-                    for (SelectTargetPlayerCommand selectTargetPlayerCommand : selectTargetPlayerCommands) {
-                        selectTargetPlayerCommand.execute();
-                        selectTargetPlayerCommand.undo();
+                    for (int i = 0; i < selectTargetPlayerCommands.size(); i++) {
+                        SelectTargetPlayerCommand selectTargetPlayerCommand = selectTargetPlayerCommands.get(i);
+                        //selectTargetPlayerCommand.execute();
+                        break;
+                        //selectTargetPlayerCommand.undo();
                     }
                 }
                 if (!selectTargetSquareCommands.isEmpty()) {
                     for (SelectTargetSquareCommand selectTargetSquareCommand : selectTargetSquareCommands) {
                         selectTargetSquareCommand.execute();
-                        selectTargetSquareCommand.undo();
+                        //selectTargetSquareCommand.undo();
+                    }
+                }
+                List<Command> possibleCommandsafter = weapon.getPossibleCommands(gameBoard, shooter, state);
+                int cont = 0;
+                for (Command command : possibleCommandsafter) {
+                    if (command instanceof ShootCommand) {
+                        cont++;
+
+                        ShootCommand shootCommand = (ShootCommand) command;
+                        System.out.println(cont);
+                        System.out.println("Danni " + player.getHealth().size());
+                        shootCommand.effects.stream().map(effectCommand -> effectCommand.tempPrint()).forEach(System.out::println);
+                        command.execute();
+                        System.out.println("Danni AFTER " + player.getHealth().size());
                     }
                 }
             }
         }
+
     }
 
     @Test
