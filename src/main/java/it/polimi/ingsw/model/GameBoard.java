@@ -307,21 +307,23 @@ public class GameBoard {
      * @return
      */
     public Square getThirdSquareInTheSameDirection(Square firstSquare, Square secondSquare, boolean ignoreWall) {
+        if (firstSquare == secondSquare)
+            return null;
         final int firstSquareRow = firstSquare.getRow();
         final int firstSquareCol = firstSquare.getCol();
         final int secondSquareRow = secondSquare.getRow();
         final int secondSquareCol = secondSquare.getCol();
         if (firstSquareRow == secondSquareRow) {
-            if (firstSquareCol < secondSquareCol && secondSquare.getConnection(CardinalDirection.WEST).isAccessible(ignoreWall)) {
+            if (firstSquareCol < secondSquareCol && secondSquare.getConnection(CardinalDirection.EAST).isAccessible(ignoreWall)) {
                 return board[firstSquareRow][secondSquareCol + 1];
             }
-            if (secondSquare.getConnection(CardinalDirection.EAST).isAccessible(ignoreWall))
+            if (firstSquareCol > secondSquareCol && secondSquare.getConnection(CardinalDirection.WEST).isAccessible(ignoreWall))
                 return board[firstSquareRow][secondSquareCol - 1];
         }
         if (firstSquareCol == secondSquareCol) {
             if (firstSquareRow < secondSquareRow && secondSquare.getConnection(CardinalDirection.SOUTH).isAccessible(ignoreWall))
                 return board[secondSquareRow + 1][firstSquareCol];
-            if (secondSquare.getConnection(CardinalDirection.NORTH).isAccessible(ignoreWall))
+            if (firstSquareRow > secondSquareRow && secondSquare.getConnection(CardinalDirection.NORTH).isAccessible(ignoreWall))
                 return board[secondSquareRow - 1][firstSquareCol];
         }
         return null;

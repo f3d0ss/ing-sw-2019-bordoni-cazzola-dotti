@@ -283,14 +283,14 @@ class WeaponTest {
     void wmTest() {
         Match match = new Match();
         GameBoard gameBoard = match.getBoard();
-        Square shooterSquare = gameBoard.getSquare(1, 2);
+        Square shooterSquare = gameBoard.getSquare(0, 0);
         Player shooter = new Player(match, PlayerId.VIOLET, PlayerId.VIOLET.playerIdName());
         shooter.respawn(Color.BLUE);
         shooter.move(shooterSquare);
         match.addPlayer(shooter);
         shooterSquare.addPlayer(shooter);
 
-        Square square = shooterSquare;
+        Square square = gameBoard.getSquare(2, 3);
         Player player = new Player(match, PlayerId.GREEN, PlayerId.GREEN.playerIdName());
         player.respawn(Color.BLUE);
         player.move(square);
@@ -311,7 +311,7 @@ class WeaponTest {
 
         Weapon shooterWeapon = null;
         for (Weapon w : allWeapons) {
-                shooterWeapon = w;
+            shooterWeapon = w;
             for (WeaponMode weaponMode : w.getWeaponModes()) {
                 shooterWeapon.setSelectedWeaponMode(weaponMode);
 
@@ -321,11 +321,11 @@ class WeaponTest {
 
                 List<Command> possibleCommands = shooterWeapon.getPossibleCommands(gameBoard, shooter, state);
                 List<Command> shooterCmds = shooter.getPossibleCommands();
-                if(possibleCommands.size()!=0)
+                if (possibleCommands.size() == 0)
                     continue;
                 System.out.println(shooterWeapon.getName() + shooterWeapon.getSelectedWeaponMode().getName());
                 System.out.println("number of commands: " + possibleCommands.size());
-                int s=0,p=0;
+                int s = 0, p = 0;
                 LinkedHashSet<SelectTargetSquareCommand> selectTargetSquareCommands = new LinkedHashSet<>();
                 for (Command command : possibleCommands) {
                     if (command instanceof ShootCommand) {
@@ -344,7 +344,7 @@ class WeaponTest {
                         System.out.println(selectTargetPlayerCommand.tempPrint());
                     }
                 }
-                assertTrue(match.getCurrentPlayers().size()-1 >= p);
+                assertTrue(match.getCurrentPlayers().size() - 1 >= p);
                 assertTrue(selectTargetSquareCommands.size() == s);
 
             }
