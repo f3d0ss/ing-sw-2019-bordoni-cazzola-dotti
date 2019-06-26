@@ -12,7 +12,7 @@ public class SelectedTeleporterState implements PlayerState {
     @Override
     public List<Command> getPossibleCommands(Player player) {
         List<Command> commands = new ArrayList<>();
-        player.getMatch().getBoard().getReachableSquare(player.getPosition(), Integer.MAX_VALUE).forEach(square -> commands.add(new UseTeleportCommand(player, this, square))); //TODO: use method in getAllSquare() (to be implemented)
+        player.getMatch().getBoard().getSquareList().forEach(square -> commands.add(new UseTeleportCommand(player, this, square)));
         return commands;
     }
 }
