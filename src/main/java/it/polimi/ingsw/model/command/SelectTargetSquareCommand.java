@@ -10,6 +10,10 @@ import it.polimi.ingsw.view.commandmessage.SquareCommandMessage;
  * This command represent the action of select a square as target
  */
 public class SelectTargetSquareCommand implements WeaponCommand {
+    //TODO REMOVE
+    public String tempPrint(){
+        return "TargetSquare: "+targetSquare.getRow()+targetSquare.getCol();
+    }
     private Square targetSquare;
     private TargetingSquareState currentState;
 

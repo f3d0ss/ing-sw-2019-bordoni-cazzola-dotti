@@ -10,10 +10,7 @@ import org.junit.jupiter.api.Test;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -280,6 +277,78 @@ class WeaponTest {
             }
         }
 
+    }
+
+    @Test
+    void wmTest() {
+        Match match = new Match();
+        GameBoard gameBoard = match.getBoard();
+        Square shooterSquare = gameBoard.getSquare(1, 2);
+        Player shooter = new Player(match, PlayerId.VIOLET, PlayerId.VIOLET.playerIdName());
+        shooter.respawn(Color.BLUE);
+        shooter.move(shooterSquare);
+        match.addPlayer(shooter);
+        shooterSquare.addPlayer(shooter);
+
+        Square square = shooterSquare;
+        Player player = new Player(match, PlayerId.GREEN, PlayerId.GREEN.playerIdName());
+        player.respawn(Color.BLUE);
+        player.move(square);
+        match.addPlayer(player);
+        square.addPlayer(player);
+
+        Player player1 = new Player(match, PlayerId.GREY, PlayerId.GREY.playerIdName());
+        player1.respawn(Color.BLUE);
+        player1.move(square);
+        match.addPlayer(player1);
+        square.addPlayer(player1);
+
+        Player player2 = new Player(match, PlayerId.BLUE, PlayerId.BLUE.playerIdName());
+        player2.respawn(Color.BLUE);
+        player2.move(square);
+        match.addPlayer(player2);
+        square.addPlayer(player2);
+
+        Weapon shooterWeapon = null;
+        for (Weapon w : allWeapons) {
+                shooterWeapon = w;
+            for (WeaponMode weaponMode : w.getWeaponModes()) {
+                shooterWeapon.setSelectedWeaponMode(weaponMode);
+
+                ReadyToShootState state = new ReadyToShootState(new AggregateAction(0, false, true, false), shooterWeapon);
+                shooter.changeState(state);
+
+
+                List<Command> possibleCommands = shooterWeapon.getPossibleCommands(gameBoard, shooter, state);
+                List<Command> shooterCmds = shooter.getPossibleCommands();
+                if(possibleCommands.size()!=0)
+                    continue;
+                System.out.println(shooterWeapon.getName() + shooterWeapon.getSelectedWeaponMode().getName());
+                System.out.println("number of commands: " + possibleCommands.size());
+                int s=0,p=0;
+                LinkedHashSet<SelectTargetSquareCommand> selectTargetSquareCommands = new LinkedHashSet<>();
+                for (Command command : possibleCommands) {
+                    if (command instanceof ShootCommand) {
+
+                    }
+                    if (command instanceof SelectTargetSquareCommand) {
+                        s++;
+                        SelectTargetSquareCommand selectTargetSquareCommand = (SelectTargetSquareCommand) command;
+                        System.out.println(selectTargetSquareCommand.tempPrint());
+                        selectTargetSquareCommands.add(selectTargetSquareCommand);
+
+                    }
+                    if (command instanceof SelectTargetPlayerCommand) {
+                        p++;
+                        SelectTargetPlayerCommand selectTargetPlayerCommand = (SelectTargetPlayerCommand) command;
+                        System.out.println(selectTargetPlayerCommand.tempPrint());
+                    }
+                }
+                assertTrue(match.getCurrentPlayers().size()-1 >= p);
+                assertTrue(selectTargetSquareCommands.size() == s);
+
+            }
+        }
     }
 
     @Test

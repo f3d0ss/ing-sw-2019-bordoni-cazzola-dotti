@@ -11,6 +11,7 @@ import java.util.Objects;
  */
 public class EffectCommand {
 
+    //TODO REMOVE
     public String tempPrint() {
         return "Sono: " + shooter + " damage: " + damage + " marks: " + marks + " a: " + player.getId() + " e lo mando in: " + arrivalSquare.getRow() + arrivalSquare.getCol();
     }
