@@ -4,6 +4,7 @@ import it.polimi.ingsw.model.command.GrabCommand;
 import it.polimi.ingsw.model.command.SelectBuyingWeaponCommand;
 import it.polimi.ingsw.model.playerstate.SelectedAggregateActionState;
 import it.polimi.ingsw.view.SpawnSquareView;
+import it.polimi.ingsw.view.SquareView;
 import it.polimi.ingsw.view.WeaponView;
 
 import java.util.ArrayList;
@@ -22,7 +23,7 @@ public class SpawnSquare extends Square {
 
     @Override
     protected void update() {
-        match.getAllVirtualViews().forEach(viewInterface -> viewInterface.update(new SpawnSquareView(getRow(), getCol(), getConnections(), getColor(), weapons.stream().map(weapon -> new WeaponView(weapon.getName(), weapon.isLoaded())).collect(Collectors.toList()), getHostedPlayers().stream().map(Player::getId).collect(Collectors.toList()))));
+        match.getAllVirtualViews().forEach(viewInterface -> viewInterface.update(getSquareView()));
     }
 
     @Override
@@ -30,6 +31,11 @@ public class SpawnSquare extends Square {
         ArrayList<GrabCommand> commands = new ArrayList<>();
         weapons.forEach(weapon -> commands.add(new SelectBuyingWeaponCommand(player, state, weapon, this)));
         return commands;
+    }
+
+    @Override
+    protected SquareView getSquareView() {
+        return new SpawnSquareView(getRow(), getCol(), getConnections(), getColor(), weapons.stream().map(weapon -> new WeaponView(weapon.getName(), weapon.isLoaded())).collect(Collectors.toList()), getHostedPlayers().stream().map(Player::getId).collect(Collectors.toList()));
     }
 
     public void removeWeapon(Weapon weapon) {
