@@ -65,7 +65,7 @@ public class ServerManager implements Runnable {
         idClient++;
     }
 
-    public String getNickname(int playerId){
+    public String getNickname(int playerId) {
         return nicknames.get(playerId);
     }
 
@@ -83,7 +83,8 @@ public class ServerManager implements Runnable {
                     break;
                 oldId = Integer.parseInt(code);
                 if (switchClientId(oldId, temporaryId)) {
-                    sendMessageAndWaitForAnswer(oldId, new Message(Protocol.WELCOME_BACK, "", null));
+                    awayFromKeyboardOrDisconnected.remove((Object) oldId);
+                    sendMessageAndWaitForAnswer(oldId, new Message(Protocol.WELCOME_BACK, nicknames.get(oldId), null));
                     activeMatches.get(oldId).reconnect(nicknames.get(oldId));
                     break;
                 } else
@@ -96,25 +97,13 @@ public class ServerManager implements Runnable {
     }
 
     private boolean switchClientId(int oldId, int temporaryId) {
-        if (activeMatches.containsKey(oldId)) {
-            if (socketClients.containsKey(oldId)) {
-                if (socketClients.containsKey(temporaryId)) {
-                    socketClients.put(oldId, socketClients.get(temporaryId));
-                    socketClients.remove(temporaryId);
-                    return true;
-                }
-                socketClients.remove(oldId);
-                rmiClients.put(oldId, rmiClients.get(temporaryId));
-                rmiClients.remove(temporaryId);
+        if (isAwayFromKeyboardOrDisconnected(oldId)) {
+            if (socketClients.containsKey(temporaryId)) {
+                socketClients.put(oldId, socketClients.get(temporaryId));
+                socketClients.remove(temporaryId);
                 return true;
             }
-            if (rmiClients.containsKey(oldId)) {
-                if (socketClients.containsKey(temporaryId)) {
-                    rmiClients.remove(oldId);
-                    socketClients.put(oldId, socketClients.get(temporaryId));
-                    socketClients.remove(temporaryId);
-                    return true;
-                }
+            if (rmiClients.containsKey(temporaryId)) {
                 rmiClients.put(oldId, rmiClients.get(temporaryId));
                 rmiClients.remove(temporaryId);
                 return true;
@@ -230,12 +219,13 @@ public class ServerManager implements Runnable {
             activeMatches.put(i, match);
             nicknames.put(i, lobby.get(i));
         });
-        gamers.values().forEach(v -> ((VirtualView)v).setController(match));
+        gamers.values().forEach(v -> ((VirtualView) v).setController(match));
         new Thread(match).start();
     }
 
-    public void removeGame(int playerId){
+    public void removeGame(int playerId) {
         activeMatches.remove(playerId);
+        awayFromKeyboardOrDisconnected.remove((Object) playerId);
     }
 
     public boolean allServerReady() {
@@ -274,7 +264,7 @@ public class ServerManager implements Runnable {
         return socketClients.containsKey(number) || rmiClients.containsKey(number);
     }
 
-    public synchronized void removeClient(Socket client) {
+    public void removeClient(Socket client) {
         try {
             int number = getNumber(client);
             socketClients.remove(number);
@@ -283,7 +273,7 @@ public class ServerManager implements Runnable {
         }
     }
 
-    public synchronized void removeClient(RmiClientInterface client) {
+    public void removeClient(RmiClientInterface client) {
         try {
             int number = getNumber(client);
             rmiClients.remove(number);
@@ -320,7 +310,7 @@ public class ServerManager implements Runnable {
     }
 
     public String sendMessageAndWaitForAnswer(int number, Message message) {
-        if(isAwayFromKeyboardOrDisconnected(number))
+        if (isAwayFromKeyboardOrDisconnected(number))
             return Protocol.ERR;
         String serializedMessage = parser.serialize(message);
         while (!answerReady.get(number)) {
@@ -369,8 +359,8 @@ public class ServerManager implements Runnable {
         if (isTimeExceeded) {
             communication.setTimeExceeded();
             awayFromKeyboardOrDisconnected.add(number);
+            activeMatches.get(number).disconnect(nicknames.get(number));
             return Protocol.ERR;
-            //TODO: notify controller
         }
         return answers.get(number);
     }

@@ -99,7 +99,7 @@ public class Match {
 
     public void setLeaderBoard(Map<PlayerId, Long> leaderBoard) {
         this.leaderBoard = leaderBoard;
-        views.values().forEach(v -> ((VirtualView)v).setGameOver());
+        views.values().forEach(v -> ((VirtualView) v).setGameOver());
         update();
     }
 
@@ -248,6 +248,13 @@ public class Match {
         currentPlayers.forEach(Player::update);
         board.getSquareList().forEach(Square::update);
         views.values().forEach(ViewInterface::setViewInitializationDone);
+    }
+
+    public void sendModelAfterReconnection(PlayerId player) {
+        views.get(player).update(new MatchView(killshotTrack, deathsCounter, board.getId(), leaderBoard));
+        currentPlayers.forEach(p -> views.get(player).update(p.getPlayerView(p.getId() == player)));
+        board.getSquareList().forEach(s -> views.get(player).update(s.getSquareView()));
+        views.get(player).setViewInitializationDone();
     }
 
 }

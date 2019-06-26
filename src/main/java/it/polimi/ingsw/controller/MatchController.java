@@ -39,12 +39,14 @@ public class MatchController implements Runnable {
 
     public void reconnect(String username) {
         for (Player player : players)
-            if (player.getNickname().equals(username)) player.setDisconnected(false);
+            if (player.getNickname().equals(username))
+                player.setConnected();
     }
 
     public void disconnect(String username) {
         for (Player player : players)
-            if (player.getNickname().equals(username)) player.setDisconnected(true);
+            if (player.getNickname().equals(username))
+                player.setDisconnected();
     }
 
     /**

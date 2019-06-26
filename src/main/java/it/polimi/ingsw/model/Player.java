@@ -298,8 +298,14 @@ public class Player {
         return disconnected;
     }
 
-    public void setDisconnected(boolean disconnected) {
-        this.disconnected = disconnected;
+    public void setDisconnected() {
+        disconnected = true;
+        update();
+    }
+
+    public void setConnected() {
+        disconnected = false;
+        match.sendModelAfterReconnection(id);
         update();
     }
 
