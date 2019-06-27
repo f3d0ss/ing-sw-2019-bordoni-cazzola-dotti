@@ -16,7 +16,7 @@ public class PowerUpView {
         return type.powerUpName();
     }
 
-    public String getColorName() {
-        return color.colorName();
+    public Color getColor() {
+        return color;
     }
 }

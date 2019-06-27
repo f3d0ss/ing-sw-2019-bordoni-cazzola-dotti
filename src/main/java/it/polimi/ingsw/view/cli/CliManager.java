@@ -12,6 +12,8 @@ import it.polimi.ingsw.view.TurretSquareView;
 public class CliManager {
 
     private final static int INNERWIDTH = 11;
+    private final static int SEPARATOR_LENGTH = 100;
+    private final static String SEPARATOR = "█";
     private final static String VERTICAL_WALL = "║";
     private final static String HORIZONTAL_WALL = "═";
     private final static String CORNER_BOTTOM_RIGHT = "╝";
@@ -19,8 +21,15 @@ public class CliManager {
     private final static String CORNER_TOP_RIGHT = "╗";
     private final static String CORNER_TOP_LEFT = "╔";
     private final static int SQUARE_HEIGHT = 5;
+    public static final String ANSI_RESET = "\u001B[0m";
+    public static final String ANSI_RED = "\u001B[91m";
+    public static final String ANSI_YELLOW = "\u001B[93m";
+    public static final String ANSI_BLUE = "\u001B[94m";
 
     public void displayAll(ModelView modelView) {
+        for (int i = 0; i < SEPARATOR_LENGTH; i++)
+            System.out.printf(SEPARATOR);
+        System.out.println(SEPARATOR);
         for (int i = 0; i < ModelView.HEIGHT; i++)
             for (int k = 0; k < SQUARE_HEIGHT; k++) {
                 for (int j = 0; j < ModelView.WIDTH; j++) {
@@ -51,7 +60,7 @@ public class CliManager {
             case 1:
             case 3:
                 displayVerticalConnection(square.getConnection(CardinalDirection.WEST), isMiddle);
-                System.out.printf(String.format("%-" + INNERWIDTH + "s", displaySquareInformation(square, squareRow)).substring(0, INNERWIDTH));
+                System.out.printf(String.format(displaySquareInformation(square, squareRow)));
                 displayVerticalConnection(square.getConnection(CardinalDirection.EAST), isMiddle);
                 break;
             case 4:
@@ -113,16 +122,16 @@ public class CliManager {
         switch (row) {
             case 1:
                 if (square.getColor() != null)
-                    return " " + square.getColor().colorName() + "Spawn";
+                    return " " + setDisplayColored(square.getColor()) + square.getColor().colorName().substring(0, 3) + "Spawn  " + ANSI_RESET;
                 TurretSquareView turret = (TurretSquareView) square;
-                return " Ammo: " + turret.getAmmoTile().toString();
+                return " Ammo: " + displayColoredAmmoTile(turret.getAmmoTile().toString()) + " ";
             case 2:
                 String out = "";
                 for (PlayerId p : square.getHostedPlayers())
                     out = out + " " + p.playerIdName().substring(0, 1);
-                return out;
+                return String.format("%-" + INNERWIDTH + "s", out).substring(0, INNERWIDTH);
         }
-        return " ";
+        return String.format("%-" + INNERWIDTH + "s", " ").substring(0, INNERWIDTH);
     }
 
     //TODO: implement SpawnSquare.getWeapons
@@ -130,15 +139,15 @@ public class CliManager {
     private void displayRightSideInformation(int row, ModelView modelView) {
         switch (row) {
             case 1:
-                System.out.printf("BlueSpawn weapons: ");
+                System.out.printf(ANSI_BLUE + "BlueSpawn weapons: " + ANSI_RESET);
                 modelView.getWeaponsOnSpawn(Color.BLUE).forEach(weapon -> System.out.printf(weapon.getName() + "; "));
                 break;
             case 2:
-                System.out.printf("RedSpawn weapons: ");
+                System.out.printf(ANSI_RED + "RedSpawn weapons: " + ANSI_RESET);
                 modelView.getWeaponsOnSpawn(Color.RED).forEach(weapon -> System.out.printf(weapon.getName() + "; "));
                 break;
             case 3:
-                System.out.printf("YellowSpawn weapons: ");
+                System.out.printf(ANSI_YELLOW + "YellowSpawn weapons: " + ANSI_RESET);
                 modelView.getWeaponsOnSpawn(Color.YELLOW).forEach(weapon -> System.out.printf(weapon.getName() + "; "));
                 break;
             case 4:
@@ -157,15 +166,18 @@ public class CliManager {
                 break;
             case 9:
                 System.out.printf("Weapons: ");
-                modelView.getMe().getWeapons().forEach(weapon -> System.out.printf(weapon.getName() + (weapon.isLoaded() ? "; " : "(UNLOADED), ")));
+                modelView.getMe().getWeapons().forEach(weapon -> System.out.printf(weapon.getName() + (weapon.isLoaded() ? "; " : " (UNLOADED); ")));
                 break;
             case 10:
                 System.out.printf("Powerups: ");
-                modelView.getMe().getPowerUps().forEach(powerUp -> System.out.printf(powerUp.getName() + " " + powerUp.getColorName() + "; "));
+                modelView.getMe().getPowerUps().forEach(powerUp -> System.out.printf(setDisplayColored(powerUp.getColor()) + powerUp.getName() + " " + powerUp.getColor().colorName() + ANSI_RESET + "; "));
                 break;
             case 11:
                 System.out.printf("Ammos: ");
-                modelView.getMe().getAmmo().forEach((color, value) -> System.out.printf(value + " " + color.colorName() + "; "));
+                modelView.getMe().getAmmo().forEach((color, value) -> {
+                    if (value > 0)
+                        System.out.printf(setDisplayColored(color) + value + " " + color.colorName() + ANSI_RESET + "; ");
+                });
                 break;
             case 12:
                 System.out.printf("Damages: ");
@@ -188,7 +200,10 @@ public class CliManager {
     private void displayEnemiesInformation(PlayerView enemy) {
         System.out.printf("\n" + enemy.getId().playerIdName().toUpperCase() + " (" + enemy.getNickname() + (enemy.isDisconnected() ? " - DISCONNESSO" : "") + ") has " + enemy.getPowerUps().size() + " poweups.");
         System.out.printf(" Ammos: ");
-        enemy.getAmmo().forEach((color, value) -> System.out.printf(value + " " + color.colorName() + "; "));
+        enemy.getAmmo().forEach((color, value) -> {
+            if (value > 0)
+                System.out.printf(setDisplayColored(color) + value + " " + color.colorName() + ANSI_RESET + "; ");
+        });
         System.out.printf("\n     Weapons: ");
         enemy.getWeapons().forEach(weapon -> System.out.printf(weapon.isLoaded() ? "XXXXXX; " : weapon.getName() + "; "));
         System.out.printf("\n     Damages: ");
@@ -196,6 +211,33 @@ public class CliManager {
         System.out.printf("Marks: ");
         enemy.getMarks().forEach((id, n) -> System.out.printf(n + " from " + id.playerIdName() + " "));
         System.out.println("(dead " + enemy.getDeaths() + " times)");
+    }
+
+    private String setDisplayColored(Color color) {
+        switch (color) {
+            case BLUE:
+                return ANSI_BLUE;
+            case RED:
+                return ANSI_RED;
+            case YELLOW:
+                return ANSI_YELLOW;
+            default:
+                return ANSI_RESET;
+        }
+    }
+
+    private String displayColoredAmmoTile(String ammoTile) {
+        String out = "";
+        for (int i = 0; i < ammoTile.length(); i++) {
+            if (ammoTile.substring(i, i + 1).equals(Color.BLUE.colorName().substring(0, 1)))
+                out = out + ANSI_BLUE + ammoTile.substring(i, i + 1) + ANSI_RESET;
+            else if (ammoTile.substring(i, i + 1).equals(Color.RED.colorName().substring(0, 1)))
+                out = out + ANSI_RED + ammoTile.substring(i, i + 1) + ANSI_RESET;
+            else if (ammoTile.substring(i, i + 1).equals(Color.YELLOW.colorName().substring(0, 1)))
+                out = out + ANSI_YELLOW + ammoTile.substring(i, i + 1) + ANSI_RESET;
+            else out = out + ammoTile.substring(i, i + 1);
+        }
+        return out;
     }
 
     public void displayMessage(String message) {
