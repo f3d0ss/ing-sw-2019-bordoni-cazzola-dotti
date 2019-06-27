@@ -3,7 +3,6 @@ package it.polimi.ingsw.model;
 import it.polimi.ingsw.model.command.*;
 import it.polimi.ingsw.model.playerstate.ChoosingWeaponOptionState;
 import it.polimi.ingsw.model.playerstate.ReadyToShootState;
-import it.polimi.ingsw.network.server.ServerManager;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -232,7 +231,7 @@ public class Weapon {
             for (Player targetPlayer : targetPlayers) {
                 if (targetPlayer.getPosition() == targetSquares.get(0))
                     effectCommands.add(new EffectCommand(targetPlayer, selectedWeaponMode.getDamage(0), selectedWeaponMode.getMarks(), targetPlayer.getPosition(), shooter.getId()));
-                if (targetPlayer.getPosition() == targetSquares.get(0))
+                if (targetPlayer.getPosition() != targetSquares.get(0))
                     effectCommands.add(new EffectCommand(targetPlayer, selectedWeaponMode.getDamage(1), selectedWeaponMode.getMarks(), targetPlayer.getPosition(), shooter.getId()));
             }
         }
@@ -458,16 +457,17 @@ public class Weapon {
     private List<WeaponCommand> getPossibleSelectTargetCommandsTargetSquareFlameThrower(GameBoard gameBoard, Player shooter, ReadyToShootState state) {
         List<WeaponCommand> possibleCommands = new ArrayList<>();
         List<Player> possibleTargetPlayers = new ArrayList<>();
-        final int maxTargets = ServerManager.MAX_PLAYERS - 1;
+        final int maxTargets = 4;
         if (targetSquares.size() == 1) {
             Square secondTargetSquare = gameBoard.getThirdSquareInTheSameDirection(shooter.getPosition(), targetSquares.get(0), false);
-            if (secondTargetSquare != null &&secondTargetSquare.hasOtherPlayers(shooter)) //ask possible 2nd square in the same direction (flameth)
+            if (secondTargetSquare != null && secondTargetSquare.hasOtherPlayers(shooter)) //ask possible 2nd square in the same direction (flameth)
                 possibleCommands.add(new SelectTargetSquareCommand(state, secondTargetSquare));
             if (targetPlayers.isEmpty()) {
                 if (selectedWeaponMode.getMaxNumberOfTargetPlayers() != maxTargets) { //select max 1 player per square
                     possibleTargetPlayers.addAll(targetSquares.get(0).getHostedPlayers(shooter));
                     possibleTargetPlayers.stream()
                             .filter(possibleTargetPlayer -> !possibleTargetPlayer.getId().equals(shooter.getId()))
+                            .distinct()
                             .forEach(player -> possibleCommands.add(new SelectTargetPlayerCommand(state, player)));
                 } else
                     targetPlayers.addAll(targetSquares.get(0).getHostedPlayers(shooter));
@@ -476,11 +476,15 @@ public class Weapon {
             if (selectedWeaponMode.getMaxNumberOfTargetPlayers() != maxTargets && targetPlayers.size() == 1) {
                 possibleTargetPlayers.addAll(targetSquares.get(1).getHostedPlayers(shooter));
                 possibleTargetPlayers.stream()
-                        .filter(possibleTargetPlayer -> !possibleTargetPlayer.getId().equals(shooter.getId()))
+                        .filter(possibleTargetPlayer -> !possibleTargetPlayer.getId().equals(possibleTargetPlayers.get(0).getId()))
                         .forEach(player -> possibleCommands.add(new SelectTargetPlayerCommand(state, player)));
-            } else if (!targetPlayers.containsAll(targetSquares.get(1).getHostedPlayers(shooter)))
-                targetPlayers.addAll(targetSquares.get(1).getHostedPlayers(shooter));
+            } else {
+                if (!targetPlayers.containsAll(targetSquares.get(1).getHostedPlayers(shooter))) {
+                    targetPlayers.addAll(targetSquares.get(1).getHostedPlayers(shooter));
+                }
+            }
         }
+        targetPlayers = targetPlayers.stream().distinct().collect(Collectors.toList());
         return possibleCommands;
     }
 

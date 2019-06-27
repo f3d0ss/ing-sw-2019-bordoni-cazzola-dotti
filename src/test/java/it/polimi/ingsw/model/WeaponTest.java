@@ -411,28 +411,28 @@ class WeaponTest {
     void weeeTest() {
         Match match = new Match(1);
         GameBoard gameBoard = match.getBoard();
-        Square shooterSquare = gameBoard.getSquare(2, 2);
+        Square shooterSquare = gameBoard.getSquare(2, 1);
         Player shooter = new Player(match, PlayerId.VIOLET, PlayerId.VIOLET.playerIdName());
         shooter.respawn(Color.BLUE);
         shooter.move(shooterSquare);
         match.addPlayer(shooter);
         shooterSquare.addPlayer(shooter);
 
-        Square square = gameBoard.getSquare(1, 2);
+        Square square = gameBoard.getSquare(2, 2);
         Player player = new Player(match, PlayerId.GREEN, PlayerId.GREEN.playerIdName());
         player.respawn(Color.BLUE);
         player.move(square);
         match.addPlayer(player);
         square.addPlayer(player);
 
-        Square square1 = gameBoard.getSquare(0, 2);
+        Square square1 = gameBoard.getSquare(2, 2);
         Player player1 = new Player(match, PlayerId.GREY, PlayerId.GREY.playerIdName());
         player1.respawn(Color.BLUE);
         player1.move(square1);
         match.addPlayer(player1);
         square1.addPlayer(player1);
 
-        Square square2 = gameBoard.getSquare(0, 0);
+        Square square2 = gameBoard.getSquare(1, 3);
         Player player2 = new Player(match, PlayerId.BLUE, PlayerId.BLUE.playerIdName());
         player2.respawn(Color.BLUE);
         player2.move(square2);
@@ -441,19 +441,27 @@ class WeaponTest {
 
         Weapon shooterWeapon = null;
         for (Weapon w : allWeapons) {
-            if (!w.getName().contains("Rail"))
+            if (!w.getName().contains("Flam"))
                 continue;
             shooterWeapon = w;
-            WeaponMode weaponmode = w.getWeaponModes().get(1);
+            WeaponMode weaponmode = w.getWeaponModes().get(0);
             shooterWeapon.setSelectedWeaponMode(weaponmode);
 
             ReadyToShootState state = new ReadyToShootState(new AggregateAction(0, false, true, false), shooterWeapon);
             shooter.changeState(state);
-
+ System.out.println(player.getHealth().size());
+            System.out.println(player1.getHealth().size());
+            System.out.println(player2.getHealth().size());
 
             List<Command> possibleCommands = shooterWeapon.getPossibleCommands(gameBoard, shooter, state);
             possibleCommands.get(0).execute();
             possibleCommands = shooter.getPossibleCommands();
+
+           // possibleCommands.get(0).execute();
+            possibleCommands = shooter.getPossibleCommands();
+            System.out.println(player.getHealth().size());
+            System.out.println(player1.getHealth().size());
+            System.out.println(player2.getHealth().size());
             System.out.println(shooterWeapon.getName() + shooterWeapon.getSelectedWeaponMode().getName());
             System.out.println("number of commands: " + possibleCommands.size());
             int s = 0, p = 0;
