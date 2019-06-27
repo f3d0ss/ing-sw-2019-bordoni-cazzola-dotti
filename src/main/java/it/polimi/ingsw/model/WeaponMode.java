@@ -64,8 +64,8 @@ public class WeaponMode {
         int c = 1;
         for (Weapon w : weaponList)
             for (WeaponMode wm : w.getWeaponModes()) {
-                if (wm.isTargetSquare() && wm.isCardinalDirectionMode() ) {
-                        System.out.println(c + " " + w.getName() + " " + wm.name + " " + " " + wm.description + " " + wm.getMaxTargetDistance() + " " + wm.getMinTargetDistance() + " maxtargets" + wm.maxNumberOfTargetPlayers + " min" + wm.getMinNumberOfTargetPlayers());
+                if (wm.isTargetSquare() && wm.isCardinalDirectionMode()) {
+                    System.out.println(c + " " + w.getName() + " " + wm.name + " " + " " + wm.description + " " + wm.getMaxTargetDistance() + " " + wm.getMinTargetDistance() + " maxtargets" + wm.maxNumberOfTargetPlayers + " min" + wm.getMinNumberOfTargetPlayers());
                     c++;
                 }
             }
@@ -75,7 +75,7 @@ public class WeaponMode {
         return name;
     }
 
-    public String getDescription() {
+    String getDescription() {
         return description;
     }
 
@@ -83,47 +83,47 @@ public class WeaponMode {
         return Objects.requireNonNullElseGet(cost, LinkedHashMap::new);
     }
 
-    public int getMaxNumberOfTargetPlayers() {
+    int getMaxNumberOfTargetPlayers() {
         return maxNumberOfTargetPlayers;
     }
 
-    public int getMinNumberOfTargetPlayers() {
+    int getMinNumberOfTargetPlayers() {
         return minNumberOfTargetPlayers;
     }
 
-    public boolean isTargetPlayers() {
+    boolean isTargetPlayers() {
         return targetPlayers;
     }
 
-    public boolean isTargetSquare() {
+    boolean isTargetSquare() {
         return targetSquare;
     }
 
-    public boolean isTargetRoom() {
+    boolean isTargetRoom() {
         return targetRoom;
     }
 
-    public boolean isEachTargetInTheSameRoom() {
+    boolean isEachTargetInTheSameRoom() {
         return eachTargetInTheSameRoom;
     }
 
-    public boolean isEachTargetOnTheSameSquare() {
+    boolean isEachTargetOnTheSameSquare() {
         return eachTargetOnTheSameSquare;
     }
 
-    public boolean isEachTargetOnDifferentSquares() {
+    boolean isEachTargetOnDifferentSquares() {
         return eachTargetOnDifferentSquares;
     }
 
-    public boolean isDamageEveryone() {
+    boolean isDamageEveryone() {
         return damageEveryone;
     }
 
-    public boolean isTargetVisibleByOtherTarget() {
+    boolean isTargetVisibleByOtherTarget() {
         return targetVisibleByOtherTarget;
     }
 
-    public boolean isTargetVisibleByShooter() {
+    boolean isTargetVisibleByShooter() {
         return targetVisibleByShooter;
     }
 
@@ -131,51 +131,51 @@ public class WeaponMode {
         return cardinalDirectionMode;
     }
 
-    public int getMaxTargetDistance() {
+    int getMaxTargetDistance() {
         return maxTargetDistance;
     }
 
-    public int getMinTargetDistance() {
+    int getMinTargetDistance() {
         return minTargetDistance;
     }
 
-    public int getMarks() {
+    int getMarks() {
         return marks;
     }
 
-    public List<Integer> getDamage() {
+    List<Integer> getDamage() {
         return damage;
     }
 
-    public int getDamage(int index) {
+    int getDamage(int index) {
         return damage.get(index);
     }
 
-    public int getAdditionalDamageAvailable() {
+    int getAdditionalDamageAvailable() {
         return additionalDamageAvailable;
     }
 
-    public int getMaxAdditionalDamagePerPlayer() {
+    int getMaxAdditionalDamagePerPlayer() {
         return maxAdditionalDamagePerPlayer;
     }
 
-    public boolean isMoveTargetBeforeShoot() {
+    boolean isMoveTargetBeforeShoot() {
         return moveTargetBeforeShoot;
     }
 
-    public boolean isMoveTargetAfterShoot() {
+    boolean isMoveTargetAfterShoot() {
         return moveTargetAfterShoot;
     }
 
-    public boolean isMoveShooter() {
+    boolean isMoveShooter() {
         return moveShooter;
     }
 
-    public int getMaxTargetMove() {
+    int getMaxTargetMove() {
         return maxTargetMove;
     }
 
-    public int getMaxShooterMove() {
+    int getMaxShooterMove() {
         return maxShooterMove;
     }
 
