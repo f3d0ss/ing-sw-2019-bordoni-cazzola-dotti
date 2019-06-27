@@ -406,5 +406,81 @@ class WeaponTest {
     private Square getRandomSquare(GameBoard gameBoard) {
         return gameBoard.getSquareList().get(new Random().nextInt(gameBoard.getSquareList().size()));
     }
+
+    @Test
+    void weeeTest() {
+        Match match = new Match(1);
+        GameBoard gameBoard = match.getBoard();
+        Square shooterSquare = gameBoard.getSquare(2, 2);
+        Player shooter = new Player(match, PlayerId.VIOLET, PlayerId.VIOLET.playerIdName());
+        shooter.respawn(Color.BLUE);
+        shooter.move(shooterSquare);
+        match.addPlayer(shooter);
+        shooterSquare.addPlayer(shooter);
+
+        Square square = gameBoard.getSquare(1, 2);
+        Player player = new Player(match, PlayerId.GREEN, PlayerId.GREEN.playerIdName());
+        player.respawn(Color.BLUE);
+        player.move(square);
+        match.addPlayer(player);
+        square.addPlayer(player);
+
+        Square square1 = gameBoard.getSquare(0, 2);
+        Player player1 = new Player(match, PlayerId.GREY, PlayerId.GREY.playerIdName());
+        player1.respawn(Color.BLUE);
+        player1.move(square1);
+        match.addPlayer(player1);
+        square1.addPlayer(player1);
+
+        Square square2 = gameBoard.getSquare(0, 0);
+        Player player2 = new Player(match, PlayerId.BLUE, PlayerId.BLUE.playerIdName());
+        player2.respawn(Color.BLUE);
+        player2.move(square2);
+        match.addPlayer(player2);
+        square2.addPlayer(player2);
+
+        Weapon shooterWeapon = null;
+        for (Weapon w : allWeapons) {
+            if (!w.getName().contains("Rail"))
+                continue;
+            shooterWeapon = w;
+            WeaponMode weaponmode = w.getWeaponModes().get(1);
+            shooterWeapon.setSelectedWeaponMode(weaponmode);
+
+            ReadyToShootState state = new ReadyToShootState(new AggregateAction(0, false, true, false), shooterWeapon);
+            shooter.changeState(state);
+
+
+            List<Command> possibleCommands = shooterWeapon.getPossibleCommands(gameBoard, shooter, state);
+            possibleCommands.get(0).execute();
+            possibleCommands = shooter.getPossibleCommands();
+            System.out.println(shooterWeapon.getName() + shooterWeapon.getSelectedWeaponMode().getName());
+            System.out.println("number of commands: " + possibleCommands.size());
+            int s = 0, p = 0;
+            LinkedHashSet<SelectTargetSquareCommand> selectTargetSquareCommands = new LinkedHashSet<>();
+                for (Command command : possibleCommands) {
+                    if (command instanceof ShootCommand) {
+                        ShootCommand shootCommand = (ShootCommand) command;
+                        shootCommand.effects.stream().map(EffectCommand::tempPrint).
+                                forEach(System.out::println);
+
+                    }
+                    if (command instanceof SelectTargetSquareCommand) {
+                        s++;
+                        SelectTargetSquareCommand selectTargetSquareCommand = (SelectTargetSquareCommand) command;
+                        System.out.println(selectTargetSquareCommand.tempPrint());
+                        selectTargetSquareCommands.add(selectTargetSquareCommand);
+
+                    }
+                    if (command instanceof SelectTargetPlayerCommand) {
+                        p++;
+                        SelectTargetPlayerCommand selectTargetPlayerCommand = (SelectTargetPlayerCommand) command;
+                        System.out.println(selectTargetPlayerCommand.tempPrint());
+                    }
+
+                }
+
+        }
+    }
 }
 

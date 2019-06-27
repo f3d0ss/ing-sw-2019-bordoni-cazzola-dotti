@@ -75,7 +75,7 @@ public enum CommandType {
         }
     }, SHOOT {
         public String getString() {
-            return "Spara";
+            return "Conferma Shoot Action: ";
         }
     }, USE_NEWTON {
         public String getString() {

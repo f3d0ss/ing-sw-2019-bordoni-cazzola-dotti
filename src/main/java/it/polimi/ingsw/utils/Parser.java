@@ -44,7 +44,8 @@ public class Parser {
                 .registerSubtype(SimpleCommandMessage.class, SimpleCommandMessage.class.getSimpleName())
                 .registerSubtype(SquareCommandMessage.class, SquareCommandMessage.class.getSimpleName())
                 .registerSubtype(WeaponCommandMessage.class, WeaponCommandMessage.class.getSimpleName())
-                .registerSubtype(WeaponModeCommandMessage.class, WeaponModeCommandMessage.class.getSimpleName());
+                .registerSubtype(WeaponModeCommandMessage.class, WeaponModeCommandMessage.class.getSimpleName())
+                .registerSubtype(ShootCommandMessage.class, ShootCommandMessage.class.getSimpleName());
 
         RuntimeTypeAdapterFactory<Message> messageRuntimeTypeAdapterFactory = RuntimeTypeAdapterFactory
                 .of(Message.class, "jType")

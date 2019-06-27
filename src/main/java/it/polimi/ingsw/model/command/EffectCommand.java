@@ -4,6 +4,7 @@ import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.PlayerId;
 import it.polimi.ingsw.model.Square;
 import it.polimi.ingsw.model.playerstate.ShootedState;
+import it.polimi.ingsw.view.commandmessage.EffectCommandMessage;
 
 import java.util.Objects;
 
@@ -86,5 +87,11 @@ public class EffectCommand {
      */
     public boolean hasDamage() {
         return damage > 0;
+    }
+
+    EffectCommandMessage createCommandMessage() {
+        if (arrivalSquare == player.getPosition())
+            return new EffectCommandMessage(player.getId(), damage, marks, null, null);
+        return new EffectCommandMessage(player.getId(), damage, marks, arrivalSquare.getRow(), arrivalSquare.getCol());
     }
 }

@@ -29,7 +29,7 @@ public class Cli implements Ui {
     public void run() {
     }
 
-    public void refreshView(ModelView modelView){
+    public void refreshView(ModelView modelView) {
         cliManager.displayAll(modelView);
     }
 
@@ -41,22 +41,22 @@ public class Cli implements Ui {
         return initializationDone;
     }
 
-    public int manageCommandChoice(List<CommandMessage> commands, boolean undo){
+    public int manageCommandChoice(List<CommandMessage> commands, boolean undo) {
         List<String> possibleAnswers = new ArrayList<>();
         commands.forEach(c -> possibleAnswers.add(c.getType().getString() + getParameter(c)));
-        if(undo)
+        if (undo)
             possibleAnswers.add(CommandType.UNDO.getString());
         System.out.println("Scegli una delle seguenti opzioni:");
         showPossibleAnswers(possibleAnswers);
         return askChoiceByNumber(possibleAnswers.size()) - FIRST_CHOICE_NUMBER;
     }
 
-    private void showPossibleAnswers(List<String> possibleAnswers){
+    private void showPossibleAnswers(List<String> possibleAnswers) {
         for (int i = 0; i < possibleAnswers.size(); i++)
             System.out.println("(" + (i + FIRST_CHOICE_NUMBER) + ") " + possibleAnswers.get(i));
     }
 
-    private int askChoiceByNumber(int size){
+    private int askChoiceByNumber(int size) {
         int choice;
         try {
             choice = stdin.nextInt();
@@ -100,13 +100,29 @@ public class Cli implements Ui {
             return ((SquareCommandMessage) command).getRow() + " " + ((SquareCommandMessage) command).getCol();
         if (command.getType() == CommandType.SELECT_WEAPON_MODE)
             return ((WeaponModeCommandMessage) command).getWeaponMode();
+        if (command.getType() == CommandType.SHOOT) {
+            ShootCommandMessage shootCommandMessage = (ShootCommandMessage) command;
+            List<EffectCommandMessage> effectCommandMessageList = shootCommandMessage.getEffectCommandMessageList();
+            String shootString = "\n";
+            for (int i = 0; i < effectCommandMessageList.size(); i++) {
+                EffectCommandMessage effectCommandMessage = effectCommandMessageList.get(i);
+                shootString = new StringBuilder().append(shootString).append("Danneggia ").append(effectCommandMessage.getPlayer().playerIdName()).append(" ").append(effectCommandMessage.getDamage()).append(" danno").toString();
+                if (effectCommandMessage.getMarks() > 0)
+                    shootString = new StringBuilder().append(shootString).append("| ").append(effectCommandMessage.getMarks()).append(" marchi ").toString();
+                if (effectCommandMessage.getCol() != null)
+                    shootString = new StringBuilder().append(shootString).append("| spostalo in ").append(effectCommandMessage.getRow()).append(effectCommandMessage.getCol()).toString();
+                if (effectCommandMessageList.size() > i + 1)
+                    shootString = shootString + "\n";
+            }
+            return shootString;
+        }
         return "";
     }
 
-    public void showLeaderBoard(Map<PlayerId, Long> leaderBoard){
+    public void showLeaderBoard(Map<PlayerId, Long> leaderBoard) {
         System.out.println("Partita conclusa");
         int i = 1;
-        for(PlayerId p : leaderBoard.keySet()){
+        for (PlayerId p : leaderBoard.keySet()) {
             System.out.println(i + "° classificato: " + p.playerIdName() + " con " + leaderBoard.get(p) + " punti");
             i++;
         }
