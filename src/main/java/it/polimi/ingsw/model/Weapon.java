@@ -202,7 +202,7 @@ public class Weapon {
     private List<WeaponCommand> getPossibleShootCommandsTargetPlayers(GameBoard gameboard, Player shooter, ReadyToShootState state) {
         List<WeaponCommand> possibleCommands = new ArrayList<>();
         if (!selectedWeaponMode.isMoveTargetAfterShoot()) {
-            if (name.equals("PowerGlove")) { //shooter must move on last target square
+            if (name.equals("Power Glove")) { //shooter must move on last target square
                 List<EffectCommand> effectCommands = createSimpleEffectCommandList(shooter);
                 effectCommands.add(new EffectCommand(shooter, 0, 0, targetPlayers.get(targetPlayers.size() - 1).getPosition(), shooter.getId()));
                 possibleCommands.add(new ShootCommand(state, effectCommands, shooter));
@@ -381,9 +381,10 @@ public class Weapon {
             List<Player> visibleTargets = gameboard.getVisibleTargets(shooter, selectedWeaponMode.getMaxTargetDistance(), selectedWeaponMode.getMinTargetDistance());
             if (selectedWeaponMode.getName().contains("tsunami")) //directly pick targets
                 targetPlayers.addAll(visibleTargets);
-            visibleTargets.stream()
-                    .filter(possibleTargetPlayer -> !possibleTargetPlayer.getId().equals(shooter.getId()))
-                    .forEach(player -> possibleCommands.add(new SelectTargetPlayerCommand(state, player)));
+            else
+                visibleTargets.stream()
+                        .filter(possibleTargetPlayer -> !possibleTargetPlayer.getId().equals(shooter.getId()))
+                        .forEach(player -> possibleCommands.add(new SelectTargetPlayerCommand(state, player)));
         } else {
             if (name.equals("Hellion") && targetPlayers.size() == 1) //add other players on the same square (shooter cant be on this square)
                 targetPlayers.addAll(targetPlayers.get(0).getPosition().getHostedPlayers(targetPlayers.get(0)));
@@ -401,15 +402,15 @@ public class Weapon {
         if (selectedWeaponMode.isTargetVisibleByShooter()) {//PowerGlove rocketfistmode
             if (targetPlayers.isEmpty())
                 gameboard.getVisibleTargets(shooter, selectedWeaponMode.getMaxTargetDistance(), selectedWeaponMode.getMinTargetDistance())
-                        .stream()
-                        .filter(possibleTargetPlayer -> !possibleTargetPlayer.getId().equals(shooter.getId()))
+                        //.stream()
+                        ///.filter(possibleTargetPlayer -> !possibleTargetPlayer.getId().equals(shooter.getId()))
                         .forEach(player -> possibleCommands.add(new SelectTargetPlayerCommand(state, player)));
             else {
                 Square squareInTheSameDirection = gameboard.getThirdSquareInTheSameDirection(shooter.getPosition(), targetPlayers.get(0).getPosition(), false);
                 if (squareInTheSameDirection != null)
                     squareInTheSameDirection.getHostedPlayers()
-                            .stream()
-                            .filter(possibleTargetPlayer -> !possibleTargetPlayer.getId().equals(shooter.getId()))
+                            //.stream()
+                            //.filter(possibleTargetPlayer -> !possibleTargetPlayer.getId().equals(shooter.getId()))
                             .forEach(player -> possibleCommands.add(new SelectTargetPlayerCommand(state, player)));
             }
         } else { //RAILGUN

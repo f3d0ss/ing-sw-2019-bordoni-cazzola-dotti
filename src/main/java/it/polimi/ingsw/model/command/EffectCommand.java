@@ -54,7 +54,7 @@ public class EffectCommand {
         this.arrivalSquare = arrivalSquare;
         this.shooter = shooter;
         if (shooter.equals(player.getId()) && (marks != 0 || damage != 0)) {
-            throw new IllegalStateException();
+            throw new UnsupportedOperationException();
         }
     }
 
