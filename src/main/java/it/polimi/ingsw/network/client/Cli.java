@@ -97,7 +97,7 @@ public class Cli implements Ui {
         if (command.getType() == CommandType.SELECT_TARGET_SQUARE
                 || command.getType() == CommandType.MOVE
                 || command.getType() == CommandType.USE_TELEPORT)
-            return ((SquareCommandMessage) command).getRow() + " " + ((SquareCommandMessage) command).getCol();
+            return (cliManager.getVerticalCoordinateName(((SquareCommandMessage) command).getRow()) + cliManager.getHorizontalCoordinateName(((SquareCommandMessage) command).getCol()));
         if (command.getType() == CommandType.SELECT_WEAPON_MODE)
             return ((WeaponModeCommandMessage) command).getWeaponMode();
         return "";

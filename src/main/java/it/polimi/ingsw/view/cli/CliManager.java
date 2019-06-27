@@ -11,20 +11,23 @@ import it.polimi.ingsw.view.TurretSquareView;
 
 public class CliManager {
 
-    private final static int INNERWIDTH = 11;
-    private final static int SEPARATOR_LENGTH = 100;
-    private final static String SEPARATOR = "█";
-    private final static String VERTICAL_WALL = "║";
-    private final static String HORIZONTAL_WALL = "═";
-    private final static String CORNER_BOTTOM_RIGHT = "╝";
-    private final static String CORNER_BOTTOM_LEFT = "╚";
-    private final static String CORNER_TOP_RIGHT = "╗";
-    private final static String CORNER_TOP_LEFT = "╔";
-    private final static int SQUARE_HEIGHT = 5;
-    public static final String ANSI_RESET = "\u001B[0m";
-    public static final String ANSI_RED = "\u001B[91m";
-    public static final String ANSI_YELLOW = "\u001B[93m";
-    public static final String ANSI_BLUE = "\u001B[94m";
+    private static final int INNERWIDTH = 11;
+    private static final int SEPARATOR_LENGTH = 100;
+    private static final String SEPARATOR = "█";
+    private static final String VERTICAL_WALL = "║";
+    private static final String HORIZONTAL_WALL = "═";
+    private static final String CORNER_BOTTOM_RIGHT = "╝";
+    private static final String CORNER_BOTTOM_LEFT = "╚";
+    private static final String CORNER_TOP_RIGHT = "╗";
+    private static final String CORNER_TOP_LEFT = "╔";
+    private static final String SPACE = " ";
+    private static final int SQUARE_HEIGHT = 5;
+    private static final int ASCII_A_CODE = 65;
+    private static final int FIRST_ROW_NUMBER = 1;
+    private static final String ANSI_RESET = "\u001B[0m";
+    private static final String ANSI_RED = "\u001B[91m";
+    private static final String ANSI_YELLOW = "\u001B[93m";
+    private static final String ANSI_BLUE = "\u001B[94m";
 
     public void displayAll(ModelView modelView) {
         for (int i = 0; i < SEPARATOR_LENGTH; i++)
@@ -34,9 +37,8 @@ public class CliManager {
             for (int k = 0; k < SQUARE_HEIGHT; k++) {
                 for (int j = 0; j < ModelView.WIDTH; j++) {
                     displaySquare(modelView.getSquareBoard(i, j), k);
-                    System.out.printf(" ");
                 }
-                System.out.printf(" ");
+                System.out.printf(SPACE);
                 displayRightSideInformation(i * SQUARE_HEIGHT + k, modelView);
                 System.out.printf("%n");
             }
@@ -44,79 +46,101 @@ public class CliManager {
             displayEnemiesInformation(player);
     }
 
-    private void displaySquare(SquareView square, int squareRow) {
+    private void displaySquare(SquareView square, int printingRow) {
         boolean isMiddle = false;
         if (square == null) {
             for (int i = 0; i < INNERWIDTH + 2; i++)
-                System.out.printf(" ");
+                System.out.printf(SPACE);
             return;
         }
-        switch (squareRow) {
+        switch (printingRow) {
             case 0:
-                displayTopHorizontalConnection(square.getConnection(CardinalDirection.NORTH));
+                displayTopHorizontalConnection(square);
                 break;
             case 2:
                 isMiddle = true;
             case 1:
             case 3:
-                displayVerticalConnection(square.getConnection(CardinalDirection.WEST), isMiddle);
-                System.out.printf(String.format(displaySquareInformation(square, squareRow)));
-                displayVerticalConnection(square.getConnection(CardinalDirection.EAST), isMiddle);
+                displayVerticalConnection(square.getConnection(CardinalDirection.WEST), isMiddle, square.getRow());
+                System.out.printf(String.format(displaySquareInformation(square, printingRow)));
+                displayVerticalConnection(square.getConnection(CardinalDirection.EAST), isMiddle, square.getRow());
+                System.out.printf(SPACE);
                 break;
             case 4:
-                displayBottomHorizontalConnection(square.getConnection(CardinalDirection.SOUTH));
+                displayBottomHorizontalConnection(square);
                 break;
         }
     }
 
-    private void displayTopHorizontalConnection(Connection side) {
-        System.out.printf(CORNER_TOP_LEFT);
-        displayHorizontalConnection(side);
-        System.out.printf(CORNER_TOP_RIGHT);
+    private void displayTopHorizontalConnection(SquareView square) {
+        displayCorner(square.getConnection(CardinalDirection.WEST), square.getConnection(CardinalDirection.NORTH), CORNER_TOP_LEFT);
+        displayHorizontalConnection(square.getConnection(CardinalDirection.NORTH), square.getCol());
+        displayCorner(square.getConnection(CardinalDirection.EAST), square.getConnection(CardinalDirection.NORTH), CORNER_TOP_RIGHT);
+        displayAdditionalSpace(square.getConnection(CardinalDirection.EAST), square.getConnection(CardinalDirection.NORTH));
     }
 
-    private void displayBottomHorizontalConnection(Connection side) {
-        System.out.printf(CORNER_BOTTOM_LEFT);
-        displayHorizontalConnection(side);
-        System.out.printf(CORNER_BOTTOM_RIGHT);
+    private void displayBottomHorizontalConnection(SquareView square) {
+        displayCorner(square.getConnection(CardinalDirection.WEST), square.getConnection(CardinalDirection.SOUTH), CORNER_BOTTOM_LEFT);
+        displayHorizontalConnection(square.getConnection(CardinalDirection.SOUTH), square.getCol());
+        displayCorner(square.getConnection(CardinalDirection.EAST), square.getConnection(CardinalDirection.SOUTH), CORNER_BOTTOM_RIGHT);
+        displayAdditionalSpace(square.getConnection(CardinalDirection.EAST), square.getConnection(CardinalDirection.SOUTH));
     }
 
-    private void displayHorizontalConnection(Connection side) {
+    private void displayCorner(Connection vertical, Connection horizontal, String corner) {
+        if (vertical == Connection.SAME_ROOM) {
+            if (horizontal == Connection.SAME_ROOM) System.out.printf(SPACE);
+            else System.out.printf(HORIZONTAL_WALL);
+        } else {
+            if (horizontal == Connection.SAME_ROOM) System.out.printf(VERTICAL_WALL);
+            else System.out.printf(corner);
+        }
+    }
+
+    private void displayAdditionalSpace(Connection vertical, Connection horizontal) {
+        System.out.printf((vertical == Connection.SAME_ROOM && horizontal != Connection.SAME_ROOM) ? HORIZONTAL_WALL : SPACE);
+    }
+
+    private void displayHorizontalConnection(Connection side, int column) {
         for (int i = 0; i < INNERWIDTH; i++)
             switch (side) {
                 case WALL:
                     System.out.printf(HORIZONTAL_WALL);
                     break;
                 case MAP_BORDER:
-                    System.out.printf(HORIZONTAL_WALL);
+                    System.out.printf((i < INNERWIDTH / 2 || i > INNERWIDTH / 2) ? HORIZONTAL_WALL : getHorizontalCoordinateName(column));
                     break;
                 case SAME_ROOM:
-                    System.out.printf(" ");
+                    System.out.printf(SPACE);
                     break;
                 case DOOR:
-                    if (i < INNERWIDTH / 2 - 1 || i > INNERWIDTH / 2 + 1)
-                        System.out.printf(HORIZONTAL_WALL);
-                    else
-                        System.out.printf(" ");
+                    System.out.printf((i < INNERWIDTH / 2 - 1 || i > INNERWIDTH / 2 + 1) ? HORIZONTAL_WALL : SPACE);
             }
     }
 
-    private void displayVerticalConnection(Connection side, boolean door) {
+    private void displayVerticalConnection(Connection side, boolean isMiddle, int row) {
         switch (side) {
             case WALL:
-            case MAP_BORDER:
                 System.out.printf(VERTICAL_WALL);
                 break;
+            case MAP_BORDER:
+                System.out.printf(isMiddle ? getVerticalCoordinateName(row) : VERTICAL_WALL);
+                break;
             case SAME_ROOM:
-                System.out.printf(" ");
+                System.out.printf(SPACE);
                 break;
             case DOOR:
-                if (door)
-                    System.out.printf(" ");
-                else
-                    System.out.printf(VERTICAL_WALL);
+                System.out.printf(isMiddle ? SPACE : VERTICAL_WALL);
         }
     }
+
+    public String getHorizontalCoordinateName(int column) {
+        return "" + (char) (column + ASCII_A_CODE);
+    }
+
+    public String getVerticalCoordinateName(int column) {
+        return String.valueOf(column + FIRST_ROW_NUMBER);
+    }
+
 
     private String displaySquareInformation(SquareView square, int row) {
         switch (row) {
@@ -238,9 +262,5 @@ public class CliManager {
             else out = out + ammoTile.substring(i, i + 1);
         }
         return out;
-    }
-
-    public void displayMessage(String message) {
-        System.out.println(message);
     }
 }
