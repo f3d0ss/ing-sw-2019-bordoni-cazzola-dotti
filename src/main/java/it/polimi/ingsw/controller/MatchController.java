@@ -23,8 +23,8 @@ public class MatchController implements Runnable {
     private final Map<PlayerId, ViewInterface> virtualViews = new LinkedHashMap<>();
     private final List<Player> players;
 
-    public MatchController(Map<String, ViewInterface> lobby, int gameBoardNumber) {
-        match = new Match(gameBoardNumber);
+    public MatchController(Map<String, ViewInterface> lobby, int gameBoardNumber, int skulls) {
+        match = new Match(gameBoardNumber, skulls);
         PlayerId[] values = PlayerId.values();
         List<String> nicknames = new ArrayList<>(lobby.keySet());
         for (int i = 0; i < nicknames.size(); i++) {

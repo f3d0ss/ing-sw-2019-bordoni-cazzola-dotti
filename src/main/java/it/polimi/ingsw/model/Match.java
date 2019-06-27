@@ -11,35 +11,36 @@ import java.util.*;
 
 public class Match {
 
-    private static final int SKULLS = 8;
-    //TODO param server
+    private static final int DEFAULT_SKULLS = 8;
+
     private List<PlayerId> killshotTrack;
     private PowerUpDeck currentPowerUpDeck;
     private PowerUpDeck usedPowerUpDeck;
     private AmmoTileDeck currentAmmoTileDeck;
     private AmmoTileDeck usedAmmoTileDeck;
     private WeaponDeck currentWeaponDeck;
-    private int deathsCounter = SKULLS;
+    private int deathsCounter;
     private List<Player> currentPlayers;
     private GameBoard board;
     private boolean firstPlayerPlayedLastTurn;
     private Map<PlayerId, ViewInterface> views;
     private Map<PlayerId, Long> leaderBoard;
 
-    public Match(int gameBoardNumber) {
+    public Match(int gameBoardNumber, int skulls) {
         Parser parser = new Parser();
         initializeGameBoard(gameBoardNumber, parser);
         views = new HashMap<>();
         killshotTrack = new ArrayList<>();
         currentPlayers = new ArrayList<>();
         firstPlayerPlayedLastTurn = false;
+        deathsCounter = skulls;
         initializeAmmoTiles(parser);
         initializeWeapons(parser);
         initializePowerUps(parser);
     }
 
     public Match() {
-        this(1);
+        this(1, DEFAULT_SKULLS);
     }
 
     private void initializeGameBoard(int gameBoardNumber, Parser parser) {

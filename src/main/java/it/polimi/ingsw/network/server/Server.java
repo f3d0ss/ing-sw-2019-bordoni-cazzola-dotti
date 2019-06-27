@@ -20,14 +20,15 @@ public class Server {
     private final static int MAX_CONNECTION_TIME = 5000;
     private final static int MIN_TURN_TIME = 5;
     private final static int MAX_TURN_TIME = 5000;
+    private final static int MIN_SKULLS = 1;
+    private final static int MAX_SKULLS = 8;
 
     public static void main(String[] args) {
         ServerManager serverManager;
         Scanner stdin = new Scanner(System.in);
-        String message;
-        int client;
         int secondsAfterThirdConnection;
         int secondsDuringTurn;
+        int skulls;
         System.out.println("Avvio servers in corso...");
         try {
             System.out.println("local ip: " + InetAddress.getLocalHost().getHostAddress());
@@ -42,7 +43,9 @@ public class Server {
         secondsAfterThirdConnection = manageIntInput(stdin, MIN_CONNECTION_TIME, MAX_CONNECTION_TIME, 0);
         System.out.println("Specifica il numero di secondi concessi ai giocatori per ogni mossa:");
         secondsDuringTurn = manageIntInput(stdin, MIN_TURN_TIME, MAX_TURN_TIME, 0);
-        serverManager = new ServerManager(secondsAfterThirdConnection, secondsDuringTurn, socketPort, rmiPort);
+        System.out.println("Specifica il numero di teschi iniziali nelle partite:");
+        skulls = manageIntInput(stdin, MIN_SKULLS, MAX_SKULLS, 0);
+        serverManager = new ServerManager(secondsAfterThirdConnection, secondsDuringTurn, socketPort, rmiPort, skulls);
         serverManager.run();
         while (!serverManager.allServerReady()) {
             try {
@@ -51,26 +54,6 @@ public class Server {
             }
         }
         while (keepAlive) {
-            /*
-            System.out.printf("Clients attivi: [");
-            serverManager.printClients();
-            System.out.println("] Scrivi con quale client vuoi comunicare, " + INPUT_UPDATE + " per aggiornare la lista.");
-            while (true) {
-                try {
-                    client = Integer.parseInt(stdin.nextLine());
-                    if (serverManager.isActive(client) || client == INPUT_UPDATE)
-                        break;
-                    else
-                        System.out.println("L'user " + client + " non è attivo. Riprova:");
-                } catch (NumberFormatException e) {
-                    System.out.println("Non è un numero valido, riprova:");
-                }
-            }
-            if (client != INPUT_UPDATE) {
-                System.out.println("Scrivi il messaggio:");
-                message = stdin.nextLine();
-                serverManager.sendMessageAndWaitForAnswer(client, new Message(Protocol.TRY, message, null, 0));
-            }*/
         }
         //serverManager.shutDownAllServers();
     }
