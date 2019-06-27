@@ -45,12 +45,20 @@ public class Gui implements Ui, Runnable {
     }
 
     public void setViewInitializationDone(ModelView modelView) {
-        Platform.runLater(() -> {
-            GuiManager.startMainGui();
-            controller = GuiManager.getController();
-            controller.setModelView(modelView);
+        Lock lock = new Lock();
+        try {
+            lock.lock();
+            Platform.runLater(() -> {
+                GuiManager.startMainGui();
+                controller = GuiManager.getController();
+                controller.setModelView(modelView);
+                lock.unlock();
+            });
+            lock.lock();
             initializationDone = true;
-        });
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     public boolean isViewInitializationDone() {

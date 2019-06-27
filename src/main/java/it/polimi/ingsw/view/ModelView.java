@@ -4,6 +4,7 @@ import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.PlayerId;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -23,6 +24,8 @@ public class ModelView {
     }
 
     public void setMatch(MatchView match) {
+        match.getKillshotTrack().add(PlayerId.BLUE);
+        match.getKillshotTrack().add(PlayerId.VIOLET);
         this.match = match;
     }
 
@@ -31,6 +34,23 @@ public class ModelView {
     }
 
     public void setMe(PlayerView me) {
+//        TODO: JUST FOR TEST GUI
+//        List<PlayerId> health = new LinkedList<>();
+//        health.add(me.getId());
+//        health.add(me.getId());
+//        health.add(me.getId());
+//        health.add(me.getId());
+//        health.add(me.getId());
+//        health.add(me.getId());
+//        health.add(me.getId());
+//
+//        Map<PlayerId, Integer> marks = new HashMap<>();
+//        marks.put(me.getId(),2);
+//
+//
+//        me.getHealth().addAll(health);
+//        me.getMarks().putAll(marks);
+
         this.me = me;
     }
 
@@ -48,6 +68,10 @@ public class ModelView {
 
     public void setEnemie(PlayerId playerId, PlayerView enemie) {
         this.enemies.put(playerId, enemie);
+    }
+
+    public Map<Color, List<WeaponView>> getWeaponsOnSpawn() {
+        return weaponsOnSpawn;
     }
 
     public List<WeaponView> getWeaponsOnSpawn(Color color) {
