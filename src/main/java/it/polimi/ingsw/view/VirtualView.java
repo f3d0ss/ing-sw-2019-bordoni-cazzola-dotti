@@ -28,21 +28,21 @@ public class VirtualView implements ViewInterface {
 
     @Override
     public void update(MatchView mw) {
-        if (!serverManager.isAwayFromKeyboardOrDisconnected(playerId))
+        if (!serverManager.isAwayFromKeyboardOrDisconnected(playerId) && serverManager.isListening(playerId))
             if (serverManager.sendMessageAndWaitForAnswer(playerId, new MatchViewTransfer(mw)).equals(Protocol.ERR))
                 controller.disconnect(serverManager.getNickname(playerId));
     }
 
     @Override
     public void update(SquareView sw) {
-        if (!serverManager.isAwayFromKeyboardOrDisconnected(playerId))
+        if (!serverManager.isAwayFromKeyboardOrDisconnected(playerId) && serverManager.isListening(playerId))
             if (serverManager.sendMessageAndWaitForAnswer(playerId, new SquareViewTransfer(sw)).equals(Protocol.ERR))
                 controller.disconnect(serverManager.getNickname(playerId));
     }
 
     @Override
     public void update(PlayerView pw) {
-        if (!serverManager.isAwayFromKeyboardOrDisconnected(playerId))
+        if (!serverManager.isAwayFromKeyboardOrDisconnected(playerId) && serverManager.isListening(playerId))
             if (serverManager.sendMessageAndWaitForAnswer(playerId, new PlayerViewTransfer(pw)).equals(Protocol.ERR))
                 controller.disconnect(serverManager.getNickname(playerId));
     }

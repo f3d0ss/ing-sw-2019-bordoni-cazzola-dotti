@@ -23,6 +23,7 @@ public class ServerManager implements Runnable {
     private final static String NEW_GAME = "New game";
     private int socketPort;
     private int rmiPort;
+    private int skulls;
     private Map<Integer, Socket> socketClients = new HashMap<>();
     private Map<Integer, RmiClientInterface> rmiClients = new HashMap<>();
     private Map<Integer, String> answers = new HashMap<>();
@@ -42,11 +43,12 @@ public class ServerManager implements Runnable {
     private int secondsDuringTurn;
     private Map<Integer, MatchController> activeMatches = new HashMap<>();
 
-    public ServerManager(int secondsAfterThirdConnection, int secondsDuringTurn, int socketPort, int rmiPort) {
+    public ServerManager(int secondsAfterThirdConnection, int secondsDuringTurn, int socketPort, int rmiPort, int skulls) {
         countDown = new GameCountDown(this, secondsAfterThirdConnection);
         this.secondsDuringTurn = secondsDuringTurn;
         this.socketPort = socketPort;
         this.rmiPort = rmiPort;
+        this.skulls = skulls;
     }
 
     public void addClient(Socket client) {
@@ -82,7 +84,9 @@ public class ServerManager implements Runnable {
                 if (code.equals(Protocol.ERR))
                     break;
                 oldId = Integer.parseInt(code);
-                if (switchClientId(oldId, temporaryId)) {
+                if (checkIfDisconnected(oldId)) {
+                    if (!switchClientId(oldId, temporaryId))
+                        break;
                     awayFromKeyboardOrDisconnected.remove((Object) oldId);
                     sendMessageAndWaitForAnswer(oldId, new Message(Protocol.WELCOME_BACK, nicknames.get(oldId), null));
                     activeMatches.get(oldId).reconnect(nicknames.get(oldId));
@@ -96,32 +100,38 @@ public class ServerManager implements Runnable {
         }
     }
 
+    private boolean checkIfDisconnected(int oldId) {
+        if (isAwayFromKeyboardOrDisconnected(oldId))
+            return true;
+        if (!answerReady.get(oldId))
+            return false;
+        sendMessageAndWaitForAnswer(oldId, new Message(Protocol.ARE_YOU_ALIVE, "", null));
+        if (isAwayFromKeyboardOrDisconnected(oldId))
+            return true;
+        return false;
+    }
+
     private boolean switchClientId(int oldId, int temporaryId) {
-        if (isAwayFromKeyboardOrDisconnected(oldId)) {
-            if (socketClients.containsKey(temporaryId)) {
-                socketClients.put(oldId, socketClients.get(temporaryId));
-                socketClients.remove(temporaryId);
-                return true;
-            }
-            if (rmiClients.containsKey(temporaryId)) {
-                rmiClients.put(oldId, rmiClients.get(temporaryId));
-                rmiClients.remove(temporaryId);
-                return true;
-            }
+        if (socketClients.containsKey(temporaryId)) {
+            socketClients.put(oldId, socketClients.get(temporaryId));
+            socketClients.remove(temporaryId);
+            return true;
+        }
+        if (rmiClients.containsKey(temporaryId)) {
+            rmiClients.put(oldId, rmiClients.get(temporaryId));
+            rmiClients.remove(temporaryId);
+            return true;
         }
         return false;
     }
 
     public void addClientToLobby(int id) {
-        //lobby.put(id, "");
         connected.add(id);
         login(id);
         connected.remove((Object) id);
         if (lobby.size() == MIN_PLAYERS) {
-            //countDown.restore();
             if (!countDown.isRunning())
                 new Thread(countDown).start();
-            //notifyTimeLeft();
         } else if (lobby.size() == MAX_PLAYERS) {
             countDown.stopCount();
             checkAllConnections();
@@ -141,7 +151,6 @@ public class ServerManager implements Runnable {
             if (name.equals(Protocol.ERR))
                 return;
         }
-        //TODO: correct error from delay during board choice
         if (chosenBoard == 0) {
             chosenBoard = DEFAULT_BOARD;
             String ans = sendMessageAndWaitForAnswer(id, new Message(Protocol.CHOOSE_BOARD, "", Arrays.asList("Board1", "Board2", "Board3", "Board4")));
@@ -214,7 +223,7 @@ public class ServerManager implements Runnable {
     private void createNewGame() {
         Map<String, ViewInterface> gamers = new HashMap<>();
         lobby.keySet().forEach(i -> gamers.put(lobby.get(i), new VirtualView(this, i)));
-        MatchController match = new MatchController(gamers, chosenBoard);
+        MatchController match = new MatchController(gamers, chosenBoard, skulls);
         lobby.keySet().forEach(i -> {
             activeMatches.put(i, match);
             nicknames.put(i, lobby.get(i));
@@ -309,6 +318,10 @@ public class ServerManager implements Runnable {
     public void printClients() {
         socketClients.forEach((integer, socket) -> System.out.printf("%d ", integer));
         rmiClients.forEach((integer, rmi) -> System.out.printf("%d ", integer));
+    }
+
+    public boolean isListening(int user){
+        return answerReady.get(user);
     }
 
     public String sendMessageAndWaitForAnswer(int number, Message message) {

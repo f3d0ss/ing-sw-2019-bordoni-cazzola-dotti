@@ -49,6 +49,9 @@ public class Client implements Runnable {
             view.setViewInitializationDone();
             return Protocol.ACK;
         }
+        if (fromServer.type == Protocol.ARE_YOU_ALIVE) {
+            return Protocol.ACK;
+        }
         if (fromServer.type == Protocol.SEND_COMMANDS) {
             CommandViewTransfer commandViewTransfer = (CommandViewTransfer) fromServer;
             return String.valueOf(view.sendCommands(commandViewTransfer.getAttachment(), commandViewTransfer.isUndo()));

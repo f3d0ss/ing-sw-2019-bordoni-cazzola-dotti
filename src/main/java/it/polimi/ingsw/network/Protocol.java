@@ -169,6 +169,14 @@ public enum Protocol {
         public boolean requiresAnswer() {
             return false;
         }
+    }, ARE_YOU_ALIVE {
+        public String getQuestion() {
+            return "";
+        }
+
+        public boolean requiresAnswer() {
+            return false;
+        }
     }, LET_US_START {
         public String getQuestion() {
             return "Avvio del gioco in corso...";
