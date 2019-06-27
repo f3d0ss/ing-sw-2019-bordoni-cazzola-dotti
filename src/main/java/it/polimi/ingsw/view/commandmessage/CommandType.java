@@ -47,7 +47,7 @@ public enum CommandType {
         }
     }, SELECT_RELOADING_WEAPON {
         public String getString() {
-            return "Seleziona l'arma che vuoi ricaricare";
+            return "Ricarica l'arma ";
         }
     }, SELECT_SCOPE {
         public String getString() {

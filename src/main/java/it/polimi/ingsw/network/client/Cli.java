@@ -46,7 +46,7 @@ public class Cli implements Ui {
         commands.forEach(c -> possibleAnswers.add(c.getType().getString() + getParameter(c)));
         if(undo)
             possibleAnswers.add(CommandType.UNDO.getString());
-        System.out.println("Scegli una delle seguenti opzioni:");
+        System.out.println("\nScegli una delle seguenti opzioni:");
         showPossibleAnswers(possibleAnswers);
         return askChoiceByNumber(possibleAnswers.size()) - FIRST_CHOICE_NUMBER;
     }
