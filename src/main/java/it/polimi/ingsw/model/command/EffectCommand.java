@@ -3,6 +3,7 @@ package it.polimi.ingsw.model.command;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.PlayerId;
 import it.polimi.ingsw.model.Square;
+import it.polimi.ingsw.model.playerstate.ShootedState;
 
 import java.util.Objects;
 
@@ -65,6 +66,8 @@ public class EffectCommand {
         player.addDamage(damage, shooter);
         player.addMarks(marks, shooter);
         player.move(arrivalSquare);
+        if (hasDamage())
+            player.changeState(new ShootedState());
     }
 
     /**
