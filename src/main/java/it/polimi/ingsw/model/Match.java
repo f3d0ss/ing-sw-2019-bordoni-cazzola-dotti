@@ -60,6 +60,7 @@ public class Match {
 
     private void initializeWeapons(Parser parser) {
         List<Weapon> weaponList = new ArrayList<>();
+        weaponList.add(parser.deserialize(new InputStreamReader(getClass().getResourceAsStream("/weapons/TractorBeam.json"))));
         weaponList.add(parser.deserialize(new InputStreamReader(getClass().getResourceAsStream("/weapons/Cyberblade.json"))));
         weaponList.add(parser.deserialize(new InputStreamReader(getClass().getResourceAsStream("/weapons/Electroscythe.json"))));
         weaponList.add(parser.deserialize(new InputStreamReader(getClass().getResourceAsStream("/weapons/Flamethrower.json"))));
@@ -77,16 +78,15 @@ public class Match {
         weaponList.add(parser.deserialize(new InputStreamReader(getClass().getResourceAsStream("/weapons/Shotgun.json"))));
         weaponList.add(parser.deserialize(new InputStreamReader(getClass().getResourceAsStream("/weapons/Sledgehammer.json"))));
         weaponList.add(parser.deserialize(new InputStreamReader(getClass().getResourceAsStream("/weapons/Thor.json"))));
-        weaponList.add(parser.deserialize(new InputStreamReader(getClass().getResourceAsStream("/weapons/TractorBeam.json"))));
         weaponList.add(parser.deserialize(new InputStreamReader(getClass().getResourceAsStream("/weapons/VortexCannon.json"))));
         weaponList.add(parser.deserialize(new InputStreamReader(getClass().getResourceAsStream("/weapons/Whisper.json"))));
         weaponList.add(parser.deserialize(new InputStreamReader(getClass().getResourceAsStream("/weapons/Zx2.json"))));
-        Collections.shuffle(weaponList);
         for (Color color : Color.values()) {
             for (int i = 0; i < SpawnSquare.MAX_WEAPON; i++)
                 board.getSpawn(color).addWeapon(weaponList.remove(0));
         }
         currentWeaponDeck = new WeaponDeck(weaponList);
+        currentWeaponDeck.shuffle();
     }
 
     private void initializePowerUps(Parser parser) {

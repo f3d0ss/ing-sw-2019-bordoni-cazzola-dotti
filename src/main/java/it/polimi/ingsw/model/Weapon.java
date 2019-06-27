@@ -296,15 +296,22 @@ public class Weapon {
     private List<WeaponCommand> getPossibleSelectTargetCommandsTargetCanMoveBeforeShoot(GameBoard gameboard, Player shooter, ReadyToShootState state) {
         List<WeaponCommand> possibleCommands = new ArrayList<>();
         if (targetSquares.isEmpty()) { //select a square (first call)
-            List<Square> possibleTargetSquares = new ArrayList<>();
-            if (selectedWeaponMode.isTargetVisibleByShooter()) //target square must be visible and with players that can be moved to it
-                possibleTargetSquares.addAll(gameboard.getReachableSquaresWithOtherPlayers(gameboard.getVisibleSquares(shooter.getPosition(), selectedWeaponMode.getMaxTargetDistance(), selectedWeaponMode.getMinTargetDistance(), false), selectedWeaponMode.getMaxTargetMove(), shooter));
-            for (Square possibleTarget : possibleTargetSquares)
-                possibleCommands.add(new SelectTargetSquareCommand(state, possibleTarget));
-        } else { //pick target players if not already selected (second call)
+            List<Square> visibleSquares = gameboard.getVisibleSquares(shooter.getPosition(), selectedWeaponMode.getMaxTargetDistance(), selectedWeaponMode.getMinTargetDistance(), false);
+            for (Square square : visibleSquares) {
+                if (!gameboard.getReachableSquaresWithOtherPlayers(square, selectedWeaponMode.getMaxTargetMove(), shooter).isEmpty()) {
+                    if (square.equals(shooter.getPosition()) && selectedWeaponMode.getMaxTargetDistance() > 0)
+                        continue;
+                    if (selectedWeaponMode.getMaxTargetDistance() == 0 && selectedWeaponMode.getMinTargetDistance() == 0)
+                        targetSquares.add(square);
+                    else
+                        possibleCommands.add(new SelectTargetSquareCommand(state, square));
+                }
+            }
+        }
+        if (!targetSquares.isEmpty()) { //pick target players if not already selected (second call)
             List<Player> otherPlayersOnReachableSquares = gameboard.getOtherPlayersOnReachableSquares(targetSquares.get(0), selectedWeaponMode.getMaxTargetMove(), shooter);
             for (Player possibleTargetPlayer : otherPlayersOnReachableSquares)
-                if (!targetPlayers.contains(possibleTargetPlayer) /*&& !possibleTargetPlayer.getId().equals(shooter.getId())*/)
+                if (!targetPlayers.contains(possibleTargetPlayer) && !possibleTargetPlayer.getId().equals(shooter.getId()))
                     possibleCommands.add(new SelectTargetPlayerCommand(state, possibleTargetPlayer));
         }
         return possibleCommands;
@@ -532,7 +539,7 @@ public class Weapon {
         List<MoveCommand> list = new ArrayList<>();
         for (Square square : shooter.getAccessibleSquare(selectedWeaponMode.getMaxShooterMove())) {
             shooter.untracedMove(square);
-            if (!getPossibleSelectTargetCommands(gameBoard, shooter, state).isEmpty()) {
+            if (!getPossibleSelectTargetCommands(gameBoard, shooter, state).isEmpty() && !square.equals(shooter.getPosition())) {
                 MoveCommand moveCommand = new MoveCommand(shooter, square, state);
                 list.add(moveCommand);
             }
