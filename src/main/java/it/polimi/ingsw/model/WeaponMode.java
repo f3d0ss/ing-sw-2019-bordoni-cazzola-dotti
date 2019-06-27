@@ -1,9 +1,12 @@
 package it.polimi.ingsw.model;
 
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.util.*;
 
 /**
  * This class represents a weapon's mode
@@ -41,7 +44,7 @@ public class WeaponMode {
     private int maxTargetMove;
     private int maxShooterMove;
 
-   /* public static void main(String[] args) {
+    public static void main(String[] args) {
         GsonBuilder g = new GsonBuilder();
         g.setPrettyPrinting();
         g.serializeNulls();
@@ -61,12 +64,12 @@ public class WeaponMode {
         int c = 1;
         for (Weapon w : weaponList)
             for (WeaponMode wm : w.getWeaponModes()) {
-                if (wm.isMoveTargetBeforeShoot() ) {
+                if (wm.isTargetSquare() && wm.isCardinalDirectionMode() ) {
                         System.out.println(c + " " + w.getName() + " " + wm.name + " " + " " + wm.description + " " + wm.getMaxTargetDistance() + " " + wm.getMinTargetDistance() + " maxtargets" + wm.maxNumberOfTargetPlayers + " min" + wm.getMinNumberOfTargetPlayers());
                     c++;
                 }
             }
-    }*/
+    }
 
     public String getName() {
         return name;

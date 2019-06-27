@@ -3,6 +3,7 @@ package it.polimi.ingsw.model;
 import it.polimi.ingsw.model.command.*;
 import it.polimi.ingsw.model.playerstate.ChoosingWeaponOptionState;
 import it.polimi.ingsw.model.playerstate.ReadyToShootState;
+import it.polimi.ingsw.network.server.ServerManager;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -457,12 +458,13 @@ public class Weapon {
     private List<WeaponCommand> getPossibleSelectTargetCommandsTargetSquareFlameThrower(GameBoard gameBoard, Player shooter, ReadyToShootState state) {
         List<WeaponCommand> possibleCommands = new ArrayList<>();
         List<Player> possibleTargetPlayers = new ArrayList<>();
+        final int maxTargets = ServerManager.MAX_PLAYERS - 1;
         if (targetSquares.size() == 1) {
             Square secondTargetSquare = gameBoard.getThirdSquareInTheSameDirection(shooter.getPosition(), targetSquares.get(0), false);
-            if (secondTargetSquare != null) //ask possible 2nd square in the same direction (flameth)
+            if (secondTargetSquare != null &&secondTargetSquare.hasOtherPlayers(shooter)) //ask possible 2nd square in the same direction (flameth)
                 possibleCommands.add(new SelectTargetSquareCommand(state, secondTargetSquare));
             if (targetPlayers.isEmpty()) {
-                if (selectedWeaponMode.getMaxNumberOfTargetPlayers() != 4) { //select max 1 player per square
+                if (selectedWeaponMode.getMaxNumberOfTargetPlayers() != maxTargets) { //select max 1 player per square
                     possibleTargetPlayers.addAll(targetSquares.get(0).getHostedPlayers(shooter));
                     possibleTargetPlayers.stream()
                             .filter(possibleTargetPlayer -> !possibleTargetPlayer.getId().equals(shooter.getId()))
@@ -471,7 +473,7 @@ public class Weapon {
                     targetPlayers.addAll(targetSquares.get(0).getHostedPlayers(shooter));
             }
         } else {
-            if (selectedWeaponMode.getMaxNumberOfTargetPlayers() != 4 && targetPlayers.size() == 1) {
+            if (selectedWeaponMode.getMaxNumberOfTargetPlayers() != maxTargets && targetPlayers.size() == 1) {
                 possibleTargetPlayers.addAll(targetSquares.get(1).getHostedPlayers(shooter));
                 possibleTargetPlayers.stream()
                         .filter(possibleTargetPlayer -> !possibleTargetPlayer.getId().equals(shooter.getId()))
@@ -502,7 +504,8 @@ public class Weapon {
             List<Square> possibleTargetSquares = new ArrayList<>();
             if (selectedWeaponMode.isCardinalDirectionMode())
                 possibleTargetSquares.addAll(gameboard.getVisibleSquares(shooter.getPosition(), selectedWeaponMode.getMinTargetDistance(), selectedWeaponMode.getMinTargetDistance(), true));
-            possibleTargetSquares.addAll(gameboard.getVisibleSquares(shooter.getPosition(), selectedWeaponMode.getMaxTargetDistance(), selectedWeaponMode.getMinTargetDistance(), true));
+            else
+                possibleTargetSquares.addAll(gameboard.getVisibleSquares(shooter.getPosition(), selectedWeaponMode.getMaxTargetDistance(), selectedWeaponMode.getMinTargetDistance(), true));
             possibleTargetSquares.stream().filter(square -> square.hasOtherPlayers(shooter)).forEach(square -> possibleCommands.add(new SelectTargetSquareCommand(state, square)));
         } else {
             if (selectedWeaponMode.isCardinalDirectionMode()) {
@@ -537,9 +540,11 @@ public class Weapon {
     private List<MoveCommand> getPossibleExtraMoveCommands(GameBoard gameBoard, Player shooter, ReadyToShootState state) {
         Square currentPosition = shooter.getPosition();
         List<MoveCommand> list = new ArrayList<>();
-        for (Square square : shooter.getAccessibleSquare(selectedWeaponMode.getMaxShooterMove())) {
+        List<Square> shooterAccessibleSquare = shooter.getAccessibleSquare(selectedWeaponMode.getMaxShooterMove());
+        shooterAccessibleSquare.remove(currentPosition);
+        for (Square square : shooterAccessibleSquare) {
             shooter.untracedMove(square);
-            if (!getPossibleSelectTargetCommands(gameBoard, shooter, state).isEmpty() && !square.equals(shooter.getPosition())) {
+            if (!getPossibleSelectTargetCommands(gameBoard, shooter, state).isEmpty()) {
                 MoveCommand moveCommand = new MoveCommand(shooter, square, state);
                 list.add(moveCommand);
             }
