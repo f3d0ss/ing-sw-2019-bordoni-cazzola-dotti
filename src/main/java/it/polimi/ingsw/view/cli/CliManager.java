@@ -49,7 +49,7 @@ public class CliManager {
     private void displaySquare(SquareView square, int printingRow) {
         boolean isMiddle = false;
         if (square == null) {
-            for (int i = 0; i < INNERWIDTH + 2; i++)
+            for (int i = 0; i < INNERWIDTH + 3; i++)
                 System.out.printf(SPACE);
             return;
         }
@@ -174,9 +174,6 @@ public class CliManager {
                 System.out.printf(ANSI_YELLOW + "YellowSpawn weapons: " + ANSI_RESET);
                 modelView.getWeaponsOnSpawn(Color.YELLOW).forEach(weapon -> System.out.printf(weapon.getName() + "; "));
                 break;
-            case 4:
-                //System.out.printf("Skulls: " + match.getDeathsCounter());
-                break;
             case 5:
                 System.out.printf("Killshots: ");
                 modelView.getMatch().getKillshotTrack().forEach(id -> System.out.printf(id.playerIdName().substring(0, 1) + " "));
@@ -206,18 +203,20 @@ public class CliManager {
             case 12:
                 System.out.printf("Damages: ");
                 modelView.getMe().getHealth().forEach(id -> System.out.printf(id.playerIdName().substring(0, 1)));
-                //TODO: how remove hardcoded information about adrenalinic actions?
-                if (modelView.getMe().getHealth().size() > 2)
-                    if (modelView.getMe().getHealth().size() > 5)
-                        System.out.printf(" (azioni adrenaliniche lv 2 sbloccate)");
+                if (modelView.getMatch().isLastTurn())
+                    System.out.printf(" (final frenzy)");
+                else if (modelView.getMe().isFirstAdrenalina())
+                    if (modelView.getMe().isSecondAdrenalina())
+                        System.out.printf(" (adrenaline action lv 2 unlocked)");
                     else
-                        System.out.printf(" (azioni adrenaliniche lv 1 sbloccate)");
+                        System.out.printf(" (adrenaline action lv 1 unlocked)");
                 else
-                    System.out.printf(" (azioni adrenaliniche bloccate)");
+                    System.out.printf(" (adrenaline action locked)");
                 break;
             case 13:
                 System.out.printf("Marks: ");
                 modelView.getMe().getMarks().forEach((id, n) -> System.out.printf(n + " from " + id.playerIdName() + "; "));
+            default:
         }
     }
 

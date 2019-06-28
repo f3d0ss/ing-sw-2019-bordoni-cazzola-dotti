@@ -238,7 +238,7 @@ public class Match {
     }
 
     private void update() {
-        views.values().forEach(viewInterface -> viewInterface.update(new MatchView(killshotTrack, deathsCounter, board.getId(), leaderBoard)));
+        views.values().forEach(viewInterface -> viewInterface.update(new MatchView(killshotTrack, deathsCounter, leaderBoard, isLastTurn())));
     }
 
     /**
@@ -252,7 +252,7 @@ public class Match {
     }
 
     public void sendModelAfterReconnection(PlayerId player) {
-        views.get(player).update(new MatchView(killshotTrack, deathsCounter, board.getId(), leaderBoard));
+        views.get(player).update(new MatchView(killshotTrack, deathsCounter, leaderBoard, isLastTurn()));
         currentPlayers.forEach(p -> views.get(player).update(p.getPlayerView(p.getId() == player)));
         board.getSquareList().forEach(s -> views.get(player).update(s.getSquareView()));
         views.get(player).setViewInitializationDone();

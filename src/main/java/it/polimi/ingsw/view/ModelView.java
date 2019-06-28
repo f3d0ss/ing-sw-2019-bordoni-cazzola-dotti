@@ -13,7 +13,6 @@ public class ModelView {
 
     private MatchView match;
     private PlayerView me;
-    private PlayerId myId;
     private Map<PlayerId, PlayerView> enemies = new HashMap<>();
     private Map<Color, List<WeaponView>> weaponsOnSpawn = new HashMap<>();
     private SquareView[][] board = new SquareView[HEIGHT][WIDTH];
@@ -32,14 +31,6 @@ public class ModelView {
 
     public void setMe(PlayerView me) {
         this.me = me;
-    }
-
-    public PlayerId getMyId() {
-        return myId;
-    }
-
-    public void setMyId(PlayerId myId) {
-        this.myId = myId;
     }
 
     public Map<PlayerId, PlayerView> getEnemies() {
