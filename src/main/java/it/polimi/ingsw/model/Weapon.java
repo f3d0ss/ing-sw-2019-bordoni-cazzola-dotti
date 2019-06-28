@@ -227,14 +227,12 @@ public class Weapon {
         if (selectedWeaponMode.getMaxNumberOfTargetPlayers() != 4) {
             for (int i = 0; i < targetPlayers.size(); i++)
                 effectCommands.add(new EffectCommand(targetPlayers.get(i), selectedWeaponMode.getDamage(i), selectedWeaponMode.getMarks(), targetPlayers.get(i).getPosition(), shooter.getId()));
-        } else {
-            if (!targetSquares.isEmpty()) {
-                for (Player targetPlayer : targetPlayers) {
-                    if (targetPlayer.getPosition() == targetSquares.get(0))
-                        effectCommands.add(new EffectCommand(targetPlayer, selectedWeaponMode.getDamage(0), selectedWeaponMode.getMarks(), targetPlayer.getPosition(), shooter.getId()));
-                    if (targetPlayer.getPosition() != targetSquares.get(0))
-                        effectCommands.add(new EffectCommand(targetPlayer, selectedWeaponMode.getDamage(1), selectedWeaponMode.getMarks(), targetPlayer.getPosition(), shooter.getId()));
-                }
+        } else if (!targetSquares.isEmpty()) {
+            for (Player targetPlayer : targetPlayers) {
+                if (targetPlayer.getPosition() == targetSquares.get(0))
+                    effectCommands.add(new EffectCommand(targetPlayer, selectedWeaponMode.getDamage(0), selectedWeaponMode.getMarks(), targetPlayer.getPosition(), shooter.getId()));
+                if (targetPlayer.getPosition() != targetSquares.get(0))
+                    effectCommands.add(new EffectCommand(targetPlayer, selectedWeaponMode.getDamage(1), selectedWeaponMode.getMarks(), targetPlayer.getPosition(), shooter.getId()));
             }
         }
         possibleCommands.add(new ShootCommand(state, effectCommands, shooter));
@@ -475,14 +473,12 @@ public class Weapon {
                 Square secondTargetSquare = gameBoard.getThirdSquareInTheSameDirection(shooter.getPosition(), targetSquares.get(0), false);
                 if (secondTargetSquare != null && secondTargetSquare.hasOtherPlayers(shooter)) //ask possible 2nd square in the same direction (flameth)
                     possibleCommands.add(new SelectTargetSquareCommand(state, secondTargetSquare));
-            } else {
-                if (selectedWeaponMode.getMaxNumberOfTargetPlayers() != maxTargets) { //select max 1 player per square
-                    possibleTargetPlayers.addAll(targetSquares.get(0).getHostedPlayers(shooter));
-                    possibleTargetPlayers.stream()
-                            .filter(possibleTargetPlayer -> !possibleTargetPlayer.getId().equals(shooter.getId()))
-                            .distinct()
-                            .forEach(player -> possibleCommands.add(new SelectTargetPlayerCommand(state, player)));
-                }
+            } else if (selectedWeaponMode.getMaxNumberOfTargetPlayers() != maxTargets) { //select max 1 player per square
+                possibleTargetPlayers.addAll(targetSquares.get(0).getHostedPlayers(shooter));
+                possibleTargetPlayers.stream()
+                        .filter(possibleTargetPlayer -> !possibleTargetPlayer.getId().equals(shooter.getId()))
+                        .distinct()
+                        .forEach(player -> possibleCommands.add(new SelectTargetPlayerCommand(state, player)));
             }
             if (selectedWeaponMode.getMaxNumberOfTargetPlayers() == maxTargets)
                 targetPlayers.addAll(targetSquares.get(0).getHostedPlayers(shooter));

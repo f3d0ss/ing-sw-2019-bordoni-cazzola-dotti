@@ -14,6 +14,7 @@ import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+//TODO remove prints and temporary test
 
 class WeaponTest {
     private List<Weapon> allWeapons;
@@ -94,16 +95,6 @@ class WeaponTest {
         Weapon weapon = getRandomWeapon();
         weapon.unload();
         assertFalse(weapon.isLoaded());
-    }
-
-    @Test
-    void extraMoves() {
-        for (Weapon weapon : allWeapons) {
-            if (weapon.hasExtraMove()) {
-                weapon.useExtraMoves();
-                assertFalse(weapon.hasExtraMove());
-            }
-        }
     }
 
     @Test
@@ -400,7 +391,6 @@ class WeaponTest {
                 }
             }
         }
-
     }
 
     private Square getRandomSquare(GameBoard gameBoard) {
@@ -408,7 +398,7 @@ class WeaponTest {
     }
 
     @Test
-    void weeeTest() {
+    void tempTest() {
         Match match = new Match();
         GameBoard gameBoard = match.getBoard();
         Square shooterSquare = gameBoard.getSquare(2, 1);
@@ -449,7 +439,7 @@ class WeaponTest {
 
             ReadyToShootState state = new ReadyToShootState(new AggregateAction(0, false, true, false), shooterWeapon);
             shooter.changeState(state);
- System.out.println(player.getHealth().size());
+            System.out.println(player.getHealth().size());
             System.out.println(player1.getHealth().size());
             System.out.println(player2.getHealth().size());
 
@@ -457,7 +447,7 @@ class WeaponTest {
             possibleCommands.get(0).execute();
             possibleCommands = shooter.getPossibleCommands();
 
-           // possibleCommands.get(0).execute();
+            // possibleCommands.get(0).execute();
             possibleCommands = shooter.getPossibleCommands();
             System.out.println(player.getHealth().size());
             System.out.println(player1.getHealth().size());
@@ -466,28 +456,25 @@ class WeaponTest {
             System.out.println("number of commands: " + possibleCommands.size());
             int s = 0, p = 0;
             LinkedHashSet<SelectTargetSquareCommand> selectTargetSquareCommands = new LinkedHashSet<>();
-                for (Command command : possibleCommands) {
-                    if (command instanceof ShootCommand) {
-                        ShootCommand shootCommand = (ShootCommand) command;
-                        shootCommand.effects.stream().map(EffectCommand::tempPrint).
-                                forEach(System.out::println);
-
-                    }
-                    if (command instanceof SelectTargetSquareCommand) {
-                        s++;
-                        SelectTargetSquareCommand selectTargetSquareCommand = (SelectTargetSquareCommand) command;
-                        System.out.println(selectTargetSquareCommand.tempPrint());
-                        selectTargetSquareCommands.add(selectTargetSquareCommand);
-
-                    }
-                    if (command instanceof SelectTargetPlayerCommand) {
-                        p++;
-                        SelectTargetPlayerCommand selectTargetPlayerCommand = (SelectTargetPlayerCommand) command;
-                        System.out.println(selectTargetPlayerCommand.tempPrint());
-                    }
+            for (Command command : possibleCommands) {
+                if (command instanceof ShootCommand) {
+                    ShootCommand shootCommand = (ShootCommand) command;
+                    shootCommand.effects.stream().map(EffectCommand::tempPrint).
+                            forEach(System.out::println);
+                }
+                if (command instanceof SelectTargetSquareCommand) {
+                    s++;
+                    SelectTargetSquareCommand selectTargetSquareCommand = (SelectTargetSquareCommand) command;
+                    System.out.println(selectTargetSquareCommand.tempPrint());
+                    selectTargetSquareCommands.add(selectTargetSquareCommand);
 
                 }
-
+                if (command instanceof SelectTargetPlayerCommand) {
+                    p++;
+                    SelectTargetPlayerCommand selectTargetPlayerCommand = (SelectTargetPlayerCommand) command;
+                    System.out.println(selectTargetPlayerCommand.tempPrint());
+                }
+            }
         }
     }
 }
