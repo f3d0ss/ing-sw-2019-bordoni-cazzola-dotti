@@ -228,8 +228,8 @@ public class Weapon {
             for (int i = 0; i < targetPlayers.size(); i++)
                 effectCommands.add(new EffectCommand(targetPlayers.get(i), selectedWeaponMode.getDamage(i), selectedWeaponMode.getMarks(), targetPlayers.get(i).getPosition(), shooter.getId()));
         } else {
-            for (Player targetPlayer : targetPlayers) {
-                if (!targetSquares.isEmpty()) {
+            if (!targetSquares.isEmpty()) {
+                for (Player targetPlayer : targetPlayers) {
                     if (targetPlayer.getPosition() == targetSquares.get(0))
                         effectCommands.add(new EffectCommand(targetPlayer, selectedWeaponMode.getDamage(0), selectedWeaponMode.getMarks(), targetPlayer.getPosition(), shooter.getId()));
                     if (targetPlayer.getPosition() != targetSquares.get(0))
@@ -299,16 +299,15 @@ public class Weapon {
         List<WeaponCommand> possibleCommands = new ArrayList<>();
         if (targetSquares.isEmpty()) { //select a square (first call)
             List<Square> visibleSquares = gameboard.getVisibleSquares(shooter.getPosition(), selectedWeaponMode.getMaxTargetDistance(), selectedWeaponMode.getMinTargetDistance(), false);
-            for (Square square : visibleSquares) {
-                if (!gameboard.getReachableSquaresWithOtherPlayers(square, selectedWeaponMode.getMaxTargetMove(), shooter).isEmpty()) {
-                    if (square.equals(shooter.getPosition()) && selectedWeaponMode.getMaxTargetDistance() > 0)
-                        continue;
-                    if (selectedWeaponMode.getMaxTargetDistance() == 0 && selectedWeaponMode.getMinTargetDistance() == 0)
-                        targetSquares.add(square);
-                    else
-                        possibleCommands.add(new SelectTargetSquareCommand(state, square));
-                }
-            }
+            visibleSquares.stream()
+                    .filter(square -> !gameboard.getReachableSquaresWithOtherPlayers(square, selectedWeaponMode.getMaxTargetMove(), shooter).isEmpty())
+                    .filter(square -> !square.equals(shooter.getPosition()) || selectedWeaponMode.getMaxTargetDistance() <= 0)
+                    .forEach(square -> {
+                        if (selectedWeaponMode.getMaxTargetDistance() == 0 && selectedWeaponMode.getMinTargetDistance() == 0)
+                            targetSquares.add(square);
+                        else
+                            possibleCommands.add(new SelectTargetSquareCommand(state, square));
+                    });
         }
         if (!targetSquares.isEmpty()) { //pick target players if not already selected (second call)
             List<Player> otherPlayersOnReachableSquares = gameboard.getOtherPlayersOnReachableSquares(targetSquares.get(0), selectedWeaponMode.getMaxTargetMove(), shooter);
@@ -430,9 +429,10 @@ public class Weapon {
                         .forEach(player -> possibleCommands.add(new SelectTargetPlayerCommand(state, player)));
             else  //target another player in the same direction
             {
-                if (targetSquares.get(0).equals(shooter.getPosition())) { //samesquare check
+                if (targetPlayers.get(0).getPosition().equals(shooter.getPosition())) { //samesquare check
                     gameboard.getPlayersOnCardinalDirectionSquares(shooter, selectedWeaponMode.getMaxTargetDistance(), selectedWeaponMode.getMinTargetDistance(), true)
                             .stream()
+                            .distinct()
                             .filter(possibleTargetPlayer -> !possibleTargetPlayer.getId().equals(shooter.getId()))
                             .filter(possibleTargetPlayer -> !possibleTargetPlayer.getId().equals(targetPlayers.get(0).getId()))
                             .forEach(player -> possibleCommands.add(new SelectTargetPlayerCommand(state, player)));
@@ -440,6 +440,7 @@ public class Weapon {
                 gameboard.getPlayersInTheSameDirection(shooter, targetPlayers, selectedWeaponMode.getMaxTargetDistance(), selectedWeaponMode.getMinTargetDistance(), true)
                         .stream()
                         .filter(possibleTargetPlayer -> !possibleTargetPlayer.getId().equals(shooter.getId()))
+                        .filter(possibleTargetPlayer -> !possibleTargetPlayer.getId().equals(targetPlayers.get(0).getId()))
                         .forEach(player -> possibleCommands.add(new SelectTargetPlayerCommand(state, player)));
             }
         }
@@ -470,32 +471,28 @@ public class Weapon {
         List<Player> possibleTargetPlayers = new ArrayList<>();
         final int maxTargets = 4;
         if (targetSquares.size() == 1) {
-            Square secondTargetSquare = gameBoard.getThirdSquareInTheSameDirection(shooter.getPosition(), targetSquares.get(0), false);
-            if (secondTargetSquare != null && secondTargetSquare.hasOtherPlayers(shooter)) //ask possible 2nd square in the same direction (flameth)
-                possibleCommands.add(new SelectTargetSquareCommand(state, secondTargetSquare));
-            if (targetPlayers.isEmpty()) {
+            if (!targetPlayers.isEmpty() || selectedWeaponMode.getMaxNumberOfTargetPlayers() == maxTargets) { //pick 2nd square after players on the 1st one
+                Square secondTargetSquare = gameBoard.getThirdSquareInTheSameDirection(shooter.getPosition(), targetSquares.get(0), false);
+                if (secondTargetSquare != null && secondTargetSquare.hasOtherPlayers(shooter)) //ask possible 2nd square in the same direction (flameth)
+                    possibleCommands.add(new SelectTargetSquareCommand(state, secondTargetSquare));
+            } else {
                 if (selectedWeaponMode.getMaxNumberOfTargetPlayers() != maxTargets) { //select max 1 player per square
                     possibleTargetPlayers.addAll(targetSquares.get(0).getHostedPlayers(shooter));
                     possibleTargetPlayers.stream()
                             .filter(possibleTargetPlayer -> !possibleTargetPlayer.getId().equals(shooter.getId()))
                             .distinct()
                             .forEach(player -> possibleCommands.add(new SelectTargetPlayerCommand(state, player)));
-                } else
-                    targetPlayers.addAll(targetSquares.get(0).getHostedPlayers(shooter));
-            }
-        } else {
-            if (selectedWeaponMode.getMaxNumberOfTargetPlayers() != maxTargets) {
-                if (targetPlayers.isEmpty())
-                    possibleTargetPlayers.addAll(targetSquares.get(0).getHostedPlayers(shooter));
-                possibleTargetPlayers.addAll(targetSquares.get(1).getHostedPlayers(shooter));
-                possibleTargetPlayers.stream()
-                        .filter(possibleTargetPlayer -> !possibleTargetPlayer.getId().equals(possibleTargetPlayers.get(0).getId()))
-                        .forEach(player -> possibleCommands.add(new SelectTargetPlayerCommand(state, player)));
-            } else {
-                if (!targetPlayers.containsAll(targetSquares.get(1).getHostedPlayers(shooter))) {
-                    targetPlayers.addAll(targetSquares.get(1).getHostedPlayers(shooter));
                 }
             }
+            if (selectedWeaponMode.getMaxNumberOfTargetPlayers() == maxTargets)
+                targetPlayers.addAll(targetSquares.get(0).getHostedPlayers(shooter));
+        } else { //manage 2nd square
+            if (selectedWeaponMode.getMaxNumberOfTargetPlayers() != maxTargets) {
+                targetSquares.get(1).getHostedPlayers(shooter).stream()
+                        .filter(possibleTargetPlayer -> !possibleTargetPlayer.getId().equals(targetPlayers.get(0).getId()))
+                        .forEach(player -> possibleCommands.add(new SelectTargetPlayerCommand(state, player)));
+            } else if (!targetPlayers.containsAll(targetSquares.get(1).getHostedPlayers(shooter)))
+                targetPlayers.addAll(targetSquares.get(1).getHostedPlayers(shooter));
         }
         targetPlayers = targetPlayers.stream().distinct().collect(Collectors.toList());
         return possibleCommands;

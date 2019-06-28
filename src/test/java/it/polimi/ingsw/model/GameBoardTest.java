@@ -210,5 +210,10 @@ public class GameBoardTest {
         assertEquals(null, s3);
         s3 = gameBoard.getThirdSquareInTheSameDirection(s1, s2, true);
         assertEquals(gameBoard.getSquare(0, 1), s3);
+
+        s1= gameBoard.getSquare(0,2);
+        s2=gameBoard.getSquare(1,2);
+        s3=gameBoard.getThirdSquareInTheSameDirection(s1,s2,false);
+        assertEquals(gameBoard.getSquare(2,2),s3);
     }
 }
