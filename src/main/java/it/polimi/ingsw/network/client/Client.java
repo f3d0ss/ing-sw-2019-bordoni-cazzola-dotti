@@ -7,6 +7,10 @@ import it.polimi.ingsw.view.ConcreteView;
 import java.io.IOException;
 import java.rmi.NotBoundException;
 
+/**
+ * This class represent a client regardless of the type of connection (Rmi or Socket)
+ */
+
 public class Client implements Runnable {
 
     private String type;
@@ -30,6 +34,13 @@ public class Client implements Runnable {
 
     public void startClient() throws NotBoundException, IOException {
     }
+
+    /**
+     * Recognizes the type of the message coming from server.
+     *
+     * @param gsonCoded is the gson-coded string that wraps the message during transfer
+     * @return the answer to be sent to server
+     */
 
     public String manageMessage(String gsonCoded) {
         Message fromServer = parser.deserialize(gsonCoded, Message.class);
@@ -69,9 +80,23 @@ public class Client implements Runnable {
         this.type = type;
     }
 
+    /**
+     * Checks if a string is a valid ip.
+     *
+     * @param input is the string to be checked
+     * @return the result of check
+     */
+
     protected static boolean isValidIp(String input) {
         return input.matches("^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?).(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?).(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?).(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$");
     }
+
+    /**
+     * Checks is a string contains a valid port number.
+     *
+     * @param port is the string to be checked
+     * @return the result of check
+     */
 
     protected static int isValidPort(String port){
         int number;
@@ -84,6 +109,10 @@ public class Client implements Runnable {
             return -1;
         return number;
     }
+
+    /**
+     * Manages when user types an invalid ip or port number.
+     */
 
     protected void manageInvalidIpOrPort(){
         ip = manageMessage(parser.serialize(new Message(Protocol.INSERT_IP_AGAIN, "", null)));
