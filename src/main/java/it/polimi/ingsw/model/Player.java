@@ -141,14 +141,20 @@ public class Player {
         update();
     }
 
+    /**
+     * This method adds damage without considering marks (Must be called for damages in the same action) (ex. Targeting Scope powerup)
+     *
+     * @param damage ammount of damage
+     * @param color  shooter ID
+     */
+    public void addDamageSameAction(int damage, PlayerId color) {
+        setDamage(damage, color);
+        lastShooter = color;
+        update();
+    }
+
     public void addDamage(int damage, PlayerId color) {
-        int possibleDamage = MAX_DAMAGE - health.size();
-        for (int i = damage; i > 0; i--) {
-            if (possibleDamage <= 0)
-                break;
-            this.health.add(color);
-            possibleDamage--;
-        }
+        int possibleDamage = setDamage(damage, color);
         for (int i = marks.getOrDefault(color, 0); i > 0; i--) {
             if (possibleDamage <= 0)
                 break;
@@ -158,6 +164,17 @@ public class Player {
         marks.put(color, 0);
         lastShooter = color;
         update();
+    }
+
+    private int setDamage(int damage, PlayerId color) {
+        int possibleDamage = MAX_DAMAGE - health.size();
+        for (int i = damage; i > 0; i--) {
+            if (possibleDamage <= 0)
+                break;
+            this.health.add(color);
+            possibleDamage--;
+        }
+        return possibleDamage;
     }
 
     public void addMarks(int marks, PlayerId color) {
@@ -277,7 +294,7 @@ public class Player {
     }
 
     public boolean hasScope() {
-        return getTargetingScopes().isEmpty();
+        return !getTargetingScopes().isEmpty();
     }
 
     public void selectAggregateAction() {

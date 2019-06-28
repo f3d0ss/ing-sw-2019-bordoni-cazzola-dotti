@@ -16,7 +16,7 @@ import static java.lang.Thread.sleep;
 public class ServerManager implements Runnable {
 
     public final static int MIN_PLAYERS = 2;
-    private final static int MAX_PLAYERS = 3;
+    public final static int MAX_PLAYERS = 5;
     private final static int DEFAULT_BOARD = 1;
     private final static int MILLIS_TO_WAIT = 100;
     private final static String RECONNECT = "Reconnect";

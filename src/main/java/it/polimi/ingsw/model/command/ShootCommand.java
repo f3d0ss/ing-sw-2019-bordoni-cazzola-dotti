@@ -7,7 +7,8 @@ import it.polimi.ingsw.model.playerstate.ReadyToShootState;
 import it.polimi.ingsw.model.playerstate.ScopeState;
 import it.polimi.ingsw.view.commandmessage.CommandMessage;
 import it.polimi.ingsw.view.commandmessage.CommandType;
-import it.polimi.ingsw.view.commandmessage.SimpleCommandMessage;
+import it.polimi.ingsw.view.commandmessage.EffectCommandMessage;
+import it.polimi.ingsw.view.commandmessage.ShootCommandMessage;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -16,7 +17,7 @@ import java.util.stream.Collectors;
  * This command represent the shoot action
  */
 public class ShootCommand implements WeaponCommand {
-    private List<EffectCommand> effects;
+    public List<EffectCommand> effects;
     private Player player;
     private ReadyToShootState currentState;
 
@@ -73,6 +74,10 @@ public class ShootCommand implements WeaponCommand {
 
     @Override
     public CommandMessage createCommandMessage() {
-        return new SimpleCommandMessage(CommandType.SHOOT);
+        List<EffectCommandMessage> effectCommandMessageList = effects
+                .stream()
+                .map(EffectCommand::createCommandMessage)
+                .collect(Collectors.toList());
+        return new ShootCommandMessage(CommandType.SHOOT, effectCommandMessageList);
     }
 }

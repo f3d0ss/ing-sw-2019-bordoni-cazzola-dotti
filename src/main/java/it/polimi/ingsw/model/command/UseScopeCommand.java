@@ -32,7 +32,7 @@ public class UseScopeCommand implements Command {
      */
     @Override
     public void execute() {
-        currentState.getSelectedPlayer().addDamage(PowerUp.TRGETING_SCOPE_DAMAGE, player.getId());
+        currentState.getSelectedPlayer().addDamageSameAction(PowerUp.TRGETING_SCOPE_DAMAGE, player.getId());
         player.changeState(new ScopeState(currentState.getSelectedAggregateAction(), currentState.getSelectedWeapon(), currentState.getShootedPlayers()));
     }
 
