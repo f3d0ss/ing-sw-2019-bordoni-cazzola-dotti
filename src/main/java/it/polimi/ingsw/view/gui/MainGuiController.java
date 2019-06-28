@@ -1,11 +1,10 @@
 package it.polimi.ingsw.view.gui;
 
 import it.polimi.ingsw.model.Color;
+import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.PlayerId;
 import it.polimi.ingsw.utils.Lock;
-import it.polimi.ingsw.view.ModelView;
-import it.polimi.ingsw.view.PlayerView;
-import it.polimi.ingsw.view.WeaponView;
+import it.polimi.ingsw.view.*;
 import it.polimi.ingsw.view.commandmessage.AggregateActionCommandMessage;
 import it.polimi.ingsw.view.commandmessage.CommandMessage;
 import javafx.fxml.FXML;
@@ -35,10 +34,13 @@ public class MainGuiController {
     private static final int POWERUP_WIDTH = 169;
     private static final int WEAPON_HEIGHT = 406;
     private static final int WEAPON_WIDTH = 240;
-    private static final int WEAPON_SPAWN_MARGIN_RATIO = 18;
+    private static final int WEAPON_SPAWN_MARGIN_RATIO = 33;
     private static final int PLAYER_LIFE = 12;
     private static final int NUMBER_OF_STANDAR_SKULL = 8;
     private static final int MAX_NUMBER_PLAYER_DEATH_SKULL = 6;
+    private static final int HEIGHT_RATIO_SQUARE_INPUT = 2;
+    private static final int WIDTH_RATIO_SQUARE_INPUT = 3;
+    public VBox playerAmmo;
     @FXML
     private HBox playerAggregateActionMMM;
     @FXML
@@ -50,7 +52,7 @@ public class MainGuiController {
     @FXML
     private VBox aggregateActionBox;
     @FXML
-    private Pane boardWithoutAggregateAction;
+    private HBox boardWithoutAggregateAction;
     @FXML
     private HBox playerPowerUpContainer;
     @FXML
@@ -97,7 +99,7 @@ public class MainGuiController {
     private HBox playerDeaths;
     @FXML
     private HBox playerMarks;
-    private Pane[][] squares;
+    private HBox[][] squareBoxes;
     private ModelView modelView;
     private static final String LANG = "IT";
     private static final String SPACE = "_";
@@ -107,7 +109,10 @@ public class MainGuiController {
     private static final String POWERUP_IMAGES_DIR = IMAGES_DIR + "cards/AD_powerups_" + LANG + SPACE;
     private static final String WEAPON_IMAGES_DIR = IMAGES_DIR + "cards/AD_weapons_" + LANG + SPACE;
     private static final String TOKEN_IMAGES_DIR = IMAGES_DIR + "tokens/";
+    private static final String AMMO_TILE_IMAGES_DIR = IMAGES_DIR + "ammotiles/";
+    private static final String AMMO_IMAGES_DIR = IMAGES_DIR + "ammos/";
     private static final String SKULL_IMAGE_URI = IMAGES_DIR + "other/skull.jpeg";
+    private static final String AMMO_TILE_BACK = "back";
     private static final String PLAYERBOARD_IMAGES_DIR = IMAGES_DIR + "playerboards/";
     private static final String AGGREGATE_ACTION_FILE_PATTERN = "_aggregate_action" + IMAGE_EXTENSION;
     private static final String AGGREGATE_ACTION_FLIPPED_FILE_PATTERN = "_aggregate_action_flipped" + IMAGE_EXTENSION;
@@ -119,12 +124,12 @@ public class MainGuiController {
 
         List<Button> buttons = new ArrayList<>(Arrays.asList(otherPlayer1, otherPlayer3, otherPlayer2, otherPlayer4));
         buttons.forEach(this::handlePlayerButton);
-        squares = new Pane[gameBoard.getColumnCount()][gameBoard.getRowCount()];
+        squareBoxes = new HBox[gameBoard.getRowCount()][gameBoard.getColumnCount()];
         //inizialize squares
-        for (int i = 0; i < gameBoard.getColumnCount(); i++) {
-            for (int j = 0; j < gameBoard.getRowCount(); j++) {
-                squares[i][j] = new Pane();
-                gameBoard.add(squares[i][j], i, j);
+        for (int i = 0; i < gameBoard.getRowCount(); i++) {
+            for (int j = 0; j < gameBoard.getColumnCount(); j++) {
+                squareBoxes[i][j] = new HBox();
+                gameBoard.add(squareBoxes[i][j], j, i);
             }
         }
 
@@ -149,6 +154,42 @@ public class MainGuiController {
         printSpawnWeapons(modelView.getWeaponsOnSpawn());
         printKillshotTrack(modelView.getMatch().getKillshotTrack());
         printPlayerBoard(modelView.getMe());
+        printBoard(modelView.getBoard());
+    }
+
+    private void printBoard(SquareView[][] board) {
+        for (int i = 0; i < board.length; i++) {
+            for (int j = 0; j < board[i].length; j++) {
+                if (board[i][j] != null) {
+                    squareBoxes[i][j].getChildren().clear();
+                    if (board[i][j].getColor() == null) {
+                        HBox ammoBox = new HBox();
+                        AmmoTileView ammoTileView = ((TurretSquareView) board[i][j]).getAmmoTile();
+                        String ammoTileURI = AMMO_TILE_IMAGES_DIR
+                                + ((!ammoTileView.isEmpty()) ? ammoTileView.toString() : AMMO_TILE_BACK)
+                                + IMAGE_EXTENSION;
+                        setBackgroundImageFromURI(ammoBox, ammoTileURI);
+                        bindToParent(ammoBox, squareBoxes[i][j], HEIGHT_RATIO_SQUARE_INPUT, WIDTH_RATIO_SQUARE_INPUT);
+                        squareBoxes[i][j].getChildren().add(ammoBox);
+                        HBox.setHgrow(ammoBox, Priority.ALWAYS);
+                    }
+                    int finalI = i;
+                    int finalJ = j;
+                    board[i][j].getHostedPlayers().forEach(playerId -> {
+                        HBox tokenBox = getHBoxWithTokenBackground(playerId);
+                        bindToParent(tokenBox, squareBoxes[finalI][finalJ], HEIGHT_RATIO_SQUARE_INPUT, WIDTH_RATIO_SQUARE_INPUT);
+                        squareBoxes[finalI][finalJ].getChildren().add(tokenBox);
+                        HBox.setHgrow(tokenBox, Priority.ALWAYS);
+                    });
+                }
+            }
+        }
+    }
+
+    private void bindToParent(Pane child, Pane parent, int heightRatio, int widthRatio) {
+        child.maxHeightProperty().bind(parent.heightProperty().divide(heightRatio));
+        child.maxWidthProperty().bind(parent.widthProperty().divide(widthRatio));
+        HBox.setMargin(child, new Insets(0, 0, 0, 1));
     }
 
     private void printKillshotTrack(List<PlayerId> killShotTrack) {
@@ -157,27 +198,29 @@ public class MainGuiController {
         int i;
         for (i = 0; i < modelView.getMatch().getDeathsCounter(); i++) {
             HBox skullBox = getHBoxWithSkullBackground(killShotTrackBoxStandard, NUMBER_OF_STANDAR_SKULL);
-            killShotTrackBoxStandard.getChildren().add(skullBox);
+            killShotTrackBoxStandard.getChildren().add(0, skullBox);
             HBox.setHgrow(skullBox, Priority.ALWAYS);
         }
         for (i = 0; i < killShotTrack.size() && i < startSkullNumber - modelView.getMatch().getDeathsCounter(); i++) {
-            HBox killBox = getHBoxWithTokenBackground(killShotTrackBoxStandard, killShotTrack.get(i), NUMBER_OF_STANDAR_SKULL);
-            killShotTrackBoxStandard.getChildren().add(killBox);
+            HBox killBox = getHBoxWithTokenBackground(killShotTrack.get(i));
+            killBox.setPrefHeight(killShotTrackBoxStandard.getPrefHeight());
+            killBox.maxWidthProperty().bind(killShotTrackBoxStandard.widthProperty().divide(NUMBER_OF_STANDAR_SKULL));
+            HBox.setMargin(killBox, new Insets(0, 0, 0, 1));
+            killShotTrackBoxStandard.getChildren().add(0, killBox);
             HBox.setHgrow(killBox, Priority.ALWAYS);
         }
         int remainingKill = killShotTrack.size() - i;
         while (i < killShotTrack.size()) {
-            HBox killBox = getHBoxWithTokenBackground(killShotTrackBoxExtra, killShotTrack.get(i++), remainingKill);
+            HBox killBox = getHBoxWithTokenBackground(killShotTrack.get(i++));
+            killBox.setPrefHeight(killShotTrackBoxExtra.getPrefHeight());
+            killBox.maxWidthProperty().bind(killShotTrackBoxExtra.widthProperty().divide(remainingKill));
             killShotTrackBoxExtra.getChildren().add(killBox);
             HBox.setHgrow(killBox, Priority.ALWAYS);
         }
     }
 
-    private HBox getHBoxWithTokenBackground(Pane parent, PlayerId playerId, int widthRatio) {
+    private HBox getHBoxWithTokenBackground(PlayerId playerId) {
         HBox tokenBox = new HBox();
-        tokenBox.setPrefHeight(parent.getPrefHeight());
-        tokenBox.maxWidthProperty().bind(parent.widthProperty().divide(widthRatio));
-        HBox.setMargin(tokenBox, new Insets(0, 0, 0, 1));
         String tokenImageURI = TOKEN_IMAGES_DIR
                 + playerId.playerId()
                 + IMAGE_EXTENSION;
@@ -194,7 +237,7 @@ public class MainGuiController {
         return tokenBox;
     }
 
-    private HBox getHBoxWithTokenBackground(PlayerId playerId, Pane parent) {
+    private HBox getHBoxWithTokenBackgroundWithHighFixedToParent(PlayerId playerId, Pane parent) {
         HBox hbox = new HBox();
         bindHeightToParent(hbox, parent);
         String tokenImageURI = TOKEN_IMAGES_DIR
@@ -242,7 +285,7 @@ public class MainGuiController {
         playerMarks.getChildren().clear();
         playerView.getMarks().forEach((playerId, integer) -> {
             for (int i = 0; i < integer; i++) {
-                HBox markBox = getHBoxWithTokenBackground(playerId, playerMarks);
+                HBox markBox = getHBoxWithTokenBackgroundWithHighFixedToParent(playerId, playerMarks);
                 HBox.setHgrow(markBox, Priority.ALWAYS);
                 playerMarks.getChildren().add(markBox);
             }
@@ -250,7 +293,7 @@ public class MainGuiController {
 
         playerHealthBox.getChildren().clear();
         for (int i = 0; i < playerView.getHealth().size(); i++) {
-            HBox healthBox = getHBoxWithTokenBackground(playerView.getHealth().get(i), playerHealthBox);
+            HBox healthBox = getHBoxWithTokenBackgroundWithHighFixedToParent(playerView.getHealth().get(i), playerHealthBox);
             healthBox.maxWidthProperty().bind(playerHealthBox.widthProperty().divide(PLAYER_LIFE));
             playerHealthBox.getChildren().add(healthBox);
             HBox.setHgrow(healthBox, Priority.ALWAYS);
@@ -262,6 +305,27 @@ public class MainGuiController {
             playerDeaths.getChildren().add(deathBox);
             HBox.setHgrow(deathBox, Priority.ALWAYS);
         }
+
+        playerAmmo.getChildren().clear();
+        Color[] colors = Color.values();
+        for (Color color : Color.values()) {
+            HBox colorAmmoContainer = new HBox();
+            bindToParent(colorAmmoContainer, playerAmmo, colors.length, 1);
+            playerAmmo.getChildren().add(colorAmmoContainer);
+            VBox.setVgrow(colorAmmoContainer, Priority.ALWAYS);
+
+            for (int j = 0; j < playerView.getAmmo().getOrDefault(color, 0); j++) {
+                HBox singleAmmoBox = new HBox();
+                String ammoURI = AMMO_IMAGES_DIR
+                        + color.colorID()
+                        + IMAGE_EXTENSION;
+                setBackgroundImageFromURI(singleAmmoBox, ammoURI);
+                bindToParent(singleAmmoBox, colorAmmoContainer, 1, Player.MAX_AMMO);
+                colorAmmoContainer.getChildren().add(singleAmmoBox);
+                HBox.setHgrow(singleAmmoBox, Priority.ALWAYS);
+            }
+        }
+
 
     }
 
@@ -283,17 +347,17 @@ public class MainGuiController {
 
     private void printWeaponsOnSpawn(HBox spawn, List<WeaponView> weaponViews) {
         spawn.getChildren().clear();
-        for (int i = 0; i < weaponViews.size(); i++) {
+        weaponViews.forEach(weaponView -> {
             HBox weaponBox = new HBox();
             bindHeightToParent(weaponBox, spawn, WEAPON_HEIGHT, WEAPON_WIDTH);
             String weaponImageURI = WEAPON_IMAGES_DIR
-                    + weaponViews.get(i).getID()
+                    + weaponView.getID()
                     + IMAGE_EXTENSION;
             setBackgroundImageFromURI(weaponBox, weaponImageURI);
-            HBox.setMargin(weaponBox, new Insets(0, 0, 0, spawn.getWidth() / WEAPON_SPAWN_MARGIN_RATIO));
+            HBox.setMargin(weaponBox, new Insets(0, spawn.getWidth() / WEAPON_SPAWN_MARGIN_RATIO, 0, spawn.getWidth() / WEAPON_SPAWN_MARGIN_RATIO));
             spawn.getChildren().add(weaponBox);
             HBox.setHgrow(weaponBox, Priority.ALWAYS);
-        }
+        });
     }
 
     private void setBackgroundImageFromURI(Pane pane, String uri) {

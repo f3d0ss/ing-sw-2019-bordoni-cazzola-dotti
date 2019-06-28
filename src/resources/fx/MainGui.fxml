@@ -118,7 +118,7 @@
                                                       prefHeight="${mainPane.height*125/925*56/175}"/>
                                             </children>
                                         </VBox>
-                                        <Pane prefWidth="${mainPane.width*500/1645*655/700}"
+                                        <HBox prefWidth="${mainPane.width*500/1645*655/700}"
                                               prefHeight="${mainPane.height*125/925}" id="boardWithoutAggregateAction"
                                               fx:id="boardWithoutAggregateAction">
                                             <children>
@@ -176,21 +176,11 @@
                                                 <VBox prefHeight="${mainPane.height*125/925}"
                                                       prefWidth="${mainPane.width*500/1645*15/700}"/> <!-- spacing -->
                                                 <VBox prefHeight="${mainPane.height*125/925}"
-                                                      prefWidth="${mainPane.width*500/1645*150/700}">
-                                                    <children>
-                                                        <HBox fx:id="playerBlueAmmo"
-                                                              prefHeight="${mainPane.height*125/925/3}"
-                                                              prefWidth="${mainPane.width*500/1645*150/700}"/>
-                                                        <HBox fx:id="playerRedAmmo"
-                                                              prefHeight="${mainPane.height*125/925/3}"
-                                                              prefWidth="${mainPane.width*500/1645*150/700}"/>
-                                                        <HBox fx:id="playerYellowAmmo"
-                                                              prefHeight="${mainPane.height*125/925/3}"
-                                                              prefWidth="${mainPane.width*500/1645*150/700}"/>
-                                                    </children>
+                                                      prefWidth="${mainPane.width*500/1645*150/700}"
+                                                      fx:id="playerAmmo">
                                                 </VBox>
                                             </children>
-                                        </Pane>
+                                        </HBox>
                                     </children>
                                 </HBox>
 

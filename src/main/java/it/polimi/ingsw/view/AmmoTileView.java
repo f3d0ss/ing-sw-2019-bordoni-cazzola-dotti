@@ -13,15 +13,26 @@ public class AmmoTileView {
         this.ammo = ammo;
     }
 
+    public boolean isEmpty(){
+        return (powerUp == 0) && (ammo == null);
+    }
+
+
     @Override
     public String toString() {
-        StringBuilder string = new StringBuilder();
-        if (powerUp > 0)
-            string.append("P");
-        if (ammo != null)
-            for (Map.Entry<Color, Integer> entry : ammo.entrySet())
-                for (int i = 0; i < entry.getValue(); i++)
-                    string.append(entry.getKey().colorName(), 0, 1);
-        return string.toString();
+        StringBuilder id = new StringBuilder();
+        id.append("P".repeat(Math.max(0, powerUp)));
+        if (ammo != null){
+            for (int i = 0; i < ammo.getOrDefault(Color.BLUE, 0); i++) {
+                id.append(Color.BLUE.colorInitial());
+            }
+            for (int i = 0; i < ammo.getOrDefault(Color.RED, 0); i++) {
+                id.append(Color.RED.colorInitial());
+            }
+            for (int i = 0; i < ammo.getOrDefault(Color.YELLOW, 0); i++) {
+                id.append(Color.YELLOW.colorInitial());
+            }
+        }
+        return String.valueOf(id);
     }
 }

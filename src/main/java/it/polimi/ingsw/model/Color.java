@@ -20,6 +20,11 @@ public enum Color {
         public String colorID() {
             return "blue";
         }
+
+        @Override
+        public char colorInitial() {
+            return 'B';
+        }
     },
 
     /**
@@ -34,6 +39,11 @@ public enum Color {
         @Override
         public String colorID() {
             return "red";
+        }
+
+        @Override
+        public char colorInitial() {
+            return 'R';
         }
     },
 
@@ -50,9 +60,16 @@ public enum Color {
         public String colorID() {
             return "yellow";
         }
+
+        @Override
+        public char colorInitial() {
+            return 'Y';
+        }
     };
 
     public abstract String colorName();
 
     public abstract String colorID();
+
+    public abstract char colorInitial();
 }
