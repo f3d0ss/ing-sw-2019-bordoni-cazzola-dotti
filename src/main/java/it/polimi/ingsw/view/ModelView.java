@@ -4,13 +4,12 @@ import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.PlayerId;
 
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 public class ModelView {
-    public final static int HEIGHT = 3;
-    public final static int WIDTH = 4;
+    public static final int HEIGHT = 3;
+    public static final int WIDTH = 4;
 
     private MatchView match;
     private PlayerView me;
@@ -24,8 +23,6 @@ public class ModelView {
     }
 
     public void setMatch(MatchView match) {
-        match.getKillshotTrack().add(PlayerId.BLUE);
-        match.getKillshotTrack().add(PlayerId.VIOLET);
         this.match = match;
     }
 
@@ -34,23 +31,6 @@ public class ModelView {
     }
 
     public void setMe(PlayerView me) {
-//        TODO: JUST FOR TEST GUI
-//        List<PlayerId> health = new LinkedList<>();
-//        health.add(me.getId());
-//        health.add(me.getId());
-//        health.add(me.getId());
-//        health.add(me.getId());
-//        health.add(me.getId());
-//        health.add(me.getId());
-//        health.add(me.getId());
-//
-//        Map<PlayerId, Integer> marks = new HashMap<>();
-//        marks.put(me.getId(),2);
-//
-//
-//        me.getHealth().addAll(health);
-//        me.getMarks().putAll(marks);
-
         this.me = me;
     }
 

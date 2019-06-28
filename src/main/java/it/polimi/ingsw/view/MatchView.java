@@ -1,6 +1,6 @@
 package it.polimi.ingsw.view;
 
-import it.polimi.ingsw.model.*;
+import it.polimi.ingsw.model.PlayerId;
 
 import java.util.List;
 import java.util.Map;

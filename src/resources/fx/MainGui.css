@@ -2,11 +2,19 @@
     -fx-background-color: black;
 }
 
-#killShotTrackGrid {
+#killShotTrackBox {
     -fx-background-image: url("../images/gameboards/killShootTrack.png");
     -fx-background-repeat: no-repeat;
     -fx-background-size: 100%;
 
+}
+
+#playerPowerUpContainer {
+    -fx-background-color: yellow;
+}
+
+#playerWeaponContainer {
+    -fx-background-color: brown;
 }
 
 #blueSpawnWeapons {
@@ -14,10 +22,6 @@
     -fx-background-repeat: no-repeat;
     -fx-background-size: 100%;
 
-}
-
-#blueSpawnWeapons > ColumnConstraints {
-    -fx-padding: 15px;
 }
 
 #redSpawnWeapons {

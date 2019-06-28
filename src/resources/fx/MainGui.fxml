@@ -31,34 +31,18 @@
                                       prefWidth="${mainPane.width*400/1645}" prefHeight="${mainPane.height*800/925}">
                                     <children>
 
-                                        <GridPane id="killShotTrackGrid" fx:id="killShotTrackGrid"
-                                                  prefWidth="${mainPane.width*400/1645}"
-                                                  prefHeight="${mainPane.height*60/925}">
-                                            <columnConstraints>
-                                                <ColumnConstraints hgrow="SOMETIMES"
-                                                                   percentWidth="10.75"/>
-                                                <ColumnConstraints hgrow="SOMETIMES"
-                                                                   percentWidth="10.75"/>
-                                                <ColumnConstraints hgrow="SOMETIMES"
-                                                                   percentWidth="10.75"/>
-                                                <ColumnConstraints hgrow="SOMETIMES"
-                                                                   percentWidth="10.75"/>
-                                                <ColumnConstraints hgrow="SOMETIMES"
-                                                                   percentWidth="10.75"/>
-                                                <ColumnConstraints hgrow="SOMETIMES"
-                                                                   percentWidth="10.75"/>
-                                                <ColumnConstraints hgrow="SOMETIMES"
-                                                                   percentWidth="10.75"/>
-                                                <ColumnConstraints hgrow="SOMETIMES"
-                                                                   percentWidth="10.75"/>
-                                                <ColumnConstraints hgrow="SOMETIMES"
-                                                                   percentWidth="14"/>
-                                            </columnConstraints>
-                                            <rowConstraints>
-                                                <RowConstraints prefHeight="${mainPane.height*60/925}"
-                                                                vgrow="SOMETIMES"/>
-                                            </rowConstraints>
-                                        </GridPane>
+                                        <HBox id="killShotTrackBox" fx:id="killShotTrackBox"
+                                              prefWidth="${mainPane.width*400/1645}"
+                                              prefHeight="${mainPane.height*60/925}">
+                                            <children>
+                                                <HBox id="killShotTrackBoxStandard" fx:id="killShotTrackBoxStandard"
+                                                      prefWidth="${killShotTrackBox.width/100*86}"
+                                                      prefHeight="${killShotTrackBox.height}"/>
+                                                <HBox id="killShotTrackBoxExtra" fx:id="killShotTrackBoxExtra"
+                                                      prefWidth="${killShotTrackBox.width/100*14}"
+                                                      prefHeight="${killShotTrackBox.height}"/>
+                                            </children>
+                                        </HBox>
                                         <HBox id="blueSpawnWeapons" fx:id="blueSpawnWeapons"
                                               prefHeight="${mainPane.height*175/925}"
                                               prefWidth="${mainPane.width*400/1645}">
@@ -139,9 +123,9 @@
                                               fx:id="boardWithoutAggregateAction">
                                             <children>
                                                 <VBox prefHeight="${mainPane.height*130/925}"
-                                                      prefWidth="${mainPane.width*500/1645*15/700}"/> <!-- spacing -->
+                                                      prefWidth="${mainPane.width*500/1645*17/700}"/> <!-- spacing -->
                                                 <VBox prefHeight="${mainPane.height*125/925}"
-                                                      prefWidth="${mainPane.width*500/1645*475/700}">
+                                                      prefWidth="${mainPane.width*500/1645*473/700}">
                                                     <children>
                                                         <HBox prefHeight="${mainPane.height*125/925*30/175}"
                                                               prefWidth="${mainPane.width*500/1645*475/700}">
@@ -172,73 +156,19 @@
                                                                       prefWidth="${mainPane.width*500/1645*220/700}"/>  <!-- spacing -->
                                                             </children>
                                                         </HBox>
-                                                        <HBox prefHeight="${mainPane.height*125/925*55/175}"
+                                                        <HBox id="playerHealthBox" fx:id="playerHealthBox"
+                                                              prefHeight="${mainPane.height*125/925*55/175}"
                                                               prefWidth="${mainPane.width*500/1645*475/700}">
-                                                            <children>
-                                                                <GridPane id="playerHealthGrid" fx:id="playerHealthGrid"
-                                                                          prefHeight="${mainPane.height*125/925*30/175}">
-                                                                    <columnConstraints>
-                                                                        <ColumnConstraints hgrow="SOMETIMES"
-                                                                                           prefWidth="100"/>
-                                                                        <ColumnConstraints hgrow="SOMETIMES"
-                                                                                           prefWidth="100"/>
-                                                                        <ColumnConstraints hgrow="SOMETIMES"
-                                                                                           prefWidth="100"/>
-                                                                        <ColumnConstraints hgrow="SOMETIMES"
-                                                                                           prefWidth="100"/>
-                                                                        <ColumnConstraints hgrow="SOMETIMES"
-                                                                                           prefWidth="100"/>
-                                                                        <ColumnConstraints hgrow="SOMETIMES"
-                                                                                           prefWidth="100"/>
-                                                                        <ColumnConstraints hgrow="SOMETIMES"
-                                                                                           prefWidth="100"/>
-                                                                        <ColumnConstraints hgrow="SOMETIMES"
-                                                                                           prefWidth="100"/>
-                                                                        <ColumnConstraints hgrow="SOMETIMES"
-                                                                                           prefWidth="100"/>
-                                                                        <ColumnConstraints hgrow="SOMETIMES"
-                                                                                           prefWidth="100"/>
-                                                                        <ColumnConstraints hgrow="SOMETIMES"
-                                                                                           prefWidth="100"/>
-                                                                        <ColumnConstraints hgrow="SOMETIMES"
-                                                                                           prefWidth="100"/>
-                                                                    </columnConstraints>
-                                                                    <rowConstraints>
-                                                                        <RowConstraints
-                                                                                prefHeight="${mainPane.height*125/925*30/175}"
-                                                                                vgrow="SOMETIMES"/>
-                                                                    </rowConstraints>
-                                                                </GridPane>
-                                                            </children>
                                                         </HBox>
                                                         <HBox prefHeight="${mainPane.height*125/925*60/175}"
                                                               prefWidth="${mainPane.width*500/1645*475/700}">
                                                             <children>
                                                                 <HBox prefHeight="${mainPane.height*125/925*60/175}"
                                                                       prefWidth="${mainPane.width*500/1645*85/700}"/>
-                                                                <GridPane id="playerDeathsGrid" fx:id="playerDeathsGrid"
-                                                                          prefHeight="${mainPane.height*125/925*60/175}"
-                                                                          prefWidth="${mainPane.width*500/1645*224/700}">
-                                                                    <columnConstraints>
-                                                                        <ColumnConstraints hgrow="SOMETIMES"
-                                                                                           prefWidth="100"/>
-                                                                        <ColumnConstraints hgrow="SOMETIMES"
-                                                                                           prefWidth="100"/>
-                                                                        <ColumnConstraints hgrow="SOMETIMES"
-                                                                                           prefWidth="100"/>
-                                                                        <ColumnConstraints hgrow="SOMETIMES"
-                                                                                           prefWidth="100"/>
-                                                                        <ColumnConstraints hgrow="SOMETIMES"
-                                                                                           prefWidth="100"/>
-                                                                        <ColumnConstraints hgrow="SOMETIMES"
-                                                                                           prefWidth="100"/>
-                                                                    </columnConstraints>
-                                                                    <rowConstraints>
-                                                                        <RowConstraints
-                                                                                prefHeight="${mainPane.height*125/925*30/175}"
-                                                                                vgrow="SOMETIMES"/>
-                                                                    </rowConstraints>
-                                                                </GridPane>
+                                                                <HBox id="playerDeathsGrid" fx:id="playerDeaths"
+                                                                      prefHeight="${mainPane.height*125/925*60/175}"
+                                                                      prefWidth="${mainPane.width*500/1645*224/700}">
+                                                                </HBox>
                                                             </children>
                                                         </HBox>
                                                     </children>
