@@ -8,12 +8,26 @@ import it.polimi.ingsw.view.commandmessage.*;
 
 import java.util.*;
 
+/**
+ * This class manage Command Line Interface as User Interface.
+ */
+
 public class Cli implements Ui {
 
     private Scanner stdin = new Scanner(System.in);
     private CliManager cliManager = new CliManager();
     private boolean initializationDone = false;
     private final static int FIRST_CHOICE_NUMBER = 1;
+
+    /**
+     * Prints a message coming from server.
+     *
+     * @param toBeShown is a string represent a question or a statement
+     * @param possibleAnswers is the list of the possibile answers that user can choose
+     * @param isAnswerRequired specify if an answer is required (the message is a question)
+     *                        or is not (the message is a notice)
+     * @return the user's answer or a reception acknowledgement
+     */
 
     public String showMessage(String toBeShown, List<String> possibleAnswers, boolean isAnswerRequired) {
         System.out.println(toBeShown);
@@ -29,6 +43,12 @@ public class Cli implements Ui {
     public void run() {
     }
 
+    /**
+     * Updates the game displayed on command line.
+     *
+     * @param modelView is the view-side information box from which take the current game's parameters
+     */
+
     public void refreshView(ModelView modelView){
         cliManager.displayAll(modelView);
     }
@@ -41,6 +61,14 @@ public class Cli implements Ui {
         return initializationDone;
     }
 
+    /**
+     * Manages multiple options coming from server during game.
+     *
+     * @param commands is the list of command user can choose from
+     * @param undo specify if user can come back to the last choice
+     * @return the number correspond to the user choice
+     */
+
     public int manageCommandChoice(List<CommandMessage> commands, boolean undo){
         List<String> possibleAnswers = new ArrayList<>();
         commands.forEach(c -> possibleAnswers.add(c.getType().getString() + getParameter(c)));
@@ -51,10 +79,23 @@ public class Cli implements Ui {
         return askChoiceByNumber(possibleAnswers.size()) - FIRST_CHOICE_NUMBER;
     }
 
+    /**
+     * Prints the possible answers giving them a number that user can digit in order to express his preference.
+     *
+     * @param possibleAnswers is the list of strings which represent the single possible answer
+     */
+
     private void showPossibleAnswers(List<String> possibleAnswers){
         for (int i = 0; i < possibleAnswers.size(); i++)
             System.out.println("(" + (i + FIRST_CHOICE_NUMBER) + ") " + possibleAnswers.get(i));
     }
+
+    /**
+     * Catches the user answer and checks if it is valid, requesting it again until it is not a valid answer.
+     *
+     * @param size of the possible answer list
+     * @return the number typed by user
+     */
 
     private int askChoiceByNumber(int size){
         int choice;
@@ -75,6 +116,13 @@ public class Cli implements Ui {
         }
         return choice;
     }
+
+    /**
+     * Extracts specific parameters contained in the command message making them printable.
+     *
+     * @param command is the command from which get parameters
+     * @return
+     */
 
     private String getParameter(CommandMessage command) {
         if (command.getType() == CommandType.RESPAWN
@@ -102,6 +150,12 @@ public class Cli implements Ui {
             return ((WeaponModeCommandMessage) command).getWeaponMode();
         return "";
     }
+
+    /**
+     * Shows leader board at the end of game.
+     *
+     * @param leaderBoard is the leader board sent by server
+     */
 
     public void showLeaderBoard(Map<PlayerId, Long> leaderBoard){
         System.out.println("Partita conclusa");
