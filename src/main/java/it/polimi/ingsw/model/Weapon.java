@@ -548,7 +548,7 @@ public class Weapon {
         shooterAccessibleSquare.remove(currentPosition);
         for (Square square : shooterAccessibleSquare) {
             shooter.untracedMove(square);
-            if (!getPossibleSelectTargetCommands(gameBoard, shooter, state).isEmpty()) {
+            if (!loaded || !getPossibleSelectTargetCommands(gameBoard, shooter, state).isEmpty()) {
                 MoveCommand moveCommand = new MoveCommand(shooter, square, state);
                 list.add(moveCommand);
             }
