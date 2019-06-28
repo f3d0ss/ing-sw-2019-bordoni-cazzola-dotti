@@ -354,8 +354,8 @@ public class GameBoard {
     private CardinalDirection getCardinalDirection(Square origin, Square target) {
         if (origin.getRow() == target.getRow()) {
             if (origin.getCol() <= target.getCol())
-                return CardinalDirection.WEST;
-            return CardinalDirection.EAST;
+                return CardinalDirection.EAST;
+            return CardinalDirection.WEST;
         }
         if (origin.getCol() == target.getCol()) {
             if (origin.getRow() <= target.getRow())

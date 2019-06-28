@@ -229,10 +229,12 @@ public class Weapon {
                 effectCommands.add(new EffectCommand(targetPlayers.get(i), selectedWeaponMode.getDamage(i), selectedWeaponMode.getMarks(), targetPlayers.get(i).getPosition(), shooter.getId()));
         } else {
             for (Player targetPlayer : targetPlayers) {
-                if (targetPlayer.getPosition() == targetSquares.get(0))
-                    effectCommands.add(new EffectCommand(targetPlayer, selectedWeaponMode.getDamage(0), selectedWeaponMode.getMarks(), targetPlayer.getPosition(), shooter.getId()));
-                if (targetPlayer.getPosition() != targetSquares.get(0))
-                    effectCommands.add(new EffectCommand(targetPlayer, selectedWeaponMode.getDamage(1), selectedWeaponMode.getMarks(), targetPlayer.getPosition(), shooter.getId()));
+                if (!targetSquares.isEmpty()) {
+                    if (targetPlayer.getPosition() == targetSquares.get(0))
+                        effectCommands.add(new EffectCommand(targetPlayer, selectedWeaponMode.getDamage(0), selectedWeaponMode.getMarks(), targetPlayer.getPosition(), shooter.getId()));
+                    if (targetPlayer.getPosition() != targetSquares.get(0))
+                        effectCommands.add(new EffectCommand(targetPlayer, selectedWeaponMode.getDamage(1), selectedWeaponMode.getMarks(), targetPlayer.getPosition(), shooter.getId()));
+                }
             }
         }
         possibleCommands.add(new ShootCommand(state, effectCommands, shooter));
@@ -427,10 +429,19 @@ public class Weapon {
                         .filter(possibleTargetPlayer -> !possibleTargetPlayer.getId().equals(shooter.getId()))
                         .forEach(player -> possibleCommands.add(new SelectTargetPlayerCommand(state, player)));
             else  //target another player in the same direction
+            {
+                if (targetSquares.get(0).equals(shooter.getPosition())) { //samesquare check
+                    gameboard.getPlayersOnCardinalDirectionSquares(shooter, selectedWeaponMode.getMaxTargetDistance(), selectedWeaponMode.getMinTargetDistance(), true)
+                            .stream()
+                            .filter(possibleTargetPlayer -> !possibleTargetPlayer.getId().equals(shooter.getId()))
+                            .filter(possibleTargetPlayer -> !possibleTargetPlayer.getId().equals(targetPlayers.get(0).getId()))
+                            .forEach(player -> possibleCommands.add(new SelectTargetPlayerCommand(state, player)));
+                }
                 gameboard.getPlayersInTheSameDirection(shooter, targetPlayers, selectedWeaponMode.getMaxTargetDistance(), selectedWeaponMode.getMinTargetDistance(), true)
                         .stream()
                         .filter(possibleTargetPlayer -> !possibleTargetPlayer.getId().equals(shooter.getId()))
                         .forEach(player -> possibleCommands.add(new SelectTargetPlayerCommand(state, player)));
+            }
         }
         return possibleCommands;
     }
@@ -473,7 +484,9 @@ public class Weapon {
                     targetPlayers.addAll(targetSquares.get(0).getHostedPlayers(shooter));
             }
         } else {
-            if (selectedWeaponMode.getMaxNumberOfTargetPlayers() != maxTargets && targetPlayers.size() == 1) {
+            if (selectedWeaponMode.getMaxNumberOfTargetPlayers() != maxTargets) {
+                if (targetPlayers.isEmpty())
+                    possibleTargetPlayers.addAll(targetSquares.get(0).getHostedPlayers(shooter));
                 possibleTargetPlayers.addAll(targetSquares.get(1).getHostedPlayers(shooter));
                 possibleTargetPlayers.stream()
                         .filter(possibleTargetPlayer -> !possibleTargetPlayer.getId().equals(possibleTargetPlayers.get(0).getId()))
@@ -536,7 +549,7 @@ public class Weapon {
             possibleCommands.addAll(getPossibleExtraMoveCommands(gameboard, shooter, state));
         if (!hasMaximumTargets())
             possibleCommands.addAll(getPossibleSelectTargetCommands(gameboard, shooter, state));
-        if (hasSufficientTargets())
+        if (hasSufficientTargets() && hasDamageToDo())
             possibleCommands.addAll(getPossibleShootCommands(gameboard, shooter, state));
         return possibleCommands;
     }
@@ -634,6 +647,8 @@ public class Weapon {
      * @return
      */
     public boolean hasExtraMove() {
+        if (selectedWeaponMode.getName().contains("slice and dice"))
+            return extraMoveToDo && !hasMaximumTargets();
         return extraMoveToDo && !isSelectingTargets();
     }
 

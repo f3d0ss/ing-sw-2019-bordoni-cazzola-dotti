@@ -63,27 +63,28 @@ public class Match {
 
     private void initializeWeapons(Parser parser) {
         List<Weapon> weaponList = new ArrayList<>();
-        weaponList.add(parser.deserialize(new InputStreamReader(getClass().getResourceAsStream("/weapons/Thor.json"))));
-        weaponList.add(parser.deserialize(new InputStreamReader(getClass().getResourceAsStream("/weapons/Shotgun.json"))));
-        weaponList.add(parser.deserialize(new InputStreamReader(getClass().getResourceAsStream("/weapons/TractorBeam.json"))));
-        weaponList.add(parser.deserialize(new InputStreamReader(getClass().getResourceAsStream("/weapons/Cyberblade.json"))));
-        weaponList.add(parser.deserialize(new InputStreamReader(getClass().getResourceAsStream("/weapons/Electroscythe.json"))));
-        weaponList.add(parser.deserialize(new InputStreamReader(getClass().getResourceAsStream("/weapons/Flamethrower.json"))));
-        weaponList.add(parser.deserialize(new InputStreamReader(getClass().getResourceAsStream("/weapons/Furnace.json"))));
-        weaponList.add(parser.deserialize(new InputStreamReader(getClass().getResourceAsStream("/weapons/GrenadeLauncher.json"))));
-        weaponList.add(parser.deserialize(new InputStreamReader(getClass().getResourceAsStream("/weapons/Heatseeker.json"))));
-        weaponList.add(parser.deserialize(new InputStreamReader(getClass().getResourceAsStream("/weapons/Hellion.json"))));
-        weaponList.add(parser.deserialize(new InputStreamReader(getClass().getResourceAsStream("/weapons/LockRifle.json"))));
-        weaponList.add(parser.deserialize(new InputStreamReader(getClass().getResourceAsStream("/weapons/MachineGun.json"))));
         weaponList.add(parser.deserialize(new InputStreamReader(getClass().getResourceAsStream("/weapons/PlasmaGun.json"))));
-        weaponList.add(parser.deserialize(new InputStreamReader(getClass().getResourceAsStream("/weapons/PowerGlove.json"))));
-        weaponList.add(parser.deserialize(new InputStreamReader(getClass().getResourceAsStream("/weapons/Railgun.json"))));
         weaponList.add(parser.deserialize(new InputStreamReader(getClass().getResourceAsStream("/weapons/RocketLauncher.json"))));
-        weaponList.add(parser.deserialize(new InputStreamReader(getClass().getResourceAsStream("/weapons/Shockwave.json"))));
-        weaponList.add(parser.deserialize(new InputStreamReader(getClass().getResourceAsStream("/weapons/Sledgehammer.json"))));
-        weaponList.add(parser.deserialize(new InputStreamReader(getClass().getResourceAsStream("/weapons/VortexCannon.json"))));
+        weaponList.add(parser.deserialize(new InputStreamReader(getClass().getResourceAsStream("/weapons/Railgun.json"))));
+        weaponList.add(parser.deserialize(new InputStreamReader(getClass().getResourceAsStream("/weapons/Cyberblade.json"))));
+        weaponList.add(parser.deserialize(new InputStreamReader(getClass().getResourceAsStream("/weapons/Flamethrower.json"))));
+        weaponList.add(parser.deserialize(new InputStreamReader(getClass().getResourceAsStream("/weapons/GrenadeLauncher.json"))));
         weaponList.add(parser.deserialize(new InputStreamReader(getClass().getResourceAsStream("/weapons/Whisper.json"))));
+        weaponList.add(parser.deserialize(new InputStreamReader(getClass().getResourceAsStream("/weapons/PowerGlove.json"))));
+
+        weaponList.add(parser.deserialize(new InputStreamReader(getClass().getResourceAsStream("/weapons/TractorBeam.json"))));
+        weaponList.add(parser.deserialize(new InputStreamReader(getClass().getResourceAsStream("/weapons/MachineGun.json"))));
+        weaponList.add(parser.deserialize(new InputStreamReader(getClass().getResourceAsStream("/weapons/LockRifle.json"))));
         weaponList.add(parser.deserialize(new InputStreamReader(getClass().getResourceAsStream("/weapons/Zx2.json"))));
+        weaponList.add(parser.deserialize(new InputStreamReader(getClass().getResourceAsStream("/weapons/Shockwave.json"))));
+        weaponList.add(parser.deserialize(new InputStreamReader(getClass().getResourceAsStream("/weapons/Hellion.json"))));
+        weaponList.add(parser.deserialize(new InputStreamReader(getClass().getResourceAsStream("/weapons/VortexCannon.json"))));
+        weaponList.add(parser.deserialize(new InputStreamReader(getClass().getResourceAsStream("/weapons/Furnace.json"))));
+        weaponList.add(parser.deserialize(new InputStreamReader(getClass().getResourceAsStream("/weapons/Shotgun.json"))));
+        weaponList.add(parser.deserialize(new InputStreamReader(getClass().getResourceAsStream("/weapons/Electroscythe.json"))));
+        weaponList.add(parser.deserialize(new InputStreamReader(getClass().getResourceAsStream("/weapons/Thor.json"))));
+        weaponList.add(parser.deserialize(new InputStreamReader(getClass().getResourceAsStream("/weapons/Sledgehammer.json"))));
+        weaponList.add(parser.deserialize(new InputStreamReader(getClass().getResourceAsStream("/weapons/Heatseeker.json"))));
         for (Color color : Color.values()) {
             for (int i = 0; i < SpawnSquare.MAX_WEAPON; i++)
                 board.getSpawn(color).addWeapon(weaponList.remove(0));

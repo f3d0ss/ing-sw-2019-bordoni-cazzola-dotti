@@ -198,7 +198,7 @@ public class GameBoardTest {
 
     @Test
     void getThirdSquareInTheSameDirection() {
-        Match match = new Match(1);
+        Match match = new Match();
         GameBoard gameBoard = match.getBoard();
         Square s1 = gameBoard.getSquare(2, 3);
         Square s2 = gameBoard.getSquare(1, 3);

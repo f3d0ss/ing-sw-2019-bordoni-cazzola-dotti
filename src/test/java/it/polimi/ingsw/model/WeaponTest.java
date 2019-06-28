@@ -409,7 +409,7 @@ class WeaponTest {
 
     @Test
     void weeeTest() {
-        Match match = new Match(1);
+        Match match = new Match();
         GameBoard gameBoard = match.getBoard();
         Square shooterSquare = gameBoard.getSquare(2, 1);
         Player shooter = new Player(match, PlayerId.VIOLET, PlayerId.VIOLET.playerIdName());

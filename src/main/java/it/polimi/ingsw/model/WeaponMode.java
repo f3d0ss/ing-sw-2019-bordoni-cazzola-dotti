@@ -64,7 +64,7 @@ public class WeaponMode {
         int c = 1;
         for (Weapon w : weaponList)
             for (WeaponMode wm : w.getWeaponModes()) {
-                if (wm.isTargetSquare() && wm.isCardinalDirectionMode()) {
+                if (wm.isMoveShooter()) {
                     System.out.println(c + " " + w.getName() + " " + wm.name + " " + " " + wm.description + " " + wm.getMaxTargetDistance() + " " + wm.getMinTargetDistance() + " maxtargets" + wm.maxNumberOfTargetPlayers + " min" + wm.getMinNumberOfTargetPlayers());
                     c++;
                 }
