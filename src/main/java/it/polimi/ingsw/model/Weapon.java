@@ -46,7 +46,7 @@ public class Weapon {
     /**
      * This method returns true if the weapon is loaded
      *
-     * @return
+     * @return true if weapon is loaded
      */
     public boolean isLoaded() {
         return loaded;
@@ -145,10 +145,6 @@ public class Weapon {
 
     /**
      * Create a ShootCommand with all target players (same damage to everyone getDamage(0), no moves)
-     *
-     * @param shooter
-     * @param state
-     * @return
      */
     private ShootCommand createShootCommandGetDamageZero(Player shooter, ReadyToShootState state) {
         LinkedHashSet<EffectCommand> effectCommands = new LinkedHashSet<>();
@@ -160,10 +156,6 @@ public class Weapon {
 
     /**
      * Create a ShootCommand with all target players (no moves)
-     *
-     * @param shooter
-     * @param state
-     * @return
      */
     private ShootCommand createSimpleShootCommand(Player shooter, ReadyToShootState state) {
         return new ShootCommand(state, createSimpleEffectCommandList(shooter), shooter);
@@ -466,7 +458,6 @@ public class Weapon {
 
     private List<WeaponCommand> getPossibleSelectTargetCommandsTargetSquareFlameThrower(GameBoard gameBoard, Player shooter, ReadyToShootState state) {
         List<WeaponCommand> possibleCommands = new ArrayList<>();
-        List<Player> possibleTargetPlayers = new ArrayList<>();
         final int maxTargets = 4;
         if (targetSquares.size() == 1) {
             if (!targetPlayers.isEmpty() || selectedWeaponMode.getMaxNumberOfTargetPlayers() == maxTargets) { //pick 2nd square after players on the 1st one
@@ -474,7 +465,7 @@ public class Weapon {
                 if (secondTargetSquare != null && secondTargetSquare.hasOtherPlayers(shooter)) //ask possible 2nd square in the same direction (flameth)
                     possibleCommands.add(new SelectTargetSquareCommand(state, secondTargetSquare));
             } else if (selectedWeaponMode.getMaxNumberOfTargetPlayers() != maxTargets) { //select max 1 player per square
-                possibleTargetPlayers.addAll(targetSquares.get(0).getHostedPlayers(shooter));
+                List<Player> possibleTargetPlayers = new ArrayList<>(targetSquares.get(0).getHostedPlayers(shooter));
                 possibleTargetPlayers.stream()
                         .filter(possibleTargetPlayer -> !possibleTargetPlayer.getId().equals(shooter.getId()))
                         .distinct()
@@ -531,16 +522,16 @@ public class Weapon {
     /**
      * This method returns the possible commands to execute ( ExtraMoveCommands, SelectTargetCommands, ShootCommands)
      *
-     * @param gameboard
-     * @param shooter
-     * @param state
+     * @param gameboard Gameboard
+     * @param shooter   Player who is using the weapon
+     * @param state     Shooter's state
      * @return List of all possible commands to execute
      */
     public List<Command> getPossibleCommands(GameBoard gameboard, Player shooter, ReadyToShootState state) {
         List<Command> possibleCommands = new ArrayList<>();
         if (hasExtraMove())
             possibleCommands.addAll(getPossibleExtraMoveCommands(gameboard, shooter, state));
-        if (!hasMaximumTargets())
+        if (!hasMaximumTargets() && hasDamageToDo())
             possibleCommands.addAll(getPossibleSelectTargetCommands(gameboard, shooter, state));
         if (hasSufficientTargets() && hasDamageToDo())
             possibleCommands.addAll(getPossibleShootCommands(gameboard, shooter, state));
@@ -574,9 +565,9 @@ public class Weapon {
     /**
      * This method returns the commands to select which weapon mode to use.
      *
-     * @param player
-     * @param state
-     * @return List of the commands
+     * @param player Player who is using the weapon
+     * @param state  Shooter's state
+     * @return List of commands to select a weapon mode.
      */
     public List<SelectWeaponModeCommand> getSelectWeaponModeCommands(Player player, ChoosingWeaponOptionState state) {
         return weaponModes.stream()
@@ -637,7 +628,7 @@ public class Weapon {
     /**
      * This method returns true if the weapon can generate MoveCommands when invoked
      *
-     * @return
+     * @return true if weapon can move its owner
      */
     public boolean hasExtraMove() {
         if (selectedWeaponMode.getName().contains("slice and dice"))
@@ -672,16 +663,16 @@ public class Weapon {
     /**
      * This method returns true if the weapon can shoot again
      *
-     * @return
+     * @return True if weapon can shoot
      */
     public boolean hasDamageToDo() {
         return damageToDo > 0;
     }
 
     /**
-     * This method returns true if a square or a player has been selected
+     * This method returns true if a target square or a player has been selected
      *
-     * @return
+     * @return True if target has been selected
      */
     private boolean isSelectingTargets() {
         return !targetPlayers.isEmpty() || !targetSquares.isEmpty();
@@ -705,6 +696,9 @@ public class Weapon {
         targetSquares = new ArrayList<>();
     }
 
+    /**
+     * Must be called to instantiate some fields which are not saved on json
+     */
     public void postDeserialization() {
         resetTargetLists();
         loaded = true;

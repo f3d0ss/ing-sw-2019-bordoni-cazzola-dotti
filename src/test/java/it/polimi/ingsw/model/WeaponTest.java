@@ -98,6 +98,18 @@ class WeaponTest {
     }
 
     @Test
+    void setExtraMoveTest() {
+        for (Weapon weapon : getAllWeapons())
+            for (WeaponMode weaponMode : weapon.getWeaponModes()) {
+                weapon.setSelectedWeaponMode(weaponMode);
+                weapon.useExtraMoves();
+                assertFalse(weapon.hasExtraMove());
+                weapon.resetMoves();
+                assertTrue(weapon.hasExtraMove());
+            }
+    }
+
+    @Test
     void getPossibleCommandsWithoutTargetPlayers() {
         Match match = new Match();
         GameBoard gameBoard = match.getBoard();
