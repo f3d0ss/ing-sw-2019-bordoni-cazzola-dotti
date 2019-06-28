@@ -18,7 +18,8 @@ public class ServerManager implements Runnable {
     public final static int MIN_PLAYERS = 2;
     private final static int MAX_PLAYERS = 3;
     private final static int DEFAULT_BOARD = 1;
-    private final static int MILLIS_TO_WAIT = 100;
+    private final static int MILLIS_TO_WAIT = 10;
+    private final static int MILLIS_IN_SECOND = 1000;
     private final static String RECONNECT = "Reconnect";
     private final static String NEW_GAME = "New game";
     private int socketPort;
@@ -366,7 +367,7 @@ public class ServerManager implements Runnable {
             } catch (InterruptedException e) {
                 break;
             }
-            if (counter > secondsDuringTurn * 10) {
+            if (counter > secondsDuringTurn * MILLIS_IN_SECOND / MILLIS_TO_WAIT) {
                 isTimeExceeded = true;
                 break;
             }
