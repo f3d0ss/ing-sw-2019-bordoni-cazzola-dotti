@@ -182,8 +182,10 @@ public class ServerManager implements Runnable {
     public void addClientToLobby(int id) {
         login(id);
         if (lobby.size() == MIN_PLAYERS) {
-            if (!countDown.isRunning())
+            if (!countDown.isRunning()) {
+                countDown.restore();
                 new Thread(countDown).start();
+            }
         } else if (lobby.size() == MAX_PLAYERS) {
             countDown.stopCount();
             checkAllConnections();
@@ -340,9 +342,9 @@ public class ServerManager implements Runnable {
     public void removeGame(int playerId) {
         activeMatches.remove(playerId);
         awayFromKeyboardOrDisconnected.remove((Object) playerId);
-        if(socketClients.containsKey(playerId))
+        if (socketClients.containsKey(playerId))
             removeClient(socketClients.get(playerId));
-        if(rmiClients.containsKey(playerId))
+        if (rmiClients.containsKey(playerId))
             removeClient(rmiClients.remove(playerId));
     }
 
@@ -462,7 +464,7 @@ public class ServerManager implements Runnable {
      * Manages the delivery of a message and the wait of client's answer measuring time:
      * if time exceeds before the answer's arrival, the client is marked as afk.
      *
-     * @param number is the unique code of the addressee
+     * @param number  is the unique code of the addressee
      * @param message is the outgoing message
      * @return the client's answer
      */
@@ -515,8 +517,10 @@ public class ServerManager implements Runnable {
         }
         if (isTimeExceeded) {
             communication.setTimeExceeded();
-            awayFromKeyboardOrDisconnected.add(number);
-            activeMatches.get(number).disconnect(nicknames.get(number));
+            if (activeMatches.containsKey(number)) {
+                awayFromKeyboardOrDisconnected.add(number);
+                activeMatches.get(number).disconnect(nicknames.get(number));
+            }
             return Protocol.ERR;
         }
         return answers.get(number);
