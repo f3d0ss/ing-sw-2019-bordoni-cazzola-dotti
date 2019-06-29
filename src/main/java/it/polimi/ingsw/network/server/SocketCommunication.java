@@ -6,27 +6,33 @@ import it.polimi.ingsw.utils.Parser;
 
 import java.net.Socket;
 
+/**
+ * This class represent a single communication between server and client according to socket technology.
+ */
+
 public class SocketCommunication extends SingleCommunication {
 
-    private Socket client;
-    private SocketServer socketServer;
+    private final Socket client;
+    private final SocketServer socketServer;
 
-    public SocketCommunication(String message, Socket client, SocketServer socketServer, int number, ServerManager serverManager) {
+    SocketCommunication(String message, Socket client, SocketServer socketServer, int number, ServerManager serverManager) {
         super(number, serverManager, message);
         this.client = client;
         this.socketServer = socketServer;
     }
 
+    /**
+     * Sends message through socket server. If time exceeds, it sends a notification then it unregisters the client.
+     */
+
     @Override
     public void run() {
         String answer = socketServer.sendMessageAndGetAnswer(client, message);
-        serverManager.setAnswer(number, answer);
-        System.out.println("User " + number + ": " + answer);
-        if(timeExceeded) {
+        showAndSetAnswer(answer);
+        if (timeExceeded) {
             answer = socketServer.sendMessageAndGetAnswer(client, new Parser().serialize(new Message(Protocol.TIME_EXCEEDED, "", null)));
-            serverManager.setAnswer(number, answer);
-            System.out.println("User " + number + ": " + answer);
-            socketServer.unregistry(client);
+            showAndSetAnswer(answer);
+            socketServer.unregister(client);
         }
     }
 }

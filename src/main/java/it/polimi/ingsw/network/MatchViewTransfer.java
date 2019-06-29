@@ -4,7 +4,7 @@ import it.polimi.ingsw.view.MatchView;
 
 public class MatchViewTransfer extends Message {
 
-    private MatchView attachment;
+    private final MatchView attachment;
 
     public MatchViewTransfer(MatchView mw) {
         super(Protocol.UPDATE_MATCH, "", null);

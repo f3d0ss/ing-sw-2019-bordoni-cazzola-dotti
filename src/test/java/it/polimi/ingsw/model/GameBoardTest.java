@@ -18,7 +18,7 @@ public class GameBoardTest {
 
     @Test
     public void testGetVisibleSquares() {
-        GameBoard board = new Match(1).getBoard();
+        GameBoard board = new Match().getBoard();
         Square square;
         List<Square> list;
         for (int i = 0; i < ROWS; i++)
@@ -94,7 +94,7 @@ public class GameBoardTest {
 
     @Test
     public void testGetAccessibleDirections() {
-        GameBoard board = new Match(1).getBoard();
+        GameBoard board = new Match().getBoard();
         Square square;
         List<CardinalDirection> list;
         for (int i = 0; i < ROWS * COLUMNS; i++) {

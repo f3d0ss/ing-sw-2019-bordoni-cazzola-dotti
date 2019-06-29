@@ -5,29 +5,36 @@ import java.net.UnknownHostException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-import static java.lang.Thread.sleep;
+/**
+ * This class is the executable class for the server-side of the game.
+ */
 
-public class Server {
+class Server {
 
-    private static boolean keepAlive = true;
-    private static int socketPort;
-    private static int rmiPort;
-    private final static int MILLIS_TO_WAIT = 100;
-    private final static int INPUT_UPDATE = -1;
-    private final static int MIN_PORT = 1000;
-    private final static int MAX_PORT = 50000;
-    private final static int MIN_CONNECTION_TIME = 5;
-    private final static int MAX_CONNECTION_TIME = 5000;
-    private final static int MIN_TURN_TIME = 5;
-    private final static int MAX_TURN_TIME = 5000;
+    private static final int MIN_PORT = 1000;
+    private static final int MAX_PORT = 50000;
+    private static final int MIN_CONNECTION_TIME = 5;
+    private static final int MAX_CONNECTION_TIME = 5000;
+    private static final int MIN_TURN_TIME = 5;
+    private static final int MAX_TURN_TIME = 5000;
+    private static final int MIN_SKULLS = 1;
+    private static final int MAX_SKULLS = 8;
+
+    /**
+     * Runs the server-side process asking for some parameters and then starts the server manager.
+     * and connection technology (socket or rmi).
+     *
+     * @param args are command line inputs
+     */
 
     public static void main(String[] args) {
+        int socketPort;
+        int rmiPort;
         ServerManager serverManager;
         Scanner stdin = new Scanner(System.in);
-        String message;
-        int client;
         int secondsAfterThirdConnection;
         int secondsDuringTurn;
+        int skulls;
         System.out.println("Avvio servers in corso...");
         try {
             System.out.println("local ip: " + InetAddress.getLocalHost().getHostAddress());
@@ -42,38 +49,22 @@ public class Server {
         secondsAfterThirdConnection = manageIntInput(stdin, MIN_CONNECTION_TIME, MAX_CONNECTION_TIME, 0);
         System.out.println("Specifica il numero di secondi concessi ai giocatori per ogni mossa:");
         secondsDuringTurn = manageIntInput(stdin, MIN_TURN_TIME, MAX_TURN_TIME, 0);
-        serverManager = new ServerManager(secondsAfterThirdConnection, secondsDuringTurn, socketPort, rmiPort);
+        System.out.println("Specifica il numero di teschi iniziali nelle partite:");
+        skulls = manageIntInput(stdin, MIN_SKULLS, MAX_SKULLS, 0);
+        serverManager = new ServerManager(secondsAfterThirdConnection, secondsDuringTurn, socketPort, rmiPort, skulls);
         serverManager.run();
-        while (!serverManager.allServerReady()) {
-            try {
-                sleep(MILLIS_TO_WAIT);
-            } catch (InterruptedException e) {
-            }
-        }
-        while (keepAlive) {
-            /*
-            System.out.printf("Clients attivi: [");
-            serverManager.printClients();
-            System.out.println("] Scrivi con quale client vuoi comunicare, " + INPUT_UPDATE + " per aggiornare la lista.");
-            while (true) {
-                try {
-                    client = Integer.parseInt(stdin.nextLine());
-                    if (serverManager.isActive(client) || client == INPUT_UPDATE)
-                        break;
-                    else
-                        System.out.println("L'user " + client + " non è attivo. Riprova:");
-                } catch (NumberFormatException e) {
-                    System.out.println("Non è un numero valido, riprova:");
-                }
-            }
-            if (client != INPUT_UPDATE) {
-                System.out.println("Scrivi il messaggio:");
-                message = stdin.nextLine();
-                serverManager.sendMessageAndWaitForAnswer(client, new Message(Protocol.TRY, message, null, 0));
-            }*/
-        }
-        //serverManager.shutDownAllServers();
     }
+
+    /**
+     * Manages the insertion of an integer on command line input,
+     * asking it again until it not a valid value.
+     *
+     * @param stdin          is the input scanner
+     * @param minValue       is the minimum acceptable value of the input
+     * @param maxValue       is the maximum acceptable value of the input
+     * @param forbiddenValue is a forbidden value of the input
+     * @return the value of the input
+     */
 
     private static int manageIntInput(Scanner stdin, int minValue, int maxValue, int forbiddenValue) {
         int output;

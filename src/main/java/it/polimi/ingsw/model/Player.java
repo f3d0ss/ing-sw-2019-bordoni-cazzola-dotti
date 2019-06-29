@@ -65,7 +65,7 @@ public class Player {
         powerUps.forEach(powerUp -> pvs.add(new PowerUpView(powerUp.getType(), powerUp.getColor())));
 //        TODO: decide if view need to know
 //        playerState.updatePlayerView(playerView);
-        return new PlayerView(id, isMe, health, deaths, marks, nickname, wvs, pvs, ammo, availableAggregateActionCounter, flippedBoard, disconnected);
+        return new PlayerView(id, isMe, health, deaths, marks, nickname, wvs, pvs, ammo, availableAggregateActionCounter, flippedBoard, disconnected, health.size() > DAMAGE_BEFORE_FIRST_ADRENALINA, health.size() > DAMAGE_BEFORE_SECOND_ADRENALINA);
     }
 
     public Map<Color, Integer> getAmmo() {

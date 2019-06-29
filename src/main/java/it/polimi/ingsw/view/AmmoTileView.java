@@ -22,6 +22,8 @@ public class AmmoTileView {
             for (Map.Entry<Color, Integer> entry : ammo.entrySet())
                 for (int i = 0; i < entry.getValue(); i++)
                     string.append(entry.getKey().colorName(), 0, 1);
+        else
+            string.append("   ");
         return string.toString();
     }
 }

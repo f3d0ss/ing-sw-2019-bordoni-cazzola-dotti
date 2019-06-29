@@ -35,11 +35,27 @@ public enum Protocol {
         }
     }, INSERT_IP_AGAIN {
         public String getQuestion() {
-            return "Server non raggiungibile. Reimmetti l'indirizzo ip o riprova più tardi.";
+            return "Indirizzo ip non valido. Riprova.";
         }
 
         public boolean requiresAnswer() {
             return true;
+        }
+    }, INSERT_PORT_AGAIN {
+        public String getQuestion() {
+            return "Numero di porta non valido. Riprova.";
+        }
+
+        public boolean requiresAnswer() {
+            return true;
+        }
+    }, INVALID_CONNECTION_PARAMETERS {
+        public String getQuestion() {
+            return "Server non raggiungibile. Verifica che siano corretti indirizzo ip e porta o riprova più tardi.";
+        }
+
+        public boolean requiresAnswer() {
+            return false;
         }
     }, CONNECTING {
         public String getQuestion() {
@@ -169,6 +185,14 @@ public enum Protocol {
         public boolean requiresAnswer() {
             return false;
         }
+    }, ARE_YOU_ALIVE {
+        public String getQuestion() {
+            return "";
+        }
+
+        public boolean requiresAnswer() {
+            return false;
+        }
     }, LET_US_START {
         public String getQuestion() {
             return "Avvio del gioco in corso...";
@@ -229,14 +253,15 @@ public enum Protocol {
         public String getQuestion() {
             return "";
         }
+
         public boolean requiresAnswer() {
             return true;
         }
     };
 
-    public static final String ACK = Character.toString((char) 3) + "ack";
-    public static final String AFK = Character.toString((char) 4) + "afk";
-    public static final String ERR = Character.toString((char) 5) + "err";
+    public static final String ACK = (char) 3 + "ack";
+    public static final String AFK = (char) 4 + "afk";
+    public static final String ERR = (char) 5 + "err";
 
     public abstract String getQuestion();
 

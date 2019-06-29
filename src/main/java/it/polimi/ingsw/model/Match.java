@@ -14,35 +14,36 @@ import java.util.Map;
 
 public class Match {
 
-    private static final int SKULLS = 8;
-    //TODO param server
+    private static final int DEFAULT_SKULLS = 8;
+
     private List<PlayerId> killshotTrack;
     private PowerUpDeck currentPowerUpDeck;
     private PowerUpDeck usedPowerUpDeck;
     private AmmoTileDeck currentAmmoTileDeck;
     private AmmoTileDeck usedAmmoTileDeck;
     private WeaponDeck currentWeaponDeck;
-    private int deathsCounter = SKULLS;
+    private int deathsCounter;
     private List<Player> currentPlayers;
     private GameBoard board;
     private boolean firstPlayerPlayedLastTurn;
     private Map<PlayerId, ViewInterface> views;
     private Map<PlayerId, Long> leaderBoard;
 
-    public Match(int gameBoardNumber) {
+    public Match(int gameBoardNumber, int skulls) {
         Parser parser = new Parser();
         initializeGameBoard(gameBoardNumber, parser);
         views = new HashMap<>();
         killshotTrack = new ArrayList<>();
         currentPlayers = new ArrayList<>();
         firstPlayerPlayedLastTurn = false;
+        deathsCounter = skulls;
         initializeAmmoTiles(parser);
         initializeWeapons(parser);
         initializePowerUps(parser);
     }
 
     public Match() {
-        this(1);
+        this(1, DEFAULT_SKULLS);
     }
 
     private void initializeGameBoard(int gameBoardNumber, Parser parser) {
@@ -104,8 +105,8 @@ public class Match {
 
     public void setLeaderBoard(Map<PlayerId, Long> leaderBoard) {
         this.leaderBoard = leaderBoard;
-        views.values().forEach(v -> ((VirtualView) v).setGameOver());
         update();
+        views.values().forEach(v -> ((VirtualView) v).setGameOver());
     }
 
     public Player getPlayer(PlayerId id) {
@@ -242,7 +243,7 @@ public class Match {
     }
 
     private void update() {
-        views.values().forEach(viewInterface -> viewInterface.update(new MatchView(killshotTrack, deathsCounter, board.getId(), leaderBoard)));
+        views.values().forEach(viewInterface -> viewInterface.update(new MatchView(killshotTrack, deathsCounter, leaderBoard, isLastTurn())));
     }
 
     /**
@@ -256,7 +257,7 @@ public class Match {
     }
 
     public void sendModelAfterReconnection(PlayerId player) {
-        views.get(player).update(new MatchView(killshotTrack, deathsCounter, board.getId(), leaderBoard));
+        views.get(player).update(new MatchView(killshotTrack, deathsCounter, leaderBoard, isLastTurn()));
         currentPlayers.forEach(p -> views.get(player).update(p.getPlayerView(p.getId() == player)));
         board.getSquareList().forEach(s -> views.get(player).update(s.getSquareView()));
         views.get(player).setViewInitializationDone();

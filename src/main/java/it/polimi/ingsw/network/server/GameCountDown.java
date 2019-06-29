@@ -1,37 +1,60 @@
 package it.polimi.ingsw.network.server;
 
-public class GameCountDown extends Thread {
+/**
+ * This class manage the countdown after the minimum players number is reached.
+ * Game starts when countdown reach 0 or the maximum players number is reached.
+ */
 
-    private int secondsToWait;
+class GameCountDown extends Thread {
+
+    private static final int MILLIS_IN_SECOND = 1000;
+    private final int secondsToWait;
+    private final ServerManager serverManager;
     private int seconds;
-    private ServerManager serverManager;
     private boolean stopped = false;
-    private final static int MILLIS_IN_SECOND = 1000;
 
-    public GameCountDown(ServerManager serverManager, int secondsToWait) {
+    GameCountDown(ServerManager serverManager, int secondsToWait) {
         this.serverManager = serverManager;
         this.secondsToWait = secondsToWait;
         seconds = secondsToWait;
     }
 
-    public void stopCount() {
+    /**
+     * Sets countdown as stopped and restore the seconds-left value.
+     */
+
+    void stopCount() {
         stopped = true;
         seconds = secondsToWait;
     }
 
-    public void restore() {
+    /**
+     * Restores countdown without sets it as stopped.
+     */
+
+    void restore() {
         stopped = false;
         seconds = secondsToWait;
     }
 
-    public int getTimeLeft() {
+    int getTimeLeft() {
         return seconds;
     }
 
-    public boolean isRunning(){
+    /**
+     * @return true if countdown is still running
+     */
+
+    boolean isRunning() {
         return seconds < secondsToWait;
     }
 
+    /**
+     * Starts countdown and lets it running until it reaches 0 or it is stopped.
+     * If it is stopped, it means that maximum players number is reached, then game can start.
+     */
+
+    @Override
     public void run() {
         while (seconds > 0 && !stopped) {
             seconds--;

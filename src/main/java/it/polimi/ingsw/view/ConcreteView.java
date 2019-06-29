@@ -18,9 +18,9 @@ public class ConcreteView implements ViewInterface {
     @Override
     public void update(MatchView mw) {
         modelView.setMatch(mw);
-        if(ui.isViewInitializationDone())
+        if (ui.isViewInitializationDone())
             ui.refreshView(modelView);
-        if(mw.getLeaderBoard() != null)
+        if (mw.getLeaderBoard() != null)
             ui.showLeaderBoard(mw.getLeaderBoard());
     }
 
@@ -31,7 +31,7 @@ public class ConcreteView implements ViewInterface {
         modelView.setSquareBoard(row, col, sw);
         if (sw.getColor() != null)
             modelView.setWeaponsOnSpawn(sw.getColor(), ((SpawnSquareView) sw).getWeapons());
-        if(ui.isViewInitializationDone())
+        if (ui.isViewInitializationDone())
             ui.refreshView(modelView);
     }
 
@@ -41,7 +41,7 @@ public class ConcreteView implements ViewInterface {
             modelView.setMe(pw);
         else
             modelView.setEnemie(pw.getId(), pw);
-        if(ui.isViewInitializationDone())
+        if (ui.isViewInitializationDone())
             ui.refreshView(modelView);
     }
 
@@ -53,7 +53,7 @@ public class ConcreteView implements ViewInterface {
 
     @Override
     public int sendCommands(List<CommandMessage> commands, boolean undo) {
-        if(ui.isViewInitializationDone())
+        if (ui.isViewInitializationDone())
             ui.refreshView(modelView);
         return ui.manageCommandChoice(commands, undo);
     }

@@ -4,7 +4,7 @@ import it.polimi.ingsw.view.PlayerView;
 
 public class PlayerViewTransfer extends Message {
 
-    private PlayerView attachment;
+    private final PlayerView attachment;
 
     public PlayerViewTransfer(PlayerView pw) {
         super(Protocol.UPDATE_PLAYER, "", null);
