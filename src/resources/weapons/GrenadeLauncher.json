@@ -15,10 +15,7 @@
       "targetPlayers": true,
       "targetSquare": false,
       "targetRoom": false,
-      "eachTargetInTheSameRoom": false,
-      "eachTargetOnTheSameSquare": false,
       "eachTargetOnDifferentSquares": false,
-      "damageEveryone": true,
       "targetVisibleByOtherTarget": false,
       "targetVisibleByShooter": true,
       "cardinalDirectionMode": false,
@@ -34,7 +31,12 @@
       "moveTargetAfterShoot": true,
       "moveShooter": false,
       "maxTargetMove": 1,
-      "maxShooterMove": 0
+      "maxShooterMove": 0,
+      "multiAction": false,
+      "spinner": false,
+      "fragmentingWarHeadMod": false,
+      "moveOnTarget": false,
+      "hellionMod": false
     },
     {
       "name": "basic effect + extra grenade",
@@ -47,10 +49,7 @@
       "targetPlayers": true,
       "targetSquare": true,
       "targetRoom": false,
-      "eachTargetInTheSameRoom": false,
-      "eachTargetOnTheSameSquare": false,
       "eachTargetOnDifferentSquares": false,
-      "damageEveryone": true,
       "targetVisibleByOtherTarget": false,
       "targetVisibleByShooter": true,
       "cardinalDirectionMode": false,
@@ -67,7 +66,12 @@
       "moveTargetAfterShoot": true,
       "moveShooter": false,
       "maxTargetMove": 1,
-      "maxShooterMove": 0
+      "maxShooterMove": 0,
+      "multiAction": false,
+      "spinner": false,
+      "fragmentingWarHeadMod": false,
+      "moveOnTarget": false,
+      "hellionMod": false
     }
   ]
 }

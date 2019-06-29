@@ -18,10 +18,7 @@
       "targetPlayers": true,
       "targetSquare": false,
       "targetRoom": false,
-      "eachTargetInTheSameRoom": false,
-      "eachTargetOnTheSameSquare": true,
       "eachTargetOnDifferentSquares": false,
-      "damageEveryone": true,
       "targetVisibleByOtherTarget": false,
       "targetVisibleByShooter": true,
       "cardinalDirectionMode": false,
@@ -40,7 +37,12 @@
       "moveTargetAfterShoot": false,
       "moveShooter": false,
       "maxTargetMove": 0,
-      "maxShooterMove": 0
+      "maxShooterMove": 0,
+      "multiAction": false,
+      "spinner": false,
+      "fragmentingWarHeadMod": false,
+      "moveOnTarget": false,
+      "hellionMod": true
     },
     {
       "name": "nano-tracer mode",
@@ -51,10 +53,7 @@
       "targetPlayers": true,
       "targetSquare": false,
       "targetRoom": false,
-      "eachTargetInTheSameRoom": false,
-      "eachTargetOnTheSameSquare": true,
       "eachTargetOnDifferentSquares": false,
-      "damageEveryone": true,
       "targetVisibleByOtherTarget": false,
       "targetVisibleByShooter": true,
       "cardinalDirectionMode": false,
@@ -73,7 +72,12 @@
       "moveTargetAfterShoot": false,
       "moveShooter": false,
       "maxTargetMove": 0,
-      "maxShooterMove": 0
+      "maxShooterMove": 0,
+      "multiAction": false,
+      "spinner": false,
+      "fragmentingWarHeadMod": false,
+      "moveOnTarget": false,
+      "hellionMod": true
     }
   ]
 }

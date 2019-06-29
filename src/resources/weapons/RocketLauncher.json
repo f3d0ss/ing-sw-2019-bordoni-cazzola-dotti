@@ -17,10 +17,7 @@
       "targetPlayers": true,
       "targetSquare": false,
       "targetRoom": false,
-      "eachTargetInTheSameRoom": false,
-      "eachTargetOnTheSameSquare": false,
       "eachTargetOnDifferentSquares": false,
-      "damageEveryone": true,
       "targetVisibleByOtherTarget": false,
       "targetVisibleByShooter": true,
       "cardinalDirectionMode": false,
@@ -36,7 +33,12 @@
       "moveTargetAfterShoot": true,
       "moveShooter": false,
       "maxTargetMove": 1,
-      "maxShooterMove": 0
+      "maxShooterMove": 0,
+      "multiAction": false,
+      "spinner": false,
+      "fragmentingWarHeadMod": false,
+      "moveOnTarget": false,
+      "hellionMod": false
     },
     {
       "name": "basic effect + rocket jump",
@@ -49,10 +51,7 @@
       "targetPlayers": true,
       "targetSquare": false,
       "targetRoom": false,
-      "eachTargetInTheSameRoom": false,
-      "eachTargetOnTheSameSquare": false,
       "eachTargetOnDifferentSquares": false,
-      "damageEveryone": true,
       "targetVisibleByOtherTarget": false,
       "targetVisibleByShooter": true,
       "cardinalDirectionMode": false,
@@ -68,23 +67,25 @@
       "moveTargetAfterShoot": true,
       "moveShooter": true,
       "maxTargetMove": 1,
-      "maxShooterMove": 2
+      "maxShooterMove": 2,
+      "multiAction": false,
+      "spinner": false,
+      "fragmentingWarHeadMod": false,
+      "moveOnTarget": false,
+      "hellionMod": false
     },
     {
       "name": "basic effect + fragmenting warhead",
       "description": "Deal 2 damage to 1 target you can see that is not on your square. Then you may move the target 1 square. During the basic effect, deal 1 damage to every player on your target's original square – including the target, even if you move it.",
       "cost": {
-        "YELLOW": "1"
+        "YELLOW": 1
       },
       "maxNumberOfTargetPlayers": 4,
       "minNumberOfTargetPlayers": 1,
       "targetPlayers": false,
       "targetSquare": true,
       "targetRoom": false,
-      "eachTargetInTheSameRoom": false,
-      "eachTargetOnTheSameSquare": true,
       "eachTargetOnDifferentSquares": false,
-      "damageEveryone": true,
       "targetVisibleByOtherTarget": false,
       "targetVisibleByShooter": true,
       "cardinalDirectionMode": false,
@@ -103,7 +104,12 @@
       "moveTargetAfterShoot": true,
       "moveShooter": false,
       "maxTargetMove": 1,
-      "maxShooterMove": 0
+      "maxShooterMove": 0,
+      "multiAction": false,
+      "spinner": false,
+      "fragmentingWarHeadMod": true,
+      "moveOnTarget": false,
+      "hellionMod": false
     },
     {
       "name": "basic effect + rocket jump + fragmenting warhead",
@@ -117,10 +123,7 @@
       "targetPlayers": false,
       "targetSquare": true,
       "targetRoom": false,
-      "eachTargetInTheSameRoom": false,
-      "eachTargetOnTheSameSquare": true,
       "eachTargetOnDifferentSquares": false,
-      "damageEveryone": true,
       "targetVisibleByOtherTarget": false,
       "targetVisibleByShooter": true,
       "cardinalDirectionMode": false,
@@ -139,7 +142,12 @@
       "moveTargetAfterShoot": true,
       "moveShooter": true,
       "maxTargetMove": 1,
-      "maxShooterMove": 2
+      "maxShooterMove": 2,
+      "multiAction": false,
+      "spinner": false,
+      "fragmentingWarHeadMod": true,
+      "moveOnTarget": false,
+      "hellionMod": false
     }
   ]
 }

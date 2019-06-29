@@ -1,12 +1,9 @@
 package it.polimi.ingsw.model;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.util.*;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 /**
  * This class represents a weapon's mode
@@ -23,11 +20,8 @@ public class WeaponMode {
     private boolean targetPlayers;
     private boolean targetSquare;
     private boolean targetRoom;
-    private boolean eachTargetInTheSameRoom; //(RM?)
-    private boolean eachTargetOnTheSameSquare; //(RM?)
-    private boolean eachTargetOnDifferentSquares;//shockwave
-    private boolean damageEveryone; //The weapon must damage every target possible, the player can't decide not to shoot one target.(RM?)
-    private boolean targetVisibleByOtherTarget;//thor
+    private boolean eachTargetOnDifferentSquares;
+    private boolean targetVisibleByOtherTarget;
     private boolean targetVisibleByShooter;
     private boolean cardinalDirectionMode;
     private int maxTargetDistance;
@@ -38,38 +32,18 @@ public class WeaponMode {
     private int maxAdditionalDamagePerPlayer;
 
     //move parameters
-    private boolean moveTargetBeforeShoot;//vortex,tractor beam
-    private boolean moveTargetAfterShoot;//same direction (Hammer)
+    private boolean moveTargetBeforeShoot;
+    private boolean moveTargetAfterShoot;
     private boolean moveShooter;
     private int maxTargetMove;
     private int maxShooterMove;
 
-    public static void main(String[] args) {
-        GsonBuilder g = new GsonBuilder();
-        g.setPrettyPrinting();
-        g.serializeNulls();
-        Gson gson = g.create();
-        List<Weapon> weaponList = new ArrayList<>();
-        File file = new File("src/resources/weapons/");
-        File[] files = file.listFiles();
-        for (File f : files) {
-            System.out.println(f.getPath());
-
-            try {
-                weaponList.add(gson.fromJson(new FileReader(f.getPath()), Weapon.class));
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
-        }
-        int c = 1;
-        for (Weapon w : weaponList)
-            for (WeaponMode wm : w.getWeaponModes()) {
-                if (wm.isMoveShooter()) {
-                    System.out.println(c + " " + w.getName() + " " + wm.name + " " + " " + wm.description + " " + wm.getMaxTargetDistance() + " " + wm.getMinTargetDistance() + " maxtargets" + wm.maxNumberOfTargetPlayers + " min" + wm.getMinNumberOfTargetPlayers());
-                    c++;
-                }
-            }
-    }
+    //extra param
+    private boolean multiAction;
+    private boolean spinner;
+    private boolean fragmentingWarHeadMod;
+    private boolean moveOnTarget;
+    private boolean hellionMod;
 
     public String getName() {
         return name;
@@ -103,20 +77,8 @@ public class WeaponMode {
         return targetRoom;
     }
 
-    boolean isEachTargetInTheSameRoom() {
-        return eachTargetInTheSameRoom;
-    }
-
-    boolean isEachTargetOnTheSameSquare() {
-        return eachTargetOnTheSameSquare;
-    }
-
     boolean isEachTargetOnDifferentSquares() {
         return eachTargetOnDifferentSquares;
-    }
-
-    boolean isDamageEveryone() {
-        return damageEveryone;
     }
 
     boolean isTargetVisibleByOtherTarget() {
@@ -177,6 +139,26 @@ public class WeaponMode {
 
     int getMaxShooterMove() {
         return maxShooterMove;
+    }
+
+    public boolean isMultiAction() {
+        return multiAction;
+    }
+
+    public boolean isSpinner() {
+        return spinner;
+    }
+
+    public boolean isFragmentingWarHeadMod() {
+        return fragmentingWarHeadMod;
+    }
+
+    public boolean isMoveOnTarget() {
+        return moveOnTarget;
+    }
+
+    public boolean isHellionMod() {
+        return hellionMod;
     }
 
     void postDeserialization() {

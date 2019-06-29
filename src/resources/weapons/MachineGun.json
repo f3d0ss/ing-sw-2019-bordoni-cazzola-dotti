@@ -18,10 +18,7 @@
       "targetPlayers": true,
       "targetSquare": false,
       "targetRoom": false,
-      "eachTargetInTheSameRoom": false,
-      "eachTargetOnTheSameSquare": false,
       "eachTargetOnDifferentSquares": false,
-      "damageEveryone": false,
       "targetVisibleByOtherTarget": false,
       "targetVisibleByShooter": true,
       "cardinalDirectionMode": false,
@@ -38,7 +35,12 @@
       "moveTargetAfterShoot": false,
       "moveShooter": false,
       "maxTargetMove": 0,
-      "maxShooterMove": 0
+      "maxShooterMove": 0,
+      "multiAction": false,
+      "spinner": false,
+      "fragmentingWarHeadMod": false,
+      "moveOnTarget": false,
+      "hellionMod": false
     },
     {
       "name": "basic effect + focus shot",
@@ -51,10 +53,7 @@
       "targetPlayers": true,
       "targetSquare": false,
       "targetRoom": false,
-      "eachTargetInTheSameRoom": false,
-      "eachTargetOnTheSameSquare": false,
       "eachTargetOnDifferentSquares": false,
-      "damageEveryone": false,
       "targetVisibleByOtherTarget": false,
       "targetVisibleByShooter": true,
       "cardinalDirectionMode": false,
@@ -71,7 +70,12 @@
       "moveTargetAfterShoot": false,
       "moveShooter": false,
       "maxTargetMove": 0,
-      "maxShooterMove": 0
+      "maxShooterMove": 0,
+      "multiAction": false,
+      "spinner": false,
+      "fragmentingWarHeadMod": false,
+      "moveOnTarget": false,
+      "hellionMod": false
     },
     {
       "name": "basic effect + turret tripod",
@@ -84,10 +88,7 @@
       "targetPlayers": true,
       "targetSquare": false,
       "targetRoom": false,
-      "eachTargetInTheSameRoom": false,
-      "eachTargetOnTheSameSquare": false,
       "eachTargetOnDifferentSquares": false,
-      "damageEveryone": false,
       "targetVisibleByOtherTarget": false,
       "targetVisibleByShooter": true,
       "cardinalDirectionMode": false,
@@ -105,7 +106,12 @@
       "moveTargetAfterShoot": false,
       "moveShooter": false,
       "maxTargetMove": 0,
-      "maxShooterMove": 0
+      "maxShooterMove": 0,
+      "multiAction": false,
+      "spinner": false,
+      "fragmentingWarHeadMod": false,
+      "moveOnTarget": false,
+      "hellionMod": false
     },
     {
       "name": "basic effect + focus shot + turret tripod",
@@ -119,10 +125,7 @@
       "targetPlayers": true,
       "targetSquare": false,
       "targetRoom": false,
-      "eachTargetInTheSameRoom": false,
-      "eachTargetOnTheSameSquare": false,
       "eachTargetOnDifferentSquares": false,
-      "damageEveryone": false,
       "targetVisibleByOtherTarget": false,
       "targetVisibleByShooter": true,
       "cardinalDirectionMode": false,
@@ -140,7 +143,12 @@
       "moveTargetAfterShoot": false,
       "moveShooter": false,
       "maxTargetMove": 0,
-      "maxShooterMove": 0
+      "maxShooterMove": 0,
+      "multiAction": false,
+      "spinner": false,
+      "fragmentingWarHeadMod": false,
+      "moveOnTarget": false,
+      "hellionMod": false
     }
   ]
 }
