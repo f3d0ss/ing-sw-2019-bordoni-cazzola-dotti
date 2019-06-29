@@ -28,10 +28,10 @@ public class SocketCommunication extends SingleCommunication {
     @Override
     public void run() {
         String answer = socketServer.sendMessageAndGetAnswer(client, message);
-        showAndSetAnswer(number, answer);
+        showAndSetAnswer(answer);
         if(timeExceeded) {
             answer = socketServer.sendMessageAndGetAnswer(client, new Parser().serialize(new Message(Protocol.TIME_EXCEEDED, "", null)));
-            showAndSetAnswer(number, answer);
+            showAndSetAnswer(answer);
             socketServer.unregister(client);
         }
     }

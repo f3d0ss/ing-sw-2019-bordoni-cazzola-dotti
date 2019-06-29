@@ -26,14 +26,14 @@ public class SingleCommunication implements Runnable {
 
     public void setTimeExceeded(){
         timeExceeded = true;
-        System.out.println("User " + number + ": TEMPO SCADUTO");
+        showAndSetAnswer("TEMPO SCADUTO");
     }
 
     /**
      * Sets client's answer and prints it on server log.
      */
 
-    protected void showAndSetAnswer(int number, String answer){
+    protected void showAndSetAnswer(String answer){
         serverManager.setAnswer(number, answer);
         System.out.println("User " + number + ": " + answer);
     }

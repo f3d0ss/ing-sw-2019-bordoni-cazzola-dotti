@@ -26,10 +26,10 @@ public class RmiCommunication extends SingleCommunication {
     @Override
     public void run() {
         String answer = rmiServer.sendMessageAndGetAnswer(client, message);
-        showAndSetAnswer(number, answer);
+        showAndSetAnswer(answer);
         if(timeExceeded) {
             answer = rmiServer.sendMessageAndGetAnswer(client, new Parser().serialize(new Message(Protocol.TIME_EXCEEDED, "", null)));
-            showAndSetAnswer(number, answer);
+            showAndSetAnswer(answer);
             rmiServer.unregister(client);
         }
     }
