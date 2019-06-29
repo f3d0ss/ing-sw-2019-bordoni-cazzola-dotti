@@ -1,5 +1,9 @@
 package it.polimi.ingsw.network.server;
 
+/**
+ * This class allows to manage parallel client enrollments.
+ */
+
 public class ClientReception implements Runnable {
 
     private ServerManager serverManager;

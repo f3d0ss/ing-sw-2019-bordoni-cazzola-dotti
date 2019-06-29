@@ -3,8 +3,11 @@ package it.polimi.ingsw.network.server;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 
+/**
+ * This interface exposes some rmi-client's methods rmi-server can call.
+ */
+
 public interface RmiClientInterface extends Remote {
-    /*dichiara qui tutti i metodi che possono essere chiamati in remoto dal server*/
     String sendMessageAndGetAnswer(String message) throws RemoteException;
     boolean testAliveness() throws RemoteException;
 }
