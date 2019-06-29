@@ -194,7 +194,7 @@ public class Weapon {
     private List<WeaponCommand> getPossibleShootCommandsTargetPlayers(GameBoard gameboard, Player shooter, ReadyToShootState state) {
         List<WeaponCommand> possibleCommands = new ArrayList<>();
         if (!selectedWeaponMode.isMoveTargetAfterShoot()) {
-            if (name.equals("Power Glove")) { //shooter must move on last target square
+            if (selectedWeaponMode.isMoveOnTarget()) { //shooter must move on last target square
                 List<EffectCommand> effectCommands = createSimpleEffectCommandList(shooter);
                 effectCommands.add(new EffectCommand(shooter, 0, 0, targetPlayers.get(targetPlayers.size() - 1).getPosition(), shooter.getId()));
                 possibleCommands.add(new ShootCommand(state, effectCommands, shooter));
@@ -377,18 +377,18 @@ public class Weapon {
         List<WeaponCommand> possibleCommands = new ArrayList<>();
         if (targetPlayers.isEmpty()) {
             List<Player> visibleTargets = gameboard.getVisibleTargets(shooter, selectedWeaponMode.getMaxTargetDistance(), selectedWeaponMode.getMinTargetDistance());
-            if (selectedWeaponMode.getName().contains("tsunami")) //directly pick targets
+            if (selectedWeaponMode.isSpinner()) //directly pick targets
                 targetPlayers.addAll(visibleTargets);
             else
                 visibleTargets.stream()
                         .filter(possibleTargetPlayer -> !possibleTargetPlayer.getId().equals(shooter.getId()))
                         .forEach(player -> possibleCommands.add(new SelectTargetPlayerCommand(state, player)));
         } else {
-            if (name.equals("Hellion") && targetPlayers.size() == 1) //add other players on the same square (shooter cant be on this square)
+            if (selectedWeaponMode.isHellionMod() && targetPlayers.size() == 1) //add other players on the same square (shooter cant be on this square)
                 targetPlayers.addAll(targetPlayers.get(0).getPosition().getHostedPlayers(targetPlayers.get(0)));
             else if (selectedWeaponMode.isTargetVisibleByOtherTarget()) { //THOR
                 possibleCommands.addAll(getPossibleSelectTargetCommandsTargetPlayersVisibleByOtherTarget(gameboard, shooter, state));
-            } else if (!selectedWeaponMode.getName().contains("tsunami")) { //otherweapons
+            } else if (!selectedWeaponMode.isSpinner()) { //otherweapons
                 possibleCommands.addAll(getPossibleSelectTargetCommandsTargetPlayersVisibleStandard(gameboard, shooter, state));
             }
         }
@@ -511,7 +511,7 @@ public class Weapon {
         } else {
             if (selectedWeaponMode.isCardinalDirectionMode()) {
                 possibleCommands.addAll(getPossibleSelectTargetCommandsTargetSquareFlameThrower(gameboard, shooter, state));
-            } else if (selectedWeaponMode.getName().contains("fragmenting warhead")) {//rocketlaunch
+            } else if (selectedWeaponMode.isFragmentingWarHeadMod()) {//rocketlaunch
                 possibleCommands.addAll(getPossibleSelectTargetCommandsTargetSquareFragmentingWarhead(shooter, state));
             } else if (targetPlayers.isEmpty()) //Other modes target all players
                 targetSquares.stream().map(square -> square.getHostedPlayers(shooter)).forEach(targetPlayers::addAll);
@@ -631,7 +631,7 @@ public class Weapon {
      * @return true if weapon can move its owner
      */
     public boolean hasExtraMove() {
-        if (selectedWeaponMode.getName().contains("slice and dice"))
+        if (selectedWeaponMode.isMultiAction())
             return extraMoveToDo && !hasMaximumTargets();
         return extraMoveToDo && !isSelectingTargets();
     }
@@ -682,7 +682,7 @@ public class Weapon {
      * This method must be called when executing a ShootCommand
      */
     public void shoot() {
-        if (selectedWeaponMode.getName().contains("slice and dice") && extraMoveToDo && targetPlayers.size() == 1)
+        if (selectedWeaponMode.isMultiAction() && extraMoveToDo && targetPlayers.size() == 1)
             damageToDo--;
         else {
             damageToDo = 0;

@@ -15,10 +15,7 @@
       "targetPlayers": true,
       "targetSquare": false,
       "targetRoom": false,
-      "eachTargetInTheSameRoom": false,
-      "eachTargetOnTheSameSquare": false,
       "eachTargetOnDifferentSquares": false,
-      "damageEveryone": true,
       "targetVisibleByOtherTarget": false,
       "targetVisibleByShooter": true,
       "cardinalDirectionMode": false,
@@ -34,11 +31,16 @@
       "moveTargetAfterShoot": true,
       "moveShooter": false,
       "maxTargetMove": 1,
-      "maxShooterMove": 0
+      "maxShooterMove": 0,
+      "multiAction": false,
+      "spinner": false,
+      "fragmentingWarHeadMod": false,
+      "moveOnTarget": false,
+      "hellionMod": false
     },
     {
       "name": "basic effect + extra grenade",
-      "description": "Deal 1 damage to 1 target you can see. Then you may move the target 1 square. Deal 1 damage to every player on a square you can see. You can use this before or after the basic effect's move.",
+      "description": "Deal 1 damage to 1 target you can see. Then you may move the target 1 square. Deal 1 damage to every player on a square you can see. You can use this before or after the basic effect\u0027s move.",
       "cost": {
         "RED": 1
       },
@@ -47,10 +49,7 @@
       "targetPlayers": true,
       "targetSquare": true,
       "targetRoom": false,
-      "eachTargetInTheSameRoom": false,
-      "eachTargetOnTheSameSquare": false,
       "eachTargetOnDifferentSquares": false,
-      "damageEveryone": true,
       "targetVisibleByOtherTarget": false,
       "targetVisibleByShooter": true,
       "cardinalDirectionMode": false,
@@ -67,7 +66,12 @@
       "moveTargetAfterShoot": true,
       "moveShooter": false,
       "maxTargetMove": 1,
-      "maxShooterMove": 0
+      "maxShooterMove": 0,
+      "multiAction": false,
+      "spinner": false,
+      "fragmentingWarHeadMod": false,
+      "moveOnTarget": false,
+      "hellionMod": false
     }
   ]
 }

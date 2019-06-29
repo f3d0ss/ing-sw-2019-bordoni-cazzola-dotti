@@ -15,10 +15,7 @@
       "targetPlayers": false,
       "targetSquare": true,
       "targetRoom": false,
-      "eachTargetInTheSameRoom": false,
-      "eachTargetOnTheSameSquare": false,
       "eachTargetOnDifferentSquares": true,
-      "damageEveryone": true,
       "targetVisibleByOtherTarget": true,
       "targetVisibleByShooter": true,
       "cardinalDirectionMode": true,
@@ -35,7 +32,12 @@
       "moveTargetAfterShoot": false,
       "moveShooter": false,
       "maxTargetMove": 0,
-      "maxShooterMove": 0
+      "maxShooterMove": 0,
+      "multiAction": false,
+      "spinner": false,
+      "fragmentingWarHeadMod": false,
+      "moveOnTarget": false,
+      "hellionMod": false
     },
     {
       "name": "barbecue mode",
@@ -48,10 +50,7 @@
       "targetPlayers": false,
       "targetSquare": true,
       "targetRoom": false,
-      "eachTargetInTheSameRoom": false,
-      "eachTargetOnTheSameSquare": false,
       "eachTargetOnDifferentSquares": true,
-      "damageEveryone": true,
       "targetVisibleByOtherTarget": true,
       "targetVisibleByShooter": true,
       "cardinalDirectionMode": true,
@@ -68,7 +67,12 @@
       "moveTargetAfterShoot": false,
       "moveShooter": false,
       "maxTargetMove": 0,
-      "maxShooterMove": 0
+      "maxShooterMove": 0,
+      "multiAction": false,
+      "spinner": false,
+      "fragmentingWarHeadMod": false,
+      "moveOnTarget": false,
+      "hellionMod": false
     }
   ]
 }

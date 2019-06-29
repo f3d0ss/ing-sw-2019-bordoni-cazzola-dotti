@@ -23,11 +23,8 @@ public class WeaponMode {
     private boolean targetPlayers;
     private boolean targetSquare;
     private boolean targetRoom;
-    private boolean eachTargetInTheSameRoom; //(RM?)
-    private boolean eachTargetOnTheSameSquare; //(RM?)
-    private boolean eachTargetOnDifferentSquares;//shockwave
-    private boolean damageEveryone; //The weapon must damage every target possible, the player can't decide not to shoot one target.(RM?)
-    private boolean targetVisibleByOtherTarget;//thor
+    private boolean eachTargetOnDifferentSquares;
+    private boolean targetVisibleByOtherTarget;
     private boolean targetVisibleByShooter;
     private boolean cardinalDirectionMode;
     private int maxTargetDistance;
@@ -44,7 +41,14 @@ public class WeaponMode {
     private int maxTargetMove;
     private int maxShooterMove;
 
-    public static void main(String[] args) {
+    //extra param
+    private boolean multiAction;
+    private boolean spinner;
+    private boolean fragmentingWarHeadMod;
+    private boolean moveOnTarget;
+    private boolean hellionMod;
+
+    /*public static void main(String[] args) {
         GsonBuilder g = new GsonBuilder();
         g.setPrettyPrinting();
         g.serializeNulls();
@@ -64,12 +68,18 @@ public class WeaponMode {
         int c = 1;
         for (Weapon w : weaponList)
             for (WeaponMode wm : w.getWeaponModes()) {
-                if (wm.isMoveShooter()) {
+                wm.postDeserialization();
+                if (wm.hellionMod || wm.fragmentingWarHeadMod) {
                     System.out.println(c + " " + w.getName() + " " + wm.name + " " + " " + wm.description + " " + wm.getMaxTargetDistance() + " " + wm.getMinTargetDistance() + " maxtargets" + wm.maxNumberOfTargetPlayers + " min" + wm.getMinNumberOfTargetPlayers());
                     c++;
                 }
             }
-    }
+
+        for (Weapon weapon : weaponList) {
+            if (weapon.getName().contains("ZX"))
+                System.out.println(gson.toJson(weapon));
+        }
+    }*/
 
     public String getName() {
         return name;
@@ -103,20 +113,8 @@ public class WeaponMode {
         return targetRoom;
     }
 
-    boolean isEachTargetInTheSameRoom() {
-        return eachTargetInTheSameRoom;
-    }
-
-    boolean isEachTargetOnTheSameSquare() {
-        return eachTargetOnTheSameSquare;
-    }
-
     boolean isEachTargetOnDifferentSquares() {
         return eachTargetOnDifferentSquares;
-    }
-
-    boolean isDamageEveryone() {
-        return damageEveryone;
     }
 
     boolean isTargetVisibleByOtherTarget() {
@@ -179,6 +177,26 @@ public class WeaponMode {
         return maxShooterMove;
     }
 
+    public boolean isMultiAction() {
+        return multiAction;
+    }
+
+    public boolean isSpinner() {
+        return spinner;
+    }
+
+    public boolean isFragmentingWarHeadMod() {
+        return fragmentingWarHeadMod;
+    }
+
+    public boolean isMoveOnTarget() {
+        return moveOnTarget;
+    }
+
+    public boolean isHellionMod() {
+        return hellionMod;
+    }
+
     void postDeserialization() {
         final int maxSteps = GameBoard.ROWS * GameBoard.COLUMNS - 1;
         if (maxShooterMove > maxSteps)
@@ -187,5 +205,13 @@ public class WeaponMode {
             maxTargetDistance = maxSteps;
         if (maxTargetMove > maxSteps)
             maxTargetDistance = maxSteps;
+        /*multiAction = getName().contains("slice and dice");
+        spinner = getName().contains("tsunami");
+        fragmentingWarHeadMod = getName().contains("fragmenting warhead");
+        moveOnTarget = getDescription().contains("oose 1 target on any square exactly 1 move away. Move onto that square and give the target 1 damage and 2 mark")
+                || getDescription().contains("ve onto that square. You may deal 2 damage to 1 target there. If you want,");
+        hellionMod = getDescription().contains(" see at least 1 move away. Then give 2 mark to that target and everyo")
+                || getDescription().contains("see at least 1 move away. Then give 1 mark to that target and everyone else on");*/
+
     }
 }
