@@ -1,12 +1,9 @@
 package it.polimi.ingsw.model;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.util.*;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 /**
  * This class represents a weapon's mode
@@ -35,8 +32,8 @@ public class WeaponMode {
     private int maxAdditionalDamagePerPlayer;
 
     //move parameters
-    private boolean moveTargetBeforeShoot;//vortex,tractor beam
-    private boolean moveTargetAfterShoot;//same direction (Hammer)
+    private boolean moveTargetBeforeShoot;
+    private boolean moveTargetAfterShoot;
     private boolean moveShooter;
     private int maxTargetMove;
     private int maxShooterMove;
@@ -47,39 +44,6 @@ public class WeaponMode {
     private boolean fragmentingWarHeadMod;
     private boolean moveOnTarget;
     private boolean hellionMod;
-
-    /*public static void main(String[] args) {
-        GsonBuilder g = new GsonBuilder();
-        g.setPrettyPrinting();
-        g.serializeNulls();
-        Gson gson = g.create();
-        List<Weapon> weaponList = new ArrayList<>();
-        File file = new File("src/resources/weapons/");
-        File[] files = file.listFiles();
-        for (File f : files) {
-            System.out.println(f.getPath());
-
-            try {
-                weaponList.add(gson.fromJson(new FileReader(f.getPath()), Weapon.class));
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
-        }
-        int c = 1;
-        for (Weapon w : weaponList)
-            for (WeaponMode wm : w.getWeaponModes()) {
-                wm.postDeserialization();
-                if (wm.hellionMod || wm.fragmentingWarHeadMod) {
-                    System.out.println(c + " " + w.getName() + " " + wm.name + " " + " " + wm.description + " " + wm.getMaxTargetDistance() + " " + wm.getMinTargetDistance() + " maxtargets" + wm.maxNumberOfTargetPlayers + " min" + wm.getMinNumberOfTargetPlayers());
-                    c++;
-                }
-            }
-
-        for (Weapon weapon : weaponList) {
-            if (weapon.getName().contains("ZX"))
-                System.out.println(gson.toJson(weapon));
-        }
-    }*/
 
     public String getName() {
         return name;
@@ -205,13 +169,5 @@ public class WeaponMode {
             maxTargetDistance = maxSteps;
         if (maxTargetMove > maxSteps)
             maxTargetDistance = maxSteps;
-        /*multiAction = getName().contains("slice and dice");
-        spinner = getName().contains("tsunami");
-        fragmentingWarHeadMod = getName().contains("fragmenting warhead");
-        moveOnTarget = getDescription().contains("oose 1 target on any square exactly 1 move away. Move onto that square and give the target 1 damage and 2 mark")
-                || getDescription().contains("ve onto that square. You may deal 2 damage to 1 target there. If you want,");
-        hellionMod = getDescription().contains(" see at least 1 move away. Then give 2 mark to that target and everyo")
-                || getDescription().contains("see at least 1 move away. Then give 1 mark to that target and everyone else on");*/
-
     }
 }
