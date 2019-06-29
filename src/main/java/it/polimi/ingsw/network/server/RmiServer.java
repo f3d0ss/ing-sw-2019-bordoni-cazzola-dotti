@@ -7,12 +7,15 @@ import java.net.UnknownHostException;
 import java.rmi.AlreadyBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
-import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 
-public class RmiServer implements Runnable {
+/**
+ * This class represent the server for communications using rmi,
+ * implementing the interface exposed to rmi client.
+ */
 
-    private RmiServerImplementation server;
+public class RmiServer implements Runnable, RmiServerInterface {
+
     private ServerManager serverManager;
     private int port;
 
@@ -21,13 +24,12 @@ public class RmiServer implements Runnable {
         this.port = port;
     }
 
-    public void run() {
-        try {
-            startServer();
-        } catch (RemoteException | AlreadyBoundException e) {
-            System.err.println(e.getMessage());
-        }
-    }
+    /**
+     * Registries a new rmi client on the server manager,
+     * starting a thread devoted to look after the enrollment.
+     *
+     * @param client is the rmi interface of the new client
+     */
 
     public void registry(RmiClientInterface client) {
         serverManager.addClient(client);
@@ -36,25 +38,56 @@ public class RmiServer implements Runnable {
         new Thread(new ClientReception(serverManager, number)).start();
     }
 
-    public void unregistry(RmiClientInterface client) {
+    /**
+     * Unregisters a rmi client.
+     *
+     * @param client is the interface of the outgoing client
+     */
+
+    public void unregister(RmiClientInterface client) {
         serverManager.removeClient(client);
     }
 
-    public RmiServerImplementation getImplementation() {
-        return server;
+    /**
+     * This method is called by client in order to test server presence.
+     *
+     * @return always true
+     */
+
+    public synchronized boolean testAliveness() {
+        return true;
     }
 
-    public void startServer() throws RemoteException, AlreadyBoundException {
+    /**
+     * Sends a message to a rmi client. If the client is unreachable, it unregisters it.
+     *
+     * @param addressee is the rmi interface of the addressee
+     * @param message is the string containing the sending message
+     * @return is the answer coming from the client
+     */
+
+    public String sendMessageAndGetAnswer(RmiClientInterface addressee, String message) {
+        try {
+            return addressee.sendMessageAndGetAnswer(message);
+        } catch (RemoteException e) {
+            unregister(addressee);
+            return "Impossibile raggiungere il client. " + e.getMessage();
+        }
+    }
+
+    /**
+     * Starts a server according to the rmi technology.
+     */
+
+    public void run() {
         try {
             System.setProperty("java.rmi.server.hostname", InetAddress.getLocalHost().getHostAddress());
-        } catch (UnknownHostException e) {
+            RmiServerInterface stub = (RmiServerInterface) UnicastRemoteObject.exportObject(this, 0);
+            LocateRegistry.createRegistry(port);
+            LocateRegistry.getRegistry(port).bind(RmiServerInterface.NAME, stub);
+            System.out.println("RmiServer avviato.");
+        } catch (UnknownHostException | RemoteException | AlreadyBoundException e) {
+            System.out.println(e.getMessage());
         }
-        server = new RmiServerImplementation(this);
-        RmiServerInterface stub = (RmiServerInterface) UnicastRemoteObject.exportObject(server, 0);
-        LocateRegistry.createRegistry(port);
-        Registry registry = LocateRegistry.getRegistry(port);
-        registry.bind(RmiServerInterface.NAME, stub);
-        System.out.println("RmiServer avviato.");
-        serverManager.setRmiReady();
     }
 }

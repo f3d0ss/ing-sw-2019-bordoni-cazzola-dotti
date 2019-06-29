@@ -5,25 +5,31 @@ import java.net.UnknownHostException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-import static java.lang.Thread.sleep;
+/**
+ * This class is the executable class for the server-side of the game.
+ */
 
 public class Server {
 
-    public final static int MILLIS_TO_WAIT = 10;
-    private static boolean keepAlive = true;
-    private static int socketPort;
-    private static int rmiPort;
-    private final static int INPUT_UPDATE = -1;
-    private final static int MIN_PORT = 1000;
-    private final static int MAX_PORT = 50000;
-    private final static int MIN_CONNECTION_TIME = 5;
-    private final static int MAX_CONNECTION_TIME = 5000;
-    private final static int MIN_TURN_TIME = 5;
-    private final static int MAX_TURN_TIME = 5000;
-    private final static int MIN_SKULLS = 1;
-    private final static int MAX_SKULLS = 8;
+    private static final int MIN_PORT = 1000;
+    private static final int MAX_PORT = 50000;
+    private static final int MIN_CONNECTION_TIME = 5;
+    private static final int MAX_CONNECTION_TIME = 5000;
+    private static final int MIN_TURN_TIME = 5;
+    private static final int MAX_TURN_TIME = 5000;
+    private static final int MIN_SKULLS = 1;
+    private static final int MAX_SKULLS = 8;
+
+    /**
+     * Runs the server-side process asking for some parameters and then starts the server manager.
+     * and connection technology (socket or rmi).
+     *
+     * @param args are command line inputs
+     */
 
     public static void main(String[] args) {
+        int socketPort;
+        int rmiPort;
         ServerManager serverManager;
         Scanner stdin = new Scanner(System.in);
         int secondsAfterThirdConnection;
@@ -47,16 +53,18 @@ public class Server {
         skulls = manageIntInput(stdin, MIN_SKULLS, MAX_SKULLS, 0);
         serverManager = new ServerManager(secondsAfterThirdConnection, secondsDuringTurn, socketPort, rmiPort, skulls);
         serverManager.run();
-        while (!serverManager.allServerReady()) {
-            try {
-                sleep(MILLIS_TO_WAIT);
-            } catch (InterruptedException e) {
-            }
-        }
-        while (keepAlive) {
-        }
-        //serverManager.shutDownAllServers();
     }
+
+    /**
+     * Manages the insertion of an integer on command line input,
+     * asking it again until it not a valid value.
+     *
+     * @param stdin          is the input scanner
+     * @param minValue       is the minimum acceptable value of the input
+     * @param maxValue       is the maximum acceptable value of the input
+     * @param forbiddenValue is a forbidden value of the input
+     * @return the value of the input
+     */
 
     private static int manageIntInput(Scanner stdin, int minValue, int maxValue, int forbiddenValue) {
         int output;

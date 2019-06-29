@@ -4,6 +4,10 @@ import it.polimi.ingsw.network.Message;
 import it.polimi.ingsw.network.Protocol;
 import it.polimi.ingsw.utils.Parser;
 
+/**
+ * This class represent a single communication between server and client according to rmi technology.
+ */
+
 public class RmiCommunication extends SingleCommunication {
 
     private RmiClientInterface client;
@@ -15,16 +19,18 @@ public class RmiCommunication extends SingleCommunication {
         this.rmiServer = rmiServer;
     }
 
+    /**
+     * Sends message through rmi server. If time exceeds, it sends a notification then it unregisters the client.
+     */
+
     @Override
     public void run() {
-        String answer = rmiServer.getImplementation().sendMessageAndGetAnswer(client, message);
-        serverManager.setAnswer(number, answer);
-        System.out.println("User " + number + ": " + answer);//it shows answer on server log
+        String answer = rmiServer.sendMessageAndGetAnswer(client, message);
+        showAndSetAnswer(number, answer);
         if(timeExceeded) {
-            answer = rmiServer.getImplementation().sendMessageAndGetAnswer(client, new Parser().serialize(new Message(Protocol.TIME_EXCEEDED, "", null)));
-            serverManager.setAnswer(number, answer);
-            System.out.println("User " + number + ": " + answer);
-            rmiServer.unregistry(client);
+            answer = rmiServer.sendMessageAndGetAnswer(client, new Parser().serialize(new Message(Protocol.TIME_EXCEEDED, "", null)));
+            showAndSetAnswer(number, answer);
+            rmiServer.unregister(client);
         }
     }
 }
