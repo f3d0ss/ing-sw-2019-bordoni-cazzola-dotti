@@ -46,7 +46,7 @@ public class Weapon {
     /**
      * This method returns true if the weapon is loaded
      *
-     * @return
+     * @return true if weapon is loaded
      */
     public boolean isLoaded() {
         return loaded;
@@ -122,13 +122,16 @@ public class Weapon {
         List<WeaponCommand> possibleCommands = new ArrayList<>();
         if (!targetSquares.isEmpty() && !targetPlayers.isEmpty()) {
             for (Square square : gameboard.getReachableSquare(targetPlayers.get(0).getPosition(), selectedWeaponMode.getMaxTargetMove())) { //generate a ShootCommand for each possible move of the target
-                List<EffectCommand> effectCommands = new ArrayList<>();
+                LinkedHashSet<EffectCommand> effectCommands = new LinkedHashSet<>();
                 if (square.equals(targetSquares.get(0)))//if target player moves on target square
                     effectCommands.add(new EffectCommand(targetPlayers.get(0), selectedWeaponMode.getDamage(0) + selectedWeaponMode.getDamage(1), selectedWeaponMode.getMarks(), square, shooter.getId()));
                 else
                     effectCommands.add(new EffectCommand(targetPlayers.get(0), selectedWeaponMode.getDamage(0), selectedWeaponMode.getMarks(), square, shooter.getId()));
-                targetSquares.get(0).getHostedPlayers(new ArrayList<>(Arrays.asList(shooter, targetPlayers.get(0)))).forEach(player -> effectCommands.add(new EffectCommand(player, selectedWeaponMode.getDamage(1), selectedWeaponMode.getMarks(), player.getPosition(), shooter.getId()))); //damage players on target square (can be done outside loop)
-                possibleCommands.add(new ShootCommand(state, effectCommands, shooter));
+                targetSquares.get(0).getHostedPlayers(new ArrayList<>(Arrays.asList(shooter, targetPlayers.get(0))))
+                        .stream()
+                        .filter(player -> !player.equals(shooter))
+                        .forEach(player -> effectCommands.add(new EffectCommand(player, selectedWeaponMode.getDamage(1), selectedWeaponMode.getMarks(), player.getPosition(), shooter.getId()))); //damage players on target square (can be done outside loop)
+                possibleCommands.add(new ShootCommand(state, new ArrayList<>(effectCommands), shooter));
             }
         }
         return possibleCommands;
@@ -142,33 +145,29 @@ public class Weapon {
 
     /**
      * Create a ShootCommand with all target players (same damage to everyone getDamage(0), no moves)
-     *
-     * @param shooter
-     * @param state
-     * @return
      */
     private ShootCommand createShootCommandGetDamageZero(Player shooter, ReadyToShootState state) {
-        List<EffectCommand> effectCommands = new ArrayList<>();
-        targetPlayers.forEach(player -> effectCommands.add(new EffectCommand(player, selectedWeaponMode.getDamage(0), selectedWeaponMode.getMarks(), player.getPosition(), shooter.getId())));
-        return new ShootCommand(state, effectCommands, shooter);
+        LinkedHashSet<EffectCommand> effectCommands = new LinkedHashSet<>();
+        targetPlayers.stream()
+                .filter(player -> !player.getId().equals(shooter.getId()))
+                .forEach(player -> effectCommands.add(new EffectCommand(player, selectedWeaponMode.getDamage(0), selectedWeaponMode.getMarks(), player.getPosition(), shooter.getId())));
+        return new ShootCommand(state, new ArrayList<>(effectCommands), shooter);
     }
 
     /**
      * Create a ShootCommand with all target players (no moves)
-     *
-     * @param shooter
-     * @param state
-     * @return
      */
     private ShootCommand createSimpleShootCommand(Player shooter, ReadyToShootState state) {
         return new ShootCommand(state, createSimpleEffectCommandList(shooter), shooter);
     }
 
     private List<EffectCommand> createSimpleEffectCommandList(Player shooter) {
-        List<EffectCommand> effectCommands = new ArrayList<>();
-        for (int i = 0; i < targetPlayers.size(); i++)
-            effectCommands.add(new EffectCommand(targetPlayers.get(i), selectedWeaponMode.getDamage(i), selectedWeaponMode.getMarks(), targetPlayers.get(i).getPosition(), shooter.getId()));
-        return effectCommands;
+        LinkedHashSet<EffectCommand> effectCommands = new LinkedHashSet<>();
+        for (int i = 0; i < targetPlayers.size(); i++) {
+            if (!targetPlayers.get(i).getId().equals(shooter.getId()))
+                effectCommands.add(new EffectCommand(targetPlayers.get(i), selectedWeaponMode.getDamage(i), selectedWeaponMode.getMarks(), targetPlayers.get(i).getPosition(), shooter.getId()));
+        }
+        return new ArrayList<>(effectCommands);
     }
 
     private List<WeaponCommand> getPossibleShootCommandsTargetPlayersAdditionalDamage(Player shooter, ReadyToShootState state) {
@@ -181,7 +180,9 @@ public class Weapon {
                 if (i == j && selectedWeaponMode.getAdditionalDamageAvailable() == 1 || i != j && selectedWeaponMode.getAdditionalDamageAvailable() == 2 || selectedWeaponMode.getAdditionalDamageAvailable() == 2 && targetPlayers.size() == 2) {
                     damage += selectedWeaponMode.getMaxAdditionalDamagePerPlayer();
                 }
-                effectCommands.add(new EffectCommand(targetPlayers.get(i), damage, selectedWeaponMode.getMarks(), targetPlayers.get(i).getPosition(), shooter.getId()));
+                if (!targetPlayers.get(i).getId().equals(shooter.getId())) {
+                    effectCommands.add(new EffectCommand(targetPlayers.get(i), damage, selectedWeaponMode.getMarks(), targetPlayers.get(i).getPosition(), shooter.getId()));
+                }
                 if (selectedWeaponMode.getAdditionalDamageAvailable() == 2 && targetPlayers.size() == 2)
                     break;
             }
@@ -193,7 +194,7 @@ public class Weapon {
     private List<WeaponCommand> getPossibleShootCommandsTargetPlayers(GameBoard gameboard, Player shooter, ReadyToShootState state) {
         List<WeaponCommand> possibleCommands = new ArrayList<>();
         if (!selectedWeaponMode.isMoveTargetAfterShoot()) {
-            if (name.equals("PowerGlove")) { //shooter must move on last target square
+            if (name.equals("Power Glove")) { //shooter must move on last target square
                 List<EffectCommand> effectCommands = createSimpleEffectCommandList(shooter);
                 effectCommands.add(new EffectCommand(shooter, 0, 0, targetPlayers.get(targetPlayers.size() - 1).getPosition(), shooter.getId()));
                 possibleCommands.add(new ShootCommand(state, effectCommands, shooter));
@@ -218,11 +219,11 @@ public class Weapon {
         if (selectedWeaponMode.getMaxNumberOfTargetPlayers() != 4) {
             for (int i = 0; i < targetPlayers.size(); i++)
                 effectCommands.add(new EffectCommand(targetPlayers.get(i), selectedWeaponMode.getDamage(i), selectedWeaponMode.getMarks(), targetPlayers.get(i).getPosition(), shooter.getId()));
-        } else {
+        } else if (!targetSquares.isEmpty()) {
             for (Player targetPlayer : targetPlayers) {
                 if (targetPlayer.getPosition() == targetSquares.get(0))
                     effectCommands.add(new EffectCommand(targetPlayer, selectedWeaponMode.getDamage(0), selectedWeaponMode.getMarks(), targetPlayer.getPosition(), shooter.getId()));
-                if (targetPlayer.getPosition() == targetSquares.get(0))
+                if (targetPlayer.getPosition() != targetSquares.get(0))
                     effectCommands.add(new EffectCommand(targetPlayer, selectedWeaponMode.getDamage(1), selectedWeaponMode.getMarks(), targetPlayer.getPosition(), shooter.getId()));
             }
         }
@@ -287,15 +288,21 @@ public class Weapon {
     private List<WeaponCommand> getPossibleSelectTargetCommandsTargetCanMoveBeforeShoot(GameBoard gameboard, Player shooter, ReadyToShootState state) {
         List<WeaponCommand> possibleCommands = new ArrayList<>();
         if (targetSquares.isEmpty()) { //select a square (first call)
-            List<Square> possibleTargetSquares = new ArrayList<>();
-            if (selectedWeaponMode.isTargetVisibleByShooter()) //target square must be visible and with players that can be moved to it
-                possibleTargetSquares.addAll(gameboard.getReachableSquaresWithOtherPlayers(gameboard.getVisibleSquares(shooter.getPosition(), selectedWeaponMode.getMaxTargetDistance(), selectedWeaponMode.getMinTargetDistance(), false), selectedWeaponMode.getMaxTargetMove(), shooter));
-            for (Square possibleTarget : possibleTargetSquares)
-                possibleCommands.add(new SelectTargetSquareCommand(state, possibleTarget));
-        } else { //pick target players if not already selected (second call)
+            List<Square> visibleSquares = gameboard.getVisibleSquares(shooter.getPosition(), selectedWeaponMode.getMaxTargetDistance(), selectedWeaponMode.getMinTargetDistance(), false);
+            visibleSquares.stream()
+                    .filter(square -> !gameboard.getReachableSquaresWithOtherPlayers(square, selectedWeaponMode.getMaxTargetMove(), shooter).isEmpty())
+                    .filter(square -> !square.equals(shooter.getPosition()) || selectedWeaponMode.getMaxTargetDistance() <= 0)
+                    .forEach(square -> {
+                        if (selectedWeaponMode.getMaxTargetDistance() == 0 && selectedWeaponMode.getMinTargetDistance() == 0)
+                            targetSquares.add(square);
+                        else
+                            possibleCommands.add(new SelectTargetSquareCommand(state, square));
+                    });
+        }
+        if (!targetSquares.isEmpty()) { //pick target players if not already selected (second call)
             List<Player> otherPlayersOnReachableSquares = gameboard.getOtherPlayersOnReachableSquares(targetSquares.get(0), selectedWeaponMode.getMaxTargetMove(), shooter);
             for (Player possibleTargetPlayer : otherPlayersOnReachableSquares)
-                if (!targetPlayers.contains(possibleTargetPlayer))
+                if (!targetPlayers.contains(possibleTargetPlayer) && !possibleTargetPlayer.getId().equals(shooter.getId()))
                     possibleCommands.add(new SelectTargetPlayerCommand(state, possibleTargetPlayer));
         }
         return possibleCommands;
@@ -304,7 +311,10 @@ public class Weapon {
     private List<WeaponCommand> getPossibleSelectTargetCommandsMultiTarget(GameBoard gameboard, Player shooter, ReadyToShootState state) {
         List<WeaponCommand> possibleCommands = new ArrayList<>();
         if (targetPlayers.isEmpty())
-            gameboard.getVisibleTargets(shooter, selectedWeaponMode.getMaxTargetDistance(), selectedWeaponMode.getMinTargetDistance()).forEach(player -> possibleCommands.add(new SelectTargetPlayerCommand(state, player)));
+            gameboard.getVisibleTargets(shooter, selectedWeaponMode.getMaxTargetDistance(), selectedWeaponMode.getMinTargetDistance())
+                    .stream()
+                    .filter(possibleTargetPlayer -> !possibleTargetPlayer.getId().equals(shooter.getId()))
+                    .forEach(player -> possibleCommands.add(new SelectTargetPlayerCommand(state, player)));
         if (targetSquares.isEmpty())
             gameboard.getVisibleSquares(shooter.getPosition(), selectedWeaponMode.getMaxTargetDistance(), selectedWeaponMode.getMinTargetDistance(), false).forEach(square -> possibleCommands.add(new SelectTargetSquareCommand(state, square)));
         return possibleCommands;
@@ -331,23 +341,35 @@ public class Weapon {
 
     private List<WeaponCommand> getPossibleSelectTargetCommandsTargetPlayersVisibleStandard(GameBoard gameboard, Player shooter, ReadyToShootState state) {
         List<Player> visibleTargets = gameboard.getVisibleTargets(shooter, selectedWeaponMode.getMaxTargetDistance(), selectedWeaponMode.getMinTargetDistance());
-        targetPlayers.forEach(targetPlayer -> visibleTargets.stream().filter(newTarget -> targetPlayer.getId().equals(newTarget.getId())).forEachOrdered(visibleTargets::remove));
+        for (Player targetPlayer1 : targetPlayers) {
+            visibleTargets = visibleTargets.stream()
+                    .filter(newTarget -> !targetPlayer1.getId().equals(newTarget.getId()))
+                    .collect(Collectors.toList());
+        }
         if (selectedWeaponMode.isEachTargetOnDifferentSquares()) //shockwave basiceffect
-            targetPlayers.forEach(targetPlayer -> visibleTargets.stream().filter(newTarget -> targetPlayer.getPosition().equals(newTarget.getPosition())).forEachOrdered(visibleTargets::remove));
-        return visibleTargets.stream().map(player -> new SelectTargetPlayerCommand(state, player)).collect(Collectors.toList());
+        {
+            for (Player targetPlayer1 : targetPlayers) {
+                visibleTargets = visibleTargets.stream()
+                        .filter(newTarget -> !targetPlayer1.getPosition().equals(newTarget.getPosition()))
+                        .collect(Collectors.toList());
+            }
+        }
+        return visibleTargets.stream()
+                .filter(possibleTargetPlayer -> !possibleTargetPlayer.getId().equals(shooter.getId()))
+                .map(player -> new SelectTargetPlayerCommand(state, player)).collect(Collectors.toList());
     }
 
     private List<WeaponCommand> getPossibleSelectTargetCommandsTargetPlayersVisibleByOtherTarget(GameBoard gameboard, Player shooter, ReadyToShootState state) {
         List<WeaponCommand> possibleCommands = new ArrayList<>();
         List<Player> visibleTargets = gameboard.getVisibleTargets(targetPlayers.get(targetPlayers.size() - 1), selectedWeaponMode.getMaxTargetDistance(), selectedWeaponMode.getMinTargetDistance());
-        for (Player visibleTarget : visibleTargets) {
-            for (Player targetPlayer : targetPlayers) {
-                if (visibleTarget.getId().equals(shooter.getId()) || visibleTarget.getId().equals(targetPlayer.getId())) {
-                    visibleTargets.remove(visibleTarget);
-                }
-            }
+        for (Player targetPlayer : targetPlayers) {
+            visibleTargets = visibleTargets.stream()
+                    .filter(visibleTarget -> !visibleTarget.getId().equals(shooter.getId()) && !visibleTarget.getId().equals(targetPlayer.getId()))
+                    .collect(Collectors.toList());
         }
-        visibleTargets.forEach(player -> possibleCommands.add(new SelectTargetPlayerCommand(state, player)));
+        visibleTargets.stream()
+                .filter(possibleTargetPlayer -> !possibleTargetPlayer.getId().equals(shooter.getId()))
+                .forEach(player -> possibleCommands.add(new SelectTargetPlayerCommand(state, player)));
         return possibleCommands;
     }
 
@@ -357,7 +379,10 @@ public class Weapon {
             List<Player> visibleTargets = gameboard.getVisibleTargets(shooter, selectedWeaponMode.getMaxTargetDistance(), selectedWeaponMode.getMinTargetDistance());
             if (selectedWeaponMode.getName().contains("tsunami")) //directly pick targets
                 targetPlayers.addAll(visibleTargets);
-            visibleTargets.forEach(player -> possibleCommands.add(new SelectTargetPlayerCommand(state, player)));
+            else
+                visibleTargets.stream()
+                        .filter(possibleTargetPlayer -> !possibleTargetPlayer.getId().equals(shooter.getId()))
+                        .forEach(player -> possibleCommands.add(new SelectTargetPlayerCommand(state, player)));
         } else {
             if (name.equals("Hellion") && targetPlayers.size() == 1) //add other players on the same square (shooter cant be on this square)
                 targetPlayers.addAll(targetPlayers.get(0).getPosition().getHostedPlayers(targetPlayers.get(0)));
@@ -374,26 +399,50 @@ public class Weapon {
         List<WeaponCommand> possibleCommands = new ArrayList<>();
         if (selectedWeaponMode.isTargetVisibleByShooter()) {//PowerGlove rocketfistmode
             if (targetPlayers.isEmpty())
-                gameboard.getVisibleTargets(shooter, selectedWeaponMode.getMaxTargetDistance(), selectedWeaponMode.getMinTargetDistance()).forEach(player -> possibleCommands.add(new SelectTargetPlayerCommand(state, player)));
+                gameboard.getVisibleTargets(shooter, selectedWeaponMode.getMaxTargetDistance(), selectedWeaponMode.getMinTargetDistance())
+                        //.stream()
+                        ///.filter(possibleTargetPlayer -> !possibleTargetPlayer.getId().equals(shooter.getId()))
+                        .forEach(player -> possibleCommands.add(new SelectTargetPlayerCommand(state, player)));
             else {
                 Square squareInTheSameDirection = gameboard.getThirdSquareInTheSameDirection(shooter.getPosition(), targetPlayers.get(0).getPosition(), false);
                 if (squareInTheSameDirection != null)
-                    squareInTheSameDirection.getHostedPlayers().forEach(player -> possibleCommands.add(new SelectTargetPlayerCommand(state, player)));
+                    squareInTheSameDirection.getHostedPlayers()
+                            //.stream()
+                            //.filter(possibleTargetPlayer -> !possibleTargetPlayer.getId().equals(shooter.getId()))
+                            .forEach(player -> possibleCommands.add(new SelectTargetPlayerCommand(state, player)));
             }
         } else { //RAILGUN
             if (targetPlayers.isEmpty())
-                gameboard.getPlayersOnCardinalDirectionSquares(shooter, selectedWeaponMode.getMaxTargetDistance(), selectedWeaponMode.getMinTargetDistance(), true).forEach(player -> possibleCommands.add(new SelectTargetPlayerCommand(state, player)));
+                gameboard.getPlayersOnCardinalDirectionSquares(shooter, selectedWeaponMode.getMaxTargetDistance(), selectedWeaponMode.getMinTargetDistance(), true)
+                        .stream()
+                        .filter(possibleTargetPlayer -> !possibleTargetPlayer.getId().equals(shooter.getId()))
+                        .forEach(player -> possibleCommands.add(new SelectTargetPlayerCommand(state, player)));
             else  //target another player in the same direction
-                gameboard.getPlayersInTheSameDirection(shooter, targetPlayers, selectedWeaponMode.getMaxTargetDistance(), selectedWeaponMode.getMinTargetDistance(), true).forEach(player -> possibleCommands.add(new SelectTargetPlayerCommand(state, player)));
+            {
+                if (targetPlayers.get(0).getPosition().equals(shooter.getPosition())) { //samesquare check
+                    gameboard.getPlayersOnCardinalDirectionSquares(shooter, selectedWeaponMode.getMaxTargetDistance(), selectedWeaponMode.getMinTargetDistance(), true)
+                            .stream()
+                            .distinct()
+                            .filter(possibleTargetPlayer -> !possibleTargetPlayer.getId().equals(shooter.getId()))
+                            .filter(possibleTargetPlayer -> !possibleTargetPlayer.getId().equals(targetPlayers.get(0).getId()))
+                            .forEach(player -> possibleCommands.add(new SelectTargetPlayerCommand(state, player)));
+                }
+                gameboard.getPlayersInTheSameDirection(shooter, targetPlayers, selectedWeaponMode.getMaxTargetDistance(), selectedWeaponMode.getMinTargetDistance(), true)
+                        .stream()
+                        .filter(possibleTargetPlayer -> !possibleTargetPlayer.getId().equals(shooter.getId()))
+                        .filter(possibleTargetPlayer -> !possibleTargetPlayer.getId().equals(targetPlayers.get(0).getId()))
+                        .forEach(player -> possibleCommands.add(new SelectTargetPlayerCommand(state, player)));
+            }
         }
         return possibleCommands;
     }
 
     private List<WeaponCommand> getPossibleSelectTargetCommandsTargetPlayersNotVisible(GameBoard gameboard, Player shooter, ReadyToShootState state) {
-        List<Player> allOtherPlayers = shooter.getMatch().getCurrentPlayers();
+        List<Player> allOtherPlayers = new ArrayList<>(shooter.getMatch().getCurrentPlayers());
         allOtherPlayers.remove(shooter);
-        allOtherPlayers.removeAll(gameboard.getVisibleTargets(shooter, Integer.MAX_VALUE, 0));
-        return allOtherPlayers.stream().map(player -> new SelectTargetPlayerCommand(state, player)).collect(Collectors.toList());
+        allOtherPlayers.removeAll(gameboard.getVisibleTargets(shooter, GameBoard.ROWS * GameBoard.COLUMNS - 1, 0));
+        return allOtherPlayers.stream()
+                .map(player -> new SelectTargetPlayerCommand(state, player)).collect(Collectors.toList());
     }
 
     private List<WeaponCommand> getPossibleSelectTargetCommandsTargetPlayers(GameBoard gameboard, Player shooter, ReadyToShootState state) {
@@ -409,25 +458,30 @@ public class Weapon {
 
     private List<WeaponCommand> getPossibleSelectTargetCommandsTargetSquareFlameThrower(GameBoard gameBoard, Player shooter, ReadyToShootState state) {
         List<WeaponCommand> possibleCommands = new ArrayList<>();
-        List<Player> possibleTargetPlayers = new ArrayList<>();
+        final int maxTargets = 4;
         if (targetSquares.size() == 1) {
-            Square secondTargetSquare = gameBoard.getThirdSquareInTheSameDirection(shooter.getPosition(), targetSquares.get(0), false);
-            if (secondTargetSquare != null) //ask possible 2nd square in the same direction (flameth)
-                possibleCommands.add(new SelectTargetSquareCommand(state, secondTargetSquare));
-            if (targetPlayers.isEmpty()) {
-                if (selectedWeaponMode.getMaxNumberOfTargetPlayers() != 4) { //select max 1 player per square
-                    possibleTargetPlayers.addAll(targetSquares.get(0).getHostedPlayers(shooter));
-                    possibleTargetPlayers.forEach(player -> possibleCommands.add(new SelectTargetPlayerCommand(state, player)));
-                } else
-                    targetPlayers.addAll(targetSquares.get(0).getHostedPlayers(shooter));
+            if (!targetPlayers.isEmpty() || selectedWeaponMode.getMaxNumberOfTargetPlayers() == maxTargets) { //pick 2nd square after players on the 1st one
+                Square secondTargetSquare = gameBoard.getThirdSquareInTheSameDirection(shooter.getPosition(), targetSquares.get(0), false);
+                if (secondTargetSquare != null && secondTargetSquare.hasOtherPlayers(shooter)) //ask possible 2nd square in the same direction (flameth)
+                    possibleCommands.add(new SelectTargetSquareCommand(state, secondTargetSquare));
+            } else if (selectedWeaponMode.getMaxNumberOfTargetPlayers() != maxTargets) { //select max 1 player per square
+                List<Player> possibleTargetPlayers = new ArrayList<>(targetSquares.get(0).getHostedPlayers(shooter));
+                possibleTargetPlayers.stream()
+                        .filter(possibleTargetPlayer -> !possibleTargetPlayer.getId().equals(shooter.getId()))
+                        .distinct()
+                        .forEach(player -> possibleCommands.add(new SelectTargetPlayerCommand(state, player)));
             }
-        } else {
-            if (selectedWeaponMode.getMaxNumberOfTargetPlayers() != 4 && targetPlayers.size() == 1) {
-                possibleTargetPlayers.addAll(targetSquares.get(1).getHostedPlayers(shooter));
-                possibleTargetPlayers.forEach(player -> possibleCommands.add(new SelectTargetPlayerCommand(state, player)));
+            if (selectedWeaponMode.getMaxNumberOfTargetPlayers() == maxTargets)
+                targetPlayers.addAll(targetSquares.get(0).getHostedPlayers(shooter));
+        } else { //manage 2nd square
+            if (selectedWeaponMode.getMaxNumberOfTargetPlayers() != maxTargets) {
+                targetSquares.get(1).getHostedPlayers(shooter).stream()
+                        .filter(possibleTargetPlayer -> !possibleTargetPlayer.getId().equals(targetPlayers.get(0).getId()))
+                        .forEach(player -> possibleCommands.add(new SelectTargetPlayerCommand(state, player)));
             } else if (!targetPlayers.containsAll(targetSquares.get(1).getHostedPlayers(shooter)))
                 targetPlayers.addAll(targetSquares.get(1).getHostedPlayers(shooter));
         }
+        targetPlayers = targetPlayers.stream().distinct().collect(Collectors.toList());
         return possibleCommands;
     }
 
@@ -437,7 +491,9 @@ public class Weapon {
         //add other players on the same square
         if (targetPlayers.isEmpty()) { //commands to target 1st player
             targetSquares.stream().map(square -> square.getHostedPlayers(shooter)).forEach(possibleTargetPlayers::addAll);
-            possibleTargetPlayers.forEach(player -> possibleCommands.add(new SelectTargetPlayerCommand(state, player)));
+            possibleTargetPlayers.stream()
+                    .filter(possibleTargetPlayer -> !possibleTargetPlayer.getId().equals(shooter.getId()))
+                    .forEach(player -> possibleCommands.add(new SelectTargetPlayerCommand(state, player)));
         } else if (targetPlayers.size() == 1) //add other players on the square (fragmenting warhead effect)
             targetPlayers.addAll(targetPlayers.get(0).getPosition().getHostedPlayers(new ArrayList<>(Arrays.asList(shooter, targetPlayers.get(0)))));
         return possibleCommands;
@@ -449,7 +505,8 @@ public class Weapon {
             List<Square> possibleTargetSquares = new ArrayList<>();
             if (selectedWeaponMode.isCardinalDirectionMode())
                 possibleTargetSquares.addAll(gameboard.getVisibleSquares(shooter.getPosition(), selectedWeaponMode.getMinTargetDistance(), selectedWeaponMode.getMinTargetDistance(), true));
-            possibleTargetSquares.addAll(gameboard.getVisibleSquares(shooter.getPosition(), selectedWeaponMode.getMaxTargetDistance(), selectedWeaponMode.getMinTargetDistance(), true));
+            else
+                possibleTargetSquares.addAll(gameboard.getVisibleSquares(shooter.getPosition(), selectedWeaponMode.getMaxTargetDistance(), selectedWeaponMode.getMinTargetDistance(), true));
             possibleTargetSquares.stream().filter(square -> square.hasOtherPlayers(shooter)).forEach(square -> possibleCommands.add(new SelectTargetSquareCommand(state, square)));
         } else {
             if (selectedWeaponMode.isCardinalDirectionMode()) {
@@ -465,18 +522,18 @@ public class Weapon {
     /**
      * This method returns the possible commands to execute ( ExtraMoveCommands, SelectTargetCommands, ShootCommands)
      *
-     * @param gameboard
-     * @param shooter
-     * @param state
+     * @param gameboard Gameboard
+     * @param shooter   Player who is using the weapon
+     * @param state     Shooter's state
      * @return List of all possible commands to execute
      */
     public List<Command> getPossibleCommands(GameBoard gameboard, Player shooter, ReadyToShootState state) {
         List<Command> possibleCommands = new ArrayList<>();
         if (hasExtraMove())
             possibleCommands.addAll(getPossibleExtraMoveCommands(gameboard, shooter, state));
-        if (!hasMaximumTargets())
+        if (!hasMaximumTargets() && hasDamageToDo())
             possibleCommands.addAll(getPossibleSelectTargetCommands(gameboard, shooter, state));
-        if (hasSufficientTargets())
+        if (hasSufficientTargets() && hasDamageToDo())
             possibleCommands.addAll(getPossibleShootCommands(gameboard, shooter, state));
         return possibleCommands;
     }
@@ -484,9 +541,11 @@ public class Weapon {
     private List<MoveCommand> getPossibleExtraMoveCommands(GameBoard gameBoard, Player shooter, ReadyToShootState state) {
         Square currentPosition = shooter.getPosition();
         List<MoveCommand> list = new ArrayList<>();
-        for (Square square : shooter.getAccessibleSquare(selectedWeaponMode.getMaxShooterMove())) {
+        List<Square> shooterAccessibleSquare = shooter.getAccessibleSquare(selectedWeaponMode.getMaxShooterMove());
+        shooterAccessibleSquare.remove(currentPosition);
+        for (Square square : shooterAccessibleSquare) {
             shooter.untracedMove(square);
-            if (!getPossibleSelectTargetCommands(gameBoard, shooter, state).isEmpty()) {
+            if (!loaded || !getPossibleSelectTargetCommands(gameBoard, shooter, state).isEmpty()) {
                 MoveCommand moveCommand = new MoveCommand(shooter, square, state);
                 list.add(moveCommand);
             }
@@ -506,9 +565,9 @@ public class Weapon {
     /**
      * This method returns the commands to select which weapon mode to use.
      *
-     * @param player
-     * @param state
-     * @return List of the commands
+     * @param player Player who is using the weapon
+     * @param state  Shooter's state
+     * @return List of commands to select a weapon mode.
      */
     public List<SelectWeaponModeCommand> getSelectWeaponModeCommands(Player player, ChoosingWeaponOptionState state) {
         return weaponModes.stream()
@@ -569,9 +628,11 @@ public class Weapon {
     /**
      * This method returns true if the weapon can generate MoveCommands when invoked
      *
-     * @return
+     * @return true if weapon can move its owner
      */
     public boolean hasExtraMove() {
+        if (selectedWeaponMode.getName().contains("slice and dice"))
+            return extraMoveToDo && !hasMaximumTargets();
         return extraMoveToDo && !isSelectingTargets();
     }
 
@@ -602,16 +663,16 @@ public class Weapon {
     /**
      * This method returns true if the weapon can shoot again
      *
-     * @return
+     * @return True if weapon can shoot
      */
     public boolean hasDamageToDo() {
         return damageToDo > 0;
     }
 
     /**
-     * This method returns true if a square or a player has been selected
+     * This method returns true if a target square or a player has been selected
      *
-     * @return
+     * @return True if target has been selected
      */
     private boolean isSelectingTargets() {
         return !targetPlayers.isEmpty() || !targetSquares.isEmpty();
@@ -635,6 +696,9 @@ public class Weapon {
         targetSquares = new ArrayList<>();
     }
 
+    /**
+     * Must be called to instantiate some fields which are not saved on json
+     */
     public void postDeserialization() {
         resetTargetLists();
         loaded = true;

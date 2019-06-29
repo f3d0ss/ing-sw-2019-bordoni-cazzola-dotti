@@ -170,8 +170,11 @@ public class GameBoard {
 
     public List<Player> getPlayersOnCardinalDirectionSquares(Player shooter, int maxRange, int minRange, boolean ignoreWalls) {
         List<Player> players = new ArrayList<>();
-        getCardinalDirectionSquares(shooter.getPosition(), maxRange, minRange, ignoreWalls).stream().map(square -> square.getHostedPlayers(shooter)).forEach(players::addAll);
-        return players;
+        getCardinalDirectionSquares(shooter.getPosition(), maxRange, minRange, ignoreWalls)
+                .stream()
+                .map(square -> square.getHostedPlayers(shooter))
+                .forEach(players::addAll);
+        return players.stream().distinct().collect(Collectors.toList());
     }
 
     /**
@@ -259,8 +262,11 @@ public class GameBoard {
      */
     public List<Player> getVisibleTargets(Player shooter, int maxDistance, int minDistance) {
         List<Player> targets = new ArrayList<>();
-        getVisibleSquares(shooter.getPosition(), maxDistance, minDistance, true).stream().map(s -> s.getHostedPlayers(shooter)).forEach(targets::addAll);
-        return targets;
+        getVisibleSquares(shooter.getPosition(), maxDistance, minDistance, true)
+                .stream()
+                .map(s -> s.getHostedPlayers(shooter))
+                .forEach(targets::addAll);
+        return targets.stream().distinct().collect(Collectors.toList());
     }
 
     /**
@@ -301,21 +307,23 @@ public class GameBoard {
      * @return
      */
     public Square getThirdSquareInTheSameDirection(Square firstSquare, Square secondSquare, boolean ignoreWall) {
+        if (firstSquare == secondSquare)
+            return null;
         final int firstSquareRow = firstSquare.getRow();
         final int firstSquareCol = firstSquare.getCol();
         final int secondSquareRow = secondSquare.getRow();
         final int secondSquareCol = secondSquare.getCol();
         if (firstSquareRow == secondSquareRow) {
-            if (firstSquareCol < secondSquareCol && secondSquare.getConnection(CardinalDirection.WEST).isAccessible(ignoreWall)) {
+            if (firstSquareCol < secondSquareCol && secondSquare.getConnection(CardinalDirection.EAST).isAccessible(ignoreWall)) {
                 return board[firstSquareRow][secondSquareCol + 1];
             }
-            if (secondSquare.getConnection(CardinalDirection.EAST).isAccessible(ignoreWall))
+            if (firstSquareCol > secondSquareCol && secondSquare.getConnection(CardinalDirection.WEST).isAccessible(ignoreWall))
                 return board[firstSquareRow][secondSquareCol - 1];
         }
         if (firstSquareCol == secondSquareCol) {
             if (firstSquareRow < secondSquareRow && secondSquare.getConnection(CardinalDirection.SOUTH).isAccessible(ignoreWall))
                 return board[secondSquareRow + 1][firstSquareCol];
-            if (secondSquare.getConnection(CardinalDirection.NORTH).isAccessible(ignoreWall))
+            if (firstSquareRow > secondSquareRow && secondSquare.getConnection(CardinalDirection.NORTH).isAccessible(ignoreWall))
                 return board[secondSquareRow - 1][firstSquareCol];
         }
         return null;
@@ -346,8 +354,8 @@ public class GameBoard {
     private CardinalDirection getCardinalDirection(Square origin, Square target) {
         if (origin.getRow() == target.getRow()) {
             if (origin.getCol() <= target.getCol())
-                return CardinalDirection.WEST;
-            return CardinalDirection.EAST;
+                return CardinalDirection.EAST;
+            return CardinalDirection.WEST;
         }
         if (origin.getCol() == target.getCol()) {
             if (origin.getRow() <= target.getRow())

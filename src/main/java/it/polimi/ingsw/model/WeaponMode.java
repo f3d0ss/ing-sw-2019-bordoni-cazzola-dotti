@@ -1,9 +1,12 @@
 package it.polimi.ingsw.model;
 
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.util.*;
 
 /**
  * This class represents a weapon's mode
@@ -41,7 +44,7 @@ public class WeaponMode {
     private int maxTargetMove;
     private int maxShooterMove;
 
-   /* public static void main(String[] args) {
+    public static void main(String[] args) {
         GsonBuilder g = new GsonBuilder();
         g.setPrettyPrinting();
         g.serializeNulls();
@@ -61,19 +64,18 @@ public class WeaponMode {
         int c = 1;
         for (Weapon w : weaponList)
             for (WeaponMode wm : w.getWeaponModes()) {
-                if (!wm.isMoveTargetBeforeShoot() && !wm.isTargetSquare() && wm.isTargetPlayers() && wm.isTargetVisibleByShooter() && !wm.isCardinalDirectionMode()) {
-                    if (wm.moveTargetAfterShoot)
-                        System.out.println(c + " " + w.getName() + " " + wm.name + " " + " " + wm.description + " " + wm.getMaxTargetDistance() + " " + wm.getMinTargetDistance() + " maxtargets" + wm.maxNumberOfTargetPlayers + " min" + wm.getMinNumberOfTargetPlayers());
+                if (wm.isMoveShooter()) {
+                    System.out.println(c + " " + w.getName() + " " + wm.name + " " + " " + wm.description + " " + wm.getMaxTargetDistance() + " " + wm.getMinTargetDistance() + " maxtargets" + wm.maxNumberOfTargetPlayers + " min" + wm.getMinNumberOfTargetPlayers());
                     c++;
                 }
             }
-    }*/
+    }
 
     public String getName() {
         return name;
     }
 
-    public String getDescription() {
+    String getDescription() {
         return description;
     }
 
@@ -81,47 +83,47 @@ public class WeaponMode {
         return Objects.requireNonNullElseGet(cost, LinkedHashMap::new);
     }
 
-    public int getMaxNumberOfTargetPlayers() {
+    int getMaxNumberOfTargetPlayers() {
         return maxNumberOfTargetPlayers;
     }
 
-    public int getMinNumberOfTargetPlayers() {
+    int getMinNumberOfTargetPlayers() {
         return minNumberOfTargetPlayers;
     }
 
-    public boolean isTargetPlayers() {
+    boolean isTargetPlayers() {
         return targetPlayers;
     }
 
-    public boolean isTargetSquare() {
+    boolean isTargetSquare() {
         return targetSquare;
     }
 
-    public boolean isTargetRoom() {
+    boolean isTargetRoom() {
         return targetRoom;
     }
 
-    public boolean isEachTargetInTheSameRoom() {
+    boolean isEachTargetInTheSameRoom() {
         return eachTargetInTheSameRoom;
     }
 
-    public boolean isEachTargetOnTheSameSquare() {
+    boolean isEachTargetOnTheSameSquare() {
         return eachTargetOnTheSameSquare;
     }
 
-    public boolean isEachTargetOnDifferentSquares() {
+    boolean isEachTargetOnDifferentSquares() {
         return eachTargetOnDifferentSquares;
     }
 
-    public boolean isDamageEveryone() {
+    boolean isDamageEveryone() {
         return damageEveryone;
     }
 
-    public boolean isTargetVisibleByOtherTarget() {
+    boolean isTargetVisibleByOtherTarget() {
         return targetVisibleByOtherTarget;
     }
 
-    public boolean isTargetVisibleByShooter() {
+    boolean isTargetVisibleByShooter() {
         return targetVisibleByShooter;
     }
 
@@ -129,51 +131,51 @@ public class WeaponMode {
         return cardinalDirectionMode;
     }
 
-    public int getMaxTargetDistance() {
+    int getMaxTargetDistance() {
         return maxTargetDistance;
     }
 
-    public int getMinTargetDistance() {
+    int getMinTargetDistance() {
         return minTargetDistance;
     }
 
-    public int getMarks() {
+    int getMarks() {
         return marks;
     }
 
-    public List<Integer> getDamage() {
+    List<Integer> getDamage() {
         return damage;
     }
 
-    public int getDamage(int index) {
+    int getDamage(int index) {
         return damage.get(index);
     }
 
-    public int getAdditionalDamageAvailable() {
+    int getAdditionalDamageAvailable() {
         return additionalDamageAvailable;
     }
 
-    public int getMaxAdditionalDamagePerPlayer() {
+    int getMaxAdditionalDamagePerPlayer() {
         return maxAdditionalDamagePerPlayer;
     }
 
-    public boolean isMoveTargetBeforeShoot() {
+    boolean isMoveTargetBeforeShoot() {
         return moveTargetBeforeShoot;
     }
 
-    public boolean isMoveTargetAfterShoot() {
+    boolean isMoveTargetAfterShoot() {
         return moveTargetAfterShoot;
     }
 
-    public boolean isMoveShooter() {
+    boolean isMoveShooter() {
         return moveShooter;
     }
 
-    public int getMaxTargetMove() {
+    int getMaxTargetMove() {
         return maxTargetMove;
     }
 
-    public int getMaxShooterMove() {
+    int getMaxShooterMove() {
         return maxShooterMove;
     }
 
