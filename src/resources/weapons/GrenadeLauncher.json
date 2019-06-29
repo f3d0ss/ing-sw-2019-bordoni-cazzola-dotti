@@ -40,7 +40,7 @@
     },
     {
       "name": "basic effect + extra grenade",
-      "description": "Deal 1 damage to 1 target you can see. Then you may move the target 1 square. Deal 1 damage to every player on a square you can see. You can use this before or after the basic effect\u0027s move.",
+      "description": "Deal 1 damage to 1 target you can see. Then you may move the target 1 square. Deal 1 damage to every player on a square you can see. You can use this before or after the basic effect's move.",
       "cost": {
         "RED": 1
       },

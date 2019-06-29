@@ -76,7 +76,7 @@
     },
     {
       "name": "basic effect + fragmenting warhead",
-      "description": "Deal 2 damage to 1 target you can see that is not on your square. Then you may move the target 1 square. During the basic effect, deal 1 damage to every player on your target\u0027s original square – including the target, even if you move it.",
+      "description": "Deal 2 damage to 1 target you can see that is not on your square. Then you may move the target 1 square. During the basic effect, deal 1 damage to every player on your target's original square – including the target, even if you move it.",
       "cost": {
         "YELLOW": 1
       },
@@ -113,7 +113,7 @@
     },
     {
       "name": "basic effect + rocket jump + fragmenting warhead",
-      "description": "Deal 2 damage to 1 target you can see that is not on your square. Then you may move the target 1 square. Move 1 or 2 squares. This effect can be used either before or after the basic effect. During the basic effect, deal 1 damage to every player on your target\u0027s original square – including the target, even if you move it.",
+      "description": "Deal 2 damage to 1 target you can see that is not on your square. Then you may move the target 1 square. Move 1 or 2 squares. This effect can be used either before or after the basic effect. During the basic effect, deal 1 damage to every player on your target's original square – including the target, even if you move it.",
       "cost": {
         "BLUE": 1,
         "YELLOW": 1
