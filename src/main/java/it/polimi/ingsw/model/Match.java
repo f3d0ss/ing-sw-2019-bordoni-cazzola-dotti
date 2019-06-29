@@ -105,8 +105,8 @@ public class Match {
 
     public void setLeaderBoard(Map<PlayerId, Long> leaderBoard) {
         this.leaderBoard = leaderBoard;
-        views.values().forEach(v -> ((VirtualView) v).setGameOver());
         update();
+        views.values().forEach(v -> ((VirtualView) v).setGameOver());
     }
 
     public Player getPlayer(PlayerId id) {
