@@ -35,11 +35,27 @@ public enum Protocol {
         }
     }, INSERT_IP_AGAIN {
         public String getQuestion() {
-            return "Server non raggiungibile. Reimmetti l'indirizzo ip o riprova più tardi.";
+            return "Indirizzo ip non valido. Riprova.";
         }
 
         public boolean requiresAnswer() {
             return true;
+        }
+    }, INSERT_PORT_AGAIN {
+        public String getQuestion() {
+            return "Numero di porta non valido. Riprova.";
+        }
+
+        public boolean requiresAnswer() {
+            return true;
+        }
+    }, INVALID_CONNECTION_PARAMETERS {
+        public String getQuestion() {
+            return "Server non raggiungibile. Verifica che siano corretti indirizzo ip e porta o riprova più tardi.";
+        }
+
+        public boolean requiresAnswer() {
+            return false;
         }
     }, CONNECTING {
         public String getQuestion() {

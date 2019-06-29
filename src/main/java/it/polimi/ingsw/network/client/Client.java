@@ -4,9 +4,6 @@ import it.polimi.ingsw.network.*;
 import it.polimi.ingsw.utils.Parser;
 import it.polimi.ingsw.view.ConcreteView;
 
-import java.io.IOException;
-import java.rmi.NotBoundException;
-
 /**
  * This class represent a client regardless of the type of connection (Rmi or Socket)
  */
@@ -20,6 +17,7 @@ public class Client implements Runnable {
     protected String ip;
     protected int port;
     protected String portString;
+    protected boolean keepAlive = true;
 
     public Client(Ui ui) {
         this.ui = ui;
@@ -32,9 +30,6 @@ public class Client implements Runnable {
     public void run() {
     }
 
-    public void startClient() throws NotBoundException, IOException {
-    }
-
     /**
      * Recognizes the type of the message coming from server.
      *
@@ -45,15 +40,15 @@ public class Client implements Runnable {
     public String manageMessage(String gsonCoded) {
         Message fromServer = parser.deserialize(gsonCoded, Message.class);
         if (fromServer.type == Protocol.UPDATE_MATCH) {
-            view.update(((MatchViewTransfer)fromServer).getAttachment());
+            view.update(((MatchViewTransfer) fromServer).getAttachment());
             return Protocol.ACK;
         }
         if (fromServer.type == Protocol.UPDATE_PLAYER) {
-            view.update(((PlayerViewTransfer)fromServer).getAttachment());
+            view.update(((PlayerViewTransfer) fromServer).getAttachment());
             return Protocol.ACK;
         }
         if (fromServer.type == Protocol.UPDATE_SQUARE) {
-            view.update(((SquareViewTransfer)fromServer).getAttachment());
+            view.update(((SquareViewTransfer) fromServer).getAttachment());
             return Protocol.ACK;
         }
         if (fromServer.type == Protocol.INITIALIZATION_DONE) {
@@ -92,31 +87,38 @@ public class Client implements Runnable {
     }
 
     /**
-     * Checks is a string contains a valid port number.
+     * Checks if a string contains a valid port number.
      *
      * @param port is the string to be checked
-     * @return the result of check
+     * @return the port converted to integer if the result of check is positive, -1 otherwise
      */
 
-    protected static int isValidPort(String port){
+    protected static int isValidPort(String port) {
         int number;
         try {
             number = Integer.parseInt(port);
         } catch (NumberFormatException e) {
             return -1;
         }
-        if(number < 0 || number > 50000)
+        if (number < 0 || number > 50000)
             return -1;
         return number;
     }
 
     /**
-     * Manages when user types an invalid ip or port number.
+     * Manages when user types ip and port number, checking if they are valid values.
      */
 
-    protected void manageInvalidIpOrPort(){
-        ip = manageMessage(parser.serialize(new Message(Protocol.INSERT_IP_AGAIN, "", null)));
+    protected void manageIpAndPortInsertion() {
+        ip = manageMessage(parser.serialize(new Message(Protocol.INSERT_IP, "", null)));
+        while (!isValidIp(ip)) {
+            ip = manageMessage(parser.serialize(new Message(Protocol.INSERT_IP_AGAIN, "", null)));
+        }
         portString = manageMessage(parser.serialize(new Message(Protocol.INSERT_PORT, "", null)));
         port = isValidPort(portString);
+        while (port < 0) {
+            portString = manageMessage(parser.serialize(new Message(Protocol.INSERT_PORT_AGAIN, "", null)));
+            port = isValidPort(portString);
+        }
     }
 }

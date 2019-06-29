@@ -6,34 +6,34 @@ import it.polimi.ingsw.network.Protocol;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.net.SocketException;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
+/**
+ * This class represent a client using socket connection.
+ */
+
 public class SocketClient extends Client {
 
-    private boolean keepAlive = true;
-    private Socket socket;
-    private Scanner fromServer;
-    private PrintWriter toServer;
-    private String input;
-    private final static String TYPE = "Socket";
+    private static final String TYPE = "Socket";
 
-    public SocketClient(String ip, int port, Ui ui) {
+    public SocketClient(Ui ui) {
         super(ui);
-        this.ip = ip;
-        this.port = port;
     }
 
+    /**
+     * Starts a client according to the socket communication and keeps listening to server.
+     * When a problem occurs or connection goes down,
+     * it closes the process after having notified the disconnection.
+     */
+
+    @Override
     public void run() {
-        try {
-            startClient();
-        } catch (IOException e) {
-            System.err.println(e.getMessage());
-        }
-    }
-
-    public void startClient() throws IOException {
+        Socket socket;
+        Scanner fromServer;
+        PrintWriter toServer;
+        String input;
+        manageIpAndPortInsertion();
         while (true) {
             manageMessage(parser.serialize(new Message(Protocol.CONNECTING, TYPE, null)));
             try {
@@ -41,11 +41,9 @@ public class SocketClient extends Client {
                 fromServer = new Scanner(socket.getInputStream());
                 toServer = new PrintWriter(socket.getOutputStream(), true);
                 break;
-            } catch (SocketException e) {
-                //System.out.println(e.getMessage());
-                do {
-                    manageInvalidIpOrPort();
-                } while (!isValidIp(ip) || port < 0);
+            } catch (IOException e) {
+                manageMessage(parser.serialize(new Message(Protocol.INVALID_CONNECTION_PARAMETERS, "",null)));
+                manageIpAndPortInsertion();
             }
         }
         while (keepAlive) {
@@ -59,6 +57,10 @@ public class SocketClient extends Client {
         manageMessage(parser.serialize(new Message(Protocol.UNREACHABLE_SERVER, "", null)));
         toServer.close();
         fromServer.close();
-        socket.close();
+        try {
+            socket.close();
+        } catch (IOException e) {
+            System.out.println("Impossibile chiudere il socket: " + e.getMessage());
+        }
     }
 }
