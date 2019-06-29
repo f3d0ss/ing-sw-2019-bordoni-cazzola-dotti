@@ -54,6 +54,7 @@ public class GameCountDown extends Thread {
      * If it is stopped, it means that maximum players number is reached, then game can start.
      */
 
+    @Override
     public void run() {
         while (seconds > 0 && !stopped) {
             seconds--;

@@ -63,7 +63,7 @@ public enum CommandType {
         }
     }, SELECT_TARGET_SQUARE {
         public String getString() {
-            return "Scegli un riquadro";
+            return "Scegli il riquadro ";
         }
     }, SELECT_WEAPON {
         public String getString() {
