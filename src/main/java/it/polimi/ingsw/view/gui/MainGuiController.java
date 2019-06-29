@@ -21,6 +21,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -109,13 +110,17 @@ public class MainGuiController {
     static final String AGGREGATE_ACTION_FILE_PATTERN = "_aggregate_action" + IMAGE_EXTENSION;
     static final String AGGREGATE_ACTION_FLIPPED_FILE_PATTERN = "_aggregate_action_flipped" + IMAGE_EXTENSION;
     static final String BOARD_FILE_PATTERN = "_board_without_aggregate_action" + IMAGE_EXTENSION;
+    private static final String KILL_SHOT_TRACK_URI = IMAGES_DIR + "gameboards/killShootTrack" + IMAGE_EXTENSION;
+    private static final String BLUE_SPAWN_WEAPON_URI = IMAGES_DIR + "gameboards/blueSpawn" + IMAGE_EXTENSION;
+    private static final String RED_SPAWN_WEAPON_URI = IMAGES_DIR + "gameboards/redSpawn" + IMAGE_EXTENSION;
+    private static final String YELLOW_SPAWN_WEAPON_URI = IMAGES_DIR + "gameboards/yellowSpawn" + IMAGE_EXTENSION;
+    private Map<PlayerId, PlayerBoardController> playerBoardControllers = new EnumMap<>(PlayerId.class);
     private int selectedCommand;
     private int startSkullNumber;
-    private Stage otherPlayerStage;
 
     public void initialize() {
         squareBoxes = new HBox[gameBoard.getRowCount()][gameBoard.getColumnCount()];
-        //inizialize squares
+        //set squares
         for (int i = 0; i < gameBoard.getRowCount(); i++) {
             for (int j = 0; j < gameBoard.getColumnCount(); j++) {
                 squareBoxes[i][j] = new HBox();
@@ -134,6 +139,7 @@ public class MainGuiController {
         printKillshotTrack(modelView.getMatch().getKillshotTrack());
         printPlayerBoard(modelView.getMe());
         printBoard(modelView.getBoard());
+        playerBoardControllers.forEach((playerId, playerBoardController) -> playerBoardController.update(modelView.getEnemies().get(playerId)));
     }
 
     private void printBoard(SquareView[][] board) {
@@ -239,19 +245,21 @@ public class MainGuiController {
     private void handlePlayerButton(PlayerId playerId) {
 
         try {
-            if (otherPlayerStage != null) {
-                otherPlayerStage.close();
+            if (playerBoardControllers.get(playerId) != null) {
+                return;
             }
             FXMLLoader fxmlLoader = new FXMLLoader();
             fxmlLoader.setLocation(MainGuiController.class.getResource("/fx/PlayerBoard.fxml"));
             Parent root1 = fxmlLoader.load();
-            PlayerBoardController playerBoardController = fxmlLoader.getController();
-            playerBoardController.setPlayer(modelView.getEnemies().get(playerId));
             Stage stage = new Stage();
+            playerBoardControllers.put(playerId, fxmlLoader.getController());
+            playerBoardControllers.get(playerId).setPlayer(modelView.getEnemies().get(playerId));
+            playerBoardControllers.get(playerId).setStage(stage);
             stage.setScene(new Scene(root1));
+            stage.setAlwaysOnTop(true);
+            stage.setOnCloseRequest(windowEvent -> playerBoardControllers.remove(playerId));
+            stage.setTitle(playerId.toString());
             stage.show();
-            otherPlayerStage = stage;
-            mainPane.setOnMouseClicked(mouseEvent -> stage.close());
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -309,6 +317,14 @@ public class MainGuiController {
                 + BOARD_FILE_PATTERN;
         setBackgroundImageFromURI(boardWithoutAggregateAction, playerBoardImageURI);
 
+        setBackgroundImageFromURI(killShotTrackBox, KILL_SHOT_TRACK_URI);
+
+        setBackgroundImageFromURI(blueSpawnWeapons, BLUE_SPAWN_WEAPON_URI);
+
+        setBackgroundImageFromURI(redSpawnWeapons, RED_SPAWN_WEAPON_URI);
+
+        setBackgroundImageFromURI(yellowSpawnWeapons, YELLOW_SPAWN_WEAPON_URI);
+
         AtomicInteger i = new AtomicInteger(0);
         AtomicInteger j = new AtomicInteger(0);
         modelView.getEnemies().forEach((playerId, playerView) -> {
@@ -316,6 +332,11 @@ public class MainGuiController {
             playerButton.setOnMouseClicked(mouseEvent -> handlePlayerButton(playerId));
             bindToParent(playerButton, otherPlayerGrid, otherPlayerGrid.getRowCount(), otherPlayerGrid.getColumnCount());
             otherPlayerGrid.add(playerButton, i.getAndIncrement() % otherPlayerGrid.getColumnCount(), j.getAndIncrement() / otherPlayerGrid.getColumnCount());
+        });
+
+        mainPane.setOnMouseClicked(mouseEvent -> {
+            playerBoardControllers.forEach((playerId1, playerBoardController) -> playerBoardController.close());
+            playerBoardControllers.clear();
         });
 
         updateModelView(modelView);
