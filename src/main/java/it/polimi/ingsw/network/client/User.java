@@ -13,7 +13,7 @@ import static java.lang.Thread.sleep;
  * This class is the executable class for the client-side of the game.
  */
 
-public class User {
+class User {
 
     private static final String CLI = "CLI";
     private static final String GUI = "GUI";
@@ -39,13 +39,13 @@ public class User {
             Gui gui = new Gui();
             new Thread(gui).start();
             GuiManager.setGui(gui);
-            System.out.printf("Avvio Gui in corso.");
+            System.out.print("Avvio Gui in corso.");
             while (!gui.isReady()) {
                 try {
                     sleep(MILLIS_IN_SECOND);
                 } catch (InterruptedException e) {
                 }
-                System.out.printf(".");
+                System.out.print(".");
             }
             client.setUi(gui);
             ui = gui;

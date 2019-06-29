@@ -253,14 +253,15 @@ public enum Protocol {
         public String getQuestion() {
             return "";
         }
+
         public boolean requiresAnswer() {
             return true;
         }
     };
 
-    public static final String ACK = Character.toString((char) 3) + "ack";
-    public static final String AFK = Character.toString((char) 4) + "afk";
-    public static final String ERR = Character.toString((char) 5) + "err";
+    public static final String ACK = (char) 3 + "ack";
+    public static final String AFK = (char) 4 + "afk";
+    public static final String ERR = (char) 5 + "err";
 
     public abstract String getQuestion();
 

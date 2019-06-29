@@ -3,18 +3,18 @@ package it.polimi.ingsw.view;
 import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.PlayerId;
 
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
 public class ModelView {
-    public final static int HEIGHT = 3;
-    public final static int WIDTH = 4;
+    public static final int HEIGHT = 3;
+    public static final int WIDTH = 4;
 
     private MatchView match;
     private PlayerView me;
-    private Map<PlayerId, PlayerView> enemies = new HashMap<>();
-    private Map<Color, List<WeaponView>> weaponsOnSpawn = new HashMap<>();
+    private Map<PlayerId, PlayerView> enemies = new EnumMap<>(PlayerId.class);
+    private Map<Color, List<WeaponView>> weaponsOnSpawn = new EnumMap<>(Color.class);
     private SquareView[][] board = new SquareView[HEIGHT][WIDTH];
 
     public MatchView getMatch() {

@@ -1,10 +1,10 @@
 package it.polimi.ingsw.view.commandmessage;
 
 public abstract class CommandMessage {
-    private CommandType type;
+    private final CommandType type;
     private String jsonType = getClass().getSimpleName();
 
-    public CommandMessage(CommandType type) {
+    CommandMessage(CommandType type) {
         this.type = type;
     }
 

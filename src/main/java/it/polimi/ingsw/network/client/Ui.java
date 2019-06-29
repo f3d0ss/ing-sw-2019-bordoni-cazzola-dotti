@@ -13,10 +13,16 @@ import java.util.Map;
 
 public interface Ui {
     String showMessage(String toBeShown, List<String> possibleAnswers, boolean isAnswerRequired);
+
     void refreshView(ModelView modelView);
+
     int manageCommandChoice(List<CommandMessage> commands, boolean undo);
+
     void setViewInitializationDone();
+
     boolean isViewInitializationDone();
+
     void showLeaderBoard(Map<PlayerId, Long> leaderBoard);
+
     void run();
 }

@@ -3,7 +3,7 @@ package it.polimi.ingsw.view.commandmessage;
 import it.polimi.ingsw.model.Color;
 
 public class ColorCommandMessage extends CommandMessage {
-    private Color color;
+    private final Color color;
 
     public ColorCommandMessage(CommandType type, Color color) {
         super(type);

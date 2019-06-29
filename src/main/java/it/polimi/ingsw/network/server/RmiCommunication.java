@@ -10,10 +10,10 @@ import it.polimi.ingsw.utils.Parser;
 
 public class RmiCommunication extends SingleCommunication {
 
-    private RmiClientInterface client;
-    private RmiServer rmiServer;
+    private final RmiClientInterface client;
+    private final RmiServer rmiServer;
 
-    public RmiCommunication(String message, RmiClientInterface client, RmiServer rmiServer, int number, ServerManager serverManager) {
+    RmiCommunication(String message, RmiClientInterface client, RmiServer rmiServer, int number, ServerManager serverManager) {
         super(number, serverManager, message);
         this.client = client;
         this.rmiServer = rmiServer;
@@ -27,7 +27,7 @@ public class RmiCommunication extends SingleCommunication {
     public void run() {
         String answer = rmiServer.sendMessageAndGetAnswer(client, message);
         showAndSetAnswer(answer);
-        if(timeExceeded) {
+        if (timeExceeded) {
             answer = rmiServer.sendMessageAndGetAnswer(client, new Parser().serialize(new Message(Protocol.TIME_EXCEEDED, "", null)));
             showAndSetAnswer(answer);
             rmiServer.unregister(client);

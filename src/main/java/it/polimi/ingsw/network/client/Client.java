@@ -10,20 +10,49 @@ import it.polimi.ingsw.view.ConcreteView;
 
 public class Client implements Runnable {
 
+    final Parser parser = new Parser();
+    String ip;
+    int port;
+    boolean keepAlive = true;
+    private ConcreteView view;
     private String type;
     private Ui ui;
-    protected Parser parser = new Parser();
-    protected ConcreteView view;
-    protected String ip;
-    protected int port;
-    protected String portString;
-    protected boolean keepAlive = true;
 
-    public Client(Ui ui) {
+    Client(Ui ui) {
         this.ui = ui;
     }
 
-    public void setUi(Ui ui) {
+    /**
+     * Checks if a string is a valid ip.
+     *
+     * @param input is the string to be checked
+     * @return the result of check
+     */
+
+    private static boolean isValidIp(String input) {
+        return input.matches("^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?).(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?).(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?).(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$");
+    }
+
+    /**
+     * Checks if a string contains a valid port number.
+     *
+     * @param port is the string to be checked
+     * @return the port converted to integer if the result of check is positive, -1 otherwise
+     */
+
+    private static int isValidPort(String port) {
+        int number;
+        try {
+            number = Integer.parseInt(port);
+        } catch (NumberFormatException e) {
+            return -1;
+        }
+        if (number < 0 || number > 50000)
+            return -1;
+        return number;
+    }
+
+    void setUi(Ui ui) {
         this.ui = ui;
     }
 
@@ -37,7 +66,7 @@ public class Client implements Runnable {
      * @return the answer to be sent to server
      */
 
-    public String manageMessage(String gsonCoded) {
+    String manageMessage(String gsonCoded) {
         Message fromServer = parser.deserialize(gsonCoded, Message.class);
         if (fromServer.type == Protocol.UPDATE_MATCH) {
             view.update(((MatchViewTransfer) fromServer).getAttachment());
@@ -76,45 +105,15 @@ public class Client implements Runnable {
     }
 
     /**
-     * Checks if a string is a valid ip.
-     *
-     * @param input is the string to be checked
-     * @return the result of check
-     */
-
-    protected static boolean isValidIp(String input) {
-        return input.matches("^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?).(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?).(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?).(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$");
-    }
-
-    /**
-     * Checks if a string contains a valid port number.
-     *
-     * @param port is the string to be checked
-     * @return the port converted to integer if the result of check is positive, -1 otherwise
-     */
-
-    protected static int isValidPort(String port) {
-        int number;
-        try {
-            number = Integer.parseInt(port);
-        } catch (NumberFormatException e) {
-            return -1;
-        }
-        if (number < 0 || number > 50000)
-            return -1;
-        return number;
-    }
-
-    /**
      * Manages when user types ip and port number, checking if they are valid values.
      */
 
-    protected void manageIpAndPortInsertion() {
+    void manageIpAndPortInsertion() {
         ip = manageMessage(parser.serialize(new Message(Protocol.INSERT_IP, "", null)));
         while (!isValidIp(ip)) {
             ip = manageMessage(parser.serialize(new Message(Protocol.INSERT_IP_AGAIN, "", null)));
         }
-        portString = manageMessage(parser.serialize(new Message(Protocol.INSERT_PORT, "", null)));
+        String portString = manageMessage(parser.serialize(new Message(Protocol.INSERT_PORT, "", null)));
         port = isValidPort(portString);
         while (port < 0) {
             portString = manageMessage(parser.serialize(new Message(Protocol.INSERT_PORT_AGAIN, "", null)));

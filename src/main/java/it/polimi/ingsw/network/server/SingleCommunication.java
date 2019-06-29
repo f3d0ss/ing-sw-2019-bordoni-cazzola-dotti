@@ -4,27 +4,28 @@ package it.polimi.ingsw.network.server;
  * This class represent a single communication between server and client regardless the communication technology.
  */
 
-public class SingleCommunication implements Runnable {
+class SingleCommunication implements Runnable {
 
-    protected boolean timeExceeded = false;
-    protected int number;
-    protected ServerManager serverManager;
-    protected String message;
+    final String message;
+    private final int number;
+    private final ServerManager serverManager;
+    boolean timeExceeded = false;
 
-    public SingleCommunication(int number, ServerManager serverManager, String message) {
+    SingleCommunication(int number, ServerManager serverManager, String message) {
         this.number = number;
         this.serverManager = serverManager;
         this.message = message;
     }
 
-    public void run(){
+    @Override
+    public void run() {
     }
 
     /**
      * Sets time exceed and print advise on server log.
      */
 
-    public void setTimeExceeded(){
+    void setTimeExceeded() {
         timeExceeded = true;
         showAndSetAnswer("TEMPO SCADUTO");
     }
@@ -33,7 +34,7 @@ public class SingleCommunication implements Runnable {
      * Sets client's answer and prints it on server log.
      */
 
-    protected void showAndSetAnswer(String answer){
+    void showAndSetAnswer(String answer) {
         serverManager.setAnswer(number, answer);
         System.out.println("User " + number + ": " + answer);
     }

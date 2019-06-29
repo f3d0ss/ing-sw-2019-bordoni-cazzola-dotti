@@ -5,15 +5,15 @@ package it.polimi.ingsw.network.server;
  * Game starts when countdown reach 0 or the maximum players number is reached.
  */
 
-public class GameCountDown extends Thread {
+class GameCountDown extends Thread {
 
-    private int secondsToWait;
+    private static final int MILLIS_IN_SECOND = 1000;
+    private final int secondsToWait;
+    private final ServerManager serverManager;
     private int seconds;
-    private ServerManager serverManager;
     private boolean stopped = false;
-    private final static int MILLIS_IN_SECOND = 1000;
 
-    public GameCountDown(ServerManager serverManager, int secondsToWait) {
+    GameCountDown(ServerManager serverManager, int secondsToWait) {
         this.serverManager = serverManager;
         this.secondsToWait = secondsToWait;
         seconds = secondsToWait;
@@ -23,7 +23,7 @@ public class GameCountDown extends Thread {
      * Sets countdown as stopped and restore the seconds-left value.
      */
 
-    public void stopCount() {
+    void stopCount() {
         stopped = true;
         seconds = secondsToWait;
     }
@@ -32,12 +32,12 @@ public class GameCountDown extends Thread {
      * Restores countdown without sets it as stopped.
      */
 
-    public void restore() {
+    void restore() {
         stopped = false;
         seconds = secondsToWait;
     }
 
-    public int getTimeLeft() {
+    int getTimeLeft() {
         return seconds;
     }
 
@@ -45,7 +45,7 @@ public class GameCountDown extends Thread {
      * @return true if countdown is still running
      */
 
-    public boolean isRunning(){
+    boolean isRunning() {
         return seconds < secondsToWait;
     }
 

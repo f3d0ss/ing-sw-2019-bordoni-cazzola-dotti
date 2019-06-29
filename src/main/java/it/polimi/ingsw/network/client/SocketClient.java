@@ -17,7 +17,7 @@ public class SocketClient extends Client {
 
     private static final String TYPE = "Socket";
 
-    public SocketClient(Ui ui) {
+    SocketClient(Ui ui) {
         super(ui);
     }
 
@@ -42,7 +42,7 @@ public class SocketClient extends Client {
                 toServer = new PrintWriter(socket.getOutputStream(), true);
                 break;
             } catch (IOException e) {
-                manageMessage(parser.serialize(new Message(Protocol.INVALID_CONNECTION_PARAMETERS, "",null)));
+                manageMessage(parser.serialize(new Message(Protocol.INVALID_CONNECTION_PARAMETERS, "", null)));
                 manageIpAndPortInsertion();
             }
         }

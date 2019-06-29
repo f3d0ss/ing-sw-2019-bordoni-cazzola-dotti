@@ -5,7 +5,7 @@ import java.util.List;
 
 public class ShootCommandMessage extends CommandMessage {
 
-    private List<EffectCommandMessage> effectCommandMessageList;
+    private final List<EffectCommandMessage> effectCommandMessageList;
 
     public ShootCommandMessage(CommandType type, List<EffectCommandMessage> effectCommandMessageList) {
         super(type);

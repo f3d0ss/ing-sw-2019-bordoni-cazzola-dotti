@@ -12,10 +12,10 @@ import java.net.Socket;
 
 public class SocketCommunication extends SingleCommunication {
 
-    private Socket client;
-    private SocketServer socketServer;
+    private final Socket client;
+    private final SocketServer socketServer;
 
-    public SocketCommunication(String message, Socket client, SocketServer socketServer, int number, ServerManager serverManager) {
+    SocketCommunication(String message, Socket client, SocketServer socketServer, int number, ServerManager serverManager) {
         super(number, serverManager, message);
         this.client = client;
         this.socketServer = socketServer;
@@ -29,7 +29,7 @@ public class SocketCommunication extends SingleCommunication {
     public void run() {
         String answer = socketServer.sendMessageAndGetAnswer(client, message);
         showAndSetAnswer(answer);
-        if(timeExceeded) {
+        if (timeExceeded) {
             answer = socketServer.sendMessageAndGetAnswer(client, new Parser().serialize(new Message(Protocol.TIME_EXCEEDED, "", null)));
             showAndSetAnswer(answer);
             socketServer.unregister(client);

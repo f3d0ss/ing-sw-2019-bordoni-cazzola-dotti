@@ -1,8 +1,8 @@
 package it.polimi.ingsw.view.commandmessage;
 
 public class SquareCommandMessage extends CommandMessage {
-    private int row;
-    private int col;
+    private final int row;
+    private final int col;
 
     public SquareCommandMessage(CommandType type, int row, int col) {
         super(type);

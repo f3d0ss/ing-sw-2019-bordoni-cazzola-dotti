@@ -20,30 +20,30 @@ import static java.lang.Thread.sleep;
 public class ServerManager implements Runnable {
 
     public static final int MIN_PLAYERS = 2;
-    public static final int MAX_PLAYERS = 5;
+    private static final int MAX_PLAYERS = 5;
     private static final int DEFAULT_BOARD = 1;
     private static final int MILLIS_TO_WAIT = 10;
     private static final int MILLIS_IN_SECOND = 1000;
     private static final String RECONNECT = "Reconnect";
     private static final String NEW_GAME = "New game";
-    private int socketPort;
-    private int rmiPort;
-    private int skulls;
-    private Map<Integer, Socket> socketClients = new HashMap<>();
-    private Map<Integer, RmiClientInterface> rmiClients = new HashMap<>();
-    private Map<Integer, String> answers = new HashMap<>();
-    private Map<Integer, Boolean> answerReady = new HashMap<>();
+    private final int socketPort;
+    private final int rmiPort;
+    private final int skulls;
+    private final Map<Integer, Socket> socketClients = new HashMap<>();
+    private final Map<Integer, RmiClientInterface> rmiClients = new HashMap<>();
+    private final Map<Integer, String> answers = new HashMap<>();
+    private final Map<Integer, Boolean> answerReady = new HashMap<>();
+    private final Map<Integer, String> lobby = new HashMap<>();
+    private final List<Integer> awayFromKeyboardOrDisconnected = new ArrayList<>();
+    private final Map<Integer, String> nicknames = new HashMap<>();
+    private final GameCountDown countDown;
+    private final Parser parser = new Parser();
+    private final int secondsDuringTurn;
+    private final Map<Integer, MatchController> activeMatches = new HashMap<>();
     private SocketServer socketServer;
     private RmiServer rmiServer;
     private int idClient = 12345;
-    private Map<Integer, String> lobby = new HashMap<>();
-    private List<Integer> awayFromKeyboardOrDisconnected = new ArrayList<>();
-    private Map<Integer, String> nicknames = new HashMap<>();
-    private GameCountDown countDown;
-    private Parser parser = new Parser();
     private int chosenBoard = 0;
-    private int secondsDuringTurn;
-    private Map<Integer, MatchController> activeMatches = new HashMap<>();
 
     public ServerManager(int secondsAfterThirdConnection, int secondsDuringTurn, int socketPort, int rmiPort, int skulls) {
         countDown = new GameCountDown(this, secondsAfterThirdConnection);
@@ -59,7 +59,7 @@ public class ServerManager implements Runnable {
      * @param client is the socket of the incoming client
      */
 
-    public void addClient(Socket client) {
+    void addClient(Socket client) {
         socketClients.put(idClient, client);
         answerReady.put(idClient, true);
         idClient++;
@@ -82,7 +82,7 @@ public class ServerManager implements Runnable {
      * @param client is the rmi interface of the incoming client
      */
 
-    public void addClient(RmiClientInterface client) {
+    void addClient(RmiClientInterface client) {
         rmiClients.put(idClient, client);
         answerReady.put(idClient, true);
         idClient++;
@@ -99,7 +99,7 @@ public class ServerManager implements Runnable {
      * @param temporaryId is the code of the incoming client
      */
 
-    public void addClientToLog(int temporaryId) {
+    void addClientToLog(int temporaryId) {
         String code;
         int oldId;
         while (true) {
@@ -146,9 +146,7 @@ public class ServerManager implements Runnable {
         if (!answerReady.get(oldId))
             return false;
         sendMessageAndWaitForAnswer(oldId, new Message(Protocol.ARE_YOU_ALIVE, "", null));
-        if (isAwayFromKeyboardOrDisconnected(oldId))
-            return true;
-        return false;
+        return isAwayFromKeyboardOrDisconnected(oldId);
     }
 
     /**
@@ -179,7 +177,7 @@ public class ServerManager implements Runnable {
      * @param id is the code of the client
      */
 
-    public void addClientToLobby(int id) {
+    private void addClientToLobby(int id) {
         login(id);
         if (lobby.size() == MIN_PLAYERS) {
             if (!countDown.isRunning()) {
@@ -353,10 +351,11 @@ public class ServerManager implements Runnable {
      * @return the unique number associated to the client
      */
 
-    public int getNumber(Socket client) {
-        for (int i : socketClients.keySet())
+    int getNumber(Socket client) {
+        for (int i : socketClients.keySet()) {
             if (socketClients.get(i) == client)
                 return i;
+        }
         throw new NoSuchElementException();
     }
 
@@ -365,7 +364,7 @@ public class ServerManager implements Runnable {
      * @return the unique number associated to the client
      */
 
-    public int getNumber(RmiClientInterface client) {
+    int getNumber(RmiClientInterface client) {
         for (int i : rmiClients.keySet())
             if (rmiClients.get(i) == client)
                 return i;
@@ -379,7 +378,7 @@ public class ServerManager implements Runnable {
      * @param answer is the string containing the client's answer
      */
 
-    public void setAnswer(int client, String answer) {
+    void setAnswer(int client, String answer) {
         if (!answer.equals(Protocol.ACK))
             answers.put(client, answer);
         answerReady.put(client, true);
@@ -391,7 +390,7 @@ public class ServerManager implements Runnable {
      * @param client is the socket of the client
      */
 
-    public void removeClient(Socket client) {
+    void removeClient(Socket client) {
         try {
             int number = getNumber(client);
             socketClients.remove(number);
@@ -406,7 +405,7 @@ public class ServerManager implements Runnable {
      * @param client is the rmi interface of the client
      */
 
-    public void removeClient(RmiClientInterface client) {
+    void removeClient(RmiClientInterface client) {
         try {
             int number = getNumber(client);
             rmiClients.remove(number);

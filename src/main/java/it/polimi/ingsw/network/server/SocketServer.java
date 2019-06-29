@@ -13,15 +13,15 @@ import java.util.Scanner;
  * This class represent the server for communications using socket.
  */
 
-public class SocketServer implements Runnable {
+class SocketServer implements Runnable {
 
-    private int port;
-    private ServerManager serverManager;
+    private final int port;
+    private final ServerManager serverManager;
+    private final Map<Socket, Scanner> fromClient = new HashMap<>();
+    private final Map<Socket, PrintWriter> toClient = new HashMap<>();
     private boolean keepAlive = true;
-    private Map<Socket, Scanner> fromClient = new HashMap<>();
-    private Map<Socket, PrintWriter> toClient = new HashMap<>();
 
-    public SocketServer(ServerManager server, int port) {
+    SocketServer(ServerManager server, int port) {
         this.serverManager = server;
         this.port = port;
     }
@@ -30,11 +30,11 @@ public class SocketServer implements Runnable {
      * Sends a message to a socket client. If the client is unreachable, it unregisters it.
      *
      * @param addressee is the socket of the addressee
-     * @param message is the string containing the sending message
+     * @param message   is the string containing the sending message
      * @return is the answer coming from the client
      */
 
-    public String sendMessageAndGetAnswer(Socket addressee, String message) {
+    String sendMessageAndGetAnswer(Socket addressee, String message) {
         toClient.get(addressee).println(message);
         try {
             return fromClient.get(addressee).nextLine();
@@ -51,7 +51,7 @@ public class SocketServer implements Runnable {
      * @param client is the rmi interface of the new client
      */
 
-    public void registry(Socket client) throws IOException {
+    private void registry(Socket client) throws IOException {
         serverManager.addClient(client);
         fromClient.put(client, new Scanner(client.getInputStream()));
         toClient.put(client, new PrintWriter(client.getOutputStream(), true));
@@ -66,7 +66,7 @@ public class SocketServer implements Runnable {
      * @param client is the socket of the outgoing client
      */
 
-    public void unregister(Socket client) {
+    void unregister(Socket client) {
         fromClient.remove(client);
         toClient.remove(client);
         serverManager.removeClient(client);
@@ -77,8 +77,7 @@ public class SocketServer implements Runnable {
      */
 
     public void run() {
-        try {
-            ServerSocket serverSocket = new ServerSocket(port);
+        try (ServerSocket serverSocket = new ServerSocket(port)) {
             System.out.println("SocketServer avviato.");
             while (keepAlive) {
                 Socket client = serverSocket.accept();

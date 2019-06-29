@@ -4,9 +4,9 @@ import java.util.List;
 
 public class Message {
 
-    public Protocol type;
-    private String stringInQuestion;
-    private List<String> possibleAnswers;
+    public final Protocol type;
+    private final String stringInQuestion;
+    private final List<String> possibleAnswers;
     private String jType = getClass().getSimpleName();
 
     public Message(Protocol type, String stringInQuestion, List<String> possibleAnswers) {

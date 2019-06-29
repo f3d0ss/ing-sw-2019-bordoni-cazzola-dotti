@@ -9,7 +9,7 @@ import java.util.Scanner;
  * This class is the executable class for the server-side of the game.
  */
 
-public class Server {
+class Server {
 
     private static final int MIN_PORT = 1000;
     private static final int MAX_PORT = 50000;

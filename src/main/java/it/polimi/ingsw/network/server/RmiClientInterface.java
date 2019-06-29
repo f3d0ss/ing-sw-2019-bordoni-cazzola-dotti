@@ -9,5 +9,6 @@ import java.rmi.RemoteException;
 
 public interface RmiClientInterface extends Remote {
     String sendMessageAndGetAnswer(String message) throws RemoteException;
+
     boolean testAliveness() throws RemoteException;
 }

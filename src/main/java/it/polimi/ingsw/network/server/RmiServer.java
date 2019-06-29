@@ -16,8 +16,8 @@ import java.rmi.server.UnicastRemoteObject;
 
 public class RmiServer implements Runnable, RmiServerInterface {
 
-    private ServerManager serverManager;
-    private int port;
+    private final ServerManager serverManager;
+    private final int port;
 
     public RmiServer(ServerManager serverManager, int port) {
         this.serverManager = serverManager;
@@ -62,11 +62,11 @@ public class RmiServer implements Runnable, RmiServerInterface {
      * Sends a message to a rmi client. If the client is unreachable, it unregisters it.
      *
      * @param addressee is the rmi interface of the addressee
-     * @param message is the string containing the sending message
+     * @param message   is the string containing the sending message
      * @return is the answer coming from the client
      */
 
-    public String sendMessageAndGetAnswer(RmiClientInterface addressee, String message) {
+    String sendMessageAndGetAnswer(RmiClientInterface addressee, String message) {
         try {
             return addressee.sendMessageAndGetAnswer(message);
         } catch (RemoteException e) {

@@ -22,7 +22,7 @@ public class RmiClient extends Client implements RmiClientInterface {
     private static final int TEST_ALIVENESS_TIME = 2000;
     private static final String TYPE = "RMI";
 
-    public RmiClient(Ui ui) {
+    RmiClient(Ui ui) {
         super(ui);
     }
 

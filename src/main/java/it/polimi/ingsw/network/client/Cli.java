@@ -14,18 +14,18 @@ import java.util.*;
 
 public class Cli implements Ui {
 
-    private Scanner stdin = new Scanner(System.in);
-    private CliManager cliManager = new CliManager();
+    private static final int FIRST_CHOICE_NUMBER = 1;
+    private final Scanner stdin = new Scanner(System.in);
+    private final CliManager cliManager = new CliManager();
     private boolean initializationDone = false;
-    private final static int FIRST_CHOICE_NUMBER = 1;
 
     /**
      * Prints a message coming from server.
      *
-     * @param toBeShown is a string represent a question or a statement
-     * @param possibleAnswers is the list of the possibile answers that user can choose
+     * @param toBeShown        is a string represent a question or a statement
+     * @param possibleAnswers  is the list of the possibile answers that user can choose
      * @param isAnswerRequired specify if an answer is required (the message is a question)
-     *                        or is not (the message is a notice)
+     *                         or is not (the message is a notice)
      * @return the user's answer or a reception acknowledgement
      */
 
@@ -65,7 +65,7 @@ public class Cli implements Ui {
      * Manages multiple options coming from server during game.
      *
      * @param commands is the list of command user can choose from
-     * @param undo specify if user can come back to the last choice
+     * @param undo     specify if user can come back to the last choice
      * @return the number correspond to the user choice
      */
 
@@ -121,7 +121,7 @@ public class Cli implements Ui {
      * Extracts specific parameters contained in the command message making them printable.
      *
      * @param command is the command from which get parameters
-     * @return
+     * @return String to show
      */
 
     private String getParameter(CommandMessage command) {
@@ -154,13 +154,13 @@ public class Cli implements Ui {
             String shootString = "\n";
             for (int i = 0; i < effectCommandMessageList.size(); i++) {
                 EffectCommandMessage effectCommandMessage = effectCommandMessageList.get(i);
-                shootString = new StringBuilder().append(shootString).append("Danneggia ").append(effectCommandMessage.getPlayer().playerIdName()).append(" ").append(effectCommandMessage.getDamage()).append(" danno").toString();
+                shootString = new StringBuilder().append(shootString).append(effectCommandMessage.getPlayer().playerIdName()).append(" ").append(effectCommandMessage.getDamage()).append(" danno").toString();
                 if (effectCommandMessage.getMarks() > 0)
-                    shootString = new StringBuilder().append(shootString).append("| ").append(effectCommandMessage.getMarks()).append(" marchi ").toString();
+                    shootString = new StringBuilder().append(shootString).append(" + ").append(effectCommandMessage.getMarks()).append(" marchi").toString();
                 if (effectCommandMessage.getCol() != null)
-                    shootString = new StringBuilder().append(shootString).append("| spostalo in ").append(effectCommandMessage.getRow()).append(effectCommandMessage.getCol()).toString();
+                    shootString = new StringBuilder().append(shootString).append("+ spostalo in ").append(cliManager.getHorizontalCoordinateName(effectCommandMessage.getRow())).append(cliManager.getVerticalCoordinateName(effectCommandMessage.getCol())).toString();
                 if (effectCommandMessageList.size() > i + 1)
-                    shootString = shootString + "\n";
+                    shootString = new StringBuilder().append(shootString).append("\n").toString();
             }
             return shootString;
         }
@@ -176,8 +176,8 @@ public class Cli implements Ui {
     public void showLeaderBoard(Map<PlayerId, Long> leaderBoard) {
         System.out.println("Partita conclusa");
         int i = 1;
-        for (PlayerId p : leaderBoard.keySet()) {
-            System.out.println(i + "° classificato: " + p.playerIdName() + " con " + leaderBoard.get(p) + " punti");
+        for (Map.Entry<PlayerId, Long> entry : leaderBoard.entrySet()) {
+            System.out.println(i + "° classificato: " + entry.getKey().playerIdName() + " con " + entry.getValue() + " punti");
             i++;
         }
         System.out.println("Digita qualcosa per uscire:");
