@@ -33,7 +33,6 @@ public class Gui implements Ui, Runnable {
             } catch (InterruptedException e) {
             }
         }
-        GuiManager.setInputReady(false);
         System.out.println(answer);//it show answer even on cli
         return answer;
     }

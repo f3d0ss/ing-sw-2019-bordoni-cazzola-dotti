@@ -119,7 +119,7 @@ public class CliManager {
             case 2:
                 String out = "";
                 for (PlayerId p : square.getHostedPlayers())
-                    out = out + " " + p.playerIdName().substring(0, 1);
+                    out = out + " " + p.toString().substring(0, 1);
                 return out;
         }
         return " ";
@@ -146,11 +146,11 @@ public class CliManager {
                 break;
             case 5:
                 System.out.printf("Killshots: ");
-                modelView.getMatch().getKillshotTrack().forEach(id -> System.out.printf(id.playerIdName().substring(0, 1) + " "));
+                modelView.getMatch().getKillshotTrack().forEach(id -> System.out.printf(id.toString().substring(0, 1) + " "));
                 System.out.printf("(" + modelView.getMatch().getDeathsCounter() + " skulls left)");
                 break;
             case 7:
-                System.out.printf(modelView.getMe().getId().playerIdName().toUpperCase() + " (" + modelView.getMe().getNickname() + ")");
+                System.out.printf(modelView.getMe().getId().toString().toUpperCase() + " (" + modelView.getMe().getNickname() + ")");
                 break;
             case 8:
                 System.out.printf("Dead " + modelView.getMe().getDeaths() + " times");
@@ -169,7 +169,7 @@ public class CliManager {
                 break;
             case 12:
                 System.out.printf("Damages: ");
-                modelView.getMe().getHealth().forEach(id -> System.out.printf(id.playerIdName().substring(0, 1)));
+                modelView.getMe().getHealth().forEach(id -> System.out.printf(id.toString().substring(0, 1)));
                 //TODO: how remove hardcoded information about adrenalinic actions?
                 if (modelView.getMe().getHealth().size() > 2)
                     if (modelView.getMe().getHealth().size() > 5)
@@ -181,20 +181,20 @@ public class CliManager {
                 break;
             case 13:
                 System.out.printf("Marks: ");
-                modelView.getMe().getMarks().forEach((id, n) -> System.out.printf(n + " from " + id.playerIdName() + "; "));
+                modelView.getMe().getMarks().forEach((id, n) -> System.out.printf(n + " from " + id.toString() + "; "));
         }
     }
 
     private void displayEnemiesInformation(PlayerView enemy) {
-        System.out.printf("\n" + enemy.getId().playerIdName().toUpperCase() + " (" + enemy.getNickname() + (enemy.isDisconnected() ? " - DISCONNESSO" : "") + ") has " + enemy.getPowerUps().size() + " poweups.");
+        System.out.printf("\n" + enemy.getId().toString().toUpperCase() + " (" + enemy.getNickname() + (enemy.isDisconnected() ? " - DISCONNESSO" : "") + ") has " + enemy.getPowerUps().size() + " poweups.");
         System.out.printf(" Ammos: ");
         enemy.getAmmo().forEach((color, value) -> System.out.printf(value + " " + color.colorName() + "; "));
         System.out.printf("\n     Weapons: ");
         enemy.getWeapons().forEach(weapon -> System.out.printf(weapon.isLoaded() ? "XXXXXX; " : weapon.getName() + "; "));
         System.out.printf("\n     Damages: ");
-        enemy.getHealth().forEach(id -> System.out.printf(id.playerIdName().substring(0, 1) + " "));
+        enemy.getHealth().forEach(id -> System.out.printf(id.toString().substring(0, 1) + " "));
         System.out.printf("Marks: ");
-        enemy.getMarks().forEach((id, n) -> System.out.printf(n + " from " + id.playerIdName() + " "));
+        enemy.getMarks().forEach((id, n) -> System.out.printf(n + " from " + id.toString() + " "));
         System.out.println("(dead " + enemy.getDeaths() + " times)");
     }
 

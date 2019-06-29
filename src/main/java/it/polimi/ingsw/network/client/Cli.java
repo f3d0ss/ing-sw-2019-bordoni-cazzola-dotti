@@ -94,7 +94,7 @@ public class Cli implements Ui {
                 || command.getType() == CommandType.SELECT_WEAPON)
             return ((WeaponCommandMessage) command).getWeapon();
         if (command.getType() == CommandType.SELECT_TARGET_PLAYER)
-            return ((PlayerCommandMessage) command).getPlayerId().playerIdName();
+            return ((PlayerCommandMessage) command).getPlayerId().toString();
         if (command.getType() == CommandType.SELECT_TARGET_SQUARE
                 || command.getType() == CommandType.MOVE
                 || command.getType() == CommandType.USE_TELEPORT)
@@ -108,7 +108,7 @@ public class Cli implements Ui {
         System.out.println("Partita conclusa");
         int i = 1;
         for(PlayerId p : leaderBoard.keySet()){
-            System.out.println(i + "° classificato: " + p.playerIdName() + " con " + leaderBoard.get(p) + " punti");
+            System.out.println(i + "° classificato: " + p.toString() + " con " + leaderBoard.get(p) + " punti");
             i++;
         }
     }

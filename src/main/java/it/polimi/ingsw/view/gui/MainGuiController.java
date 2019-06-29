@@ -21,10 +21,9 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class MainGuiController {
 
@@ -40,7 +39,10 @@ public class MainGuiController {
     private static final int MAX_NUMBER_PLAYER_DEATH_SKULL = 6;
     private static final int HEIGHT_RATIO_SQUARE_INPUT = 2;
     private static final int WIDTH_RATIO_SQUARE_INPUT = 3;
-    public VBox playerAmmo;
+    @FXML
+    private VBox playerAmmo;
+    @FXML
+    private GridPane otherPlayerGrid;
     @FXML
     private HBox playerAggregateActionMMM;
     @FXML
@@ -76,17 +78,7 @@ public class MainGuiController {
     @FXML
     private HBox yellowSpawnWeapons;
     @FXML
-    private HBox otherPlayerContainer;
-    @FXML
     private HBox killShotTrackBox;
-    @FXML
-    private Button otherPlayer1;
-    @FXML
-    private Button otherPlayer2;
-    @FXML
-    private Button otherPlayer3;
-    @FXML
-    private Button otherPlayer4;
     @FXML
     private HBox playerBoard;
     @FXML
@@ -111,19 +103,17 @@ public class MainGuiController {
     private static final String TOKEN_IMAGES_DIR = IMAGES_DIR + "tokens/";
     private static final String AMMO_TILE_IMAGES_DIR = IMAGES_DIR + "ammotiles/";
     private static final String AMMO_IMAGES_DIR = IMAGES_DIR + "ammos/";
-    private static final String SKULL_IMAGE_URI = IMAGES_DIR + "other/skull.jpeg";
+    private static final String SKULL_IMAGE_URI = IMAGES_DIR + "other/skull" + IMAGE_EXTENSION;
     private static final String AMMO_TILE_BACK = "back";
-    private static final String PLAYERBOARD_IMAGES_DIR = IMAGES_DIR + "playerboards/";
-    private static final String AGGREGATE_ACTION_FILE_PATTERN = "_aggregate_action" + IMAGE_EXTENSION;
-    private static final String AGGREGATE_ACTION_FLIPPED_FILE_PATTERN = "_aggregate_action_flipped" + IMAGE_EXTENSION;
-    private static final String BOARD_FILE_PATTERN = "_board_without_aggregate_action" + IMAGE_EXTENSION;
+    static final String PLAYERBOARD_IMAGES_DIR = IMAGES_DIR + "playerboards/";
+    static final String AGGREGATE_ACTION_FILE_PATTERN = "_aggregate_action" + IMAGE_EXTENSION;
+    static final String AGGREGATE_ACTION_FLIPPED_FILE_PATTERN = "_aggregate_action_flipped" + IMAGE_EXTENSION;
+    static final String BOARD_FILE_PATTERN = "_board_without_aggregate_action" + IMAGE_EXTENSION;
     private int selectedCommand;
     private int startSkullNumber;
+    private Stage otherPlayerStage;
 
     public void initialize() {
-
-        List<Button> buttons = new ArrayList<>(Arrays.asList(otherPlayer1, otherPlayer3, otherPlayer2, otherPlayer4));
-        buttons.forEach(this::handlePlayerButton);
         squareBoxes = new HBox[gameBoard.getRowCount()][gameBoard.getColumnCount()];
         //inizialize squares
         for (int i = 0; i < gameBoard.getRowCount(); i++) {
@@ -132,17 +122,6 @@ public class MainGuiController {
                 gameBoard.add(squareBoxes[i][j], j, i);
             }
         }
-
-//        JUST FOR TEST (highlight boxes to see if they are in the right place)
-//        setNodeClickable(playerAggregateActionMMM);
-//        setNodeClickable(playerAggregateActionMG);
-//        setNodeClickable(playerAggregateActionS);
-//        setNodeClickable(playerActionReload);
-//        setNodeClickable(playerAggregateActionMMG);
-//        setNodeClickable(playerAggregateActionMS);
-//        setNodeClickable(playerHealthBox);
-//        setNodeClickable(playerMarks);
-
     }
 
     public int getSelectedCommand() {
@@ -186,12 +165,6 @@ public class MainGuiController {
         }
     }
 
-    private void bindToParent(Pane child, Pane parent, int heightRatio, int widthRatio) {
-        child.maxHeightProperty().bind(parent.heightProperty().divide(heightRatio));
-        child.maxWidthProperty().bind(parent.widthProperty().divide(widthRatio));
-        HBox.setMargin(child, new Insets(0, 0, 0, 1));
-    }
-
     private void printKillshotTrack(List<PlayerId> killShotTrack) {
         killShotTrackBoxStandard.getChildren().clear();
         killShotTrackBoxExtra.getChildren().clear();
@@ -228,7 +201,144 @@ public class MainGuiController {
         return tokenBox;
     }
 
-    private HBox getHBoxWithSkullBackground(Pane parent, int widthRatio) {
+    private void printPlayerBoard(PlayerView playerView) {
+        MainGuiController.printPlayerBoard(playerView, aggregateActionBox, playerPowerUpContainer, playerWeaponContainer, playerMarks, playerHealthBox, playerDeaths, playerAmmo);
+    }
+
+    private void printSpawnWeapons(Map<Color, List<WeaponView>> weaponsOnSpawn) {
+        weaponsOnSpawn.forEach((color, weaponViews) -> {
+            switch (color) {
+                case RED:
+                    printWeaponsOnSpawn(redSpawnWeapons, weaponViews);
+                    break;
+                case BLUE:
+                    printWeaponsOnSpawn(blueSpawnWeapons, weaponViews);
+                    break;
+                case YELLOW:
+                    printWeaponsOnSpawn(yellowSpawnWeapons, weaponViews);
+                    break;
+            }
+        });
+    }
+
+    private void printWeaponsOnSpawn(HBox spawn, List<WeaponView> weaponViews) {
+        spawn.getChildren().clear();
+        weaponViews.forEach(weaponView -> {
+            HBox weaponBox = new HBox();
+            bindHeightToParent(weaponBox, spawn, WEAPON_HEIGHT, WEAPON_WIDTH);
+            String weaponImageURI = WEAPON_IMAGES_DIR
+                    + weaponView.getID()
+                    + IMAGE_EXTENSION;
+            setBackgroundImageFromURI(weaponBox, weaponImageURI);
+            HBox.setMargin(weaponBox, new Insets(0, spawn.getWidth() / WEAPON_SPAWN_MARGIN_RATIO, 0, spawn.getWidth() / WEAPON_SPAWN_MARGIN_RATIO));
+            spawn.getChildren().add(weaponBox);
+            HBox.setHgrow(weaponBox, Priority.ALWAYS);
+        });
+    }
+
+    private void handlePlayerButton(PlayerId playerId) {
+
+        try {
+            if (otherPlayerStage != null) {
+                otherPlayerStage.close();
+            }
+            FXMLLoader fxmlLoader = new FXMLLoader();
+            fxmlLoader.setLocation(MainGuiController.class.getResource("/fx/PlayerBoard.fxml"));
+            Parent root1 = fxmlLoader.load();
+            PlayerBoardController playerBoardController = fxmlLoader.getController();
+            playerBoardController.setPlayer(modelView.getEnemies().get(playerId));
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root1));
+            stage.show();
+            otherPlayerStage = stage;
+            mainPane.setOnMouseClicked(mouseEvent -> stage.close());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private void handleCommandClick(int index, Lock lock) {
+        extraCommandContainer.getChildren().clear();
+        selectedCommand = index;
+        lock.unlock();
+    }
+
+    public void setNodeClickable(Node node/*, CommandMessage command*/) {
+        node.setStyle("-fx-background-color: yellow; -fx-background-radius: 10; -fx-opacity: 0.5");
+        node.setOnMouseClicked(null);
+    }
+
+    public void setNodeUnClickable(Node node) {
+        node.setStyle("-fx-background-color: yellow; -fx-background-radius: 10; -fx-opacity: 0");
+        node.setOnMouseClicked(null);
+    }
+
+    public Pane getRoot() {
+        return mainPane;
+    }
+
+    public void showCommand(List<CommandMessage> commands, Lock lock) {
+        for (int i = 0; i < commands.size(); i++) {
+            Text commandText;
+            int finalI = i;
+            switch (commands.get(i).getType()) {
+                case SELECT_AGGREGATE_ACTION:
+                    commandText = new Text(((AggregateActionCommandMessage) commands.get(i)).getAggregateActionID().toString());
+                    commandText.setOnMouseClicked(actionEvent -> handleCommandClick(finalI, lock));
+                    extraCommandContainer.getChildren().add(commandText);
+                    break;
+                default:
+                    commandText = new Text(commands.get(i).getType().getString());
+                    commandText.setOnMouseClicked(actionEvent -> handleCommandClick(finalI, lock));
+                    extraCommandContainer.getChildren().add(commandText);
+            }
+
+        }
+    }
+
+    public void setModelView(ModelView modelView) {
+        this.modelView = modelView;
+        startSkullNumber = modelView.getMatch().getDeathsCounter();
+        String gameboardImageURI = GAMEBOARD_IMAGES_DIR + modelView.getMatch().getGameBoardId() + IMAGE_EXTENSION;
+        setBackgroundImageFromURI(gameBoard, gameboardImageURI);
+
+
+        String playerBoardImageURI = PLAYERBOARD_IMAGES_DIR
+                + modelView.getMe().getId().playerId()
+                + BOARD_FILE_PATTERN;
+        setBackgroundImageFromURI(boardWithoutAggregateAction, playerBoardImageURI);
+
+        AtomicInteger i = new AtomicInteger(0);
+        AtomicInteger j = new AtomicInteger(0);
+        modelView.getEnemies().forEach((playerId, playerView) -> {
+            Button playerButton = new Button(playerId.toString());
+            playerButton.setOnMouseClicked(mouseEvent -> handlePlayerButton(playerId));
+            bindToParent(playerButton, otherPlayerGrid, otherPlayerGrid.getRowCount(), otherPlayerGrid.getColumnCount());
+            otherPlayerGrid.add(playerButton, i.getAndIncrement() % otherPlayerGrid.getColumnCount(), j.getAndIncrement() / otherPlayerGrid.getColumnCount());
+        });
+
+        updateModelView(modelView);
+    }
+
+    public static MainGuiController getInstance() {
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        fxmlLoader.setLocation(MainGuiController.class.getResource("/fx/MainGui.fxml"));
+        try {
+            fxmlLoader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return fxmlLoader.getController();
+    }
+
+    private static void bindToParent(Region child, Pane parent, int heightRatio, int widthRatio) {
+        child.maxHeightProperty().bind(parent.heightProperty().divide(heightRatio));
+        child.maxWidthProperty().bind(parent.widthProperty().divide(widthRatio));
+        HBox.setMargin(child, new Insets(0, 0, 0, 1));
+    }
+
+    private static HBox getHBoxWithSkullBackground(Pane parent, int widthRatio) {
         HBox tokenBox = new HBox();
         tokenBox.setPrefHeight(parent.getPrefHeight());
         tokenBox.maxWidthProperty().bind(parent.widthProperty().divide(widthRatio));
@@ -237,7 +347,7 @@ public class MainGuiController {
         return tokenBox;
     }
 
-    private HBox getHBoxWithTokenBackgroundWithHighFixedToParent(PlayerId playerId, Pane parent) {
+    private static HBox getHBoxWithTokenBackgroundWithHighFixedToParent(PlayerId playerId, Pane parent) {
         HBox hbox = new HBox();
         bindHeightToParent(hbox, parent);
         String tokenImageURI = TOKEN_IMAGES_DIR
@@ -247,8 +357,45 @@ public class MainGuiController {
         return hbox;
     }
 
-    private void printPlayerBoard(PlayerView playerView) {
+    static void setBackgroundImageFromURI(Pane pane, String uri) {
+        Image image = new Image(MainGuiController.class.getResource(uri).toExternalForm());
+        pane.setBackground(new Background(new BackgroundFill(new ImagePattern(image), CornerRadii.EMPTY, Insets.EMPTY)));
+    }
 
+    /**
+     * Set the height of child as his parent and bind width to be the right ratio
+     *
+     * @param child       is the Pane that will be insert in the parent
+     * @param parent      is the parent Pane
+     * @param childHeight is the eight of the child
+     * @param childWidth  is the wanted width with the child childHeight
+     */
+    private static void bindHeightToParent(Pane child, Pane parent, int childHeight, int childWidth) {
+        child.setPrefHeight(parent.getPrefHeight());
+        child.maxWidthProperty().bind(child.heightProperty().divide(childHeight).multiply(childWidth));
+        HBox.setMargin(child, new Insets(0, 0, 0, 1));
+    }
+
+    /**
+     * Set the height of child as his parent and fix width as height
+     *
+     * @param child  is the Pane that will be insert in the parent
+     * @param parent is the parent Pane
+     */
+    private static void bindHeightToParent(Pane child, Pane parent) {
+        child.setPrefHeight(parent.getPrefHeight());
+        child.maxWidthProperty().bind(child.heightProperty());
+        HBox.setMargin(child, new Insets(0, 0, 0, 1));
+    }
+
+    static void printPlayerBoard(PlayerView playerView,
+                                 VBox aggregateActionBox,
+                                 HBox playerPowerUpContainer,
+                                 HBox playerWeaponContainer,
+                                 HBox playerMarks,
+                                 HBox playerHealthBox,
+                                 HBox playerDeaths,
+                                 VBox playerAmmo) {
         String aggregateActionImageURI = PLAYERBOARD_IMAGES_DIR
                 + playerView.getId().playerId()
                 + (playerView.isFlippedBoard() ? AGGREGATE_ACTION_FLIPPED_FILE_PATTERN : AGGREGATE_ACTION_FILE_PATTERN);
@@ -327,172 +474,5 @@ public class MainGuiController {
         }
 
 
-    }
-
-    private void printSpawnWeapons(Map<Color, List<WeaponView>> weaponsOnSpawn) {
-        weaponsOnSpawn.forEach((color, weaponViews) -> {
-            switch (color) {
-                case RED:
-                    printWeaponsOnSpawn(redSpawnWeapons, weaponViews);
-                    break;
-                case BLUE:
-                    printWeaponsOnSpawn(blueSpawnWeapons, weaponViews);
-                    break;
-                case YELLOW:
-                    printWeaponsOnSpawn(yellowSpawnWeapons, weaponViews);
-                    break;
-            }
-        });
-    }
-
-    private void printWeaponsOnSpawn(HBox spawn, List<WeaponView> weaponViews) {
-        spawn.getChildren().clear();
-        weaponViews.forEach(weaponView -> {
-            HBox weaponBox = new HBox();
-            bindHeightToParent(weaponBox, spawn, WEAPON_HEIGHT, WEAPON_WIDTH);
-            String weaponImageURI = WEAPON_IMAGES_DIR
-                    + weaponView.getID()
-                    + IMAGE_EXTENSION;
-            setBackgroundImageFromURI(weaponBox, weaponImageURI);
-            HBox.setMargin(weaponBox, new Insets(0, spawn.getWidth() / WEAPON_SPAWN_MARGIN_RATIO, 0, spawn.getWidth() / WEAPON_SPAWN_MARGIN_RATIO));
-            spawn.getChildren().add(weaponBox);
-            HBox.setHgrow(weaponBox, Priority.ALWAYS);
-        });
-    }
-
-    private void setBackgroundImageFromURI(Pane pane, String uri) {
-        Image image = new Image(getClass().getResource(uri).toExternalForm());
-        pane.setBackground(new Background(new BackgroundFill(new ImagePattern(image), CornerRadii.EMPTY, Insets.EMPTY)));
-    }
-
-    /**
-     * /**
-     * Set the height of child as his parent and bind width to be the right ratio
-     *
-     * @param child       is the Pane that will be insert in the parent
-     * @param parent      is the parent Pane
-     * @param childHeight is the eight of the child
-     * @param childWidth  is the wanted width with the child childHeight
-     */
-    private void bindHeightToParent(Pane child, Pane parent, int childHeight, int childWidth) {
-        child.setPrefHeight(parent.getPrefHeight());
-        child.maxWidthProperty().bind(child.heightProperty().divide(childHeight).multiply(childWidth));
-        HBox.setMargin(child, new Insets(0, 0, 0, 1));
-    }
-
-    /**
-     * Set the height of child as his parent and fix width as height
-     *
-     * @param child  is the Pane that will be insert in the parent
-     * @param parent is the parent Pane
-     */
-    private void bindHeightToParent(Pane child, Pane parent) {
-        child.setPrefHeight(parent.getPrefHeight());
-        child.maxWidthProperty().bind(child.heightProperty());
-        HBox.setMargin(child, new Insets(0, 0, 0, 1));
-    }
-
-    private void handlePlayerButton(Button button) {
-        button.setOnAction(actionEvent -> {
-
-            try {
-                FXMLLoader fxmlLoader = new FXMLLoader();
-                fxmlLoader.setLocation(MainGuiController.class.getResource("/fx/PlayerBoard.fxml"));
-                Parent root1 = fxmlLoader.load();
-                Stage stage = new Stage();
-                stage.setScene(new Scene(root1));
-                stage.show();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            if (!button.getText().equals("Paolo")) {
-                button.setText("Paolo");
-//                JUST FOR TEST
-//                setNodeClickable(squares[0][0]);
-//                yellowWeaponsOverlay[1].setStyle("-fx-background-image: url('../images/gameboards/redSpawn.png'); -fx-background-repeat: no-repeat;-fx-background-size: 100%;");
-//                yellowWeaponsOverlay[1].minWidth(10000);
-//                yellowWeaponsOverlay[1].minHeight(10000);
-//                setNodeClickable(playerAggregateActionMMM);
-//                setNodeClickable(playerAggregateActionMG);
-//                setNodeClickable(playerAggregateActionS);
-//                setNodeClickable(playerActionReload);
-//                setNodeClickable(playerAggregateActionMMG);
-//                setNodeClickable(playerAggregateActionMS);
-//                setNodeClickable(playerHealthBox);
-
-            } else {
-                button.setText("Commit");
-//                JUST FOR TEST
-//                setNodeUnClickable(squares[0][0]);
-            }
-        });
-    }
-
-    private void handleCommandClick(int index, Lock lock) {
-        extraCommandContainer.getChildren().clear();
-        selectedCommand = index;
-        lock.unlock();
-    }
-
-    public void setNodeClickable(Node node/*, CommandMessage command*/) {
-        node.setStyle("-fx-background-color: yellow; -fx-background-radius: 10; -fx-opacity: 0.5");
-        node.setOnMouseClicked(null);
-    }
-
-    public void setNodeUnClickable(Node node) {
-        node.setStyle("-fx-background-color: yellow; -fx-background-radius: 10; -fx-opacity: 0");
-        node.setOnMouseClicked(null);
-    }
-
-    public static MainGuiController getInstance() {
-        FXMLLoader fxmlLoader = new FXMLLoader();
-        fxmlLoader.setLocation(MainGuiController.class.getResource("/fx/MainGui.fxml"));
-        try {
-            fxmlLoader.load();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return fxmlLoader.getController();
-    }
-
-    public Pane getRoot() {
-        return mainPane;
-    }
-
-
-    public void showCommand(List<CommandMessage> commands, Lock lock) {
-        for (int i = 0; i < commands.size(); i++) {
-            Text commandText;
-            int finalI = i;
-            switch (commands.get(i).getType()) {
-                case SELECT_AGGREGATE_ACTION:
-                    commandText = new Text(((AggregateActionCommandMessage) commands.get(i)).getAggregateActionID().toString());
-                    commandText.setOnMouseClicked(actionEvent -> handleCommandClick(finalI, lock));
-                    extraCommandContainer.getChildren().add(commandText);
-                    break;
-                default:
-                    commandText = new Text(commands.get(i).getType().getString());
-                    commandText.setOnMouseClicked(actionEvent -> handleCommandClick(finalI, lock));
-                    extraCommandContainer.getChildren().add(commandText);
-            }
-
-        }
-    }
-
-
-    public void setModelView(ModelView modelView) {
-        this.modelView = modelView;
-        startSkullNumber = modelView.getMatch().getDeathsCounter();
-        String gameboardImageURI = GAMEBOARD_IMAGES_DIR + modelView.getMatch().getGameBoardId() + IMAGE_EXTENSION;
-        setBackgroundImageFromURI(gameBoard, gameboardImageURI);
-
-
-        String playerBoardImageURI = PLAYERBOARD_IMAGES_DIR
-                + modelView.getMe().getId().playerId()
-                + BOARD_FILE_PATTERN;
-        setBackgroundImageFromURI(boardWithoutAggregateAction, playerBoardImageURI);
-
-        updateModelView(modelView);
     }
 }

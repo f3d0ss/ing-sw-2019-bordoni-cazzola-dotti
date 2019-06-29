@@ -3,7 +3,7 @@ package it.polimi.ingsw.model;
 public enum PlayerId {
     BLUE {
         @Override
-        public String playerIdName() {
+        public String toString() {
             return "Banshee";
         }
 
@@ -15,7 +15,7 @@ public enum PlayerId {
 
     GREEN {
         @Override
-        public String playerIdName() {
+        public String toString() {
             return "Sprog";
         }
 
@@ -27,7 +27,7 @@ public enum PlayerId {
 
     YELLOW {
         @Override
-        public String playerIdName() {
+        public String toString() {
             return ":D-struct-or";
         }
 
@@ -39,7 +39,7 @@ public enum PlayerId {
 
     VIOLET {
         @Override
-        public String playerIdName() {
+        public String toString() {
             return "Violet";
         }
 
@@ -51,7 +51,7 @@ public enum PlayerId {
 
     GREY {
         @Override
-        public String playerIdName() {
+        public String toString() {
             return "Dozer";
         }
 
@@ -61,7 +61,8 @@ public enum PlayerId {
         }
     };
 
-    public abstract String playerIdName();
+    @Override
+    public abstract String toString();
 
     public abstract String playerId();
 
