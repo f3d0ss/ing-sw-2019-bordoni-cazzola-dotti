@@ -18,10 +18,7 @@
       "targetPlayers": true,
       "targetSquare": false,
       "targetRoom": false,
-      "eachTargetInTheSameRoom": false,
-      "eachTargetOnTheSameSquare": false,
       "eachTargetOnDifferentSquares": false,
-      "damageEveryone": true,
       "targetVisibleByOtherTarget": false,
       "targetVisibleByShooter": true,
       "cardinalDirectionMode": false,
@@ -37,7 +34,12 @@
       "moveTargetAfterShoot": false,
       "moveShooter": true,
       "maxTargetMove": 0,
-      "maxShooterMove": 1
+      "maxShooterMove": 1,
+      "multiAction": false,
+      "spinner": false,
+      "fragmentingWarHeadMod": false,
+      "moveOnTarget": false,
+      "hellionMod": false
     },
     {
       "name": "basic effect + shadowstep + slice and dice",
@@ -50,10 +52,7 @@
       "targetPlayers": true,
       "targetSquare": false,
       "targetRoom": false,
-      "eachTargetInTheSameRoom": false,
-      "eachTargetOnTheSameSquare": false,
       "eachTargetOnDifferentSquares": false,
-      "damageEveryone": true,
       "targetVisibleByOtherTarget": false,
       "targetVisibleByShooter": true,
       "cardinalDirectionMode": false,
@@ -70,7 +69,12 @@
       "moveTargetAfterShoot": false,
       "moveShooter": true,
       "maxTargetMove": 0,
-      "maxShooterMove": 1
+      "maxShooterMove": 1,
+      "multiAction": true,
+      "spinner": false,
+      "fragmentingWarHeadMod": false,
+      "moveOnTarget": false,
+      "hellionMod": false
     }
   ]
 }

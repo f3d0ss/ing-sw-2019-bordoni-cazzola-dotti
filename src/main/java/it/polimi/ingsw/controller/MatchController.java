@@ -19,6 +19,7 @@ public class MatchController implements Runnable {
     private static final int[] POINTS_PER_KILL = {8, 6, 4, 2, 1};
     private static final int[] POINTS_PER_KILL_FLIPPED_BOARD = {2, 1};
     private static final int POINTS_PER_FIRST_BLOOD = 1;
+    private static final int MARKS_PER_EXTRA_DAMAGE = 1;
     private final Match match;
     private final Map<PlayerId, ViewInterface> virtualViews = new LinkedHashMap<>();
     private final List<Player> players;
@@ -36,28 +37,42 @@ public class MatchController implements Runnable {
         players = match.getCurrentPlayers();
     }
 
-
+    /**
+     * This method sends an update of the match to every client
+     */
     public void sendFirstStateOfModel() {
         match.updateAllModel();
     }
 
+    /**
+     * This method reconnects a player to the game
+     *
+     * @param username Username of the player who's reconnected
+     */
     public void reconnect(String username) {
         for (Player player : players)
             if (player.getNickname().equals(username))
                 player.setConnected();
     }
 
+    /**
+     * This method sets as disconnected the player
+     *
+     * @param username Username of the player who's disconnected
+     */
     public void disconnect(String username) {
         for (Player player : players)
-            if (player.getNickname().equals(username))
+            if (player.getNickname().equals(username)) {
                 player.setDisconnected();
+                checkDisconnections();
+            }
     }
 
     /**
      * This method orders a map following the official rules:
      * If multiple players dealt the same amount of damage, break the tie in favor of the player whose damage landed first
      *
-     * @param counts            map to order (ID,numberof points/tokens)
+     * @param counts            map to order (ID,number of points/tokens)
      * @param orderByFirstBlood must be ordered by first blood
      * @return Leaderboard (ordered Map)
      */
@@ -106,12 +121,13 @@ public class MatchController implements Runnable {
     /**
      * This method handles the first turn of each player
      */
-    private void firstTurn() {
+    private void runFirstTurn() {
         for (Player currentPlayer : players) {
             spawnFirstTime(currentPlayer);
-            if (!currentPlayer.isDisconnected())
+            if (!currentPlayer.isDisconnected()) {
                 new TurnController(currentPlayer, players, virtualViews).runTurn();
-            endTurnControls(currentPlayer);
+                endTurnControls(currentPlayer);
+            }
         }
     }
 
@@ -120,17 +136,28 @@ public class MatchController implements Runnable {
      */
     @Override
     public void run() {
-        firstTurn();
+        runFirstTurn();
         int currentPlayerIndex = 0;
         while (!match.isLastTurn()) {
-            Player currentPlayer = players.get(currentPlayerIndex);
-            if (!currentPlayer.isDisconnected()) {
-                new TurnController(currentPlayer, players, virtualViews).runTurn();
-                endTurnControls(currentPlayer);
-            }
-            currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
+            currentPlayerIndex = runTurn(currentPlayerIndex);
         }
         runFinalFrenzyTurn(currentPlayerIndex);
+    }
+
+    /**
+     * This method handles a player turn
+     *
+     * @param currentPlayerIndex Player's index whose turn is starting
+     * @return next player's index
+     */
+    private int runTurn(int currentPlayerIndex) {
+        Player currentPlayer = players.get(currentPlayerIndex);
+        if (!currentPlayer.isDisconnected()) {
+            new TurnController(currentPlayer, players, virtualViews).runTurn();
+            endTurnControls(currentPlayer);
+        }
+        currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
+        return currentPlayerIndex;
     }
 
     /**
@@ -150,7 +177,7 @@ public class MatchController implements Runnable {
                 respawn(player);
             }
         }
-        if (numberOfKills > 1) { //doublekill points
+        if (numberOfKills > 1) {
             currentPlayer.addPoints(numberOfKills - 1);
         }
     }
@@ -166,12 +193,7 @@ public class MatchController implements Runnable {
         for (int i = 0; i < players.size(); i++) {
             if (currentPlayerIndex == 0)
                 match.firstPlayerPlayedLastTurn();
-            Player currentPlayer = players.get(currentPlayerIndex);
-            if (!currentPlayer.isDisconnected()) {
-                new TurnController(currentPlayer, players, virtualViews).runTurn();
-                endTurnControls(currentPlayer);
-            }
-            currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
+            currentPlayerIndex = runTurn(currentPlayerIndex);
         }
         calculateFinalScores();
     }
@@ -188,7 +210,7 @@ public class MatchController implements Runnable {
 
     /**
      * This method calculates the leaderboard
-     * Break the tie in favor of the player who got the higher score on the killshot track
+     * Break the tie in favor of the player who got the higher score on the kill shot track
      */
     private void calculateFinalScores() {
         List<PlayerId> killShootTrackLeaderBoard = Arrays.asList(scoreAllBoards());
@@ -200,10 +222,10 @@ public class MatchController implements Runnable {
 
     /**
      * This method is called after  the  final  turn,  score  all  boards  that  still  have  damage  tokens.
-     * Score  them  as  you  usually would, except, of course, they don't have killshots.
+     * Score  them  as  you  usually would, except, of course, they don't have kill shots.
      * If you are playing with the final frenzy rules, don't forget that flipped boards offer no point for first blood.
      *
-     * @return KillshootTrack leaderboard
+     * @return Kill shot Track leaderboard
      */
     private PlayerId[] scoreAllBoards() {
         for (Player player : players) {
@@ -211,9 +233,9 @@ public class MatchController implements Runnable {
                 calculateTrackScores(player);
             }
         }
-        PlayerId[] killshotTrack = sortByPoints(match.getKillshotTrack());
-        scoreKillshotTrackPoints(killshotTrack);
-        return killshotTrack;
+        PlayerId[] killShotTrack = sortByPoints(match.getKillshotTrack());
+        scoreKillShotTrackPoints(killShotTrack);
+        return killShotTrack;
     }
 
     private void endMatch() {
@@ -221,7 +243,7 @@ public class MatchController implements Runnable {
     }
 
     /**
-     * This method adds the points for the deadPlayer's track. Adds marks to killshotTrack
+     * This method adds the points for the deadPlayer's track. Adds marks to kill shot Track
      *
      * @param deadPlayer track to score owner.
      */
@@ -230,12 +252,10 @@ public class MatchController implements Runnable {
         if (!track.isEmpty()) {
             if (!deadPlayer.isFlippedBoard())
                 Objects.requireNonNull(getPlayerById(track.get(0))).addPoints(POINTS_PER_FIRST_BLOOD);
-            //marks for 12th dmg
-            //extra token on killshottrack for 12th dmg
             PlayerId playerId11thDamage = track.get(track.size() - 1);
             match.addKillshot(playerId11thDamage);
             if (track.size() == Player.MAX_DAMAGE) {
-                Objects.requireNonNull(getPlayerById(playerId11thDamage)).addMarks(1, deadPlayer.getId());
+                Objects.requireNonNull(getPlayerById(playerId11thDamage)).addMarks(MARKS_PER_EXTRA_DAMAGE, deadPlayer.getId());
                 match.addKillshot(playerId11thDamage);
             }
             scoreTrackPoints(deadPlayer, sortByPoints(track));
@@ -283,11 +303,11 @@ public class MatchController implements Runnable {
     }
 
     /**
-     * This method assigns points for the killshoot track
+     * This method assigns points for the kill shot track
      *
      * @param keys sorted by rules
      */
-    private void scoreKillshotTrackPoints(PlayerId[] keys) {
+    private void scoreKillShotTrackPoints(PlayerId[] keys) {
         final int[] pointsPerKill = POINTS_PER_KILL;
         for (int i = 0; i < keys.length; i++) {
             int points;
@@ -351,7 +371,7 @@ public class MatchController implements Runnable {
                 counter++;
         }
         if (counter < MIN_PLAYERS) {
-            System.out.println("RAGEQUIT --- ENDING MATCH");
+            System.out.println("Too many disconnections --- ENDING MATCH");
             //end match
             calculateFinalScores();
             endMatch();
