@@ -175,6 +175,7 @@ public class MainGuiController {
     }
 
     private void printSpawnWeapons(Map<Color, List<WeaponView>> weaponsOnSpawn) {
+        weaponsOnSpawnBoxes.clear();
         weaponsOnSpawn.forEach((color, weaponViews) -> {
             switch (color) {
                 case RED:
@@ -192,7 +193,6 @@ public class MainGuiController {
 
     private void printWeaponsOnSpawn(HBox spawn, List<WeaponView> weaponViews) {
         spawn.getChildren().clear();
-        weaponsOnSpawnBoxes.clear();
         weaponViews.forEach(weaponView -> {
             HBox weaponBox = new HBox();
             bindHeightToParent(weaponBox, spawn, WEAPON_HEIGHT, WEAPON_WIDTH);
