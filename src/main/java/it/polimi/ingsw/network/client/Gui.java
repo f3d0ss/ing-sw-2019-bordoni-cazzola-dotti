@@ -89,7 +89,7 @@ public class Gui implements Ui, Runnable {
         Lock lock = new Lock();
         try {
             lock.lock();
-            Platform.runLater(() -> controller.showCommand(commands, lock));
+            Platform.runLater(() -> controller.showCommand(commands, undo, lock));
             lock.lock();
             return controller.getSelectedCommand();
         } catch (InterruptedException e) {

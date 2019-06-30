@@ -4,9 +4,7 @@ import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.PlayerId;
 import it.polimi.ingsw.utils.Lock;
 import it.polimi.ingsw.view.*;
-import it.polimi.ingsw.view.commandmessage.AggregateActionCommandMessage;
-import it.polimi.ingsw.view.commandmessage.CommandMessage;
-import it.polimi.ingsw.view.commandmessage.SquareCommandMessage;
+import it.polimi.ingsw.view.commandmessage.*;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
@@ -19,10 +17,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.EnumMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class MainGuiController {
@@ -85,6 +80,8 @@ public class MainGuiController {
     private List<HBox> clickableNode = new ArrayList<>();
     private int selectedCommand;
     private int startSkullNumber;
+    private Map<String, HBox> weaponsOnSpawnBoxes = new HashMap<>();
+    private Map<PlayerId, HBox> playerBoxes = new EnumMap<>(PlayerId.class);
 
     public void initialize() {
         squareBoxes = new HBox[gameBoard.getRowCount()][gameBoard.getColumnCount()];
@@ -107,10 +104,11 @@ public class MainGuiController {
         printKillshotTrack(modelView.getMatch().getKillshotTrack());
         playerBoardController.printPlayerBoard(modelView.getMe());
         printBoard(modelView.getBoard());
-        otherPlayerBoardControllers.forEach((playerId, playerBoardController) -> playerBoardController.update(modelView.getEnemies().get(playerId)));
+        otherPlayerBoardControllers.forEach((playerId, otherPlayerBoardController) -> otherPlayerBoardController.update(modelView.getEnemies().get(playerId)));
     }
 
     private void printBoard(SquareView[][] board) {
+        playerBoxes.clear();
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board[i].length; j++) {
                 if (board[i][j] != null) {
@@ -133,6 +131,7 @@ public class MainGuiController {
                         bindToParent(tokenBox, squareBoxes[finalI][finalJ], HEIGHT_RATIO_SQUARE_INPUT, WIDTH_RATIO_SQUARE_INPUT);
                         squareBoxes[finalI][finalJ].getChildren().add(tokenBox);
                         HBox.setHgrow(tokenBox, Priority.ALWAYS);
+                        playerBoxes.put(playerId, tokenBox);
                     });
                 }
             }
@@ -175,8 +174,6 @@ public class MainGuiController {
         return tokenBox;
     }
 
-
-
     private void printSpawnWeapons(Map<Color, List<WeaponView>> weaponsOnSpawn) {
         weaponsOnSpawn.forEach((color, weaponViews) -> {
             switch (color) {
@@ -195,6 +192,7 @@ public class MainGuiController {
 
     private void printWeaponsOnSpawn(HBox spawn, List<WeaponView> weaponViews) {
         spawn.getChildren().clear();
+        weaponsOnSpawnBoxes.clear();
         weaponViews.forEach(weaponView -> {
             HBox weaponBox = new HBox();
             bindHeightToParent(weaponBox, spawn, WEAPON_HEIGHT, WEAPON_WIDTH);
@@ -205,6 +203,7 @@ public class MainGuiController {
             HBox.setMargin(weaponBox, new Insets(0, spawn.getWidth() / WEAPON_SPAWN_MARGIN_RATIO, 0, spawn.getWidth() / WEAPON_SPAWN_MARGIN_RATIO));
             spawn.getChildren().add(weaponBox);
             HBox.setHgrow(weaponBox, Priority.ALWAYS);
+            weaponsOnSpawnBoxes.put(weaponView.getName(), weaponBox);
         });
     }
 
@@ -231,6 +230,7 @@ public class MainGuiController {
 
     private void handleCommandClick(int index, Lock lock) {
         clickableNode.forEach(this::setNodeUnClickable);
+        clickableNode.clear();
         extraCommandContainer.getChildren().clear();
         selectedCommand = index;
         lock.unlock();
@@ -240,21 +240,24 @@ public class MainGuiController {
         HBox overlay = new HBox();
         overlay.setStyle("-fx-background-color: yellow; -fx-background-radius: 10; -fx-opacity: 0.5");
         overlay.setOnMouseClicked(mouseEvent -> handleCommandClick(commandIndex, lock));
-        overlay.getChildren().setAll(node.getChildrenUnmodifiable());
+        if (node.getChildren().isEmpty())
+            overlay.getChildren().setAll(node.getChildrenUnmodifiable());
         node.getChildren().setAll(overlay);
         HBox.setHgrow(overlay, Priority.ALWAYS);
+        clickableNode.add(node);
     }
 
     public void setNodeUnClickable(HBox node) {
-        node.getChildren().setAll(((HBox)node.getChildren().get(0)).getChildren());
+        node.getChildren().setAll(((HBox) node.getChildren().get(0)).getChildren());
     }
 
     public Pane getRoot() {
         return mainPane;
     }
 
-    public void showCommand(List<CommandMessage> commands, Lock lock) {
-        for (int i = 0; i < commands.size(); i++) {
+    public void showCommand(List<CommandMessage> commands, boolean undo, Lock lock) {
+        int i;
+        for (i = 0; i < commands.size(); i++) {
             Text commandText;
             int finalI = i;
             switch (commands.get(i).getType()) {
@@ -264,15 +267,41 @@ public class MainGuiController {
                     extraCommandContainer.getChildren().add(commandText);
                     break;
                 case SELECT_AMMO_PAYMENT:
-                    clickableNode.add(squareBoxes[((SquareCommandMessage)commands.get(i)).getRow()][((SquareCommandMessage)commands.get(i)).getCol()]);
-                    setNodeClickable(squareBoxes[((SquareCommandMessage)commands.get(i)).getRow()][((SquareCommandMessage)commands.get(i)).getCol()], i, lock);
+                    setNodeClickable(playerBoardController.getAmmoBox(((ColorCommandMessage) commands.get(i)).getColor()), i, lock);
+                    break;
+                case SELECT_BUYING_WEAPON:
+                    setNodeClickable(weaponsOnSpawnBoxes.get(((WeaponCommandMessage) commands.get(i)).getWeapon()), i, lock);
+                    break;
+                case SELECT_DISCARD_WEAPON:
+                case SELECT_RELOADING_WEAPON:
+                case SELECT_WEAPON:
+                    setNodeClickable(playerBoardController.getWeaponBox(((WeaponCommandMessage) commands.get(i)).getWeapon()), i, lock);
+                    break;
+                case MOVE:
+                case SELECT_TARGET_SQUARE:
+                case USE_TELEPORT:
+                    setNodeClickable(squareBoxes[((SquareCommandMessage) commands.get(i)).getRow()][((SquareCommandMessage) commands.get(i)).getCol()], i, lock);
+                    break;
+                case SELECT_TARGET_PLAYER:
+                    setNodeClickable(playerBoxes.get(((PlayerCommandMessage) commands.get(i)).getPlayerId()), i, lock);
+                    break;
+                case RESPAWN:
+                case SELECT_POWER_UP:
+                case SELECT_POWER_UP_PAYMENT:
+                case SELECT_SCOPE:
+                    setNodeClickable(playerBoardController.getPowerUpBox(((PowerUpCommandMessage) commands.get(i)).getPowerUpID(), ((PowerUpCommandMessage) commands.get(i)).getColor()), i, lock);
                     break;
                 default:
                     commandText = new Text(commands.get(i).getType().getString());
                     commandText.setOnMouseClicked(actionEvent -> handleCommandClick(finalI, lock));
                     extraCommandContainer.getChildren().add(commandText);
             }
-
+        }
+        if (undo) {
+            Text commandText = new Text(CommandType.UNDO.getString());
+            int finalI1 = i;
+            commandText.setOnMouseClicked(actionEvent -> handleCommandClick(finalI1, lock));
+            extraCommandContainer.getChildren().add(commandText);
         }
     }
 
@@ -303,7 +332,7 @@ public class MainGuiController {
         });
 
         mainPane.setOnMouseClicked(mouseEvent -> {
-            otherPlayerBoardControllers.forEach((playerId1, playerBoardController) -> playerBoardController.close());
+            otherPlayerBoardControllers.forEach((playerId1, otherPlayerBoardController) -> otherPlayerBoardController.close());
             otherPlayerBoardControllers.clear();
         });
 
