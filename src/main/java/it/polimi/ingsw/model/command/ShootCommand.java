@@ -17,9 +17,9 @@ import java.util.stream.Collectors;
  * This command represent the shoot action
  */
 public class ShootCommand implements WeaponCommand {
-    public List<EffectCommand> effects;
-    private Player player;
-    private ReadyToShootState currentState;
+    private final List<EffectCommand> effects;
+    private final Player player;
+    private final ReadyToShootState currentState;
 
     /**
      * This constructor create a command for shoot

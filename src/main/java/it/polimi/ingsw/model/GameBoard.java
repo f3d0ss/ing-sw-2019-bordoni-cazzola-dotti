@@ -1,9 +1,6 @@
 package it.polimi.ingsw.model;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class GameBoard {
@@ -52,14 +49,6 @@ public class GameBoard {
 
     public List<TurretSquare> getTurrets() {
         return turrets;
-    }
-
-    public int getHeight() {
-        return ROWS;
-    }
-
-    public int getWidth() {
-        return COLUMNS;
     }
 
     /**
@@ -113,13 +102,14 @@ public class GameBoard {
      * @return give the list of visible squares according to input parameters
      * @author supernivem
      */
+    @SuppressWarnings("squid:S3776")
     public List<Square> getVisibleSquares(Square position, int maxRange, int minRange, boolean onlyWithPlayer) {
         Square adjacent;
         List<Square> list = new ArrayList<>();
-        List<Square> out = new ArrayList<>();
         list.add(position);
         if (maxRange > 0) {
-            for (CardinalDirection dir : CardinalDirection.values())
+            CardinalDirection[] values = CardinalDirection.values();
+            for (CardinalDirection dir : values) {
                 if (position.getConnection(dir).isAccessible(false)) {
                     adjacent = this.getAdjacentSquare(position, dir);
                     if (!list.contains(adjacent)) {
@@ -128,20 +118,19 @@ public class GameBoard {
                             this.getSameRoomSquares(list, adjacent);
                     }
                 }
+            }
         }
         if (minRange > 0) {
             list.remove(position);
             if (minRange > 1)
-                for (CardinalDirection dir : CardinalDirection.values())
-                    if (position.getConnection(dir).isAccessible(false))
-                        list.remove(getAdjacentSquare(position, dir));
+                Arrays.stream(CardinalDirection.values())
+                        .filter(dir -> position.getConnection(dir).isAccessible(false))
+                        .map(dir -> getAdjacentSquare(position, dir))
+                        .forEach(list::remove);
         }
         if (!onlyWithPlayer)
             return list;
-        for (Square s : list)
-            if (!s.getHostedPlayers().isEmpty())
-                out.add(s);
-        return out;
+        return list.stream().filter(s -> !s.getHostedPlayers().isEmpty()).collect(Collectors.toList());
     }
 
     /**
@@ -255,10 +244,10 @@ public class GameBoard {
     }
 
     /**
-     * @param shooter
-     * @param maxDistance
-     * @param minDistance
-     * @return
+     * @param shooter     Player who's searching for targets
+     * @param maxDistance Max targets distance
+     * @param minDistance Min targets distance
+     * @return List of possible visible players
      */
     public List<Player> getVisibleTargets(Player shooter, int maxDistance, int minDistance) {
         List<Player> targets = new ArrayList<>();
@@ -302,9 +291,9 @@ public class GameBoard {
     /**
      * This method returns the square adjacent to the second square reachable in the same direction ( first square must be on the same column or the same row of second square)
      *
-     * @param firstSquare
-     * @param secondSquare
-     * @return
+     * @param firstSquare  FirstSquare
+     * @param secondSquare Second Square
+     * @return Square adjacent to the second square in the same direction
      */
     public Square getThirdSquareInTheSameDirection(Square firstSquare, Square secondSquare, boolean ignoreWall) {
         if (firstSquare == secondSquare)
@@ -332,11 +321,11 @@ public class GameBoard {
     /**
      * This method returns all other players in the same direction (based on shooter position and on targetPlayersToExclude players position)
      *
-     * @param shooter
+     * @param shooter                Player who's searching for other players
      * @param targetPlayersToExclude list of players to exclude
-     * @param maxTargetDistance
-     * @param minTargetDistance
-     * @param ignoreWalls
+     * @param maxTargetDistance      max targets  distance
+     * @param minTargetDistance      min targets distance
+     * @param ignoreWalls            if true walls are ignored
      * @return List of the players
      */
     public List<Player> getPlayersInTheSameDirection(Player shooter, List<Player> targetPlayersToExclude, int maxTargetDistance, int minTargetDistance, boolean ignoreWalls) {
@@ -386,8 +375,8 @@ public class GameBoard {
     /**
      * This method returns squares at distance 1 accessible through doors.
      *
-     * @param position
-     * @return
+     * @param position Current position
+     * @return List of squares ( a square for each room )
      */
     public List<Square> getSquareInOtherVisibleRooms(Square position) {
         List<Square> list = new ArrayList<>();
@@ -407,7 +396,7 @@ public class GameBoard {
     }
 
     public List<SpawnSquare> getSpawnSquares() {
-        return spawns.values().stream().collect(Collectors.toList());
+        return new ArrayList<>(spawns.values());
     }
 
     public int getId() {

@@ -3,8 +3,6 @@ package it.polimi.ingsw.model.playerstate;
 import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.model.command.Command;
 import it.polimi.ingsw.model.command.PayWeaponOptionCommand;
-import it.polimi.ingsw.model.command.SelectAmmoPaymentCommand;
-import it.polimi.ingsw.model.command.SelectPowerUpPaymentCommand;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
@@ -13,9 +11,9 @@ import java.util.Map;
 
 public class PendingPaymentWeaponOptionState extends SelectedWeaponState implements PendingPaymentState {
 
-    private Map<Color, Integer> pendingAmmo;
-    private List<PowerUp> pendingCardPayment;
-    private Map<Color, Integer> modeCost;
+    private final Map<Color, Integer> pendingAmmo;
+    private final List<PowerUp> pendingCardPayment;
+    private final Map<Color, Integer> modeCost;
 
     public PendingPaymentWeaponOptionState(AggregateAction selectedAggregateAction, Weapon selectedWeapon, Map<Color, Integer> firstOptionalModeCost) {
         super(selectedAggregateAction, selectedWeapon);
@@ -65,11 +63,11 @@ public class PendingPaymentWeaponOptionState extends SelectedWeaponState impleme
         pendingCardPayment.forEach(powerUp -> totalPending.put(powerUp.getColor(), totalPending.getOrDefault(powerUp.getColor(), 0) + 1));
         pendingAmmo.forEach((color, integer) -> totalPending.put(color, totalPending.getOrDefault(color, 0) + integer));
 
-        if (modeCost.equals(totalPending)){
+        if (modeCost.equals(totalPending)) {
             commands.add(new PayWeaponOptionCommand(player, this));
             return commands;
         }
-        return PendingPaymentState.generateSelctPaymentCommand(totalPending, player, modeCost, this);
+        return PendingPaymentState.generateSelectPaymentCommand(totalPending, player, modeCost, this);
 
     }
 }

@@ -11,8 +11,8 @@ import it.polimi.ingsw.view.commandmessage.PowerUpCommandMessage;
  * This command represent the reSpawn action
  */
 public class RespawnCommand implements Command {
-    private Player player;
-    private PowerUp powerUp;
+    private final Player player;
+    private final PowerUp powerUp;
 
     /**
      * This constructor create a command for reSpawn

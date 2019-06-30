@@ -3,7 +3,9 @@ package it.polimi.ingsw.model;
 import it.polimi.ingsw.model.command.GrabCommand;
 import it.polimi.ingsw.model.command.GrabTileCommand;
 import it.polimi.ingsw.model.playerstate.SelectedAggregateActionState;
-import it.polimi.ingsw.view.*;
+import it.polimi.ingsw.view.AmmoTileView;
+import it.polimi.ingsw.view.SquareView;
+import it.polimi.ingsw.view.TurretSquareView;
 
 import java.util.ArrayList;
 import java.util.List;

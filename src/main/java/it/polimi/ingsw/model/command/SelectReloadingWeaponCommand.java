@@ -11,10 +11,10 @@ import it.polimi.ingsw.view.commandmessage.WeaponCommandMessage;
  * This command represent the action of select a weapon to reload
  */
 public class SelectReloadingWeaponCommand implements Command {
-    private Player player;
-    private PlayerState currentState;
-    private PlayerState nextState;
-    private Weapon weapon;
+    private final Player player;
+    private final PlayerState currentState;
+    private final PlayerState nextState;
+    private final Weapon weapon;
 
     /**
      * This constructor is called from ChoosingWeaponState and set the next state to the PendingPaymentReloadBeforeShotState

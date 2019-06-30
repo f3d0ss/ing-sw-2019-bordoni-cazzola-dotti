@@ -2,9 +2,9 @@ package it.polimi.ingsw.model;
 
 public class AggregateAction {
     private final int moveNumber;
-    private boolean grab;
-    private boolean shoot;
-    private boolean reload;
+    private final boolean grab;
+    private final boolean shoot;
+    private final boolean reload;
     private boolean moved;
 
     public AggregateAction(int moveNumber, boolean grab, boolean shoot, boolean reload) {

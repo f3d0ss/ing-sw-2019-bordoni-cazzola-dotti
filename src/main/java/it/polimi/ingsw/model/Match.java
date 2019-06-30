@@ -8,7 +8,7 @@ import it.polimi.ingsw.view.VirtualView;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
@@ -32,7 +32,7 @@ public class Match {
     public Match(int gameBoardNumber, int skulls) {
         Parser parser = new Parser();
         initializeGameBoard(gameBoardNumber, parser);
-        views = new HashMap<>();
+        views = new EnumMap<>(PlayerId.class);
         killshotTrack = new ArrayList<>();
         currentPlayers = new ArrayList<>();
         firstPlayerPlayedLastTurn = false;
@@ -92,7 +92,7 @@ public class Match {
                 board.getSpawn(color).addWeapon(weaponList.remove(0));
         }
         currentWeaponDeck = new WeaponDeck(weaponList);
-        //currentWeaponDeck.shuffle();
+        currentWeaponDeck.shuffle();
     }
 
     private void initializePowerUps(Parser parser) {
@@ -174,10 +174,6 @@ public class Match {
             tmp = currentAmmoTileDeck.drawAmmoTile();
         }
         return tmp;
-    }
-
-    private Weapon drawWeaponCard() {
-        return currentWeaponDeck.drawWeapon();
     }
 
     public PowerUp drawPowerUpCard() {

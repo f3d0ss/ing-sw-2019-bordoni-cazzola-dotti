@@ -172,6 +172,7 @@ public class Weapon {
         return new ArrayList<>(effectCommands);
     }
 
+    @SuppressWarnings("squid:S3776")
     private List<WeaponCommand> getPossibleShootCommandsTargetPlayersAdditionalDamage(Player shooter, ReadyToShootState state) {
         List<WeaponCommand> possibleCommands = new ArrayList<>();
         final int dmg1 = 1;
