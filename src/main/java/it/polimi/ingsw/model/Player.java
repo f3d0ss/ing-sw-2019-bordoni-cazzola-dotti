@@ -19,7 +19,7 @@ public class Player {
 
     public static final int MAX_DAMAGE = 12;
     public static final int MAX_WEAPONS = 3;
-    public static final int INITIAL_AMMO_NUMBER = 1;
+    static final int INITIAL_AMMO_NUMBER = 1;
     private static final int MAX_AMMO = 3;
     private static final int MAX_POWERUP = 3;
     private static final int MAX_MARKS = 3;
@@ -57,13 +57,11 @@ public class Player {
 
     }
 
-    public PlayerView getPlayerView(boolean isMe) {
+    PlayerView getPlayerView(boolean isMe) {
         List<WeaponView> wvs = new ArrayList<>();
         List<PowerUpView> pvs = new ArrayList<>();
         weapons.forEach(weapon -> wvs.add(new WeaponView(weapon.getName(), weapon.isLoaded())));
         powerUps.forEach(powerUp -> pvs.add(new PowerUpView(powerUp.getType(), powerUp.getColor())));
-//        TODO: decide if view need to know
-//        playerState.updatePlayerView(playerView);
         return new PlayerView(id, isMe, health, deaths, marks, nickname, wvs, pvs, ammo, availableAggregateActionCounter, flippedBoard, disconnected, health.size() > DAMAGE_BEFORE_FIRST_ADRENALINA, health.size() > DAMAGE_BEFORE_SECOND_ADRENALINA);
     }
 
@@ -103,7 +101,7 @@ public class Player {
         this.playerState = playerState;
     }
 
-    public void untracedMove(Square square) {
+    void untracedMove(Square square) {
         position.untracedRemovePlayer(this);
         position = square;
         position.untracedAddPlayer(this);

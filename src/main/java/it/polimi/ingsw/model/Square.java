@@ -83,8 +83,8 @@ public abstract class Square {
         update();
     }
 
-    public boolean untracedRemovePlayer(Player player) {
-        return this.hostedPlayers.remove(player);
+    public void untracedRemovePlayer(Player player) {
+        this.hostedPlayers.remove(player);
     }
 
     public List<Player> getHostedPlayers() {

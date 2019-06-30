@@ -34,7 +34,7 @@ public class GameBoard {
      * @return the square placed in specified coordinates
      * @author Bordoni
      */
-    public Square getSquare(int row, int col) {
+    Square getSquare(int row, int col) {
         return board[row][col];
     }
 
@@ -43,11 +43,11 @@ public class GameBoard {
      * @return the uniqe spawn square of that color
      * @author Bordoni
      */
-    public SpawnSquare getSpawn(Color color) {
+    SpawnSquare getSpawn(Color color) {
         return spawns.get(color);
     }
 
-    public List<TurretSquare> getTurrets() {
+    List<TurretSquare> getTurrets() {
         return turrets;
     }
 
@@ -103,7 +103,7 @@ public class GameBoard {
      * @author supernivem
      */
     @SuppressWarnings("squid:S3776")
-    public List<Square> getVisibleSquares(Square position, int maxRange, int minRange, boolean onlyWithPlayer) {
+    List<Square> getVisibleSquares(Square position, int maxRange, int minRange, boolean onlyWithPlayer) {
         Square adjacent;
         List<Square> list = new ArrayList<>();
         list.add(position);
@@ -157,7 +157,7 @@ public class GameBoard {
         return list;
     }
 
-    public List<Player> getPlayersOnCardinalDirectionSquares(Player shooter, int maxRange, int minRange, boolean ignoreWalls) {
+    List<Player> getPlayersOnCardinalDirectionSquares(Player shooter, int maxRange, int minRange, boolean ignoreWalls) {
         List<Player> players = new ArrayList<>();
         getCardinalDirectionSquares(shooter.getPosition(), maxRange, minRange, ignoreWalls)
                 .stream()
@@ -189,7 +189,7 @@ public class GameBoard {
      * @return the list of squares reachable in at most maxMoves steps
      * @author supernivem
      */
-    public List<Square> getReachableSquare(Square position, int maxMoves) {
+    List<Square> getReachableSquare(Square position, int maxMoves) {
         List<Square> list = new ArrayList<>();
         getReachableSquare(position, list, maxMoves);
         return list;
@@ -201,7 +201,7 @@ public class GameBoard {
      * @param player   player to exclude
      * @return the list of squares reachable in at most maxMoves steps with at least another player on
      */
-    public List<Square> getReachableSquaresWithOtherPlayers(Square position, int maxMoves, Player player) {
+    List<Square> getReachableSquaresWithOtherPlayers(Square position, int maxMoves, Player player) {
         List<Square> reachableSquares = getReachableSquare(position, maxMoves);
         List<Square> squaresWithOtherPlayers = new ArrayList<>();
         for (Square square : reachableSquares)
@@ -249,7 +249,7 @@ public class GameBoard {
      * @param minDistance Min targets distance
      * @return List of possible visible players
      */
-    public List<Player> getVisibleTargets(Player shooter, int maxDistance, int minDistance) {
+    List<Player> getVisibleTargets(Player shooter, int maxDistance, int minDistance) {
         List<Player> targets = new ArrayList<>();
         getVisibleSquares(shooter.getPosition(), maxDistance, minDistance, true)
                 .stream()
@@ -263,7 +263,7 @@ public class GameBoard {
      * @return a list of accessible direction
      * @author supernivem
      */
-    public List<CardinalDirection> getAccessibleDirection(Square position) {
+    List<CardinalDirection> getAccessibleDirection(Square position) {
         List<CardinalDirection> dir = new ArrayList<>();
         for (CardinalDirection c : CardinalDirection.values())
             if (position.getConnection(c).isAccessible(false))
@@ -279,7 +279,7 @@ public class GameBoard {
      * @param player   player to exclude
      * @return list of other players on reachable squares
      */
-    public List<Player> getOtherPlayersOnReachableSquares(Square position, int maxMoves, Player player) {
+    List<Player> getOtherPlayersOnReachableSquares(Square position, int maxMoves, Player player) {
         List<Square> reachableSquares = getReachableSquare(position, maxMoves);
         List<Player> players = new ArrayList<>();
         for (Square square : reachableSquares)
@@ -295,7 +295,7 @@ public class GameBoard {
      * @param secondSquare Second Square
      * @return Square adjacent to the second square in the same direction
      */
-    public Square getThirdSquareInTheSameDirection(Square firstSquare, Square secondSquare, boolean ignoreWall) {
+    Square getThirdSquareInTheSameDirection(Square firstSquare, Square secondSquare, boolean ignoreWall) {
         if (firstSquare == secondSquare)
             return null;
         final int firstSquareRow = firstSquare.getRow();
@@ -328,7 +328,7 @@ public class GameBoard {
      * @param ignoreWalls            if true walls are ignored
      * @return List of the players
      */
-    public List<Player> getPlayersInTheSameDirection(Player shooter, List<Player> targetPlayersToExclude, int maxTargetDistance, int minTargetDistance, boolean ignoreWalls) {
+    List<Player> getPlayersInTheSameDirection(Player shooter, List<Player> targetPlayersToExclude, int maxTargetDistance, int minTargetDistance, boolean ignoreWalls) {
         List<Player> players = new ArrayList<>();
         CardinalDirection direction = getCardinalDirection(shooter.getPosition(), targetPlayersToExclude.get(0).getPosition());
         List<Square> squaresInADirectionIgnoringWalls = getSquaresInADirection(shooter.getPosition(), direction, maxTargetDistance, minTargetDistance, ignoreWalls);
@@ -378,7 +378,7 @@ public class GameBoard {
      * @param position Current position
      * @return List of squares ( a square for each room )
      */
-    public List<Square> getSquareInOtherVisibleRooms(Square position) {
+    List<Square> getSquareInOtherVisibleRooms(Square position) {
         List<Square> list = new ArrayList<>();
         for (CardinalDirection cardinalDirection : CardinalDirection.values())
             if (position.getConnection(cardinalDirection).isDoor())
