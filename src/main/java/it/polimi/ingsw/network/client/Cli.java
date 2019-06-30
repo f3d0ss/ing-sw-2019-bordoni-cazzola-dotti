@@ -142,11 +142,11 @@ public class Cli implements Ui {
                 || command.getType() == CommandType.SELECT_WEAPON)
             return ((WeaponCommandMessage) command).getWeapon();
         if (command.getType() == CommandType.SELECT_TARGET_PLAYER)
-            return ((PlayerCommandMessage) command).getPlayerId().toString();
+            return ((PlayerCommandMessage) command).getPlayerId().playerIdName();
         if (command.getType() == CommandType.SELECT_TARGET_SQUARE
                 || command.getType() == CommandType.MOVE
                 || command.getType() == CommandType.USE_TELEPORT)
-            return ((SquareCommandMessage) command).getRow() + " " + ((SquareCommandMessage) command).getCol();
+            return (cliManager.getVerticalCoordinateName(((SquareCommandMessage) command).getRow()) + cliManager.getHorizontalCoordinateName(((SquareCommandMessage) command).getCol()));
         if (command.getType() == CommandType.SELECT_WEAPON_MODE)
             return ((WeaponModeCommandMessage) command).getWeaponMode();
         if (command.getType() == CommandType.SHOOT) {
@@ -155,7 +155,7 @@ public class Cli implements Ui {
             String shootString = "\n";
             for (int i = 0; i < effectCommandMessageList.size(); i++) {
                 EffectCommandMessage effectCommandMessage = effectCommandMessageList.get(i);
-                shootString = new StringBuilder().append(shootString).append(effectCommandMessage.getPlayer().toString()).append(" ").append(effectCommandMessage.getDamage()).append(" danno").toString();
+                shootString = new StringBuilder().append(shootString).append(effectCommandMessage.getPlayer().playerIdName()).append(" ").append(effectCommandMessage.getDamage()).append(" danno").toString();
                 if (effectCommandMessage.getMarks() > 0)
                     shootString = new StringBuilder().append(shootString).append(" + ").append(effectCommandMessage.getMarks()).append(" marchi").toString();
                 if (effectCommandMessage.getCol() != null)
@@ -178,7 +178,7 @@ public class Cli implements Ui {
         System.out.println("Partita conclusa");
         int i = 1;
         for (Map.Entry<PlayerId, Long> entry : leaderBoard.entrySet()) {
-            System.out.println(i + "° classificato: " + entry.getKey().toString() + " con " + entry.getValue() + " punti");
+            System.out.println(i + "° classificato: " + entry.getKey().playerIdName() + " con " + entry.getValue() + " punti");
             i++;
         }
         System.out.println("Digita qualcosa per uscire:");

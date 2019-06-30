@@ -152,7 +152,7 @@ public class CliManager {
             case 2:
                 StringBuilder out = new StringBuilder();
                 for (PlayerId p : square.getHostedPlayers())
-                    out.append(" ").append(p.toString(), 0, 1);
+                    out.append(" ").append(p.playerIdName(), 0, 1);
                 return String.format("%-" + INNERWIDTH + "s", out.toString()).substring(0, INNERWIDTH);
         }
         return String.format("%-" + INNERWIDTH + "s", " ").substring(0, INNERWIDTH);
@@ -176,11 +176,11 @@ public class CliManager {
                 break;
             case 5:
                 System.out.print("Killshots: ");
-                modelView.getMatch().getKillshotTrack().forEach(id -> System.out.print(id.toString().substring(0, 1) + " "));
+                modelView.getMatch().getKillshotTrack().forEach(id -> System.out.print(id.playerIdName().substring(0, 1) + " "));
                 System.out.print("(" + modelView.getMatch().getDeathsCounter() + " skulls left)");
                 break;
             case 7:
-                System.out.print(modelView.getMe().getId().toString().toUpperCase() + " (" + modelView.getMe().getNickname() + ")");
+                System.out.print(modelView.getMe().getId().playerIdName().toUpperCase() + " (" + modelView.getMe().getNickname() + ")");
                 break;
             case 8:
                 System.out.print("Dead " + modelView.getMe().getDeaths() + " times");
@@ -202,7 +202,7 @@ public class CliManager {
                 break;
             case 12:
                 System.out.print("Damages: ");
-                modelView.getMe().getHealth().forEach(id -> System.out.print(id.toString().substring(0, 1)));
+                modelView.getMe().getHealth().forEach(id -> System.out.print(id.playerIdName().substring(0, 1)));
                 if (modelView.getMatch().isLastTurn())
                     System.out.print(" (final frenzy)");
                 else if (modelView.getMe().isFirstAdrenalina())
@@ -215,13 +215,13 @@ public class CliManager {
                 break;
             case 13:
                 System.out.print("Marks: ");
-                modelView.getMe().getMarks().forEach((id, n) -> System.out.print(n + " from " + id.toString() + "; "));
+                modelView.getMe().getMarks().forEach((id, n) -> System.out.print(n + " from " + id.playerIdName() + "; "));
             default:
         }
     }
 
     private void displayEnemiesInformation(PlayerView enemy) {
-        System.out.print("\n" + enemy.getId().toString().toUpperCase() + " (" + enemy.getNickname() + (enemy.isDisconnected() ? " - DISCONNESSO" : "") + ") has " + enemy.getPowerUps().size() + " powerups.");
+        System.out.print("\n" + enemy.getId().playerIdName().toUpperCase() + " (" + enemy.getNickname() + (enemy.isDisconnected() ? " - DISCONNESSO" : "") + ") has " + enemy.getPowerUps().size() + " powerups.");
         System.out.print(" Ammos: ");
         enemy.getAmmo().forEach((color, value) -> {
             if (value > 0)
@@ -230,9 +230,9 @@ public class CliManager {
         System.out.print("\n     Weapons: ");
         enemy.getWeapons().forEach(weapon -> System.out.print(weapon.isLoaded() ? "XXXXXX; " : weapon.getName() + "; "));
         System.out.print("\n     Damages: ");
-        enemy.getHealth().forEach(id -> System.out.print(id.toString().substring(0, 1) + " "));
+        enemy.getHealth().forEach(id -> System.out.print(id.playerIdName().substring(0, 1) + " "));
         System.out.print("Marks: ");
-        enemy.getMarks().forEach((id, n) -> System.out.print(n + " from " + id.toString() + " "));
+        enemy.getMarks().forEach((id, n) -> System.out.print(n + " from " + id.playerIdName() + " "));
         System.out.println("(dead " + enemy.getDeaths() + " times)");
     }
 

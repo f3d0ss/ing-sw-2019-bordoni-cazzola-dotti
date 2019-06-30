@@ -200,20 +200,20 @@ class WeaponTest {
         Match match = new Match();
         GameBoard gameBoard = match.getBoard();
         Square shooterSquare = gameBoard.getSpawnSquares().get(0);
-        Player shooter = new Player(match, PlayerId.VIOLET, PlayerId.VIOLET.toString());
+        Player shooter = new Player(match, PlayerId.VIOLET, PlayerId.VIOLET.playerIdName());
         shooter.respawn(Color.BLUE);
         shooter.move(shooterSquare);
         match.addPlayer(shooter);
         shooterSquare.addPlayer(shooter);
 
         Square square = shooterSquare;
-        Player player = new Player(match, PlayerId.GREEN, PlayerId.GREEN.toString());
+        Player player = new Player(match, PlayerId.GREEN, PlayerId.GREEN.playerIdName());
         player.respawn(Color.BLUE);
         player.move(square);
         match.addPlayer(player);
         square.addPlayer(player);
 
-        Player player1 = new Player(match, PlayerId.GREY, PlayerId.GREY.toString());
+        Player player1 = new Player(match, PlayerId.GREY, PlayerId.GREY.playerIdName());
         player1.respawn(Color.BLUE);
         player1.move(square);
         match.addPlayer(player1);
@@ -286,26 +286,26 @@ class WeaponTest {
         Match match = new Match();
         GameBoard gameBoard = match.getBoard();
         Square shooterSquare = gameBoard.getSquare(0, 0);
-        Player shooter = new Player(match, PlayerId.VIOLET, PlayerId.VIOLET.toString());
+        Player shooter = new Player(match, PlayerId.VIOLET, PlayerId.VIOLET.playerIdName());
         shooter.respawn(Color.BLUE);
         shooter.move(shooterSquare);
         match.addPlayer(shooter);
         shooterSquare.addPlayer(shooter);
 
         Square square = gameBoard.getSquare(2, 3);
-        Player player = new Player(match, PlayerId.GREEN, PlayerId.GREEN.toString());
+        Player player = new Player(match, PlayerId.GREEN, PlayerId.GREEN.playerIdName());
         player.respawn(Color.BLUE);
         player.move(square);
         match.addPlayer(player);
         square.addPlayer(player);
 
-        Player player1 = new Player(match, PlayerId.GREY, PlayerId.GREY.toString());
+        Player player1 = new Player(match, PlayerId.GREY, PlayerId.GREY.playerIdName());
         player1.respawn(Color.BLUE);
         player1.move(square);
         match.addPlayer(player1);
         square.addPlayer(player1);
 
-        Player player2 = new Player(match, PlayerId.BLUE, PlayerId.BLUE.toString());
+        Player player2 = new Player(match, PlayerId.BLUE, PlayerId.BLUE.playerIdName());
         player2.respawn(Color.BLUE);
         player2.move(square);
         match.addPlayer(player2);
@@ -356,7 +356,7 @@ class WeaponTest {
         Match match = new Match();
         GameBoard gameBoard = match.getBoard();
         Square shooterSquare = getRandomSquare(gameBoard);
-        Player shooter = new Player(match, PlayerId.VIOLET, PlayerId.VIOLET.toString());
+        Player shooter = new Player(match, PlayerId.VIOLET, PlayerId.VIOLET.playerIdName());
         shooter.respawn(Color.BLUE);
         shooter.move(shooterSquare);
         match.addPlayer(shooter);
@@ -364,7 +364,7 @@ class WeaponTest {
         for (PlayerId playerId : PlayerId.values()) {
             if (!playerId.equals(shooter.getId())) {
                 Square square = getRandomSquare(gameBoard);
-                Player player = new Player(match, playerId, playerId.toString());
+                Player player = new Player(match, playerId, playerId.playerIdName());
                 player.respawn(Color.BLUE);
                 player.move(square);
                 match.addPlayer(player);
@@ -411,28 +411,28 @@ class WeaponTest {
         Match match = new Match();
         GameBoard gameBoard = match.getBoard();
         Square shooterSquare = gameBoard.getSquare(2, 1);
-        Player shooter = new Player(match, PlayerId.VIOLET, PlayerId.VIOLET.toString());
+        Player shooter = new Player(match, PlayerId.VIOLET, PlayerId.VIOLET.playerIdName());
         shooter.respawn(Color.BLUE);
         shooter.move(shooterSquare);
         match.addPlayer(shooter);
         shooterSquare.addPlayer(shooter);
 
         Square square = gameBoard.getSquare(2, 2);
-        Player player = new Player(match, PlayerId.GREEN, PlayerId.GREEN.toString());
+        Player player = new Player(match, PlayerId.GREEN, PlayerId.GREEN.playerIdName());
         player.respawn(Color.BLUE);
         player.move(square);
         match.addPlayer(player);
         square.addPlayer(player);
 
         Square square1 = gameBoard.getSquare(2, 2);
-        Player player1 = new Player(match, PlayerId.GREY, PlayerId.GREY.toString());
+        Player player1 = new Player(match, PlayerId.GREY, PlayerId.GREY.playerIdName());
         player1.respawn(Color.BLUE);
         player1.move(square1);
         match.addPlayer(player1);
         square1.addPlayer(player1);
 
         Square square2 = gameBoard.getSquare(1, 3);
-        Player player2 = new Player(match, PlayerId.BLUE, PlayerId.BLUE.toString());
+        Player player2 = new Player(match, PlayerId.BLUE, PlayerId.BLUE.playerIdName());
         player2.respawn(Color.BLUE);
         player2.move(square2);
         match.addPlayer(player2);

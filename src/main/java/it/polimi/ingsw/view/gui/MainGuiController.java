@@ -220,7 +220,7 @@ public class MainGuiController {
             stage.setScene(new Scene(controller));
             stage.setAlwaysOnTop(true);
             stage.setOnCloseRequest(windowEvent -> otherPlayerBoardControllers.remove(playerId));
-            stage.setTitle(playerId.toString());
+            stage.setTitle(playerId.playerIdName());
             stage.show();
         } catch (Exception e) {
             e.printStackTrace();
@@ -325,7 +325,7 @@ public class MainGuiController {
         AtomicInteger i = new AtomicInteger(0);
         AtomicInteger j = new AtomicInteger(0);
         modelView.getEnemies().forEach((playerId, playerView) -> {
-            Button playerButton = new Button(playerId.toString());
+            Button playerButton = new Button(playerId.playerIdName());
             playerButton.setOnMouseClicked(mouseEvent -> handlePlayerButton(playerId));
             bindToParent(playerButton, otherPlayerGrid, otherPlayerGrid.getRowCount(), otherPlayerGrid.getColumnCount());
             otherPlayerGrid.add(playerButton, i.getAndIncrement() % otherPlayerGrid.getColumnCount(), j.getAndIncrement() / otherPlayerGrid.getColumnCount());
