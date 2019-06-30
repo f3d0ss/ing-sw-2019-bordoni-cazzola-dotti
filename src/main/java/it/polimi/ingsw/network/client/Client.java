@@ -56,7 +56,10 @@ public class Client implements Runnable {
         this.ui = ui;
     }
 
+    @Override
     public void run() {
+        // Do nothing (intentionally-blank override)
+
     }
 
     /**

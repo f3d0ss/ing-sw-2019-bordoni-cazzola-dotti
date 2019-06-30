@@ -9,6 +9,7 @@ import it.polimi.ingsw.view.PlayerView;
 import it.polimi.ingsw.view.SquareView;
 import it.polimi.ingsw.view.TurretSquareView;
 
+@SuppressWarnings("squid:S106")
 public class CliManager {
 
     private static final int INNERWIDTH = 11;
