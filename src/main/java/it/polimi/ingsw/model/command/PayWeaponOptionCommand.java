@@ -11,8 +11,8 @@ import it.polimi.ingsw.view.commandmessage.SimpleCommandMessage;
  * This command actualize the payment for the weapon's option selected
  */
 public class PayWeaponOptionCommand implements Command {
-    private Player player;
-    private PendingPaymentWeaponOptionState currentState;
+    private final Player player;
+    private final PendingPaymentWeaponOptionState currentState;
 
     public PayWeaponOptionCommand(Player player, PendingPaymentWeaponOptionState currentState) {
         this.player = player;

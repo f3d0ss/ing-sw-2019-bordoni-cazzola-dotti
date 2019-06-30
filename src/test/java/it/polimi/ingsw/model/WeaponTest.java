@@ -26,7 +26,7 @@ class WeaponTest {
         File[] files = file.listFiles();
         for (File f : files) {
             try {
-                weaponList.add(parser.deserialize(new FileReader(f.getPath()), Weapon.class));
+                weaponList.add(parser.deserialize(new FileReader(f.getPath())));
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
@@ -272,7 +272,6 @@ class WeaponTest {
                         ShootCommand shootCommand = (ShootCommand) command;
                         System.out.println(cont);
                         System.out.println("Danni " + player.getHealth().size());
-                        shootCommand.effects.stream().map(effectCommand -> effectCommand.tempPrint()).forEach(System.out::println);
                         command.execute();
                         System.out.println("Danni AFTER " + player.getHealth().size());
                     }
@@ -337,14 +336,12 @@ class WeaponTest {
                     if (command instanceof SelectTargetSquareCommand) {
                         s++;
                         SelectTargetSquareCommand selectTargetSquareCommand = (SelectTargetSquareCommand) command;
-                        System.out.println(selectTargetSquareCommand.tempPrint());
                         selectTargetSquareCommands.add(selectTargetSquareCommand);
 
                     }
                     if (command instanceof SelectTargetPlayerCommand) {
                         p++;
                         SelectTargetPlayerCommand selectTargetPlayerCommand = (SelectTargetPlayerCommand) command;
-                        System.out.println(selectTargetPlayerCommand.tempPrint());
                     }
                 }
                 assertTrue(match.getCurrentPlayers().size() - 1 >= p);
@@ -471,20 +468,16 @@ class WeaponTest {
             for (Command command : possibleCommands) {
                 if (command instanceof ShootCommand) {
                     ShootCommand shootCommand = (ShootCommand) command;
-                    shootCommand.effects.stream().map(EffectCommand::tempPrint).
-                            forEach(System.out::println);
                 }
                 if (command instanceof SelectTargetSquareCommand) {
                     s++;
                     SelectTargetSquareCommand selectTargetSquareCommand = (SelectTargetSquareCommand) command;
-                    System.out.println(selectTargetSquareCommand.tempPrint());
                     selectTargetSquareCommands.add(selectTargetSquareCommand);
 
                 }
                 if (command instanceof SelectTargetPlayerCommand) {
                     p++;
                     SelectTargetPlayerCommand selectTargetPlayerCommand = (SelectTargetPlayerCommand) command;
-                    System.out.println(selectTargetPlayerCommand.tempPrint());
                 }
             }
         }

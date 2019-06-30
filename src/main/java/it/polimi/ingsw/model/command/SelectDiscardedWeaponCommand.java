@@ -13,9 +13,9 @@ import it.polimi.ingsw.view.commandmessage.WeaponCommandMessage;
  */
 public class SelectDiscardedWeaponCommand implements Command {
 
-    private Player player;
-    private DiscardingWeaponState currentState;
-    private Weapon weaponToDiscard;
+    private final Player player;
+    private final DiscardingWeaponState currentState;
+    private final Weapon weaponToDiscard;
     private boolean wasLoaded;
 
     /**

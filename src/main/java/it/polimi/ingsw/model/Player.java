@@ -17,26 +17,25 @@ import java.util.stream.Collectors;
 
 public class Player {
 
-    public static final int MAX_AMMO = 3;
-    public static final int MAX_POWERUP = 3;
     public static final int MAX_DAMAGE = 12;
-    public static final int MAX_MARKS = 3;
     public static final int MAX_WEAPONS = 3;
-    public static final int DAMAGE_BEFORE_FIRST_ADRENALINA = 2;
-    public static final int DAMAGE_BEFORE_SECOND_ADRENALINA = 5;
-    public static final int DAMAGE_BEFORE_DEAD = 10;
-    public static final int INITIAL_AMMO_NUMBER = 1;
-
-    private Match match;
+    static final int INITIAL_AMMO_NUMBER = 1;
+    private static final int MAX_AMMO = 3;
+    private static final int MAX_POWERUP = 3;
+    private static final int MAX_MARKS = 3;
+    private static final int DAMAGE_BEFORE_FIRST_ADRENALINA = 2;
+    private static final int DAMAGE_BEFORE_SECOND_ADRENALINA = 5;
+    private static final int DAMAGE_BEFORE_DEAD = 10;
+    private final Match match;
+    private final PlayerId id;
+    private final String nickname;
     private int points = 0;
     private boolean disconnected = false;
     private PlayerState playerState = new IdleState();
     private Square position;
-    private PlayerId id;
     private List<PlayerId> health = new ArrayList<>();
     private int deaths = 0;
     private Map<PlayerId, Integer> marks = new EnumMap<>(PlayerId.class);
-    private String nickname;
     private List<Weapon> weapons = new ArrayList<>();
     private List<PowerUp> powerUps = new ArrayList<>();
     private Map<Color, Integer> ammo = new EnumMap<>(Color.class);
@@ -58,13 +57,11 @@ public class Player {
 
     }
 
-    public PlayerView getPlayerView(boolean isMe) {
+    PlayerView getPlayerView(boolean isMe) {
         List<WeaponView> wvs = new ArrayList<>();
         List<PowerUpView> pvs = new ArrayList<>();
         weapons.forEach(weapon -> wvs.add(new WeaponView(weapon.getName(), weapon.isLoaded())));
         powerUps.forEach(powerUp -> pvs.add(new PowerUpView(powerUp.getType(), powerUp.getColor())));
-//        TODO: decide if view need to know
-//        playerState.updatePlayerView(playerView);
         return new PlayerView(id, isMe, health, deaths, marks, nickname, wvs, pvs, ammo, availableAggregateActionCounter, flippedBoard, disconnected, health.size() > DAMAGE_BEFORE_FIRST_ADRENALINA, health.size() > DAMAGE_BEFORE_SECOND_ADRENALINA);
     }
 
@@ -104,7 +101,12 @@ public class Player {
         this.playerState = playerState;
     }
 
-    public void untracedMove(Square square) {
+    /**
+     * This method moves the player without notifying observers
+     *
+     * @param square Square the player is moving into
+     */
+    void untracedMove(Square square) {
         position.untracedRemovePlayer(this);
         position = square;
         position.untracedAddPlayer(this);

@@ -11,8 +11,8 @@ import it.polimi.ingsw.view.commandmessage.SimpleCommandMessage;
  * This command represent the action of select a shoot action
  */
 public class SelectShootActionCommand implements Command {
-    private Player player;
-    private SelectedAggregateActionState currentState;
+    private final Player player;
+    private final SelectedAggregateActionState currentState;
 
     /**
      * This constructor create a command for select a shoot action

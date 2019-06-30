@@ -13,9 +13,9 @@ import it.polimi.ingsw.view.commandmessage.WeaponModeCommandMessage;
  * This command represent the action of select a weapon mode
  */
 public class SelectWeaponModeCommand implements Command {
-    protected Player player;
-    protected ChoosingWeaponOptionState currentState;
-    private WeaponMode weaponMode;
+    private final Player player;
+    private final ChoosingWeaponOptionState currentState;
+    private final WeaponMode weaponMode;
 
     /**
      * This constructor create a command for select a weapon mode

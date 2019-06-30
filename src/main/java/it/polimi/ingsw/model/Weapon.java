@@ -85,6 +85,11 @@ public class Weapon {
         return name;
     }
 
+    /**
+     * This method returns the weapon's description
+     *
+     * @return String containing the description
+     */
     public String getDescription() {
         return description;
     }
@@ -172,6 +177,7 @@ public class Weapon {
         return new ArrayList<>(effectCommands);
     }
 
+    @SuppressWarnings("squid:S3776")
     private List<WeaponCommand> getPossibleShootCommandsTargetPlayersAdditionalDamage(Player shooter, ReadyToShootState state) {
         List<WeaponCommand> possibleCommands = new ArrayList<>();
         final int dmg1 = 1;
@@ -522,7 +528,9 @@ public class Weapon {
     }
 
     /**
-     * This method returns the possible commands to execute ( ExtraMoveCommands, SelectTargetCommands, ShootCommands)
+     * This method returns the possible commands to execute (ExtraMoveCommands {@link MoveCommand},
+     * SelectTargetsCommands {@link SelectTargetPlayerCommand} {@link SelectTargetSquareCommand},
+     * ShootCommands {@link ShootCommand})
      *
      * @param gameboard Gameboard
      * @param shooter   Player who is using the weapon

@@ -12,19 +12,8 @@ import java.util.List;
 import java.util.Map;
 
 public interface PendingPaymentState {
-    void addPendingAmmo(Color color);
 
-    void addPendingCard(PowerUp powerUp);
-
-    void removePendingAmmo(Color color);
-
-    void removePendingCard(PowerUp powerUp);
-
-    Map<Color, Integer> getPendingAmmoPayment();
-
-    List<PowerUp> getPendingCardPayment();
-
-    static List<Command> generateSelctPaymentCommand(Map<Color, Integer> totalPending, Player player, Map<Color, Integer> totalCost, PendingPaymentState state){
+    static List<Command> generateSelectPaymentCommand(Map<Color, Integer> totalPending, Player player, Map<Color, Integer> totalCost, PendingPaymentState state) {
         List<Command> commands = new ArrayList<>();
         totalCost.forEach((color, cost) -> {
             if (cost > totalPending.getOrDefault(color, 0)) {
@@ -40,4 +29,16 @@ public interface PendingPaymentState {
         });
         return commands;
     }
+
+    void addPendingAmmo(Color color);
+
+    void addPendingCard(PowerUp powerUp);
+
+    void removePendingAmmo(Color color);
+
+    void removePendingCard(PowerUp powerUp);
+
+    Map<Color, Integer> getPendingAmmoPayment();
+
+    List<PowerUp> getPendingCardPayment();
 }

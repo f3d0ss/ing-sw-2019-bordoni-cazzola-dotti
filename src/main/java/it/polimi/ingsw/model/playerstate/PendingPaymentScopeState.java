@@ -13,9 +13,9 @@ import java.util.Map;
 
 public class PendingPaymentScopeState extends SelectedWeaponState implements PendingPaymentState {
 
-    private Map<Color, Integer> pendingAmmo;
-    private List<PowerUp> pendingCardPayment;
-    private List<Player> shootedPlayers;
+    private final Map<Color, Integer> pendingAmmo;
+    private final List<PowerUp> pendingCardPayment;
+    private final List<Player> shootedPlayers;
 
     public PendingPaymentScopeState(AggregateAction selectedAggregateAction, Weapon selectedWeapon, List<Player> shootedPlayers) {
         super(selectedAggregateAction, selectedWeapon);

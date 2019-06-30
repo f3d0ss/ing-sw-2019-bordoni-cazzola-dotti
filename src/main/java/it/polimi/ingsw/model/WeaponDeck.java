@@ -6,7 +6,7 @@ import java.util.List;
 public class WeaponDeck implements Deck {
     private List<Weapon> weapons;
 
-    public WeaponDeck(List<Weapon> weaponList) {
+    WeaponDeck(List<Weapon> weaponList) {
         weapons = weaponList;
     }
 
