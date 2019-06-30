@@ -10,13 +10,14 @@ import java.util.List;
 import java.util.Map;
 
 public abstract class Square {
-    private Map<CardinalDirection, Connection> connection;
-    private int row;
-    private int col;
-    private Color color;
+    private final Map<CardinalDirection, Connection> connection;
+    private final int row;
+    private final int col;
+    private final Color color;
+    Match match;
     private List<Player> hostedPlayers;
+    @SuppressWarnings("squid:S1068")
     private String type;
-    protected Match match;
 
     /**
      * @param northConnection is the north connection
@@ -28,7 +29,8 @@ public abstract class Square {
      * @param color           is the color of the square
      * @param type            is the type of the square used for deserialization
      */
-    public Square(Connection northConnection, Connection eastConnection, Connection southConnection, Connection westConnection, int row, int col, Color color, String type) {
+    @SuppressWarnings("squid:S00107")
+    Square(Connection northConnection, Connection eastConnection, Connection southConnection, Connection westConnection, int row, int col, Color color, String type) {
         this.type = type;
         connection = new EnumMap<>(CardinalDirection.class);
         connection.put(CardinalDirection.NORTH, northConnection);
@@ -47,7 +49,7 @@ public abstract class Square {
         return connection.get(direction);
     }
 
-    protected Map<CardinalDirection, Connection> getConnections() {
+    Map<CardinalDirection, Connection> getConnections() {
         return connection;
     }
 
@@ -72,6 +74,11 @@ public abstract class Square {
         update();
     }
 
+    /**
+     * This method adds a player without notifying observers
+     *
+     * @param player Player to add
+     */
     public void untracedAddPlayer(Player player) {
         this.hostedPlayers.add(player);
     }
@@ -81,8 +88,13 @@ public abstract class Square {
         update();
     }
 
-    public boolean untracedRemovePlayer(Player player) {
-        return this.hostedPlayers.remove(player);
+    /**
+     * This method removes a player without notifying observers
+     *
+     * @param player Player to remove
+     */
+    public void untracedRemovePlayer(Player player) {
+        this.hostedPlayers.remove(player);
     }
 
     public List<Player> getHostedPlayers() {
@@ -120,7 +132,7 @@ public abstract class Square {
     /**
      * This method returns all players on the square but
      *
-     * @param playersToExclude
+     * @param playersToExclude list of players to exclude
      * @return list of other players
      */
     public List<Player> getHostedPlayers(List<Player> playersToExclude) {

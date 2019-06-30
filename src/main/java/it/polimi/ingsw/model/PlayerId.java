@@ -66,12 +66,4 @@ public enum PlayerId {
 
     public abstract String playerId();
 
-    public int getIntValue() {
-        if (this == BLUE) return 0;
-        if (this == GREEN) return 1;
-        if (this == YELLOW) return 2;
-        if (this == VIOLET) return 3;
-        if (this == GREY) return 4;
-        return -1;
-    }
 }

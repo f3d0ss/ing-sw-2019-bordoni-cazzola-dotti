@@ -6,6 +6,7 @@ public enum AggregateActionID {
         public AggregateAction create() {
             return new AggregateAction(3, false, false, false);
         }
+
         public String toString() {
             return "Muovi fino a 3 quadrati";
         }
@@ -15,6 +16,7 @@ public enum AggregateActionID {
         public AggregateAction create() {
             return new AggregateAction(1, true, false, false);
         }
+
         public String toString() {
             return "Muovi fino a 1 quadrato e raccogli";
         }
@@ -24,6 +26,7 @@ public enum AggregateActionID {
         public AggregateAction create() {
             return new AggregateAction(0, false, true, false);
         }
+
         public String toString() {
             return "Spara a un avversario";
         }
@@ -33,6 +36,7 @@ public enum AggregateActionID {
         public AggregateAction create() {
             return new AggregateAction(2, true, false, false);
         }
+
         public String toString() {
             return "Muovi fino a 2 quadrati e raccogli";
         }
@@ -42,6 +46,7 @@ public enum AggregateActionID {
         public AggregateAction create() {
             return new AggregateAction(1, false, true, false);
         }
+
         public String toString() {
             return "Muovi fino a 1 quadrato e spara";
         }
@@ -51,6 +56,7 @@ public enum AggregateActionID {
         public AggregateAction create() {
             return new AggregateAction(1, false, true, true);
         }
+
         public String toString() {
             return "Muovi fino a 1 quadrato, ricarica e spara";
         }
@@ -60,6 +66,7 @@ public enum AggregateActionID {
         public AggregateAction create() {
             return new AggregateAction(4, false, false, false);
         }
+
         public String toString() {
             return "Muovi fino a 4 quadrati";
         }
@@ -69,6 +76,7 @@ public enum AggregateActionID {
         public AggregateAction create() {
             return new AggregateAction(2, false, true, true);
         }
+
         public String toString() {
             return "Muovi fino a 2 quadrati, ricarica e spara";
         }
@@ -78,11 +86,14 @@ public enum AggregateActionID {
         public AggregateAction create() {
             return new AggregateAction(3, true, false, false);
         }
+
         public String toString() {
             return "Muovi fino a 3 quadrati e raccogli";
         }
     };
 
     public abstract AggregateAction create();
+
+    @Override
     public abstract String toString();
 }

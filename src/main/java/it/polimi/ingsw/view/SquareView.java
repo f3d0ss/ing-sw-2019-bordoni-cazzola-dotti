@@ -16,7 +16,7 @@ public abstract class SquareView {
     private final List<PlayerId> hostedPlayers;
     private final String type;
 
-    public SquareView(int row, int col, Map<CardinalDirection, Connection> connection, Color color, List<PlayerId> hostedPlayers, String type) {
+    SquareView(int row, int col, Map<CardinalDirection, Connection> connection, Color color, List<PlayerId> hostedPlayers, String type) {
         this.row = row;
         this.col = col;
         this.connection = connection;

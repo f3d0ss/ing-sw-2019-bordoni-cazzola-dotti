@@ -21,8 +21,8 @@ import java.io.Reader;
  */
 public class Parser {
 
-    private Gson gson;
-    private Gson normal = new Gson();
+    private final Gson gson;
+    private final Gson normal = new Gson();
 
     public Parser() {
         RuntimeTypeAdapterFactory<Square> runtimeTypeAdapterFactory = RuntimeTypeAdapterFactory
@@ -44,7 +44,8 @@ public class Parser {
                 .registerSubtype(SimpleCommandMessage.class, SimpleCommandMessage.class.getSimpleName())
                 .registerSubtype(SquareCommandMessage.class, SquareCommandMessage.class.getSimpleName())
                 .registerSubtype(WeaponCommandMessage.class, WeaponCommandMessage.class.getSimpleName())
-                .registerSubtype(WeaponModeCommandMessage.class, WeaponModeCommandMessage.class.getSimpleName());
+                .registerSubtype(WeaponModeCommandMessage.class, WeaponModeCommandMessage.class.getSimpleName())
+                .registerSubtype(ShootCommandMessage.class, ShootCommandMessage.class.getSimpleName());
 
         RuntimeTypeAdapterFactory<Message> messageRuntimeTypeAdapterFactory = RuntimeTypeAdapterFactory
                 .of(Message.class, "jType")

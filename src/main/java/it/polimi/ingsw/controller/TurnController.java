@@ -63,6 +63,7 @@ class TurnController {
                     if (i == -1)
                         break;
                     commands.get(i).execute();
+                    commands = p.getPossibleCommands();
                 }
             }
         }

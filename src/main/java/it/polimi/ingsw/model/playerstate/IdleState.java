@@ -7,6 +7,7 @@ import java.util.List;
 
 public class IdleState implements PlayerState {
 
+    @SuppressWarnings("squid:S1168")
     @Override
     public List<Command> getPossibleCommands(Player player) {
         return null;

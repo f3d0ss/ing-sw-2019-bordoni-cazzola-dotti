@@ -11,8 +11,8 @@ import it.polimi.ingsw.view.commandmessage.SimpleCommandMessage;
  * This command actualize the payment for the reload of a weapon
  */
 public class PayReloadWeaponCommand implements Command {
-    private Player player;
-    private PendingPaymentReloadWeaponState currentState;
+    private final Player player;
+    private final PendingPaymentReloadWeaponState currentState;
 
     /**
      * This constructor create a command for pay the reloading

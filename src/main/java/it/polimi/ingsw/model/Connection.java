@@ -1,5 +1,8 @@
 package it.polimi.ingsw.model;
 
+/**
+ * Contains all possible connections between two squares
+ */
 public enum Connection {
     MAP_BORDER, DOOR, WALL, SAME_ROOM;
 

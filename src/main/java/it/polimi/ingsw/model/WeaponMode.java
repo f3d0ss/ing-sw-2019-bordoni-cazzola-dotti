@@ -20,11 +20,8 @@ public class WeaponMode {
     private boolean targetPlayers;
     private boolean targetSquare;
     private boolean targetRoom;
-    private boolean eachTargetInTheSameRoom; //(RM?)
-    private boolean eachTargetOnTheSameSquare; //(RM?)
-    private boolean eachTargetOnDifferentSquares;//shockwave
-    private boolean damageEveryone; //The weapon must damage every target possible, the player can't decide not to shoot one target.(RM?)
-    private boolean targetVisibleByOtherTarget;//thor
+    private boolean eachTargetOnDifferentSquares;
+    private boolean targetVisibleByOtherTarget;
     private boolean targetVisibleByShooter;
     private boolean cardinalDirectionMode;
     private int maxTargetDistance;
@@ -35,45 +32,24 @@ public class WeaponMode {
     private int maxAdditionalDamagePerPlayer;
 
     //move parameters
-    private boolean moveTargetBeforeShoot;//vortex,tractor beam
-    private boolean moveTargetAfterShoot;//same direction (Hammer)
+    private boolean moveTargetBeforeShoot;
+    private boolean moveTargetAfterShoot;
     private boolean moveShooter;
     private int maxTargetMove;
     private int maxShooterMove;
 
-   /* public static void main(String[] args) {
-        GsonBuilder g = new GsonBuilder();
-        g.setPrettyPrinting();
-        g.serializeNulls();
-        Gson gson = g.create();
-        List<Weapon> weaponList = new ArrayList<>();
-        File file = new File("src/resources/weapons/");
-        File[] files = file.listFiles();
-        for (File f : files) {
-            System.out.println(f.getPath());
-
-            try {
-                weaponList.add(gson.fromJson(new FileReader(f.getPath()), Weapon.class));
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
-        }
-        int c = 1;
-        for (Weapon w : weaponList)
-            for (WeaponMode wm : w.getWeaponModes()) {
-                if (!wm.isMoveTargetBeforeShoot() && !wm.isTargetSquare() && wm.isTargetPlayers() && wm.isTargetVisibleByShooter() && !wm.isCardinalDirectionMode()) {
-                    if (wm.moveTargetAfterShoot)
-                        System.out.println(c + " " + w.getName() + " " + wm.name + " " + " " + wm.description + " " + wm.getMaxTargetDistance() + " " + wm.getMinTargetDistance() + " maxtargets" + wm.maxNumberOfTargetPlayers + " min" + wm.getMinNumberOfTargetPlayers());
-                    c++;
-                }
-            }
-    }*/
+    //extra param
+    private boolean multiAction;
+    private boolean spinner;
+    private boolean fragmentingWarHeadMod;
+    private boolean moveOnTarget;
+    private boolean hellionMod;
 
     public String getName() {
         return name;
     }
 
-    public String getDescription() {
+    String getDescription() {
         return description;
     }
 
@@ -81,47 +57,35 @@ public class WeaponMode {
         return Objects.requireNonNullElseGet(cost, LinkedHashMap::new);
     }
 
-    public int getMaxNumberOfTargetPlayers() {
+    int getMaxNumberOfTargetPlayers() {
         return maxNumberOfTargetPlayers;
     }
 
-    public int getMinNumberOfTargetPlayers() {
+    int getMinNumberOfTargetPlayers() {
         return minNumberOfTargetPlayers;
     }
 
-    public boolean isTargetPlayers() {
+    boolean isTargetPlayers() {
         return targetPlayers;
     }
 
-    public boolean isTargetSquare() {
+    boolean isTargetSquare() {
         return targetSquare;
     }
 
-    public boolean isTargetRoom() {
+    boolean isTargetRoom() {
         return targetRoom;
     }
 
-    public boolean isEachTargetInTheSameRoom() {
-        return eachTargetInTheSameRoom;
-    }
-
-    public boolean isEachTargetOnTheSameSquare() {
-        return eachTargetOnTheSameSquare;
-    }
-
-    public boolean isEachTargetOnDifferentSquares() {
+    boolean isEachTargetOnDifferentSquares() {
         return eachTargetOnDifferentSquares;
     }
 
-    public boolean isDamageEveryone() {
-        return damageEveryone;
-    }
-
-    public boolean isTargetVisibleByOtherTarget() {
+    boolean isTargetVisibleByOtherTarget() {
         return targetVisibleByOtherTarget;
     }
 
-    public boolean isTargetVisibleByShooter() {
+    boolean isTargetVisibleByShooter() {
         return targetVisibleByShooter;
     }
 
@@ -129,52 +93,72 @@ public class WeaponMode {
         return cardinalDirectionMode;
     }
 
-    public int getMaxTargetDistance() {
+    int getMaxTargetDistance() {
         return maxTargetDistance;
     }
 
-    public int getMinTargetDistance() {
+    int getMinTargetDistance() {
         return minTargetDistance;
     }
 
-    public int getMarks() {
+    int getMarks() {
         return marks;
     }
 
-    public List<Integer> getDamage() {
+    List<Integer> getDamage() {
         return damage;
     }
 
-    public int getDamage(int index) {
+    int getDamage(int index) {
         return damage.get(index);
     }
 
-    public int getAdditionalDamageAvailable() {
+    int getAdditionalDamageAvailable() {
         return additionalDamageAvailable;
     }
 
-    public int getMaxAdditionalDamagePerPlayer() {
+    int getMaxAdditionalDamagePerPlayer() {
         return maxAdditionalDamagePerPlayer;
     }
 
-    public boolean isMoveTargetBeforeShoot() {
+    boolean isMoveTargetBeforeShoot() {
         return moveTargetBeforeShoot;
     }
 
-    public boolean isMoveTargetAfterShoot() {
+    boolean isMoveTargetAfterShoot() {
         return moveTargetAfterShoot;
     }
 
-    public boolean isMoveShooter() {
+    boolean isMoveShooter() {
         return moveShooter;
     }
 
-    public int getMaxTargetMove() {
+    int getMaxTargetMove() {
         return maxTargetMove;
     }
 
-    public int getMaxShooterMove() {
+    int getMaxShooterMove() {
         return maxShooterMove;
+    }
+
+    public boolean isMultiAction() {
+        return multiAction;
+    }
+
+    public boolean isSpinner() {
+        return spinner;
+    }
+
+    public boolean isFragmentingWarHeadMod() {
+        return fragmentingWarHeadMod;
+    }
+
+    public boolean isMoveOnTarget() {
+        return moveOnTarget;
+    }
+
+    public boolean isHellionMod() {
+        return hellionMod;
     }
 
     void postDeserialization() {

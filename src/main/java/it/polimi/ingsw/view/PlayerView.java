@@ -18,10 +18,11 @@ public class PlayerView {
     private final Map<Color, Integer> ammo;
     private final int availableAggregateActionCounter;
     private final boolean flippedBoard;
-
     private final boolean disconnected;
+    private final boolean firstAdrenalina;
+    private final boolean secondAdrenalina;
 
-    public PlayerView(PlayerId id, boolean isMe, List<PlayerId> health, int deaths, Map<PlayerId, Integer> marks, String nickname, List<WeaponView> weapons, List<PowerUpView> powerUps, Map<Color, Integer> ammo, int availableAggregateActionCounter, boolean flippedBoard, boolean disconnected) {
+    public PlayerView(PlayerId id, boolean isMe, List<PlayerId> health, int deaths, Map<PlayerId, Integer> marks, String nickname, List<WeaponView> weapons, List<PowerUpView> powerUps, Map<Color, Integer> ammo, int availableAggregateActionCounter, boolean flippedBoard, boolean disconnected, boolean firstAdrenalina, boolean secondAdrenalina) {
         this.id = id;
         this.isMe = isMe;
         this.health = health;
@@ -34,6 +35,8 @@ public class PlayerView {
         this.availableAggregateActionCounter = availableAggregateActionCounter;
         this.flippedBoard = flippedBoard;
         this.disconnected = disconnected;
+        this.firstAdrenalina = firstAdrenalina;
+        this.secondAdrenalina = secondAdrenalina;
     }
 
     public PlayerId getId() {
@@ -78,5 +81,13 @@ public class PlayerView {
 
     public boolean isFlippedBoard() {
         return flippedBoard;
+    }
+
+    public boolean isFirstAdrenalina() {
+        return firstAdrenalina;
+    }
+
+    public boolean isSecondAdrenalina() {
+        return secondAdrenalina;
     }
 }

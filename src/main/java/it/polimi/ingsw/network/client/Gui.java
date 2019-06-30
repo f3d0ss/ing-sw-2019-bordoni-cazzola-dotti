@@ -16,11 +16,11 @@ import static java.lang.Thread.sleep;
 
 public class Gui implements Ui, Runnable {
 
+    private static final int TIME_TO_SLEEP = 100;
     private String answer = "";
     private boolean ready = false;
     private boolean inputReady = false;
     private boolean initializationDone = false;
-    private static final int TIME_TO_SLEEP = 100;
     private MainGuiController controller;
 
     public String showMessage(String toBeShown, List<String> possibleAnswers, boolean isAnswerRequired) {
@@ -68,7 +68,7 @@ public class Gui implements Ui, Runnable {
         this.answer = answer;
     }
 
-    public boolean isReady() {
+    boolean isReady() {
         return ready;
     }
 

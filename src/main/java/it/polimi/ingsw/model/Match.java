@@ -7,11 +7,14 @@ import it.polimi.ingsw.view.VirtualView;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.EnumMap;
+import java.util.List;
+import java.util.Map;
 
 public class Match {
 
-    private static final int SKULLS = 8;
+    private static final int DEFAULT_SKULLS = 8;
 
     private List<PlayerId> killshotTrack;
     private PowerUpDeck currentPowerUpDeck;
@@ -19,27 +22,29 @@ public class Match {
     private AmmoTileDeck currentAmmoTileDeck;
     private AmmoTileDeck usedAmmoTileDeck;
     private WeaponDeck currentWeaponDeck;
-    private int deathsCounter = SKULLS;
+    private int deathsCounter;
     private List<Player> currentPlayers;
     private GameBoard board;
     private boolean firstPlayerPlayedLastTurn;
     private Map<PlayerId, ViewInterface> views;
     private Map<PlayerId, Long> leaderBoard;
+    private int gameBoardNumber;
 
-    public Match(int gameBoardNumber) {
+    public Match(int gameBoardNumber, int skulls) {
         Parser parser = new Parser();
         initializeGameBoard(gameBoardNumber, parser);
-        views = new HashMap<>();
+        views = new EnumMap<>(PlayerId.class);
         killshotTrack = new ArrayList<>();
         currentPlayers = new ArrayList<>();
         firstPlayerPlayedLastTurn = false;
+        deathsCounter = skulls;
         initializeAmmoTiles(parser);
         initializeWeapons(parser);
         initializePowerUps(parser);
     }
 
     public Match() {
-        this(1);
+        this(1, DEFAULT_SKULLS);
     }
 
     private void initializeGameBoard(int gameBoardNumber, Parser parser) {
@@ -47,6 +52,7 @@ public class Match {
                 String.format("%03d", gameBoardNumber) + ".json")), GameBoard.class);
         board.initialize();
         board.getSquareList().forEach(square -> square.setMatch(this));
+        this.gameBoardNumber = gameBoardNumber;
     }
 
     private void initializeAmmoTiles(Parser parser) {
@@ -60,33 +66,34 @@ public class Match {
 
     private void initializeWeapons(Parser parser) {
         List<Weapon> weaponList = new ArrayList<>();
-        weaponList.add(parser.deserialize(new InputStreamReader(getClass().getResourceAsStream("/weapons/Cyberblade.json"))));
-        weaponList.add(parser.deserialize(new InputStreamReader(getClass().getResourceAsStream("/weapons/Electroscythe.json"))));
-        weaponList.add(parser.deserialize(new InputStreamReader(getClass().getResourceAsStream("/weapons/Flamethrower.json"))));
-        weaponList.add(parser.deserialize(new InputStreamReader(getClass().getResourceAsStream("/weapons/Furnace.json"))));
-        weaponList.add(parser.deserialize(new InputStreamReader(getClass().getResourceAsStream("/weapons/GrenadeLauncher.json"))));
-        weaponList.add(parser.deserialize(new InputStreamReader(getClass().getResourceAsStream("/weapons/Heatseeker.json"))));
-        weaponList.add(parser.deserialize(new InputStreamReader(getClass().getResourceAsStream("/weapons/Hellion.json"))));
-        weaponList.add(parser.deserialize(new InputStreamReader(getClass().getResourceAsStream("/weapons/LockRifle.json"))));
-        weaponList.add(parser.deserialize(new InputStreamReader(getClass().getResourceAsStream("/weapons/MachineGun.json"))));
         weaponList.add(parser.deserialize(new InputStreamReader(getClass().getResourceAsStream("/weapons/PlasmaGun.json"))));
-        weaponList.add(parser.deserialize(new InputStreamReader(getClass().getResourceAsStream("/weapons/PowerGlove.json"))));
-        weaponList.add(parser.deserialize(new InputStreamReader(getClass().getResourceAsStream("/weapons/Railgun.json"))));
         weaponList.add(parser.deserialize(new InputStreamReader(getClass().getResourceAsStream("/weapons/RocketLauncher.json"))));
-        weaponList.add(parser.deserialize(new InputStreamReader(getClass().getResourceAsStream("/weapons/Shockwave.json"))));
-        weaponList.add(parser.deserialize(new InputStreamReader(getClass().getResourceAsStream("/weapons/Shotgun.json"))));
-        weaponList.add(parser.deserialize(new InputStreamReader(getClass().getResourceAsStream("/weapons/Sledgehammer.json"))));
-        weaponList.add(parser.deserialize(new InputStreamReader(getClass().getResourceAsStream("/weapons/Thor.json"))));
+        weaponList.add(parser.deserialize(new InputStreamReader(getClass().getResourceAsStream("/weapons/Railgun.json"))));
+        weaponList.add(parser.deserialize(new InputStreamReader(getClass().getResourceAsStream("/weapons/Cyberblade.json"))));
+        weaponList.add(parser.deserialize(new InputStreamReader(getClass().getResourceAsStream("/weapons/Flamethrower.json"))));
+        weaponList.add(parser.deserialize(new InputStreamReader(getClass().getResourceAsStream("/weapons/PowerGlove.json"))));
         weaponList.add(parser.deserialize(new InputStreamReader(getClass().getResourceAsStream("/weapons/TractorBeam.json"))));
-        weaponList.add(parser.deserialize(new InputStreamReader(getClass().getResourceAsStream("/weapons/VortexCannon.json"))));
         weaponList.add(parser.deserialize(new InputStreamReader(getClass().getResourceAsStream("/weapons/Whisper.json"))));
+        weaponList.add(parser.deserialize(new InputStreamReader(getClass().getResourceAsStream("/weapons/GrenadeLauncher.json"))));
+        weaponList.add(parser.deserialize(new InputStreamReader(getClass().getResourceAsStream("/weapons/MachineGun.json"))));
+        weaponList.add(parser.deserialize(new InputStreamReader(getClass().getResourceAsStream("/weapons/LockRifle.json"))));
         weaponList.add(parser.deserialize(new InputStreamReader(getClass().getResourceAsStream("/weapons/Zx2.json"))));
-        Collections.shuffle(weaponList);
+        weaponList.add(parser.deserialize(new InputStreamReader(getClass().getResourceAsStream("/weapons/Shockwave.json"))));
+        weaponList.add(parser.deserialize(new InputStreamReader(getClass().getResourceAsStream("/weapons/Hellion.json"))));
+        weaponList.add(parser.deserialize(new InputStreamReader(getClass().getResourceAsStream("/weapons/VortexCannon.json"))));
+        weaponList.add(parser.deserialize(new InputStreamReader(getClass().getResourceAsStream("/weapons/Furnace.json"))));
+        weaponList.add(parser.deserialize(new InputStreamReader(getClass().getResourceAsStream("/weapons/Shotgun.json"))));
+        weaponList.add(parser.deserialize(new InputStreamReader(getClass().getResourceAsStream("/weapons/Electroscythe.json"))));
+        weaponList.add(parser.deserialize(new InputStreamReader(getClass().getResourceAsStream("/weapons/Thor.json"))));
+        weaponList.add(parser.deserialize(new InputStreamReader(getClass().getResourceAsStream("/weapons/Sledgehammer.json"))));
+        weaponList.add(parser.deserialize(new InputStreamReader(getClass().getResourceAsStream("/weapons/Heatseeker.json"))));
+
         for (Color color : Color.values()) {
             for (int i = 0; i < SpawnSquare.MAX_WEAPON; i++)
                 board.getSpawn(color).addWeapon(weaponList.remove(0));
         }
         currentWeaponDeck = new WeaponDeck(weaponList);
+        currentWeaponDeck.shuffle();
     }
 
     private void initializePowerUps(Parser parser) {
@@ -99,8 +106,8 @@ public class Match {
 
     public void setLeaderBoard(Map<PlayerId, Long> leaderBoard) {
         this.leaderBoard = leaderBoard;
-        views.values().forEach(v -> ((VirtualView) v).setGameOver());
         update();
+        views.values().forEach(v -> ((VirtualView) v).setGameOver());
     }
 
     public Player getPlayer(PlayerId id) {
@@ -170,10 +177,6 @@ public class Match {
         return tmp;
     }
 
-    private Weapon drawWeaponCard() {
-        return currentWeaponDeck.drawWeapon();
-    }
-
     public PowerUp drawPowerUpCard() {
         PowerUp powerup;
         powerup = currentPowerUpDeck.drawPowerUp();
@@ -237,7 +240,7 @@ public class Match {
     }
 
     private void update() {
-        views.values().forEach(viewInterface -> viewInterface.update(new MatchView(killshotTrack, deathsCounter, board.getId(), leaderBoard)));
+        views.values().forEach(viewInterface -> viewInterface.update(new MatchView(killshotTrack, deathsCounter, gameBoardNumber, leaderBoard, isLastTurn())));
     }
 
     /**
@@ -251,7 +254,7 @@ public class Match {
     }
 
     public void sendModelAfterReconnection(PlayerId player) {
-        views.get(player).update(new MatchView(killshotTrack, deathsCounter, board.getId(), leaderBoard));
+        views.get(player).update(new MatchView(killshotTrack, deathsCounter, gameBoardNumber, leaderBoard, isLastTurn()));
         currentPlayers.forEach(p -> views.get(player).update(p.getPlayerView(p.getId() == player)));
         board.getSquareList().forEach(s -> views.get(player).update(s.getSquareView()));
         views.get(player).setViewInitializationDone();

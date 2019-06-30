@@ -3,16 +3,21 @@ package it.polimi.ingsw.model.command;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.PlayerId;
 import it.polimi.ingsw.model.Square;
+import it.polimi.ingsw.model.playerstate.ShootedState;
+import it.polimi.ingsw.view.commandmessage.EffectCommandMessage;
+
+import java.util.Objects;
 
 /**
  * This command represent an effect that a weapon can have on a single player
  */
 public class EffectCommand {
-    private Player player;
-    private int damage;
-    private int marks;
-    private Square arrivalSquare;
-    private PlayerId shooter;
+
+    private final Player player;
+    private final int damage;
+    private final int marks;
+    private final Square arrivalSquare;
+    private final PlayerId shooter;
 
     /**
      * @param player        is the player affected
@@ -27,6 +32,27 @@ public class EffectCommand {
         this.marks = marks;
         this.arrivalSquare = arrivalSquare;
         this.shooter = shooter;
+        if (shooter.equals(player.getId()) && (marks != 0 || damage != 0)) {
+            throw new UnsupportedOperationException();
+        }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        EffectCommand that = (EffectCommand) o;
+        return damage == that.damage &&
+                marks == that.marks &&
+                player.getId().equals(that.player.getId()) &&
+                arrivalSquare.getRow() == that.arrivalSquare.getRow() &&
+                arrivalSquare.getCol() == that.arrivalSquare.getCol() &&
+                shooter.equals(that.shooter);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(player, damage, marks, arrivalSquare, shooter);
     }
 
     /**
@@ -36,6 +62,8 @@ public class EffectCommand {
         player.addDamage(damage, shooter);
         player.addMarks(marks, shooter);
         player.move(arrivalSquare);
+        if (hasDamage())
+            player.changeState(new ShootedState());
     }
 
     /**
@@ -54,5 +82,11 @@ public class EffectCommand {
      */
     public boolean hasDamage() {
         return damage > 0;
+    }
+
+    EffectCommandMessage createCommandMessage() {
+        if (arrivalSquare == player.getPosition())
+            return new EffectCommandMessage(player.getId(), damage, marks, null, null);
+        return new EffectCommandMessage(player.getId(), damage, marks, arrivalSquare.getRow(), arrivalSquare.getCol());
     }
 }

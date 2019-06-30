@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SelectScopeTargetState extends SelectedWeaponState implements TargetingPlayerState {
-    private List<Player> shootedPlayers;
+    private final List<Player> shootedPlayers;
     private Player selectedPlayer;
 
     public SelectScopeTargetState(AggregateAction selectedAggregateAction, Weapon selectedWeapon, List<Player> shootedPlayers) {

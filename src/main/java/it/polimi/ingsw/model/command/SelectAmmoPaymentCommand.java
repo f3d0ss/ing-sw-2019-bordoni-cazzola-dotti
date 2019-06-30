@@ -11,8 +11,8 @@ import it.polimi.ingsw.view.commandmessage.CommandType;
  * This command represent the action of select an ammo for a payment
  */
 public class SelectAmmoPaymentCommand extends SelectPaymentCommand {
-    private final static int MAX_AMMO_SELECTABLE = 1;
-    private Color color;
+    private static final int MAX_AMMO_SELECTABLE = 1;
+    private final Color color;
 
     /**
      * This constructor create a command for select an ammo for a payment

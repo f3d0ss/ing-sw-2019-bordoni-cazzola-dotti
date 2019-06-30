@@ -47,7 +47,7 @@ public enum CommandType {
         }
     }, SELECT_RELOADING_WEAPON {
         public String getString() {
-            return "Seleziona l'arma che vuoi ricaricare";
+            return "Ricarica l'arma ";
         }
     }, SELECT_SCOPE {
         public String getString() {
@@ -63,7 +63,7 @@ public enum CommandType {
         }
     }, SELECT_TARGET_SQUARE {
         public String getString() {
-            return "Scegli un riquadro";
+            return "Scegli il riquadro ";
         }
     }, SELECT_WEAPON {
         public String getString() {
@@ -75,7 +75,7 @@ public enum CommandType {
         }
     }, SHOOT {
         public String getString() {
-            return "Spara";
+            return "Conferma Shoot Action: ";
         }
     }, USE_NEWTON {
         public String getString() {

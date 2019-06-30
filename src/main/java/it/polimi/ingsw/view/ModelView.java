@@ -4,7 +4,6 @@ import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.PlayerId;
 
 import java.util.EnumMap;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -14,7 +13,6 @@ public class ModelView {
 
     private MatchView match;
     private PlayerView me;
-    private PlayerId myId;
     private Map<PlayerId, PlayerView> enemies = new EnumMap<>(PlayerId.class);
     private Map<Color, List<WeaponView>> weaponsOnSpawn = new EnumMap<>(Color.class);
     private SquareView[][] board = new SquareView[HEIGHT][WIDTH];
@@ -35,22 +33,8 @@ public class ModelView {
         this.me = me;
     }
 
-    public PlayerId getMyId() {
-        return myId;
-    }
-
-    public void setMyId(PlayerId myId) {
-        this.myId = myId;
-    }
-
     public Map<PlayerId, PlayerView> getEnemies() {
         return enemies;
-    }
-
-    public Map<PlayerId, PlayerView> getPlayers() {
-        Map<PlayerId, PlayerView> players = new EnumMap<>(enemies);
-        players.put(me.getId(), me);
-        return  players;
     }
 
     public void setEnemie(PlayerId playerId, PlayerView enemie) {

@@ -4,83 +4,84 @@ import it.polimi.ingsw.network.Message;
 import it.polimi.ingsw.network.Protocol;
 import it.polimi.ingsw.network.server.RmiClientInterface;
 
-import java.rmi.ConnectException;
-import java.rmi.ConnectIOException;
+import java.rmi.NoSuchObjectException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
-import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 
 import static java.lang.Thread.sleep;
 
-public class RmiClient extends Client {
+/**
+ * This class represent a client using rmi connection and
+ * implements the Rmi-client interface exposed to rmi server.
+ */
 
-    private RmiClientImplementation rmiClientImplementation;
-    private RmiServerInterface rmiServerInterface;
-    private RmiClientInterface stub;
-    private final static int TEST_ALIVENESS_TIME = 2000;
-    private boolean keepAlive = true;
-    private final static String TYPE = "RMI";
+public class RmiClient extends Client implements RmiClientInterface {
 
-    public RmiClient(String ip, int port, Ui ui) {
+    private static final int TEST_ALIVENESS_TIME = 2000;
+    private static final String TYPE = "RMI";
+
+    RmiClient(Ui ui) {
         super(ui);
-        this.ip = ip;
-        this.port = port;
     }
 
+    /**
+     * Starts a client according to the rmi communication and
+     * calls periodically a server's method in order to check connection.
+     * When a problem occurs, it closes the process after having notified the disconnection.
+     */
+
+    @Override
     public void run() {
-        try {
-            startClient();
-        } catch (RemoteException | NotBoundException e) {
-            System.err.println(e.getMessage());
-        }
-    }
-
-    public String printMessageAndGetAnswer(String message) {
-        return manageMessage(message);
-    }
-
-    //TODO: can a client be closed while running?
-    private void closeClient() {
-        try {
-            rmiServerInterface.unregistry(stub);
-        } catch (RemoteException e) {
-            System.out.println(e.getMessage());
-        }
-    }
-
-    public void startClient() throws RemoteException, NotBoundException {
-        while(true) {
+        RmiServerInterface rmiServerInterface;
+        manageIpAndPortInsertion();
+        while (true) {
             manageMessage(parser.serialize(new Message(Protocol.CONNECTING, TYPE, null)));
             try {
-                Registry registry = LocateRegistry.getRegistry(ip, port);
-                rmiServerInterface = (RmiServerInterface) registry.lookup(RmiServerInterface.NAME);
-                rmiClientImplementation = new RmiClientImplementation(this);
-                stub = (RmiClientInterface) UnicastRemoteObject.exportObject(rmiClientImplementation, 0);
-                rmiServerInterface.registry(stub);
+                rmiServerInterface = (RmiServerInterface) LocateRegistry.getRegistry(ip, port).lookup(RmiServerInterface.NAME);
+                rmiServerInterface.registry((RmiClientInterface) UnicastRemoteObject.exportObject(this, 0));
                 break;
-            } catch (ConnectException | ConnectIOException e) {
-                //System.out.println(e.getMessage());
-                do {
-                    manageInvalidIpOrPort();
-                }while(!isValidIp(ip) || port < 0);
+            } catch (RemoteException | NotBoundException e) {
+                manageMessage(parser.serialize(new Message(Protocol.INVALID_CONNECTION_PARAMETERS, "", null)));
+                manageIpAndPortInsertion();
             }
         }
         while (keepAlive) {
             try {
                 sleep(TEST_ALIVENESS_TIME);
-            } catch (InterruptedException e) {
-                break;
-            }
-            try {
                 rmiServerInterface.testAliveness();
-            } catch (RemoteException e) {
+            } catch (InterruptedException | RemoteException e) {
                 System.out.println(e.getMessage());
                 break;
             }
         }
         manageMessage(parser.serialize(new Message(Protocol.UNREACHABLE_SERVER, "", null)));
-        System.exit(0);
+        try {
+            UnicastRemoteObject.unexportObject(this, true);
+        } catch (NoSuchObjectException e) {
+            System.out.println("Impossibile chiudere l'interfaccia rmi: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Delegates messages management to superclass Client.
+     *
+     * @param message is the gson-coded string containing message
+     * @return the user's answer
+     */
+
+    public String sendMessageAndGetAnswer(String message) {
+        return manageMessage(message);
+    }
+
+    /**
+     * This method is called by server in order to test client presence.
+     *
+     * @return always true
+     */
+
+    public boolean testAliveness() {
+        return true;
     }
 }

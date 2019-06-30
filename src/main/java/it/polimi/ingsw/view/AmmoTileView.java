@@ -33,6 +33,8 @@ public class AmmoTileView {
                 id.append(Color.YELLOW.colorInitial());
             }
         }
+        else
+            id.append("   ");
         return String.valueOf(id);
     }
 }

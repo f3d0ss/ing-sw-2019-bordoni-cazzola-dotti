@@ -12,8 +12,8 @@ import it.polimi.ingsw.view.commandmessage.PowerUpCommandMessage;
  * This command represent the action of use a tagback grenade
  */
 public class UseTagbackGrenadeCommand implements Command {
-    private PowerUp grenade;
-    private Player player;
+    private final PowerUp grenade;
+    private final Player player;
 
     /**
      * This constructor create a command for use a tagback grenade

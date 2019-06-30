@@ -95,10 +95,10 @@ public class PlayerBoardController extends HBox {
         printPlayerBoard(playerView);
     }
 
-    void printPlayerCard(PlayerView playerView,
-                         HBox playerPowerUpContainer,
-                         HBox playerWeaponContainer,
-                         boolean isMe) {
+    private void printPlayerCard(PlayerView playerView,
+                                 HBox playerPowerUpContainer,
+                                 HBox playerWeaponContainer,
+                                 boolean isMe) {
         playerPowerUpContainer.getChildren().clear();
         powerUpBoxes.clear();
         for (int i = 0; i < playerView.getPowerUps().size(); i++) {
@@ -148,12 +148,12 @@ public class PlayerBoardController extends HBox {
 
     }
 
-    void printPlayerBoard(PlayerView playerView,
-                          VBox aggregateActionBox,
-                          HBox playerMarks,
-                          HBox playerHealthBox,
-                          HBox playerDeaths,
-                          VBox playerAmmo) {
+    private void printPlayerBoard(PlayerView playerView,
+                                  VBox aggregateActionBox,
+                                  HBox playerMarks,
+                                  HBox playerHealthBox,
+                                  HBox playerDeaths,
+                                  VBox playerAmmo) {
         String aggregateActionImageURI = MainGuiController.PLAYERBOARD_IMAGES_DIR
                 + playerView.getId().playerId()
                 + (playerView.isFlippedBoard() ? MainGuiController.AGGREGATE_ACTION_FLIPPED_FILE_PATTERN : MainGuiController.AGGREGATE_ACTION_FILE_PATTERN);

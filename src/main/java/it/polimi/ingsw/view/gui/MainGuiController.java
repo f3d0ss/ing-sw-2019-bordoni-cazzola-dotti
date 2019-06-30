@@ -240,7 +240,7 @@ public class MainGuiController {
         HBox overlay = new HBox();
         overlay.setStyle("-fx-background-color: yellow; -fx-background-radius: 10; -fx-opacity: 0.5");
         overlay.setOnMouseClicked(mouseEvent -> handleCommandClick(commandIndex, lock));
-        if (node.getChildren().isEmpty())
+        if (!node.getChildren().isEmpty())
             overlay.getChildren().setAll(node.getChildrenUnmodifiable());
         node.getChildren().setAll(overlay);
         HBox.setHgrow(overlay, Priority.ALWAYS);

@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ScopeState extends SelectedWeaponState {
-    private List<Player> shootedPlayer;
+    private final List<Player> shootedPlayer;
 
     public ScopeState(AggregateAction selectedAggregateAction, Weapon selectedWeapon, List<Player> shootedPlayer) {
         super(selectedAggregateAction, selectedWeapon);

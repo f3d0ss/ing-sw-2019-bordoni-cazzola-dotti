@@ -9,43 +9,49 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
-import static java.lang.Thread.sleep;
+/**
+ * This class represent the server for communications using socket.
+ */
 
-public class SocketServer implements Runnable {
+class SocketServer implements Runnable {
 
-    private int port;
-    private ServerManager serverManager;
-    private ServerSocket serverSocket;
+    private final int port;
+    private final ServerManager serverManager;
+    private final Map<Socket, Scanner> fromClient = new HashMap<>();
+    private final Map<Socket, PrintWriter> toClient = new HashMap<>();
     private boolean keepAlive = true;
-    //private Map<Socket, Boolean> clientReady = new HashMap<>();
-    private Map<Socket, Scanner> fromClient = new HashMap<>();
-    private Map<Socket, PrintWriter> toClient = new HashMap<>();
 
-    public SocketServer(ServerManager server, int port) {
+    SocketServer(ServerManager server, int port) {
         this.serverManager = server;
         this.port = port;
     }
 
-    public void run() {
-        try {
-            startServer();
-        } catch (IOException e) {
-            System.err.println(e.getMessage());
-        }
-    }
+    /**
+     * Sends a message to a socket client. If the client is unreachable, it unregisters it.
+     *
+     * @param addressee is the socket of the addressee
+     * @param message   is the string containing the sending message
+     * @return is the answer coming from the client
+     */
 
-    public String sendMessageAndGetAnswer(Socket addressee, String message) {
+    String sendMessageAndGetAnswer(Socket addressee, String message) {
         toClient.get(addressee).println(message);
         try {
             return fromClient.get(addressee).nextLine();
         } catch (NoSuchElementException e) {
-            //serverManager.removeClient(addressee);
-            unregistry(addressee);
+            unregister(addressee);
             return "Impossibile raggiungere il client." + e.getMessage();
         }
     }
 
-    public void registry(Socket client) throws IOException {
+    /**
+     * Registries a new socket client on the server manager,
+     * starting a thread devoted to look after the enrollment.
+     *
+     * @param client is the rmi interface of the new client
+     */
+
+    private void registry(Socket client) throws IOException {
         serverManager.addClient(client);
         fromClient.put(client, new Scanner(client.getInputStream()));
         toClient.put(client, new PrintWriter(client.getOutputStream(), true));
@@ -54,28 +60,32 @@ public class SocketServer implements Runnable {
         new Thread(new ClientReception(serverManager, number)).start();
     }
 
-    public void unregistry(Socket client) {
+    /**
+     * Unregisters a socket client.
+     *
+     * @param client is the socket of the outgoing client
+     */
+
+    void unregister(Socket client) {
         fromClient.remove(client);
         toClient.remove(client);
         serverManager.removeClient(client);
     }
 
-    public void stopServer() {
-        keepAlive = false;
-    }
+    /**
+     * Starts a server according to the socket technology, keep it listening to new connection requests.
+     */
 
-    public void startServer() throws IOException {
-        serverSocket = new ServerSocket(port);
-        System.out.println("SocketServer avviato.");
-        serverManager.setSocketReady();
-        new Thread(new SocketReceptionist(serverSocket, this)).start();
-        while (keepAlive) {
-            try {
-                sleep(2000);
-            } catch (InterruptedException e) {
+    public void run() {
+        try (ServerSocket serverSocket = new ServerSocket(port)) {
+            System.out.println("SocketServer avviato.");
+            while (keepAlive) {
+                Socket client = serverSocket.accept();
+                registry(client);
             }
+        } catch (IOException e) {
+            System.out.println("SocketServer chiuso.");
         }
-        System.out.println("SocketServer spento.");
     }
 
 }

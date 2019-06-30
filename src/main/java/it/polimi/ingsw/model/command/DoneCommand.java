@@ -10,10 +10,10 @@ import it.polimi.ingsw.view.commandmessage.SimpleCommandMessage;
  * This command change the player state from currentState to nextState
  */
 public class DoneCommand implements Command {
-    private Player player;
-    private PlayerState currentState;
-    private PlayerState nextState;
-    private boolean undoable;
+    private final Player player;
+    private final PlayerState currentState;
+    private final PlayerState nextState;
+    private final boolean undoable;
 
     /**
      * This constructor create a command that change the player state from ManageTurnState to IdleState

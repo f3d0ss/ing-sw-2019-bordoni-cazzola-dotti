@@ -6,8 +6,8 @@ import java.util.List;
 
 public class CommandViewTransfer extends Message {
 
-    private List<CommandMessage> attachedCommand;
-    private boolean undo;
+    private final List<CommandMessage> attachedCommand;
+    private final boolean undo;
 
     public CommandViewTransfer(List<CommandMessage> commands, boolean undo) {
         super(Protocol.SEND_COMMANDS, "", null);

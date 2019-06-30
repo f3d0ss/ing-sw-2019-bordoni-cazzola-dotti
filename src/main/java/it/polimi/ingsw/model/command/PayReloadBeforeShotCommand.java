@@ -11,8 +11,8 @@ import it.polimi.ingsw.view.commandmessage.SimpleCommandMessage;
  * This command actualize the payment for the reload before the shoot for the action possible only in the final round
  */
 public class PayReloadBeforeShotCommand implements Command {
-    private Player player;
-    private PendingPaymentReloadBeforeShotState currentState;
+    private final Player player;
+    private final PendingPaymentReloadBeforeShotState currentState;
 
     /**
      * This constructor create a command for pay the reloading

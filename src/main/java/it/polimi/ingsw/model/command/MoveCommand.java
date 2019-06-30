@@ -11,12 +11,12 @@ import it.polimi.ingsw.view.commandmessage.SquareCommandMessage;
  * This command represents a move action
  */
 public class MoveCommand implements Command {
-    private Player player;
-    private Square newPosition;
-    private MovableState currentState;
+    private final Player player;
+    private final Square newPosition;
+    private final MovableState currentState;
+    private final PlayerState nextState;
+    private final boolean undoable;
     private Square oldSquare;
-    private PlayerState nextState;
-    private boolean undoable;
 
     /**
      * This constructor create a command that move the player and change the state in the next state

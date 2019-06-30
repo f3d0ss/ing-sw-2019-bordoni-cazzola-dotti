@@ -18,7 +18,7 @@ public class GameBoardTest {
 
     @Test
     public void testGetVisibleSquares() {
-        GameBoard board = new Match(1).getBoard();
+        GameBoard board = new Match().getBoard();
         Square square;
         List<Square> list;
         for (int i = 0; i < ROWS; i++)
@@ -94,7 +94,7 @@ public class GameBoardTest {
 
     @Test
     public void testGetAccessibleDirections() {
-        GameBoard board = new Match(1).getBoard();
+        GameBoard board = new Match().getBoard();
         Square square;
         List<CardinalDirection> list;
         for (int i = 0; i < ROWS * COLUMNS; i++) {
@@ -194,5 +194,25 @@ public class GameBoardTest {
                         }
                 }
             }
+    }
+
+    @Test
+    void getThirdSquareInTheSameDirection() {
+        Match match = new Match();
+        GameBoard gameBoard = match.getBoard();
+        Square s1 = gameBoard.getSquare(2, 3);
+        Square s2 = gameBoard.getSquare(1, 3);
+        Square s3 = gameBoard.getThirdSquareInTheSameDirection(s1, s2, true);
+        assertEquals(null, s3);
+        s1 = gameBoard.getSquare(2, 1);
+        s2 = gameBoard.getSquare(1, 1);
+        s3 = gameBoard.getThirdSquareInTheSameDirection(s1, s2, false);
+        assertEquals(null, s3);
+        s3 = gameBoard.getThirdSquareInTheSameDirection(s1, s2, true);
+        assertEquals(gameBoard.getSquare(0, 1), s3);
+        s1 = gameBoard.getSquare(0, 2);
+        s2 = gameBoard.getSquare(1, 2);
+        s3 = gameBoard.getThirdSquareInTheSameDirection(s1, s2, true);
+        assertEquals(gameBoard.getSquare(2, 2), s3);
     }
 }
