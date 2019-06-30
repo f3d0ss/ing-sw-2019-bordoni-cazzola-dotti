@@ -1,7 +1,7 @@
 package it.polimi.ingsw.model;
 
 /**
- * This abstract class represents a PowerUp
+ * This class represents a PowerUp
  */
 public class PowerUp {
 

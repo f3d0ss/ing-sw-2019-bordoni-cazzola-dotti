@@ -1,5 +1,8 @@
 package it.polimi.ingsw.model;
 
+/**
+ * This class represents an aggregate action.
+ */
 public class AggregateAction {
     private final int moveNumber;
     private final boolean grab;

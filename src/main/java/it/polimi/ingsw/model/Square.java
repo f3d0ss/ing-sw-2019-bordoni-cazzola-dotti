@@ -74,6 +74,11 @@ public abstract class Square {
         update();
     }
 
+    /**
+     * This method adds a player without notifying observers
+     *
+     * @param player Player to add
+     */
     public void untracedAddPlayer(Player player) {
         this.hostedPlayers.add(player);
     }
@@ -83,6 +88,11 @@ public abstract class Square {
         update();
     }
 
+    /**
+     * This method removes a player without notifying observers
+     *
+     * @param player Player to remove
+     */
     public void untracedRemovePlayer(Player player) {
         this.hostedPlayers.remove(player);
     }

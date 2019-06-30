@@ -101,6 +101,11 @@ public class Player {
         this.playerState = playerState;
     }
 
+    /**
+     * This method moves the player without notifying observers
+     *
+     * @param square Square the player is moving into
+     */
     void untracedMove(Square square) {
         position.untracedRemovePlayer(this);
         position = square;

@@ -70,7 +70,6 @@ public class Match {
         weaponList.add(parser.deserialize(new InputStreamReader(getClass().getResourceAsStream("/weapons/Cyberblade.json"))));
         weaponList.add(parser.deserialize(new InputStreamReader(getClass().getResourceAsStream("/weapons/Flamethrower.json"))));
         weaponList.add(parser.deserialize(new InputStreamReader(getClass().getResourceAsStream("/weapons/PowerGlove.json"))));
-
         weaponList.add(parser.deserialize(new InputStreamReader(getClass().getResourceAsStream("/weapons/TractorBeam.json"))));
         weaponList.add(parser.deserialize(new InputStreamReader(getClass().getResourceAsStream("/weapons/Whisper.json"))));
         weaponList.add(parser.deserialize(new InputStreamReader(getClass().getResourceAsStream("/weapons/GrenadeLauncher.json"))));

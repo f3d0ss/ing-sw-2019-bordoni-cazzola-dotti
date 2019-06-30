@@ -3,6 +3,9 @@ package it.polimi.ingsw.model;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * This class represents the game map
+ */
 public class GameBoard {
 
     static final int ROWS = 3;
