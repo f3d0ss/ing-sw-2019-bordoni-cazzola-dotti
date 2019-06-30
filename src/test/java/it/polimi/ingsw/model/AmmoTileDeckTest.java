@@ -8,6 +8,6 @@ public class AmmoTileDeckTest {
     @Test
     public void initializeDeck() {
         Match m = new Match();
-        m.getBoard().getTurrets().stream().map(turretSquare -> turretSquare.getAmmoTile()).forEach(System.out::println);
+        m.getBoard().getTurrets().forEach(TurretSquare::getAmmoTile);
     }
 }

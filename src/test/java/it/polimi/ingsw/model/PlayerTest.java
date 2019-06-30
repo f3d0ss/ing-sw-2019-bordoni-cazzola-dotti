@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 
 public class PlayerTest {
@@ -58,13 +58,13 @@ public class PlayerTest {
     @Test
     public void testAddDamage() {
         Player player = new Player(new Match(), null, null);
-        assertEquals(player.isDead(), false);
+        assertFalse(player.isDead());
         for (int i = 1; i < MAX_DAMAGE - 1; i++) {
             player.addDamage(1, PlayerId.GREEN);
-            assertEquals(player.isDead(), false);
+            assertFalse(player.isDead());
         }
         player.addDamage(1, PlayerId.GREEN);
-        assertEquals(player.isDead(), true);
+        assertTrue(player.isDead());
     }
 
     //verify the correct insertion of marks and their changing in damages
@@ -77,24 +77,24 @@ public class PlayerTest {
         for (marks = 1; marks <= MAX_MARK; marks++) {
             Player player = new Player(new Match(), null, null);
             player.addMarks(marks, PlayerId.VIOLET);
-            assertEquals(player.isDead(), false);
+            assertFalse(player.isDead());
             for (int i = 1; i < MAX_DAMAGE - 1 - marks; i++) {
                 player.addDamage(1, PlayerId.VIOLET);
-                assertEquals(player.isDead(), false);
+                assertFalse(player.isDead());
             }
             player.addDamage(1, PlayerId.GREEN);
-            assertEquals(player.isDead(), true);
+            assertTrue(player.isDead());
         }
 
         Player player = new Player(new Match(), null, null);
         player.addMarks(marks, PlayerId.VIOLET);
-        assertEquals(player.isDead(), false);
+        assertFalse(player.isDead());
         for (int i = 1; i < MAX_DAMAGE - 1 - MAX_MARK; i++) {
             player.addDamage(1, PlayerId.VIOLET);
-            assertEquals(player.isDead(), false);
+            assertFalse(player.isDead());
         }
         player.addDamage(1, PlayerId.GREEN);
-        assertEquals(player.isDead(), true);
+        assertTrue(player.isDead());
     }
 
     //verify the correct movements from all position in game board

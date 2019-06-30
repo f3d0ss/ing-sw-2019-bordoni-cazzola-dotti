@@ -5,14 +5,14 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class MatchTest {
+class MatchTest {
 
     private final static int SKULLS = 8;
 
 //verify the correct insertion of players
 
     @Test
-    public void testAddPlayer() {
+    void testAddPlayer() {
         Match match = new Match();
         Player tmp;
         for (PlayerId id : PlayerId.values()) {
@@ -25,7 +25,7 @@ public class MatchTest {
 //verify the correct deaths count
 
     @Test
-    public void testDecreaseDeaths() {
+    void testDecreaseDeaths() {
         Match match = new Match();
         int attempts = 10;
         for (int k = 0; k < attempts; k++)
@@ -35,7 +35,7 @@ public class MatchTest {
 //verify the correct count of killshots
 
     @Test
-    public void testAddKillshot() {
+    void testAddKillshot() {
         Match match = new Match();
         int total = 1;
         for (PlayerId id : PlayerId.values()) {

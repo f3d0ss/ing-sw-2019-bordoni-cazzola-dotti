@@ -10,11 +10,12 @@ import org.junit.jupiter.api.Test;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.*;
-
-//TODO remove prints and temporary test
 
 class WeaponTest {
     private List<Weapon> allWeapons;
@@ -34,9 +35,22 @@ class WeaponTest {
         return weaponList;
     }
 
+    private Weapon getWeaponByName(String name) {
+        for (Weapon weapon : allWeapons) {
+            if (weapon.getName().contains(name))
+                return weapon;
+        }
+        return null;
+    }
+
     Weapon getRandomWeapon() {
         return allWeapons.get(new Random().nextInt(allWeapons.size()));
     }
+
+    private Square getRandomSquare(GameBoard gameBoard) {
+        return gameBoard.getSquareList().get(new Random().nextInt(gameBoard.getSquareList().size()));
+    }
+
 
     @BeforeEach
     void setUp() {
@@ -58,7 +72,7 @@ class WeaponTest {
     void deselectWeaponMode() {
         Weapon weapon = getRandomWeapon();
         weapon.deselectWeaponMode();
-        assertTrue(weapon.getSelectedWeaponMode() == null);
+        assertNull(weapon.getSelectedWeaponMode());
     }
 
     @Test
@@ -117,12 +131,10 @@ class WeaponTest {
         player.respawn(Color.BLUE);
         match.addPlayer(player);
         for (Weapon weapon : allWeapons) {
-            System.out.println(weapon.getName() + "------------");
             ReadyToShootState state = new ReadyToShootState(new AggregateAction(0, false, true, false), weapon);
             player.changeState(state);
             for (WeaponMode weaponMode : weapon.getWeaponModes()) {
                 weapon.setSelectedWeaponMode(weaponMode);
-                System.out.print(weaponMode.getName() + " N of Commands: ");
                 List<Command> possibleCommands = weapon.getPossibleCommands(gameBoard, player, state);
                 int shoot = 0, move = 0, targetSquare = 0, targetPlayer = 0;
                 for (Command command : possibleCommands) {
@@ -131,11 +143,10 @@ class WeaponTest {
                     else if (command instanceof SelectTargetPlayerCommand) targetPlayer++;
                     else if (command instanceof SelectTargetSquareCommand) targetSquare++;
                 }
-                System.out.println("Shoot: " + shoot + "| Move: " + move + " |TargetPlayer: " + targetPlayer + " |TargetSquare: " + targetSquare);
-                assertTrue(targetPlayer == 0);
-                assertTrue(move == 0);
+                assertEquals(0, targetPlayer);
+                assertEquals(0, move);
                 if (!weaponMode.isTargetSquare() && weaponMode.isTargetPlayers()) //these weapons can target empty squares
-                    assertTrue(targetSquare == 0);
+                    assertEquals(0, targetSquare);
             }
         }
     }
@@ -143,7 +154,6 @@ class WeaponTest {
     @Test
     void getSelectWeaponModeCommands() {
         Match match = new Match();
-        GameBoard gameBoard = match.getBoard();
         Player player = new Player(match, PlayerId.VIOLET, "Mr");
         player.respawn(Color.BLUE);
         for (Weapon weapon : allWeapons) {
@@ -169,23 +179,18 @@ class WeaponTest {
         match.addPlayer(player);
         square.addPlayer(player);
         for (Weapon weapon : allWeapons) {
-            System.out.println(weapon.getName() + "------------");
             ReadyToShootState state = new ReadyToShootState(new AggregateAction(0, false, true, false), weapon);
             player.changeState(state);
             for (WeaponMode weaponMode : weapon.getWeaponModes()) {
                 if (!weaponMode.isMoveShooter())
                     continue;
                 weapon.setSelectedWeaponMode(weaponMode);
-                System.out.println(weaponMode.getName());
                 List<Command> possibleCommands = weapon.getPossibleCommands(gameBoard, player, state);
-                System.out.println("number of commands: " + possibleCommands.size());
                 for (Command command : possibleCommands) {
                     if (command instanceof MoveCommand) {
                         Square oldPosition = player.getPosition();
-                        System.out.println("old pos: " + oldPosition.getRow() + " " + oldPosition.getCol());
                         command.execute();
                         Square newPosition = player.getPosition();
-                        System.out.println("new pos: " + newPosition.getRow() + " " + newPosition.getCol());
                         assertTrue(newPosition.getHostedPlayers().contains(player));
                         command.undo();
                         assertEquals(oldPosition, player.getPosition());
@@ -196,157 +201,119 @@ class WeaponTest {
     }
 
     @Test
-    void getPossibleCommands() {
+    void getPossibleCommandsTargetsOnSameSquare() {
         Match match = new Match();
         GameBoard gameBoard = match.getBoard();
-        Square shooterSquare = gameBoard.getSpawnSquares().get(0);
+        Square shooterSquare = gameBoard.getSquare(1, 1);
         Player shooter = new Player(match, PlayerId.VIOLET, PlayerId.VIOLET.playerIdName());
         shooter.respawn(Color.BLUE);
         shooter.move(shooterSquare);
         match.addPlayer(shooter);
         shooterSquare.addPlayer(shooter);
 
-        Square square = shooterSquare;
         Player player = new Player(match, PlayerId.GREEN, PlayerId.GREEN.playerIdName());
         player.respawn(Color.BLUE);
-        player.move(square);
+        player.move(shooterSquare);
         match.addPlayer(player);
-        square.addPlayer(player);
+        shooterSquare.addPlayer(player);
 
         Player player1 = new Player(match, PlayerId.GREY, PlayerId.GREY.playerIdName());
         player1.respawn(Color.BLUE);
-        player1.move(square);
+        player1.move(shooterSquare);
         match.addPlayer(player1);
-        square.addPlayer(player1);
-
-        System.out.println(match.getCurrentPlayers().size());
+        shooterSquare.addPlayer(player1);
 
         for (Weapon weapon : allWeapons) {
-            System.out.println(weapon.getName() + "------------");
-
             ReadyToShootState state = new ReadyToShootState(new AggregateAction(0, false, true, false), weapon);
             shooter.changeState(state);
             for (WeaponMode weaponMode : weapon.getWeaponModes()) {
                 weapon.setSelectedWeaponMode(weaponMode);
-                System.out.print(weaponMode.getName() + " N of Commands: ");
                 List<Command> possibleCommands = weapon.getPossibleCommands(gameBoard, shooter, state);
                 int shoot = 0, move = 0, targetSquare = 0, targetPlayer = 0;
-                List<ShootCommand> shootCommands = new ArrayList<>();
-                List<SelectTargetPlayerCommand> selectTargetPlayerCommands = new ArrayList<>();
-                List<SelectTargetSquareCommand> selectTargetSquareCommands = new ArrayList<>();
                 for (Command command : possibleCommands) {
                     if (command instanceof ShootCommand) {
                         shoot++;
-                        shootCommands.add((ShootCommand) command);
                     } else if (command instanceof MoveCommand) {
                         move++;
                     } else if (command instanceof SelectTargetPlayerCommand) {
                         targetPlayer++;
-                        selectTargetPlayerCommands.add((SelectTargetPlayerCommand) command);
                     } else if (command instanceof SelectTargetSquareCommand) {
                         targetSquare++;
-                        selectTargetSquareCommands.add((SelectTargetSquareCommand) command);
                     }
                 }
-                System.out.println("Shoot: " + shoot + "| Move: " + move + " |TargetPlayer: " + targetPlayer + " |TargetSquare: " + targetSquare);
-                if (!selectTargetPlayerCommands.isEmpty()) {
-                    for (int i = 0; i < selectTargetPlayerCommands.size(); i++) {
-                        SelectTargetPlayerCommand selectTargetPlayerCommand = selectTargetPlayerCommands.get(i);
-                        //selectTargetPlayerCommand.execute();
-                        break;
-                        //selectTargetPlayerCommand.undo();
-                    }
-                }
-                if (!selectTargetSquareCommands.isEmpty()) {
-                    for (SelectTargetSquareCommand selectTargetSquareCommand : selectTargetSquareCommands) {
-                        selectTargetSquareCommand.execute();
-                        //selectTargetSquareCommand.undo();
-                    }
-                }
-                List<Command> possibleCommandsafter = weapon.getPossibleCommands(gameBoard, shooter, state);
-                int cont = 0;
-                for (Command command : possibleCommandsafter) {
-                    if (command instanceof ShootCommand) {
-                        cont++;
-
-                        ShootCommand shootCommand = (ShootCommand) command;
-                        System.out.println(cont);
-                        System.out.println("Danni " + player.getHealth().size());
-                        command.execute();
-                        System.out.println("Danni AFTER " + player.getHealth().size());
-                    }
-                }
+                assertEquals(0, shoot);
+                assertTrue(targetPlayer < 3);
+                if (weaponMode.getMinTargetDistance() > 0)
+                    assertEquals(0, targetPlayer);
+                if (weaponMode.getMaxTargetDistance() == 0)
+                    assertTrue(targetPlayer + targetSquare > 0);
+                if (weaponMode.isEachTargetOnDifferentSquares())
+                    assertTrue(targetPlayer <= 1);
             }
         }
-
     }
 
     @Test
-    void wmTest() {
+    void getPossibleCommandsTargetsInTheSameRoom() {
         Match match = new Match();
         GameBoard gameBoard = match.getBoard();
-        Square shooterSquare = gameBoard.getSquare(0, 0);
+
+        Square shooterSquare = gameBoard.getSquare(1, 0);
         Player shooter = new Player(match, PlayerId.VIOLET, PlayerId.VIOLET.playerIdName());
         shooter.respawn(Color.BLUE);
         shooter.move(shooterSquare);
         match.addPlayer(shooter);
         shooterSquare.addPlayer(shooter);
 
-        Square square = gameBoard.getSquare(2, 3);
         Player player = new Player(match, PlayerId.GREEN, PlayerId.GREEN.playerIdName());
         player.respawn(Color.BLUE);
-        player.move(square);
+        player.move(shooterSquare);
         match.addPlayer(player);
-        square.addPlayer(player);
+        shooterSquare.addPlayer(player);
 
+        Square square1 = gameBoard.getSquare(1, 1);
         Player player1 = new Player(match, PlayerId.GREY, PlayerId.GREY.playerIdName());
         player1.respawn(Color.BLUE);
-        player1.move(square);
+        player1.move(square1);
         match.addPlayer(player1);
-        square.addPlayer(player1);
+        square1.addPlayer(player1);
 
         Player player2 = new Player(match, PlayerId.BLUE, PlayerId.BLUE.playerIdName());
         player2.respawn(Color.BLUE);
-        player2.move(square);
+        player2.move(square1);
         match.addPlayer(player2);
-        square.addPlayer(player2);
+        square1.addPlayer(player2);
 
-        Weapon shooterWeapon = null;
-        for (Weapon w : allWeapons) {
-            shooterWeapon = w;
-            for (WeaponMode weaponMode : w.getWeaponModes()) {
-                shooterWeapon.setSelectedWeaponMode(weaponMode);
+        Square square3 = gameBoard.getSquare(1, 2);
+        Player player3 = new Player(match, PlayerId.GREY, PlayerId.GREY.playerIdName());
+        player3.respawn(Color.BLUE);
+        player3.move(square3);
+        match.addPlayer(player3);
+        square3.addPlayer(player3);
 
-                ReadyToShootState state = new ReadyToShootState(new AggregateAction(0, false, true, false), shooterWeapon);
-                shooter.changeState(state);
-
-
-                List<Command> possibleCommands = shooterWeapon.getPossibleCommands(gameBoard, shooter, state);
-                List<Command> shooterCmds = shooter.getPossibleCommands();
-                if (possibleCommands.size() == 0)
-                    continue;
-                System.out.println(shooterWeapon.getName() + shooterWeapon.getSelectedWeaponMode().getName());
-                System.out.println("number of commands: " + possibleCommands.size());
-                int s = 0, p = 0;
-                LinkedHashSet<SelectTargetSquareCommand> selectTargetSquareCommands = new LinkedHashSet<>();
+        for (Weapon weapon : allWeapons) {
+            ReadyToShootState state = new ReadyToShootState(new AggregateAction(0, false, true, false), weapon);
+            shooter.changeState(state);
+            for (WeaponMode weaponMode : weapon.getWeaponModes()) {
+                weapon.setSelectedWeaponMode(weaponMode);
+                List<Command> possibleCommands = weapon.getPossibleCommands(gameBoard, shooter, state);
+                int shoot = 0, move = 0, targetSquare = 0, targetPlayer = 0;
                 for (Command command : possibleCommands) {
                     if (command instanceof ShootCommand) {
-
-                    }
-                    if (command instanceof SelectTargetSquareCommand) {
-                        s++;
-                        SelectTargetSquareCommand selectTargetSquareCommand = (SelectTargetSquareCommand) command;
-                        selectTargetSquareCommands.add(selectTargetSquareCommand);
-
-                    }
-                    if (command instanceof SelectTargetPlayerCommand) {
-                        p++;
-                        SelectTargetPlayerCommand selectTargetPlayerCommand = (SelectTargetPlayerCommand) command;
+                        shoot++;
+                    } else if (command instanceof MoveCommand) {
+                        move++;
+                    } else if (command instanceof SelectTargetPlayerCommand) {
+                        targetPlayer++;
+                    } else if (command instanceof SelectTargetSquareCommand) {
+                        targetSquare++;
                     }
                 }
-                assertTrue(match.getCurrentPlayers().size() - 1 >= p);
-                assertTrue(selectTargetSquareCommands.size() == s);
-
+                if (!weaponMode.isSpinner()) //spinner autoselects targets
+                    assertEquals(0, shoot);
+                assertTrue(targetPlayer <= match.getCurrentPlayers().size());
+                if (weaponMode.isTargetVisibleByShooter() && weaponMode.getMinTargetDistance() <= 2 && !weaponMode.isTargetRoom() && !weaponMode.isSpinner())
+                    assertTrue(targetPlayer + targetSquare > 0);
             }
         }
     }
@@ -355,59 +322,78 @@ class WeaponTest {
     void getPossibleShootCommandsTest() {
         Match match = new Match();
         GameBoard gameBoard = match.getBoard();
-        Square shooterSquare = getRandomSquare(gameBoard);
+
+        Square shooterSquare = gameBoard.getSquare(1, 0);
         Player shooter = new Player(match, PlayerId.VIOLET, PlayerId.VIOLET.playerIdName());
         shooter.respawn(Color.BLUE);
         shooter.move(shooterSquare);
         match.addPlayer(shooter);
         shooterSquare.addPlayer(shooter);
-        for (PlayerId playerId : PlayerId.values()) {
-            if (!playerId.equals(shooter.getId())) {
-                Square square = getRandomSquare(gameBoard);
-                Player player = new Player(match, playerId, playerId.playerIdName());
-                player.respawn(Color.BLUE);
-                player.move(square);
-                match.addPlayer(player);
-                square.addPlayer(player);
-            }
-        }
+
+        Player player = new Player(match, PlayerId.GREEN, PlayerId.GREEN.playerIdName());
+        player.respawn(Color.BLUE);
+        player.move(shooterSquare);
+        match.addPlayer(player);
+        shooterSquare.addPlayer(player);
+
+        Square square1 = gameBoard.getSquare(1, 1);
+        Player player1 = new Player(match, PlayerId.GREY, PlayerId.GREY.playerIdName());
+        player1.respawn(Color.BLUE);
+        player1.move(square1);
+        match.addPlayer(player1);
+        square1.addPlayer(player1);
+
+        Player player2 = new Player(match, PlayerId.BLUE, PlayerId.BLUE.playerIdName());
+        player2.respawn(Color.BLUE);
+        player2.move(square1);
+        match.addPlayer(player2);
+        square1.addPlayer(player2);
+
+        Square square3 = gameBoard.getSquare(1, 2);
+        Player player3 = new Player(match, PlayerId.GREY, PlayerId.GREY.playerIdName());
+        player3.respawn(Color.BLUE);
+        player3.move(square3);
+        match.addPlayer(player3);
+        square3.addPlayer(player3);
 
         for (Weapon weapon : allWeapons) {
-            System.out.println(weapon.getName() + "------------");
             ReadyToShootState state = new ReadyToShootState(new AggregateAction(0, false, true, false), weapon);
             shooter.changeState(state);
             for (WeaponMode weaponMode : weapon.getWeaponModes()) {
-                weapon.setSelectedWeaponMode(weaponMode);
-
-                if (!weaponMode.isTargetPlayers() || weaponMode.isTargetSquare()) {
-                    weapon.addTargetSquare(match.getCurrentPlayers().get(3).getPosition());
-                }
-
-                for (int i = 0; i < weaponMode.getMaxNumberOfTargetPlayers(); i++) {
-                    weapon.addTargetPlayer(match.getCurrentPlayers().get(i + 1));
-                }
-
-                System.out.println(weaponMode.getName());
-                List<Command> possibleCommands = weapon.getPossibleCommands(gameBoard, shooter, state);
-                System.out.println("number of commands: " + possibleCommands.size());
-                for (Command command : possibleCommands) {
-                    if (command instanceof ShootCommand) {
-                        match.getCurrentPlayers().stream().map(player -> player.getHealth().size()).forEach(System.out::print);
-                        command.execute();
-                        match.getCurrentPlayers().stream().map(player -> player.getHealth().size()).forEach(System.out::print);
-                        break;
+                //weaponmodes that need also to select target Squares or can't target player in this situation are excluded
+                if (weaponMode.isTargetPlayers() && !weaponMode.isTargetSquare() && weaponMode.isTargetVisibleByShooter() && weaponMode.getMinTargetDistance() <= 2
+                        && !weaponMode.isTargetRoom() && !weaponMode.isSpinner()) {
+                    weapon.setSelectedWeaponMode(weaponMode);
+                    List<Command> possibleCommands = weapon.getPossibleCommands(gameBoard, shooter, state);
+                    for (Command command : possibleCommands) {
+                        if (command instanceof SelectTargetPlayerCommand) {
+                            command.execute(); //first targetPlayersCommand is executed
+                            possibleCommands = shooter.getPossibleCommands();
+                            break;
+                        }
+                    }
+                    int shoot = 0;
+                    for (Command command : possibleCommands) {
+                        if (command instanceof ShootCommand) {
+                            shoot++;
+                        }
+                    }
+                    //these weaponmodes must generate at least 1 shoot command
+                    if (weaponMode.getMinNumberOfTargetPlayers() == 1) {
+                        assertTrue(shoot > 0);
+                        //weaponmodes that move target should have more shootcommands (the move of the target is included in the effect of the shootcommand)
+                        if (weaponMode.isMoveTargetAfterShoot())
+                            assertTrue(shoot > 1);
+                    } else if (weaponMode.getMinNumberOfTargetPlayers() > 1) {//must select more targets to be able to shoot
+                        assertEquals(0, shoot);
                     }
                 }
             }
         }
     }
 
-    private Square getRandomSquare(GameBoard gameBoard) {
-        return gameBoard.getSquareList().get(new Random().nextInt(gameBoard.getSquareList().size()));
-    }
-
     @Test
-    void tempTest() {
+    void flamethrowerSecondModeTest() {
         Match match = new Match();
         GameBoard gameBoard = match.getBoard();
         Square shooterSquare = gameBoard.getSquare(2, 1);
@@ -431,56 +417,26 @@ class WeaponTest {
         match.addPlayer(player1);
         square1.addPlayer(player1);
 
-        Square square2 = gameBoard.getSquare(1, 3);
+        Square square2 = gameBoard.getSquare(2, 3);
         Player player2 = new Player(match, PlayerId.BLUE, PlayerId.BLUE.playerIdName());
         player2.respawn(Color.BLUE);
         player2.move(square2);
         match.addPlayer(player2);
         square2.addPlayer(player2);
 
-        Weapon shooterWeapon = null;
-        for (Weapon w : allWeapons) {
-            if (!w.getName().contains("Flam"))
-                continue;
-            shooterWeapon = w;
-            WeaponMode weaponmode = w.getWeaponModes().get(0);
-            shooterWeapon.setSelectedWeaponMode(weaponmode);
-
-            ReadyToShootState state = new ReadyToShootState(new AggregateAction(0, false, true, false), shooterWeapon);
-            shooter.changeState(state);
-            System.out.println(player.getHealth().size());
-            System.out.println(player1.getHealth().size());
-            System.out.println(player2.getHealth().size());
-
-            List<Command> possibleCommands = shooterWeapon.getPossibleCommands(gameBoard, shooter, state);
-            possibleCommands.get(0).execute();
-            possibleCommands = shooter.getPossibleCommands();
-
-            // possibleCommands.get(0).execute();
-            possibleCommands = shooter.getPossibleCommands();
-            System.out.println(player.getHealth().size());
-            System.out.println(player1.getHealth().size());
-            System.out.println(player2.getHealth().size());
-            System.out.println(shooterWeapon.getName() + shooterWeapon.getSelectedWeaponMode().getName());
-            System.out.println("number of commands: " + possibleCommands.size());
-            int s = 0, p = 0;
-            LinkedHashSet<SelectTargetSquareCommand> selectTargetSquareCommands = new LinkedHashSet<>();
-            for (Command command : possibleCommands) {
-                if (command instanceof ShootCommand) {
-                    ShootCommand shootCommand = (ShootCommand) command;
-                }
-                if (command instanceof SelectTargetSquareCommand) {
-                    s++;
-                    SelectTargetSquareCommand selectTargetSquareCommand = (SelectTargetSquareCommand) command;
-                    selectTargetSquareCommands.add(selectTargetSquareCommand);
-
-                }
-                if (command instanceof SelectTargetPlayerCommand) {
-                    p++;
-                    SelectTargetPlayerCommand selectTargetPlayerCommand = (SelectTargetPlayerCommand) command;
-                }
-            }
-        }
+        Weapon flamethrowher = getWeaponByName("Flame");
+        ReadyToShootState state = new ReadyToShootState(new AggregateAction(0, false, true, false), flamethrowher);
+        shooter.changeState(state);
+        flamethrowher.setSelectedWeaponMode(flamethrowher.getWeaponModes().get(1));
+        List<Command> possibleCommands = shooter.getPossibleCommands();
+        possibleCommands.get(0).execute();
+        possibleCommands = shooter.getPossibleCommands();
+        possibleCommands.get(0).execute();
+        possibleCommands = shooter.getPossibleCommands();
+        possibleCommands.get(0).execute();
+        assertEquals(2, player.getHealth().size());
+        assertEquals(2, player1.getHealth().size());
+        assertEquals(1, player2.getHealth().size());
     }
 }
 

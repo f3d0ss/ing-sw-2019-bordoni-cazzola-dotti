@@ -5,10 +5,10 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 
-public class GameBoardTest {
+class GameBoardTest {
 
     private final static int ROWS = 3;
     private final static int COLUMNS = 4;
@@ -27,63 +27,63 @@ public class GameBoardTest {
                 if (square != null) {
                     list = board.getVisibleSquares(square, INF, 0, false);
                     if (i == 0 && j == 0 || i == 1 && j == 0 || i == 0 && j == 2) {
-                        assertEquals(list.contains(board.getSquare(0, 0)), true);
-                        assertEquals(list.contains(board.getSquare(0, 1)), true);
-                        assertEquals(list.contains(board.getSquare(0, 2)), true);
-                        assertEquals(list.contains(board.getSquare(0, 3)), false);
-                        assertEquals(list.contains(board.getSquare(1, 0)), true);
-                        assertEquals(list.contains(board.getSquare(1, 1)), true);
-                        assertEquals(list.contains(board.getSquare(1, 2)), true);
-                        assertEquals(list.contains(board.getSquare(1, 3)), false);
-                        assertEquals(list.contains(board.getSquare(2, 0)), false);
-                        assertEquals(list.contains(board.getSquare(2, 1)), false);
-                        assertEquals(list.contains(board.getSquare(2, 2)), false);
-                        assertEquals(list.contains(board.getSquare(2, 3)), false);
+                        assertTrue(list.contains(board.getSquare(0, 0)));
+                        assertTrue(list.contains(board.getSquare(0, 1)));
+                        assertTrue(list.contains(board.getSquare(0, 2)));
+                        assertFalse(list.contains(board.getSquare(0, 3)));
+                        assertTrue(list.contains(board.getSquare(1, 0)));
+                        assertTrue(list.contains(board.getSquare(1, 1)));
+                        assertTrue(list.contains(board.getSquare(1, 2)));
+                        assertFalse(list.contains(board.getSquare(1, 3)));
+                        assertFalse(list.contains(board.getSquare(2, 0)));
+                        assertFalse(list.contains(board.getSquare(2, 1)));
+                        assertFalse(list.contains(board.getSquare(2, 2)));
+                        assertFalse(list.contains(board.getSquare(2, 3)));
                         assertEquals(list.size(), 6);
                     }
                     if (i == 1 && j == 1 || i == 2 && j == 1) {
-                        assertEquals(list.contains(board.getSquare(0, 0)), false);
-                        assertEquals(list.contains(board.getSquare(0, 1)), false);
-                        assertEquals(list.contains(board.getSquare(0, 2)), false);
-                        assertEquals(list.contains(board.getSquare(0, 3)), false);
-                        assertEquals(list.contains(board.getSquare(1, 0)), true);
-                        assertEquals(list.contains(board.getSquare(1, 1)), true);
-                        assertEquals(list.contains(board.getSquare(1, 2)), true);
-                        assertEquals(list.contains(board.getSquare(1, 3)), false);
-                        assertEquals(list.contains(board.getSquare(2, 0)), false);
-                        assertEquals(list.contains(board.getSquare(2, 1)), true);
-                        assertEquals(list.contains(board.getSquare(2, 2)), true);
-                        assertEquals(list.contains(board.getSquare(2, 3)), false);
+                        assertFalse(list.contains(board.getSquare(0, 0)));
+                        assertFalse(list.contains(board.getSquare(0, 1)));
+                        assertFalse(list.contains(board.getSquare(0, 2)));
+                        assertFalse(list.contains(board.getSquare(0, 3)));
+                        assertTrue(list.contains(board.getSquare(1, 0)));
+                        assertTrue(list.contains(board.getSquare(1, 1)));
+                        assertTrue(list.contains(board.getSquare(1, 2)));
+                        assertFalse(list.contains(board.getSquare(1, 3)));
+                        assertFalse(list.contains(board.getSquare(2, 0)));
+                        assertTrue(list.contains(board.getSquare(2, 1)));
+                        assertTrue(list.contains(board.getSquare(2, 2)));
+                        assertFalse(list.contains(board.getSquare(2, 3)));
                         assertEquals(list.size(), 5);
                     }
                     if (i == 2 && j == 2 || i == 2 && j == 3) {
-                        assertEquals(list.contains(board.getSquare(0, 0)), false);
-                        assertEquals(list.contains(board.getSquare(0, 1)), false);
-                        assertEquals(list.contains(board.getSquare(0, 2)), false);
-                        assertEquals(list.contains(board.getSquare(0, 3)), false);
-                        assertEquals(list.contains(board.getSquare(1, 0)), false);
-                        assertEquals(list.contains(board.getSquare(1, 1)), false);
-                        assertEquals(list.contains(board.getSquare(1, 2)), false);
-                        assertEquals(list.contains(board.getSquare(1, 3)), true);
-                        assertEquals(list.contains(board.getSquare(2, 0)), false);
-                        assertEquals(list.contains(board.getSquare(2, 1)), true);
-                        assertEquals(list.contains(board.getSquare(2, 2)), true);
-                        assertEquals(list.contains(board.getSquare(2, 3)), true);
+                        assertFalse(list.contains(board.getSquare(0, 0)));
+                        assertFalse(list.contains(board.getSquare(0, 1)));
+                        assertFalse(list.contains(board.getSquare(0, 2)));
+                        assertFalse(list.contains(board.getSquare(0, 3)));
+                        assertFalse(list.contains(board.getSquare(1, 0)));
+                        assertFalse(list.contains(board.getSquare(1, 1)));
+                        assertFalse(list.contains(board.getSquare(1, 2)));
+                        assertTrue(list.contains(board.getSquare(1, 3)));
+                        assertFalse(list.contains(board.getSquare(2, 0)));
+                        assertTrue(list.contains(board.getSquare(2, 1)));
+                        assertTrue(list.contains(board.getSquare(2, 2)));
+                        assertTrue(list.contains(board.getSquare(2, 3)));
                         assertEquals(list.size(), 4);
                     }
                     if (i == 1 && j == 2) {
-                        assertEquals(list.contains(board.getSquare(0, 0)), true);
-                        assertEquals(list.contains(board.getSquare(0, 1)), true);
-                        assertEquals(list.contains(board.getSquare(0, 2)), true);
-                        assertEquals(list.contains(board.getSquare(0, 3)), false);
-                        assertEquals(list.contains(board.getSquare(1, 0)), true);
-                        assertEquals(list.contains(board.getSquare(1, 1)), true);
-                        assertEquals(list.contains(board.getSquare(1, 2)), true);
-                        assertEquals(list.contains(board.getSquare(1, 3)), true);
-                        assertEquals(list.contains(board.getSquare(2, 0)), false);
-                        assertEquals(list.contains(board.getSquare(2, 1)), false);
-                        assertEquals(list.contains(board.getSquare(2, 2)), false);
-                        assertEquals(list.contains(board.getSquare(2, 3)), true);
+                        assertTrue(list.contains(board.getSquare(0, 0)));
+                        assertTrue(list.contains(board.getSquare(0, 1)));
+                        assertTrue(list.contains(board.getSquare(0, 2)));
+                        assertFalse(list.contains(board.getSquare(0, 3)));
+                        assertTrue(list.contains(board.getSquare(1, 0)));
+                        assertTrue(list.contains(board.getSquare(1, 1)));
+                        assertTrue(list.contains(board.getSquare(1, 2)));
+                        assertTrue(list.contains(board.getSquare(1, 3)));
+                        assertFalse(list.contains(board.getSquare(2, 0)));
+                        assertFalse(list.contains(board.getSquare(2, 1)));
+                        assertFalse(list.contains(board.getSquare(2, 2)));
+                        assertTrue(list.contains(board.getSquare(2, 3)));
                         assertEquals(list.size(), 8);
                     }
                 }
@@ -102,21 +102,21 @@ public class GameBoardTest {
             if (square != null) {
                 list = board.getAccessibleDirection(square);
                 if (i == 4 || i == 6 || i == 9 || i == 11)
-                    assertEquals(list.contains(CardinalDirection.NORTH), true);
+                    assertTrue(list.contains(CardinalDirection.NORTH));
                 else
-                    assertEquals(list.contains(CardinalDirection.NORTH), false);
+                    assertFalse(list.contains(CardinalDirection.NORTH));
                 if (i == 0 || i == 1 || i == 4 || i == 5 || i == 6 || i == 9 || i == 10)
-                    assertEquals(list.contains(CardinalDirection.EAST), true);
+                    assertTrue(list.contains(CardinalDirection.EAST));
                 else
-                    assertEquals(list.contains(CardinalDirection.EAST), false);
+                    assertFalse(list.contains(CardinalDirection.EAST));
                 if (i == 0 || i == 2 || i == 5 || i == 7)
-                    assertEquals(list.contains(CardinalDirection.SOUTH), true);
+                    assertTrue(list.contains(CardinalDirection.SOUTH));
                 else
-                    assertEquals(list.contains(CardinalDirection.SOUTH), false);
+                    assertFalse(list.contains(CardinalDirection.SOUTH));
                 if (i == 1 || i == 2 || i == 5 || i == 6 || i == 7 || i == 10 || i == 11)
-                    assertEquals(list.contains(CardinalDirection.WEST), true);
+                    assertTrue(list.contains(CardinalDirection.WEST));
                 else
-                    assertEquals(list.contains(CardinalDirection.WEST), false);
+                    assertFalse(list.contains(CardinalDirection.WEST));
             }
         }
     }
@@ -203,11 +203,11 @@ public class GameBoardTest {
         Square s1 = gameBoard.getSquare(2, 3);
         Square s2 = gameBoard.getSquare(1, 3);
         Square s3 = gameBoard.getThirdSquareInTheSameDirection(s1, s2, true);
-        assertEquals(null, s3);
+        assertNull(s3);
         s1 = gameBoard.getSquare(2, 1);
         s2 = gameBoard.getSquare(1, 1);
         s3 = gameBoard.getThirdSquareInTheSameDirection(s1, s2, false);
-        assertEquals(null, s3);
+        assertNull(s3);
         s3 = gameBoard.getThirdSquareInTheSameDirection(s1, s2, true);
         assertEquals(gameBoard.getSquare(0, 1), s3);
         s1 = gameBoard.getSquare(0, 2);
