@@ -1,102 +1,94 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.layout.*?>
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="it.polimi.ingsw.view.gui.PlayerBoardController"
-            prefHeight="125" prefWidth="1045"
-            fx:id="mainPane"
-            stylesheets="@PlayerBoard.css">
-    <Pane>
-        <children>
-            <HBox prefHeight="${mainPane.height}" prefWidth="${mainPane.width*1045}">
-                <children>
-                    <HBox id="playerBoard" fx:id="playerBoard" prefHeight="${mainPane.height}"
-                          prefWidth="${mainPane.width*500/1045}">
-                        <children>
-                            <VBox prefWidth="${mainPane.width*500/1045*45/700}" id="aggregateActionBox"
-                                  fx:id="aggregateActionBox">
-                                <children>
-                                    <HBox prefHeight="${mainPane.height*32/175}"/> <!-- spacing -->
-                                    <HBox id="playerAggregateActionMMM" fx:id="playerAggregateActionMMM"
-                                          prefHeight="${mainPane.height*29/175}"/>
-                                    <HBox id="playerAggregateActionMG" fx:id="playerAggregateActionMG"
-                                          prefHeight="${mainPane.height*29/175}"/>
-                                    <HBox id="playerAggregateActionS" fx:id="playerAggregateActionS"
-                                          prefHeight="${mainPane.height*29/175}"/>
-                                    <HBox id="playerActionReload" fx:id="playerActionReload"
-                                          prefHeight="${mainPane.height*56/175}"/>
-                                </children>
-                            </VBox>
-                            <HBox prefWidth="${mainPane.width*500/1045*655/700}"
-                                  prefHeight="${mainPane.height}" id="boardWithoutAggregateAction"
-                                  fx:id="boardWithoutAggregateAction">
-                                <children>
-                                    <VBox prefHeight="${mainPane.height}"
-                                          prefWidth="${mainPane.width*500/1045*15/700}"/> <!-- spacing -->
-                                    <VBox prefHeight="${mainPane.height}"
-                                          prefWidth="${mainPane.width*500/1045*475/700}">
-                                        <children>
-                                            <HBox prefHeight="${mainPane.height*30/175}"
-                                                  prefWidth="${mainPane.width*500/1045*475/700}">
-                                                <children>
-                                                    <HBox prefHeight="${mainPane.height*30/175}"
-                                                          prefWidth="${mainPane.width*500/1045*270/700}"/>
-                                                    <HBox id="playerMarks" fx:id="playerMarks"
-                                                          prefHeight="${mainPane.height*30/175}"
-                                                          prefWidth="${mainPane.width*500/1045*205/700}"/>
-                                                </children>
-                                            </HBox>
-                                            <HBox prefHeight="${mainPane.height*30/175}"
-                                                  prefWidth="${mainPane.width*500/1045*475/700}">
-                                                <children>
-                                                    <HBox prefHeight="${mainPane.height*30/175}"
-                                                          prefWidth="${mainPane.width*500/1045*80/700}"/> <!-- spacing -->
-                                                    <HBox id="playerAggregateActionMMG"
-                                                          fx:id="playerAggregateActionMMG"
-                                                          prefHeight="${mainPane.height*30/175}"
-                                                          prefWidth="${mainPane.width*500/1045*55/700}"/>
-                                                    <HBox prefHeight="${mainPane.height*30/175}"
-                                                          prefWidth="${mainPane.width*500/1045*65/700}"/> <!-- spacing -->
-                                                    <HBox id="playerAggregateActionMS"
-                                                          fx:id="playerAggregateActionMS"
-                                                          prefHeight="${mainPane.height*30/175}"
-                                                          prefWidth="${mainPane.width*500/1045*55/700}"/>
-                                                    <HBox prefHeight="${mainPane.height*30/175}"
-                                                          prefWidth="${mainPane.width*500/1045*220/700}"/> <!-- spacing -->
-                                                </children>
-                                            </HBox>
-                                            <HBox prefHeight="${mainPane.height*55/175}"
-                                                  prefWidth="${mainPane.width*500/1045*475/700}"
-                                                  id="playerHealthBox" fx:id="playerHealthBox"/>
 
-                                            <HBox prefHeight="${mainPane.height*60/175}"
-                                                  prefWidth="${mainPane.width*500/1045*85/700}"/> <!-- spacing -->
-                                            <HBox id="playerDeathsGrid" fx:id="playerDeaths"
-                                                  prefHeight="${mainPane.height*60/175}"
-                                                  prefWidth="${mainPane.width*500/1045*224/700}"/>
-                                        </children>
-                                    </VBox>
-                                    <VBox prefHeight="${mainPane.height}"
-                                          prefWidth="${mainPane.width*500/1045*15/700}"/> <!-- spacing -->
-                                    <VBox prefHeight="${mainPane.height}"
-                                          prefWidth="${mainPane.width*500/1045*150/700}"
-                                          id="playerAmmo" fx:id="playerAmmo"/>
+<fx:root type="javafx.scene.layout.HBox" xmlns:fx="http://javafx.com/fxml"
+         prefHeight="125" prefWidth="1045"
+         fx:id="mainPane"
+         stylesheets="@PlayerBoard.css">
+    <HBox id="playerBoard" fx:id="playerBoard" prefHeight="${mainPane.height}"
+          prefWidth="${mainPane.width*500/1045}">
+        <children>
+            <VBox prefWidth="${mainPane.width*500/1045*45/700}" id="aggregateActionBox"
+                  fx:id="aggregateActionBox">
+                <children>
+                    <HBox prefHeight="${mainPane.height*32/175}"/> <!-- spacing -->
+                    <HBox id="playerAggregateActionMMM" fx:id="playerAggregateActionMMM"
+                          prefHeight="${mainPane.height*29/175}"/>
+                    <HBox id="playerAggregateActionMG" fx:id="playerAggregateActionMG"
+                          prefHeight="${mainPane.height*29/175}"/>
+                    <HBox id="playerAggregateActionS" fx:id="playerAggregateActionS"
+                          prefHeight="${mainPane.height*29/175}"/>
+                    <HBox id="playerActionReload" fx:id="playerActionReload"
+                          prefHeight="${mainPane.height*56/175}"/>
+                </children>
+            </VBox>
+            <HBox prefWidth="${mainPane.width*500/1045*655/700}"
+                  prefHeight="${mainPane.height}" id="boardWithoutAggregateAction"
+                  fx:id="boardWithoutAggregateAction">
+                <children>
+                    <VBox prefHeight="${mainPane.height}"
+                          prefWidth="${mainPane.width*500/1045*15/700}"/> <!-- spacing -->
+                    <VBox prefHeight="${mainPane.height}"
+                          prefWidth="${mainPane.width*500/1045*475/700}">
+                        <children>
+                            <HBox prefHeight="${mainPane.height*30/175}"
+                                  prefWidth="${mainPane.width*500/1045*475/700}">
+                                <children>
+                                    <HBox prefHeight="${mainPane.height*30/175}"
+                                          prefWidth="${mainPane.width*500/1045*270/700}"/>
+                                    <HBox id="playerMarks" fx:id="playerMarks"
+                                          prefHeight="${mainPane.height*30/175}"
+                                          prefWidth="${mainPane.width*500/1045*205/700}"/>
                                 </children>
                             </HBox>
+                            <HBox prefHeight="${mainPane.height*30/175}"
+                                  prefWidth="${mainPane.width*500/1045*475/700}">
+                                <children>
+                                    <HBox prefHeight="${mainPane.height*30/175}"
+                                          prefWidth="${mainPane.width*500/1045*80/700}"/> <!-- spacing -->
+                                    <HBox id="playerAggregateActionMMG"
+                                          fx:id="playerAggregateActionMMG"
+                                          prefHeight="${mainPane.height*30/175}"
+                                          prefWidth="${mainPane.width*500/1045*55/700}"/>
+                                    <HBox prefHeight="${mainPane.height*30/175}"
+                                          prefWidth="${mainPane.width*500/1045*65/700}"/> <!-- spacing -->
+                                    <HBox id="playerAggregateActionMS"
+                                          fx:id="playerAggregateActionMS"
+                                          prefHeight="${mainPane.height*30/175}"
+                                          prefWidth="${mainPane.width*500/1045*55/700}"/>
+                                    <HBox prefHeight="${mainPane.height*30/175}"
+                                          prefWidth="${mainPane.width*500/1045*220/700}"/> <!-- spacing -->
+                                </children>
+                            </HBox>
+                            <HBox prefHeight="${mainPane.height*55/175}"
+                                  prefWidth="${mainPane.width*500/1045*475/700}"
+                                  id="playerHealthBox" fx:id="playerHealthBox"/>
+
+                            <HBox prefHeight="${mainPane.height*60/175}"
+                                  prefWidth="${mainPane.width*500/1045*85/700}"/> <!-- spacing -->
+                            <HBox id="playerDeathsGrid" fx:id="playerDeaths"
+                                  prefHeight="${mainPane.height*60/175}"
+                                  prefWidth="${mainPane.width*500/1045*224/700}"/>
                         </children>
-                    </HBox>
-
-                    <HBox id="playerPowerUpContainer" fx:id="playerPowerUpContainer"
-                          prefHeight="${mainPane.height}"
-                          prefWidth="${mainPane.width*500/1045*452/700}"/>
-                    <HBox id="playerWeaponContainer" fx:id="playerWeaponContainer"
-                          prefHeight="${mainPane.height}"
-                          prefWidth="${mainPane.width*500/1045*309/700}"/>
-
+                    </VBox>
+                    <VBox prefHeight="${mainPane.height}"
+                          prefWidth="${mainPane.width*500/1045*15/700}"/> <!-- spacing -->
+                    <VBox prefHeight="${mainPane.height}"
+                          prefWidth="${mainPane.width*500/1045*150/700}"
+                          id="playerAmmo" fx:id="playerAmmo"/>
                 </children>
             </HBox>
         </children>
-    </Pane>
+    </HBox>
 
-</AnchorPane>
+    <HBox id="playerPowerUpContainer" fx:id="playerPowerUpContainer"
+          prefHeight="${mainPane.height}"
+          prefWidth="${mainPane.width*323/1045}"/>
+    <HBox id="playerWeaponContainer" fx:id="playerWeaponContainer"
+          prefHeight="${mainPane.height}"
+          prefWidth="${mainPane.width*220/1045}"/>
+</fx:root>
+
+
+

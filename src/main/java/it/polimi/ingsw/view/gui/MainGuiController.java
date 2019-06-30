@@ -1,17 +1,15 @@
 package it.polimi.ingsw.view.gui;
 
 import it.polimi.ingsw.model.Color;
-import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.PlayerId;
 import it.polimi.ingsw.utils.Lock;
 import it.polimi.ingsw.view.*;
 import it.polimi.ingsw.view.commandmessage.AggregateActionCommandMessage;
 import it.polimi.ingsw.view.commandmessage.CommandMessage;
+import it.polimi.ingsw.view.commandmessage.SquareCommandMessage;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
-import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
@@ -21,6 +19,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
@@ -29,37 +28,16 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class MainGuiController {
 
 
-    private static final int MAX_SKULL_PLAYERBOARD = 6;
-    private static final int POWERUP_HEIGHT = 264;
-    private static final int POWERUP_WIDTH = 169;
-    private static final int WEAPON_HEIGHT = 406;
-    private static final int WEAPON_WIDTH = 240;
+    static final int WEAPON_HEIGHT = 406;
+    static final int WEAPON_WIDTH = 240;
     private static final int WEAPON_SPAWN_MARGIN_RATIO = 33;
-    private static final int PLAYER_LIFE = 12;
     private static final int NUMBER_OF_STANDAR_SKULL = 8;
-    private static final int MAX_NUMBER_PLAYER_DEATH_SKULL = 6;
     private static final int HEIGHT_RATIO_SQUARE_INPUT = 2;
     private static final int WIDTH_RATIO_SQUARE_INPUT = 3;
     @FXML
-    private VBox playerAmmo;
+    private PlayerBoardController playerBoardController;
     @FXML
     private GridPane otherPlayerGrid;
-    @FXML
-    private HBox playerAggregateActionMMM;
-    @FXML
-    private HBox playerAggregateActionMG;
-    @FXML
-    private HBox playerAggregateActionS;
-    @FXML
-    private HBox playerActionReload;
-    @FXML
-    private VBox aggregateActionBox;
-    @FXML
-    private HBox boardWithoutAggregateAction;
-    @FXML
-    private HBox playerPowerUpContainer;
-    @FXML
-    private HBox playerWeaponContainer;
     @FXML
     private HBox killShotTrackBoxStandard;
     @FXML
@@ -80,32 +58,21 @@ public class MainGuiController {
     private HBox yellowSpawnWeapons;
     @FXML
     private HBox killShotTrackBox;
-    @FXML
-    private HBox playerBoard;
-    @FXML
-    private HBox playerAggregateActionMMG;
-    @FXML
-    private HBox playerAggregateActionMS;
-    @FXML
-    private HBox playerHealthBox;
-    @FXML
-    private HBox playerDeaths;
-    @FXML
-    private HBox playerMarks;
+
     private HBox[][] squareBoxes;
     private ModelView modelView;
     private static final String LANG = "IT";
-    private static final String SPACE = "_";
+    static final String SPACE = "_";
     private static final String IMAGES_DIR = "/images/";
-    private static final String IMAGE_EXTENSION = ".png";
+    static final String IMAGE_EXTENSION = ".png";
     private static final String GAMEBOARD_IMAGES_DIR = IMAGES_DIR + "gameboards/GameBoard00";
-    private static final String POWERUP_IMAGES_DIR = IMAGES_DIR + "cards/AD_powerups_" + LANG + SPACE;
-    private static final String WEAPON_IMAGES_DIR = IMAGES_DIR + "cards/AD_weapons_" + LANG + SPACE;
+    static final String POWERUP_IMAGES_DIR = IMAGES_DIR + "cards/AD_powerups_" + LANG + SPACE;
+    static final String WEAPON_IMAGES_DIR = IMAGES_DIR + "cards/AD_weapons_" + LANG + SPACE;
     private static final String TOKEN_IMAGES_DIR = IMAGES_DIR + "tokens/";
     private static final String AMMO_TILE_IMAGES_DIR = IMAGES_DIR + "ammotiles/";
-    private static final String AMMO_IMAGES_DIR = IMAGES_DIR + "ammos/";
+    static final String AMMO_IMAGES_DIR = IMAGES_DIR + "ammos/";
     private static final String SKULL_IMAGE_URI = IMAGES_DIR + "other/skull" + IMAGE_EXTENSION;
-    private static final String AMMO_TILE_BACK = "back";
+    static final String BACK = "back";
     static final String PLAYERBOARD_IMAGES_DIR = IMAGES_DIR + "playerboards/";
     static final String AGGREGATE_ACTION_FILE_PATTERN = "_aggregate_action" + IMAGE_EXTENSION;
     static final String AGGREGATE_ACTION_FLIPPED_FILE_PATTERN = "_aggregate_action_flipped" + IMAGE_EXTENSION;
@@ -114,7 +81,8 @@ public class MainGuiController {
     private static final String BLUE_SPAWN_WEAPON_URI = IMAGES_DIR + "gameboards/blueSpawn" + IMAGE_EXTENSION;
     private static final String RED_SPAWN_WEAPON_URI = IMAGES_DIR + "gameboards/redSpawn" + IMAGE_EXTENSION;
     private static final String YELLOW_SPAWN_WEAPON_URI = IMAGES_DIR + "gameboards/yellowSpawn" + IMAGE_EXTENSION;
-    private Map<PlayerId, PlayerBoardController> playerBoardControllers = new EnumMap<>(PlayerId.class);
+    private Map<PlayerId, PlayerBoardController> otherPlayerBoardControllers = new EnumMap<>(PlayerId.class);
+    private List<HBox> clickableNode = new ArrayList<>();
     private int selectedCommand;
     private int startSkullNumber;
 
@@ -137,9 +105,9 @@ public class MainGuiController {
         this.modelView = modelView;
         printSpawnWeapons(modelView.getWeaponsOnSpawn());
         printKillshotTrack(modelView.getMatch().getKillshotTrack());
-        printPlayerBoard(modelView.getMe());
+        playerBoardController.printPlayerBoard(modelView.getMe());
         printBoard(modelView.getBoard());
-        playerBoardControllers.forEach((playerId, playerBoardController) -> playerBoardController.update(modelView.getEnemies().get(playerId)));
+        otherPlayerBoardControllers.forEach((playerId, playerBoardController) -> playerBoardController.update(modelView.getEnemies().get(playerId)));
     }
 
     private void printBoard(SquareView[][] board) {
@@ -151,7 +119,7 @@ public class MainGuiController {
                         HBox ammoBox = new HBox();
                         AmmoTileView ammoTileView = ((TurretSquareView) board[i][j]).getAmmoTile();
                         String ammoTileURI = AMMO_TILE_IMAGES_DIR
-                                + ((!ammoTileView.isEmpty()) ? ammoTileView.toString() : AMMO_TILE_BACK)
+                                + ((!ammoTileView.isEmpty()) ? ammoTileView.toString() : BACK)
                                 + IMAGE_EXTENSION;
                         setBackgroundImageFromURI(ammoBox, ammoTileURI);
                         bindToParent(ammoBox, squareBoxes[i][j], HEIGHT_RATIO_SQUARE_INPUT, WIDTH_RATIO_SQUARE_INPUT);
@@ -207,9 +175,7 @@ public class MainGuiController {
         return tokenBox;
     }
 
-    private void printPlayerBoard(PlayerView playerView) {
-        MainGuiController.printPlayerBoard(playerView, aggregateActionBox, playerPowerUpContainer, playerWeaponContainer, playerMarks, playerHealthBox, playerDeaths, playerAmmo);
-    }
+
 
     private void printSpawnWeapons(Map<Color, List<WeaponView>> weaponsOnSpawn) {
         weaponsOnSpawn.forEach((color, weaponViews) -> {
@@ -245,19 +211,16 @@ public class MainGuiController {
     private void handlePlayerButton(PlayerId playerId) {
 
         try {
-            if (playerBoardControllers.get(playerId) != null) {
+            if (otherPlayerBoardControllers.get(playerId) != null) {
                 return;
             }
-            FXMLLoader fxmlLoader = new FXMLLoader();
-            fxmlLoader.setLocation(MainGuiController.class.getResource("/fx/PlayerBoard.fxml"));
-            Parent root1 = fxmlLoader.load();
             Stage stage = new Stage();
-            playerBoardControllers.put(playerId, fxmlLoader.getController());
-            playerBoardControllers.get(playerId).setPlayer(modelView.getEnemies().get(playerId));
-            playerBoardControllers.get(playerId).setStage(stage);
-            stage.setScene(new Scene(root1));
+            PlayerBoardController controller = new PlayerBoardController(false, stage);
+            otherPlayerBoardControllers.put(playerId, controller);
+            otherPlayerBoardControllers.get(playerId).setPlayer(modelView.getEnemies().get(playerId));
+            stage.setScene(new Scene(controller));
             stage.setAlwaysOnTop(true);
-            stage.setOnCloseRequest(windowEvent -> playerBoardControllers.remove(playerId));
+            stage.setOnCloseRequest(windowEvent -> otherPlayerBoardControllers.remove(playerId));
             stage.setTitle(playerId.toString());
             stage.show();
         } catch (Exception e) {
@@ -267,19 +230,23 @@ public class MainGuiController {
     }
 
     private void handleCommandClick(int index, Lock lock) {
+        clickableNode.forEach(this::setNodeUnClickable);
         extraCommandContainer.getChildren().clear();
         selectedCommand = index;
         lock.unlock();
     }
 
-    public void setNodeClickable(Node node/*, CommandMessage command*/) {
-        node.setStyle("-fx-background-color: yellow; -fx-background-radius: 10; -fx-opacity: 0.5");
-        node.setOnMouseClicked(null);
+    public void setNodeClickable(HBox node, int commandIndex, Lock lock) {
+        HBox overlay = new HBox();
+        overlay.setStyle("-fx-background-color: yellow; -fx-background-radius: 10; -fx-opacity: 0.5");
+        overlay.setOnMouseClicked(mouseEvent -> handleCommandClick(commandIndex, lock));
+        overlay.getChildren().setAll(node.getChildrenUnmodifiable());
+        node.getChildren().setAll(overlay);
+        HBox.setHgrow(overlay, Priority.ALWAYS);
     }
 
-    public void setNodeUnClickable(Node node) {
-        node.setStyle("-fx-background-color: yellow; -fx-background-radius: 10; -fx-opacity: 0");
-        node.setOnMouseClicked(null);
+    public void setNodeUnClickable(HBox node) {
+        node.getChildren().setAll(((HBox)node.getChildren().get(0)).getChildren());
     }
 
     public Pane getRoot() {
@@ -295,6 +262,10 @@ public class MainGuiController {
                     commandText = new Text(((AggregateActionCommandMessage) commands.get(i)).getAggregateActionID().toString());
                     commandText.setOnMouseClicked(actionEvent -> handleCommandClick(finalI, lock));
                     extraCommandContainer.getChildren().add(commandText);
+                    break;
+                case SELECT_AMMO_PAYMENT:
+                    clickableNode.add(squareBoxes[((SquareCommandMessage)commands.get(i)).getRow()][((SquareCommandMessage)commands.get(i)).getCol()]);
+                    setNodeClickable(squareBoxes[((SquareCommandMessage)commands.get(i)).getRow()][((SquareCommandMessage)commands.get(i)).getCol()], i, lock);
                     break;
                 default:
                     commandText = new Text(commands.get(i).getType().getString());
@@ -312,10 +283,7 @@ public class MainGuiController {
         setBackgroundImageFromURI(gameBoard, gameboardImageURI);
 
 
-        String playerBoardImageURI = PLAYERBOARD_IMAGES_DIR
-                + modelView.getMe().getId().playerId()
-                + BOARD_FILE_PATTERN;
-        setBackgroundImageFromURI(boardWithoutAggregateAction, playerBoardImageURI);
+        playerBoardController.setPlayer(modelView.getMe());
 
         setBackgroundImageFromURI(killShotTrackBox, KILL_SHOT_TRACK_URI);
 
@@ -335,8 +303,8 @@ public class MainGuiController {
         });
 
         mainPane.setOnMouseClicked(mouseEvent -> {
-            playerBoardControllers.forEach((playerId1, playerBoardController) -> playerBoardController.close());
-            playerBoardControllers.clear();
+            otherPlayerBoardControllers.forEach((playerId1, playerBoardController) -> playerBoardController.close());
+            otherPlayerBoardControllers.clear();
         });
 
         updateModelView(modelView);
@@ -353,13 +321,13 @@ public class MainGuiController {
         return fxmlLoader.getController();
     }
 
-    private static void bindToParent(Region child, Pane parent, int heightRatio, int widthRatio) {
+    static void bindToParent(Region child, Pane parent, int heightRatio, int widthRatio) {
         child.maxHeightProperty().bind(parent.heightProperty().divide(heightRatio));
         child.maxWidthProperty().bind(parent.widthProperty().divide(widthRatio));
         HBox.setMargin(child, new Insets(0, 0, 0, 1));
     }
 
-    private static HBox getHBoxWithSkullBackground(Pane parent, int widthRatio) {
+    static HBox getHBoxWithSkullBackground(Pane parent, int widthRatio) {
         HBox tokenBox = new HBox();
         tokenBox.setPrefHeight(parent.getPrefHeight());
         tokenBox.maxWidthProperty().bind(parent.widthProperty().divide(widthRatio));
@@ -368,7 +336,7 @@ public class MainGuiController {
         return tokenBox;
     }
 
-    private static HBox getHBoxWithTokenBackgroundWithHighFixedToParent(PlayerId playerId, Pane parent) {
+    static HBox getHBoxWithTokenBackgroundWithHighFixedToParent(PlayerId playerId, Pane parent) {
         HBox hbox = new HBox();
         bindHeightToParent(hbox, parent);
         String tokenImageURI = TOKEN_IMAGES_DIR
@@ -391,7 +359,7 @@ public class MainGuiController {
      * @param childHeight is the eight of the child
      * @param childWidth  is the wanted width with the child childHeight
      */
-    private static void bindHeightToParent(Pane child, Pane parent, int childHeight, int childWidth) {
+    static void bindHeightToParent(Pane child, Pane parent, int childHeight, int childWidth) {
         child.setPrefHeight(parent.getPrefHeight());
         child.maxWidthProperty().bind(child.heightProperty().divide(childHeight).multiply(childWidth));
         HBox.setMargin(child, new Insets(0, 0, 0, 1));
@@ -409,91 +377,5 @@ public class MainGuiController {
         HBox.setMargin(child, new Insets(0, 0, 0, 1));
     }
 
-    static void printPlayerBoard(PlayerView playerView,
-                                 VBox aggregateActionBox,
-                                 HBox playerPowerUpContainer,
-                                 HBox playerWeaponContainer,
-                                 HBox playerMarks,
-                                 HBox playerHealthBox,
-                                 HBox playerDeaths,
-                                 VBox playerAmmo) {
-        String aggregateActionImageURI = PLAYERBOARD_IMAGES_DIR
-                + playerView.getId().playerId()
-                + (playerView.isFlippedBoard() ? AGGREGATE_ACTION_FLIPPED_FILE_PATTERN : AGGREGATE_ACTION_FILE_PATTERN);
-        setBackgroundImageFromURI(aggregateActionBox, aggregateActionImageURI);
 
-        playerPowerUpContainer.getChildren().clear();
-        for (int i = 0; i < playerView.getPowerUps().size(); i++) {
-            HBox cardHBox = new HBox();
-
-            bindHeightToParent(cardHBox, playerPowerUpContainer, POWERUP_HEIGHT, POWERUP_WIDTH);
-            String powerUpImageURI = POWERUP_IMAGES_DIR
-                    + playerView.getPowerUps().get(i).getColor().colorID()
-                    + SPACE
-                    + playerView.getPowerUps().get(i).getType().powerUpID()
-                    + IMAGE_EXTENSION;
-            setBackgroundImageFromURI(cardHBox, powerUpImageURI);
-            playerPowerUpContainer.getChildren().add(cardHBox);
-            HBox.setHgrow(cardHBox, Priority.ALWAYS);
-        }
-
-        playerWeaponContainer.getChildren().clear();
-        playerView.getWeapons().forEach(weaponView -> {
-            HBox cardHBox = new HBox();
-
-            bindHeightToParent(cardHBox, playerWeaponContainer, WEAPON_HEIGHT, WEAPON_WIDTH);
-            String weaponImageURI = WEAPON_IMAGES_DIR
-                    + weaponView.getID()
-                    + IMAGE_EXTENSION;
-            setBackgroundImageFromURI(cardHBox, weaponImageURI);
-            HBox.setHgrow(cardHBox, Priority.ALWAYS);
-            playerWeaponContainer.getChildren().add(cardHBox);
-        });
-
-        playerMarks.getChildren().clear();
-        playerView.getMarks().forEach((playerId, integer) -> {
-            for (int i = 0; i < integer; i++) {
-                HBox markBox = getHBoxWithTokenBackgroundWithHighFixedToParent(playerId, playerMarks);
-                HBox.setHgrow(markBox, Priority.ALWAYS);
-                playerMarks.getChildren().add(markBox);
-            }
-        });
-
-        playerHealthBox.getChildren().clear();
-        for (int i = 0; i < playerView.getHealth().size(); i++) {
-            HBox healthBox = getHBoxWithTokenBackgroundWithHighFixedToParent(playerView.getHealth().get(i), playerHealthBox);
-            healthBox.maxWidthProperty().bind(playerHealthBox.widthProperty().divide(PLAYER_LIFE));
-            playerHealthBox.getChildren().add(healthBox);
-            HBox.setHgrow(healthBox, Priority.ALWAYS);
-        }
-
-        playerDeaths.getChildren().clear();
-        for (int i = 0; i < playerView.getDeaths() && i < MAX_SKULL_PLAYERBOARD; i++) {
-            HBox deathBox = getHBoxWithSkullBackground(playerDeaths, MAX_NUMBER_PLAYER_DEATH_SKULL);
-            playerDeaths.getChildren().add(deathBox);
-            HBox.setHgrow(deathBox, Priority.ALWAYS);
-        }
-
-        playerAmmo.getChildren().clear();
-        Color[] colors = Color.values();
-        for (Color color : Color.values()) {
-            HBox colorAmmoContainer = new HBox();
-            bindToParent(colorAmmoContainer, playerAmmo, colors.length, 1);
-            playerAmmo.getChildren().add(colorAmmoContainer);
-            VBox.setVgrow(colorAmmoContainer, Priority.ALWAYS);
-
-            for (int j = 0; j < playerView.getAmmo().getOrDefault(color, 0); j++) {
-                HBox singleAmmoBox = new HBox();
-                String ammoURI = AMMO_IMAGES_DIR
-                        + color.colorID()
-                        + IMAGE_EXTENSION;
-                setBackgroundImageFromURI(singleAmmoBox, ammoURI);
-                bindToParent(singleAmmoBox, colorAmmoContainer, 1, Player.MAX_AMMO);
-                colorAmmoContainer.getChildren().add(singleAmmoBox);
-                HBox.setHgrow(singleAmmoBox, Priority.ALWAYS);
-            }
-        }
-
-
-    }
 }
