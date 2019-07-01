@@ -1,5 +1,8 @@
 package it.polimi.ingsw.model;
 
+/**
+ * Contains every legal type of {@link AggregateAction}
+ */
 public enum AggregateActionID {
     MOVE_MOVE_MOVE {
         @Override
@@ -92,6 +95,9 @@ public enum AggregateActionID {
         }
     };
 
+    /**
+     * @return Aggregate action associated with this ID
+     */
     public abstract AggregateAction create();
 
     @Override

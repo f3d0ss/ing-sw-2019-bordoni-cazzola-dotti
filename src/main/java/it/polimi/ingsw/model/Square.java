@@ -9,6 +9,9 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Represents a square of the game board
+ */
 public abstract class Square {
     private final Map<CardinalDirection, Connection> connection;
     private final int row;
@@ -45,30 +48,66 @@ public abstract class Square {
 
     protected abstract void update();
 
+    /**
+     * Gets connection in a specific direction
+     *
+     * @param direction Direction to get the connection
+     * @return connection in the specified direction
+     */
     public Connection getConnection(CardinalDirection direction) {
         return connection.get(direction);
     }
 
-    Map<CardinalDirection, Connection> getConnections() {
+    /**
+     * Gets connections
+     *
+     * @return all the connections of the square
+     */
+    public Map<CardinalDirection, Connection> getConnections() {
         return connection;
     }
 
+    /**
+     * Gets row
+     *
+     * @return value of row
+     */
     public int getRow() {
         return row;
     }
 
+    /**
+     * Gets col
+     *
+     * @return value of col
+     */
     public int getCol() {
         return col;
     }
 
+    /**
+     * Gets color
+     *
+     * @return value of color
+     */
     public Color getColor() {
         return color;
     }
 
+    /**
+     * Sets the match
+     *
+     * @param match match to set
+     */
     public void setMatch(Match match) {
         this.match = match;
     }
 
+    /**
+     * Adds a player to the square
+     *
+     * @param player player to add
+     */
     public void addPlayer(Player player) {
         this.hostedPlayers.add(player);
         update();
@@ -83,6 +122,11 @@ public abstract class Square {
         this.hostedPlayers.add(player);
     }
 
+    /**
+     * Removes a player
+     *
+     * @param player player to remove
+     */
     public void removePlayer(Player player) {
         this.hostedPlayers.remove(player);
         update();
@@ -97,12 +141,27 @@ public abstract class Square {
         this.hostedPlayers.remove(player);
     }
 
+    /**
+     * Gets hosted players
+     *
+     * @return list of the player hosted
+     */
     public List<Player> getHostedPlayers() {
         return hostedPlayers;
     }
 
+    /**
+     * Gets the possible Grab Commands
+     *
+     * @param player player that wants to grab
+     * @param state  state of the player
+     * @return list of the possible commands
+     */
     public abstract List<GrabCommand> getGrabCommands(Player player, SelectedAggregateActionState state);
 
+    /**
+     * @return view of the square
+     */
     protected abstract SquareView getSquareView();
 
     /**
@@ -118,7 +177,7 @@ public abstract class Square {
     }
 
     /**
-     * This method returns all players on the square but
+     * This method returns all players on the square but {@code player}
      *
      * @param player player not to return
      * @return list of other players
@@ -130,7 +189,7 @@ public abstract class Square {
     }
 
     /**
-     * This method returns all players on the square but
+     * This method returns all players on the square but {@code playersToExclude}
      *
      * @param playersToExclude list of players to exclude
      * @return list of other players

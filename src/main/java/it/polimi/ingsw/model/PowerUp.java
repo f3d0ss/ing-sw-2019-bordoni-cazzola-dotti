@@ -16,11 +16,21 @@ public class PowerUp {
         this.type = type;
     }
 
-    public Color getColor() {
-        return this.color;
+    /**
+     * Gets type
+     *
+     * @return value of type
+     */
+    public PowerUpID getType() {
+        return type;
     }
 
-    public PowerUpID getType() {
-        return this.type;
+    /**
+     * Gets color
+     *
+     * @return value of color
+     */
+    public Color getColor() {
+        return color;
     }
 }

@@ -14,7 +14,8 @@ import java.util.stream.IntStream;
 import static it.polimi.ingsw.network.server.ServerManager.MIN_PLAYERS;
 
 /**
- * This class manages an entire match
+ * This class manages an entire match.
+ * Controls the flow of a game, modifies the model using inputs received from the views.
  */
 public class MatchController implements Runnable {
     private static final int[] POINTS_PER_KILL = {8, 6, 4, 2, 1};

@@ -1,5 +1,8 @@
 package it.polimi.ingsw.model;
 
+/**
+ * Contains the playerIds
+ */
 public enum PlayerId {
     BLUE {
         @Override
@@ -36,6 +39,9 @@ public enum PlayerId {
         }
     };
 
+    /**
+     * @return Standard name of the player
+     */
     public abstract String playerIdName();
 
 }

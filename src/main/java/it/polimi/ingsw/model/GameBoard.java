@@ -141,6 +141,7 @@ public class GameBoard {
      * @param maxRange    maximum distance of gotten squares
      * @param minRange    minimum distance of gotten squares
      * @param ignoreWalls specify if ignore or consider walls
+     * @return List of squares in the 4 basic cardinal directions (diagonal squares are not returned)
      * @author supernivem
      */
     public List<Square> getCardinalDirectionSquares(Square position, int maxRange, int minRange, boolean ignoreWalls) {
@@ -154,7 +155,7 @@ public class GameBoard {
                     adjacent = this.getAdjacentSquare(position, dir);
                     list.add(adjacent);
                     if (maxRange > 1)
-                        getStraightSquares(list, adjacent, maxRange--, ignoreWalls, dir);
+                        getStraightSquares(list, adjacent, maxRange - 1, ignoreWalls, dir);
                 }
         }
         return list;
@@ -296,6 +297,7 @@ public class GameBoard {
      *
      * @param firstSquare  FirstSquare
      * @param secondSquare Second Square
+     * @param ignoreWall   true to ignore walls
      * @return Square adjacent to the second square in the same direction
      */
     Square getThirdSquareInTheSameDirection(Square firstSquare, Square secondSquare, boolean ignoreWall) {

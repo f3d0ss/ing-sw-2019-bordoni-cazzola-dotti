@@ -15,10 +15,20 @@ public class AmmoTile {
         this.ammo = ammo;
     }
 
+    /**
+     * Gets ho many power up are contained
+     *
+     * @return number of power up
+     */
     public int getPowerUp() {
         return powerUp;
     }
 
+    /**
+     * Gets Ammo contained
+     *
+     * @return Ammo contained
+     */
     public Map<Color, Integer> getAmmo() {
         return ammo;
     }

@@ -15,6 +15,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+/**
+ * Contains all player's data
+ */
 public class Player {
 
     public static final int MAX_DAMAGE = 12;
