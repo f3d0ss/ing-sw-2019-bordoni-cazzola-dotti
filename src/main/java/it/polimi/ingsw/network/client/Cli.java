@@ -158,7 +158,7 @@ public class Cli implements Ui {
                 if (effectCommandMessage.getMarks() > 0)
                     shootString = new StringBuilder().append(shootString).append(" + ").append(effectCommandMessage.getMarks()).append(" marchi").toString();
                 if (effectCommandMessage.getCol() != null)
-                    shootString = new StringBuilder().append(shootString).append("+ spostalo in ").append(cliManager.getHorizontalCoordinateName(effectCommandMessage.getRow())).append(cliManager.getVerticalCoordinateName(effectCommandMessage.getCol())).toString();
+                    shootString = new StringBuilder().append(shootString).append("+ spostalo in ").append(cliManager.getVerticalCoordinateName(effectCommandMessage.getRow())).append(cliManager.getHorizontalCoordinateName(effectCommandMessage.getCol())).toString();
                 if (effectCommandMessageList.size() > i + 1)
                     shootString = new StringBuilder().append(shootString).append("\n").toString();
             }
