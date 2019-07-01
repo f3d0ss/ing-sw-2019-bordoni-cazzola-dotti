@@ -4,10 +4,7 @@ import it.polimi.ingsw.model.CardinalDirection;
 import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.Connection;
 import it.polimi.ingsw.model.PlayerId;
-import it.polimi.ingsw.view.ModelView;
-import it.polimi.ingsw.view.PlayerView;
-import it.polimi.ingsw.view.SquareView;
-import it.polimi.ingsw.view.TurretSquareView;
+import it.polimi.ingsw.view.*;
 
 public class CliManager {
 
@@ -22,8 +19,6 @@ public class CliManager {
     private static final String CORNER_TOP_LEFT = "╔";
     private static final String SPACE = " ";
     private static final int SQUARE_HEIGHT = 5;
-    private static final int ASCII_A_CODE = 65;
-    private static final int FIRST_ROW_NUMBER = 1;
     private static final String ANSI_RESET = "\u001B[0m";
     private static final String ANSI_RED = "\u001B[91m";
     private static final String ANSI_YELLOW = "\u001B[93m";
@@ -107,7 +102,7 @@ public class CliManager {
                     System.out.print(HORIZONTAL_WALL);
                     break;
                 case MAP_BORDER:
-                    System.out.print((i < INNERWIDTH / 2 || i > INNERWIDTH / 2) ? HORIZONTAL_WALL : getHorizontalCoordinateName(column));
+                    System.out.print((i < INNERWIDTH / 2 || i > INNERWIDTH / 2) ? HORIZONTAL_WALL : ConcreteView.getHorizontalCoordinateName(column));
                     break;
                 case SAME_ROOM:
                     System.out.print(SPACE);
@@ -123,7 +118,7 @@ public class CliManager {
                 System.out.print(VERTICAL_WALL);
                 break;
             case MAP_BORDER:
-                System.out.print(isMiddle ? getVerticalCoordinateName(row) : VERTICAL_WALL);
+                System.out.print(isMiddle ? ConcreteView.getVerticalCoordinateName(row) : VERTICAL_WALL);
                 break;
             case SAME_ROOM:
                 System.out.print(SPACE);
@@ -132,15 +127,6 @@ public class CliManager {
                 System.out.print(isMiddle ? SPACE : VERTICAL_WALL);
         }
     }
-
-    public String getHorizontalCoordinateName(int row) {
-        return "" + (char) (row + ASCII_A_CODE);
-    }
-
-    public String getVerticalCoordinateName(int column) {
-        return String.valueOf(column + FIRST_ROW_NUMBER);
-    }
-
 
     private String displaySquareInformation(SquareView square, int row) {
         switch (row) {

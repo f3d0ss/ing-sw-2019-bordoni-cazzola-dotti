@@ -2,6 +2,7 @@ package it.polimi.ingsw.network.client;
 
 import it.polimi.ingsw.model.PlayerId;
 import it.polimi.ingsw.network.Protocol;
+import it.polimi.ingsw.view.ConcreteView;
 import it.polimi.ingsw.view.ModelView;
 import it.polimi.ingsw.view.cli.CliManager;
 import it.polimi.ingsw.view.commandmessage.*;
@@ -73,7 +74,7 @@ public class Cli implements Ui {
     public int manageCommandChoice(List<CommandMessage> commands, boolean undo) {
         List<String> possibleAnswers = new ArrayList<>();
         commands.forEach(c -> possibleAnswers.add(c.getType().getString() + getParameter(c)));
-        if(undo)
+        if (undo)
             possibleAnswers.add(CommandType.UNDO.getString());
         System.out.println("Scegli una delle seguenti opzioni:");
         showPossibleAnswers(possibleAnswers);
@@ -146,24 +147,12 @@ public class Cli implements Ui {
         if (command.getType() == CommandType.SELECT_TARGET_SQUARE
                 || command.getType() == CommandType.MOVE
                 || command.getType() == CommandType.USE_TELEPORT)
-            return (cliManager.getVerticalCoordinateName(((SquareCommandMessage) command).getRow()) + cliManager.getHorizontalCoordinateName(((SquareCommandMessage) command).getCol()));
+            return (ConcreteView.getVerticalCoordinateName(((SquareCommandMessage) command).getRow()) + ConcreteView.getHorizontalCoordinateName(((SquareCommandMessage) command).getCol()));
         if (command.getType() == CommandType.SELECT_WEAPON_MODE)
             return ((WeaponModeCommandMessage) command).getWeaponMode();
         if (command.getType() == CommandType.SHOOT) {
             ShootCommandMessage shootCommandMessage = (ShootCommandMessage) command;
-            List<EffectCommandMessage> effectCommandMessageList = shootCommandMessage.getEffectCommandMessageList();
-            String shootString = "\n";
-            for (int i = 0; i < effectCommandMessageList.size(); i++) {
-                EffectCommandMessage effectCommandMessage = effectCommandMessageList.get(i);
-                shootString = new StringBuilder().append(shootString).append(effectCommandMessage.getPlayer().playerIdName()).append(" ").append(effectCommandMessage.getDamage()).append(" danno").toString();
-                if (effectCommandMessage.getMarks() > 0)
-                    shootString = new StringBuilder().append(shootString).append(" + ").append(effectCommandMessage.getMarks()).append(" marchi").toString();
-                if (effectCommandMessage.getCol() != null)
-                    shootString = new StringBuilder().append(shootString).append("+ spostalo in ").append(cliManager.getHorizontalCoordinateName(effectCommandMessage.getRow())).append(cliManager.getVerticalCoordinateName(effectCommandMessage.getCol())).toString();
-                if (effectCommandMessageList.size() > i + 1)
-                    shootString = new StringBuilder().append(shootString).append("\n").toString();
-            }
-            return shootString;
+            return shootCommandMessage.printCommand();
         }
         return "";
     }

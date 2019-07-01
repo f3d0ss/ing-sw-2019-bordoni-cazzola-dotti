@@ -296,6 +296,13 @@ public class MainGuiController {
                 case SELECT_AGGREGATE_ACTION:
                     showTextCommand(((AggregateActionCommandMessage) commands.get(i)).getAggregateActionID().toString(), i, lock);
                     break;
+                case SELECT_WEAPON_MODE:
+                    showTextCommand(commands.get(i).getType().getString() + ((WeaponModeCommandMessage) commands.get(i)).getWeaponMode(), i, lock);
+                    break;
+                case SHOOT:
+                    ShootCommandMessage shootCommandMessage = (ShootCommandMessage) commands.get(i);
+                    showTextCommand(shootCommandMessage.printCommand(), i, lock);
+                    break;
                 default:
                     showTextCommand(commands.get(i).getType().getString(), i, lock);
             }
@@ -310,7 +317,7 @@ public class MainGuiController {
         extraCommandContainer.getChildren().add(commandLabel);
     }
 
-    private Label createCommandLabel(String command){
+    private Label createCommandLabel(String command) {
         Label commandLabel = new Label(command);
         commandLabel.setWrapText(true);
         commandLabel.maxWidthProperty().bind(extraCommandContainer.widthProperty());

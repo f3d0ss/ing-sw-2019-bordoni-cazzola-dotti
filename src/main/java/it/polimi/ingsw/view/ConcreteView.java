@@ -7,6 +7,9 @@ import java.util.List;
 
 public class ConcreteView implements ViewInterface {
 
+
+    private static final int ASCII_A_CODE = 65;
+    private static final int FIRST_ROW_NUMBER = 1;
     private Ui ui;
     private ModelView modelView;
 
@@ -55,5 +58,13 @@ public class ConcreteView implements ViewInterface {
         if (ui.isViewInitializationDone())
             ui.refreshView(modelView);
         return ui.manageCommandChoice(commands, undo);
+    }
+
+    public static String getHorizontalCoordinateName(int row) {
+        return "" + (char) (row + ASCII_A_CODE);
+    }
+
+    public static String getVerticalCoordinateName(int column) {
+        return String.valueOf(column + FIRST_ROW_NUMBER);
     }
 }
