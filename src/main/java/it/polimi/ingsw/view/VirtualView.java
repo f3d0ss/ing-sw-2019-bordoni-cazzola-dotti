@@ -57,13 +57,10 @@ public class VirtualView implements ViewInterface {
         int answer = -1;
         String choice = serverManager.sendMessageAndWaitForAnswer(playerId, new CommandViewTransfer(commands, undo));
         if (choice.equals(Protocol.ERR)) {
-            System.out.println("VV ERRORE");
             controller.disconnect(serverManager.getNickname(playerId));
-            System.out.println("VV DISCONNESSO");
             return answer;
         }
         try {
-            //useless
             answer = Integer.parseInt(choice);
         } catch (NumberFormatException e) {
             answer = -1;
