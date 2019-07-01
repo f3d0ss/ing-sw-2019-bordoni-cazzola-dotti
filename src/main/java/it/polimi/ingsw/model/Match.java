@@ -28,6 +28,7 @@ public class Match {
     private boolean firstPlayerPlayedLastTurn;
     private Map<PlayerId, ViewInterface> views;
     private Map<PlayerId, Long> leaderBoard;
+    private PlayerId playerOnDuty;
 
     public Match(int gameBoardNumber, int skulls) {
         Parser parser = new Parser();
@@ -238,7 +239,7 @@ public class Match {
     }
 
     private void update() {
-        views.values().forEach(viewInterface -> viewInterface.update(new MatchView(killshotTrack, deathsCounter, leaderBoard, isLastTurn())));
+        views.values().forEach(viewInterface -> viewInterface.update(new MatchView(killshotTrack, deathsCounter, leaderBoard, isLastTurn(), playerOnDuty)));
     }
 
     /**
@@ -252,10 +253,14 @@ public class Match {
     }
 
     public void sendModelAfterReconnection(PlayerId player) {
-        views.get(player).update(new MatchView(killshotTrack, deathsCounter, leaderBoard, isLastTurn()));
+        views.get(player).update(new MatchView(killshotTrack, deathsCounter, leaderBoard, isLastTurn(), playerOnDuty));
         currentPlayers.forEach(p -> views.get(player).update(p.getPlayerView(p.getId() == player)));
         board.getSquareList().forEach(s -> views.get(player).update(s.getSquareView()));
         views.get(player).setViewInitializationDone();
     }
 
+    public void setPlayerOnDuty(PlayerId playerOnDuty) {
+        this.playerOnDuty = playerOnDuty;
+        update();
+    }
 }
