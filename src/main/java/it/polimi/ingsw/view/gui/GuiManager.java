@@ -33,6 +33,7 @@ public class GuiManager extends Application {
         controller = MainGuiController.getInstance();
 
         Scene scene = new Scene(controller.getRoot());
+        controller.setStage(stage);
         stage.setScene(scene);
         stage.setFullScreen(true);
         stage.show();

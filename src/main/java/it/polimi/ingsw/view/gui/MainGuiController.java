@@ -8,11 +8,16 @@ import it.polimi.ingsw.view.commandmessage.*;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.scene.paint.ImagePattern;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -25,10 +30,12 @@ public class MainGuiController {
 
     static final int WEAPON_HEIGHT = 406;
     static final int WEAPON_WIDTH = 240;
-    private static final int WEAPON_SPAWN_MARGIN_RATIO = 33;
+    private static final int WEAPON_SPAWN_MARGIN_RATIO = 30;
     private static final int NUMBER_OF_STANDAR_SKULL = 8;
     private static final int HEIGHT_RATIO_SQUARE_INPUT = 2;
     private static final int WIDTH_RATIO_SQUARE_INPUT = 3;
+    @FXML
+    private VBox logContainer;
     @FXML
     private PlayerBoardController playerBoardController;
     @FXML
@@ -43,8 +50,6 @@ public class MainGuiController {
     private Pane mainPane;
     @FXML
     private GridPane gameBoard;
-    @FXML
-    private VBox right;
     @FXML
     private HBox blueSpawnWeapons;
     @FXML
@@ -82,6 +87,7 @@ public class MainGuiController {
     private int startSkullNumber;
     private Map<String, HBox> weaponsOnSpawnBoxes = new HashMap<>();
     private Map<PlayerId, HBox> playerBoxes = new EnumMap<>(PlayerId.class);
+    private Stage stage;
 
     public void initialize() {
         squareBoxes = new HBox[gameBoard.getRowCount()][gameBoard.getColumnCount()];
@@ -213,15 +219,15 @@ public class MainGuiController {
             if (otherPlayerBoardControllers.get(playerId) != null) {
                 return;
             }
-            Stage stage = new Stage();
-            PlayerBoardController controller = new PlayerBoardController(false, stage);
+            Stage otherPlayerStage = new Stage();
+            PlayerBoardController controller = new PlayerBoardController(false, otherPlayerStage);
             otherPlayerBoardControllers.put(playerId, controller);
             otherPlayerBoardControllers.get(playerId).setPlayer(modelView.getEnemies().get(playerId));
-            stage.setScene(new Scene(controller));
-            stage.setAlwaysOnTop(true);
-            stage.setOnCloseRequest(windowEvent -> otherPlayerBoardControllers.remove(playerId));
-            stage.setTitle(playerId.playerIdName());
-            stage.show();
+            otherPlayerStage.setScene(new Scene(controller));
+            otherPlayerStage.setAlwaysOnTop(true);
+            otherPlayerStage.setOnCloseRequest(windowEvent -> otherPlayerBoardControllers.remove(playerId));
+            otherPlayerStage.setTitle(playerId.playerIdName());
+            otherPlayerStage.show();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -236,7 +242,7 @@ public class MainGuiController {
         lock.unlock();
     }
 
-    public void setNodeClickable(HBox node, int commandIndex, Lock lock) {
+    private void setNodeClickable(HBox node, int commandIndex, Lock lock) {
         HBox overlay = new HBox();
         overlay.setStyle("-fx-background-color: yellow; -fx-background-radius: 10; -fx-opacity: 0.5");
         overlay.setOnMouseClicked(mouseEvent -> handleCommandClick(commandIndex, lock));
@@ -247,25 +253,18 @@ public class MainGuiController {
         clickableNode.add(node);
     }
 
-    public void setNodeUnClickable(HBox node) {
+    private void setNodeUnClickable(HBox node) {
         node.getChildren().setAll(((HBox) node.getChildren().get(0)).getChildren());
     }
 
-    public Pane getRoot() {
+    Pane getRoot() {
         return mainPane;
     }
 
     public void showCommand(List<CommandMessage> commands, boolean undo, Lock lock) {
         int i;
         for (i = 0; i < commands.size(); i++) {
-            Text commandText;
-            int finalI = i;
             switch (commands.get(i).getType()) {
-                case SELECT_AGGREGATE_ACTION:
-                    commandText = new Text(((AggregateActionCommandMessage) commands.get(i)).getAggregateActionID().toString());
-                    commandText.setOnMouseClicked(actionEvent -> handleCommandClick(finalI, lock));
-                    extraCommandContainer.getChildren().add(commandText);
-                    break;
                 case SELECT_AMMO_PAYMENT:
                     setNodeClickable(playerBoardController.getAmmoBox(((ColorCommandMessage) commands.get(i)).getColor()), i, lock);
                     break;
@@ -280,6 +279,7 @@ public class MainGuiController {
                 case MOVE:
                 case SELECT_TARGET_SQUARE:
                 case USE_TELEPORT:
+                case USE_NEWTON:
                     setNodeClickable(squareBoxes[((SquareCommandMessage) commands.get(i)).getRow()][((SquareCommandMessage) commands.get(i)).getCol()], i, lock);
                     break;
                 case SELECT_TARGET_PLAYER:
@@ -289,20 +289,27 @@ public class MainGuiController {
                 case SELECT_POWER_UP:
                 case SELECT_POWER_UP_PAYMENT:
                 case SELECT_SCOPE:
+                case USE_TAGBACK_GRENADE:
                     setNodeClickable(playerBoardController.getPowerUpBox(((PowerUpCommandMessage) commands.get(i)).getPowerUpID(), ((PowerUpCommandMessage) commands.get(i)).getColor()), i, lock);
                     break;
+                case SELECT_AGGREGATE_ACTION:
+                    showTextCommand(((AggregateActionCommandMessage) commands.get(i)).getAggregateActionID().toString(), i, lock);
+                    break;
                 default:
-                    commandText = new Text(commands.get(i).getType().getString());
-                    commandText.setOnMouseClicked(actionEvent -> handleCommandClick(finalI, lock));
-                    extraCommandContainer.getChildren().add(commandText);
+                    showTextCommand(commands.get(i).getType().getString(), i, lock);
             }
         }
-        if (undo) {
-            Text commandText = new Text(CommandType.UNDO.getString());
-            int finalI1 = i;
-            commandText.setOnMouseClicked(actionEvent -> handleCommandClick(finalI1, lock));
-            extraCommandContainer.getChildren().add(commandText);
-        }
+        if (undo)
+            showTextCommand(CommandType.UNDO.getString(), i, lock);
+    }
+
+    private void showTextCommand(String command, int commandIndex, Lock lock) {
+        Label commandLabel = new Label(command);
+        commandLabel.setWrapText(true);
+        commandLabel.maxWidthProperty().bind(extraCommandContainer.widthProperty());
+        commandLabel.setOnMouseClicked(actionEvent -> handleCommandClick(commandIndex, lock));
+        commandLabel.setPadding(new Insets(5));
+        extraCommandContainer.getChildren().add(commandLabel);
     }
 
     public void setModelView(ModelView modelView) {
@@ -310,7 +317,6 @@ public class MainGuiController {
         startSkullNumber = modelView.getMatch().getDeathsCounter();
         String gameboardImageURI = GAMEBOARD_IMAGES_DIR + modelView.getMatch().getGameBoardId() + IMAGE_EXTENSION;
         setBackgroundImageFromURI(gameBoard, gameboardImageURI);
-
 
         playerBoardController.setPlayer(modelView.getMe());
 
@@ -336,10 +342,12 @@ public class MainGuiController {
             otherPlayerBoardControllers.clear();
         });
 
+        killShotTrackBoxStandard.setAlignment(Pos.CENTER_RIGHT);
+
         updateModelView(modelView);
     }
 
-    public static MainGuiController getInstance() {
+    static MainGuiController getInstance() {
         FXMLLoader fxmlLoader = new FXMLLoader();
         fxmlLoader.setLocation(MainGuiController.class.getResource("/fx/MainGui.fxml"));
         try {
@@ -406,5 +414,25 @@ public class MainGuiController {
         HBox.setMargin(child, new Insets(0, 0, 0, 1));
     }
 
+    public void showLeaderBoard(Map<PlayerId, Long> leaderBoard) {
+        int i = 1;
+        String playerRecord;
+        for (Map.Entry<PlayerId, Long> entry : leaderBoard.entrySet()) {
+            playerRecord = i + "° classificato: " + entry.getKey().playerIdName() + " con " + entry.getValue() + " punti";
+            Text leaderBoardText = new Text(playerRecord);
+            if (i == 1)
+                leaderBoardText.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 20));
+            if (modelView.getPlayerView(entry.getKey()).isDisconnected())
+                leaderBoardText.setStrikethrough(true);
+            logContainer.getChildren().add(leaderBoardText);
+            i++;
+        }
+        Text commandText = new Text("Esci dal gioco");
+        commandText.setOnMouseClicked(actionEvent -> stage.close());
+        extraCommandContainer.getChildren().add(commandText);
+    }
 
+    void setStage(Stage stage) {
+        this.stage = stage;
+    }
 }

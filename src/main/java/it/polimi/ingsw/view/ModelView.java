@@ -64,4 +64,11 @@ public class ModelView {
     public SquareView getSquareBoard(int row, int col) {
         return board[row][col];
     }
+
+    public PlayerView getPlayerView(PlayerId key) {
+        if(me.getId().playerId().equals(key.playerId()))
+            return me;
+        else
+            return enemies.get(key);
+    }
 }

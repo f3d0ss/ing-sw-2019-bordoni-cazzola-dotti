@@ -87,7 +87,7 @@
           prefWidth="${mainPane.width*323/1045}"/>
     <HBox id="playerWeaponContainer" fx:id="playerWeaponContainer"
           prefHeight="${mainPane.height}"
-          prefWidth="${mainPane.width*220/1045}"/>
+          prefWidth="${mainPane.width*250/1045}"/>
 </fx:root>
 
 
