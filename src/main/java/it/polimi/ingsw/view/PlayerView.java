@@ -80,6 +80,10 @@ public class PlayerView {
         return marks;
     }
 
+    public boolean isFlippedBoard() {
+        return flippedBoard;
+    }
+
     public boolean isFirstAdrenalina() {
         return firstAdrenalina;
     }
