@@ -3,9 +3,9 @@ package it.polimi.ingsw.model.command;
 import it.polimi.ingsw.view.commandmessage.CommandMessage;
 
 /**
- * The command pattern is a behavioral design pattern and is part of the GoF‘s formal list of design patterns.
- * This pattern encapsulates in an object all the data required for performing a given action (command)
- * This interface must be implemented by every command
+ * This interface must be implemented by every command.
+ * The command pattern is a behavioral design pattern.
+ * This pattern encapsulates in an object all the data required for performing a given action (command).
  */
 public interface Command {
     /**
@@ -19,9 +19,9 @@ public interface Command {
     void undo();
 
     /**
-     * Gets if it is possible to {@link #undo()} the command
+     * Gets if it is possible to undo the command
      *
-     * @return True if it is possible to {@link #undo()} the command
+     * @return True if it is possible to undo the command
      */
     boolean isUndoable();
 

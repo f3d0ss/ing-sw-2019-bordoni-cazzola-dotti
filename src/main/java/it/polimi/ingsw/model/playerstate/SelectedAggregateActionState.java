@@ -9,6 +9,9 @@ import it.polimi.ingsw.model.command.SelectShootActionCommand;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * State when the player just selected an {@link AggregateAction}
+ */
 public class SelectedAggregateActionState extends AfterSelectedAggregateActionState implements MovableState {
     public SelectedAggregateActionState(AggregateAction selectedAggregateAction) {
         super(selectedAggregateAction);

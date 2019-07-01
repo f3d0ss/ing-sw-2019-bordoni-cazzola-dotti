@@ -9,6 +9,9 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * State when the player is paying to use a weapon mode
+ */
 public class PendingPaymentWeaponOptionState extends SelectedWeaponState implements PendingPaymentState {
 
     private final Map<Color, Integer> pendingAmmo;

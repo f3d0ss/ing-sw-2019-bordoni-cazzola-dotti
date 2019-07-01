@@ -8,6 +8,9 @@ import it.polimi.ingsw.model.command.UseNewtonCommand;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * State when the player is using a Newton powerup
+ */
 public class SelectedNewtonState implements PlayerState, TargetingPlayerState {
     private Player selectedPlayer = null;
 

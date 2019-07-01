@@ -5,6 +5,9 @@ import it.polimi.ingsw.model.command.Command;
 
 import java.util.List;
 
+/**
+ * State of the player when it's not its turn and it has not been shot
+ */
 public class IdleState implements PlayerState {
     /**
      * {@inheritDoc}

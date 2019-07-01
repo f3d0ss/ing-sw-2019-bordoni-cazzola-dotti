@@ -10,6 +10,9 @@ import it.polimi.ingsw.model.command.DoneCommand;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * State when the player is shooting and selecting targets
+ */
 public class ReadyToShootState extends SelectedWeaponState implements TargetingPlayerState, TargetingSquareState, MovableState {
     public ReadyToShootState(AggregateAction selectedAggregateAction, Weapon selectedWeapon) {
         super(selectedAggregateAction, selectedWeapon);

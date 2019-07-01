@@ -41,7 +41,7 @@ public class SelectTargetSquareCommand implements WeaponCommand {
     }
 
     /**
-     * @return true if the command is undoable
+     * {@inheritDoc}
      */
     @Override
     public boolean isUndoable() {

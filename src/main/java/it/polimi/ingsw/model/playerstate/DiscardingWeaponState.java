@@ -10,6 +10,9 @@ import it.polimi.ingsw.model.command.SelectDiscardedWeaponCommand;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * State of the player while discarding a weapon
+ */
 public class DiscardingWeaponState extends SelectedWeaponState {
     private final SpawnSquare spawn;
 

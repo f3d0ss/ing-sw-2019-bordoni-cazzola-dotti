@@ -56,7 +56,7 @@ public class SelectBuyingWeaponCommand extends GrabCommand {
     }
 
     /**
-     * @return true if the command is undoable
+     * {@inheritDoc}
      */
     @Override
     public boolean isUndoable() {

@@ -45,7 +45,7 @@ public class SelectAmmoPaymentCommand extends SelectPaymentCommand {
     }
 
     /**
-     * @return true if the command is undoable
+     * {@inheritDoc}
      */
     @Override
     public boolean isUndoable() {

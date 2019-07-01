@@ -2,6 +2,9 @@ package it.polimi.ingsw.model.playerstate;
 
 import it.polimi.ingsw.model.Player;
 
+/**
+ * States when the player is selecting Target Players
+ */
 public interface TargetingPlayerState extends PlayerState {
     /**
      * Adds a target player

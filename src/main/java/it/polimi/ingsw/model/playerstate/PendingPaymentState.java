@@ -11,6 +11,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * States when the player is paying to use something
+ */
 public interface PendingPaymentState {
     /**
      * Generates a List of {@link SelectAmmoPaymentCommand}

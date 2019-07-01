@@ -12,6 +12,9 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * State when the player is paying to reload
+ */
 public class PendingPaymentReloadWeaponState implements PendingPaymentState, PlayerState {
 
     private final Map<Color, Integer> pendingAmmo;

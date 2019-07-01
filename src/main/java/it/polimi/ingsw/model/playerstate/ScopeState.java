@@ -10,6 +10,9 @@ import it.polimi.ingsw.model.command.SelectScopeCommand;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * State when te player uses a Scope powerup
+ */
 public class ScopeState extends SelectedWeaponState {
     private final List<Player> shootedPlayer;
 

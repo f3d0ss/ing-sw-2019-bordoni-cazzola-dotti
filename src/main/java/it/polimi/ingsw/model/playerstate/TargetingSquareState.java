@@ -2,6 +2,9 @@ package it.polimi.ingsw.model.playerstate;
 
 import it.polimi.ingsw.model.Square;
 
+/**
+ * States when the player is selecting Target Squares
+ */
 public interface TargetingSquareState {
     /**
      * Adds a target square

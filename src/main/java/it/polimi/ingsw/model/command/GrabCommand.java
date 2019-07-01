@@ -3,7 +3,7 @@ package it.polimi.ingsw.model.command;
 import it.polimi.ingsw.model.Player;
 
 /**
- * This class represent a grab action
+ * This commands represent a grab action
  */
 public abstract class GrabCommand implements Command {
     final Player player;

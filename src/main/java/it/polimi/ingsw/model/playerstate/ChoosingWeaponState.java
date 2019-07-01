@@ -9,6 +9,9 @@ import it.polimi.ingsw.model.command.SelectWeaponCommand;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * State of the player while choosing which {@link it.polimi.ingsw.model.Weapon} to use
+ */
 public class ChoosingWeaponState extends AfterSelectedAggregateActionState {
     public ChoosingWeaponState(AggregateAction selectedAggregateAction) {
         super(selectedAggregateAction);

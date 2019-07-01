@@ -80,7 +80,7 @@ public class MoveCommand implements Command {
     }
 
     /**
-     * @return true if the command is undoable
+     * {@inheritDoc}
      */
     @Override
     public boolean isUndoable() {

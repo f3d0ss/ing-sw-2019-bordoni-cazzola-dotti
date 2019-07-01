@@ -9,6 +9,9 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * State when the player is paying to buy a Weapon
+ */
 public class PendingPaymentWeaponState extends SelectedWeaponState implements PendingPaymentState {
     private final Map<Color, Integer> pendingAmmo;
     private final List<PowerUp> pendingCardPayment;
