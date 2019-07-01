@@ -126,6 +126,7 @@ public class Player {
     public void pay(PowerUp powerUp) {
         powerUps.remove(powerUp);
         match.discard(powerUp);
+        update();
     }
 
     private void addPowerUp(int number) {

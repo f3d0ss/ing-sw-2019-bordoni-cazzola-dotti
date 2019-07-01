@@ -19,6 +19,7 @@ class SingleCommunication implements Runnable {
 
     @Override
     public void run() {
+        // Do nothing (intentionally-blank override)
     }
 
     /**
