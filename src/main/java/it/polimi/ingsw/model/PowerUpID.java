@@ -1,5 +1,8 @@
 package it.polimi.ingsw.model;
 
+/**
+ * Contains every standard {@link PowerUp} types
+ */
 public enum PowerUpID {
     /**
      * Tagback Grenade
@@ -61,6 +64,11 @@ public enum PowerUpID {
         }
     };
 
+    /**
+     * Gets standard power up name
+     *
+     * @return Standard power up name
+     */
     public abstract String powerUpName();
 
     public abstract String powerUpID();

@@ -7,8 +7,13 @@ import it.polimi.ingsw.model.command.UseTeleportCommand;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * State when the player is using a Newton powerup
+ */
 public class SelectedTeleporterState implements PlayerState {
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Command> getPossibleCommands(Player player) {
         List<Command> commands = new ArrayList<>();

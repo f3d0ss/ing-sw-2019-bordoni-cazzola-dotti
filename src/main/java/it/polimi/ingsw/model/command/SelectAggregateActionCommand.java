@@ -48,13 +48,16 @@ public class SelectAggregateActionCommand implements Command {
     }
 
     /**
-     * @return true if the command is undoable
+     * {@inheritDoc}
      */
     @Override
     public boolean isUndoable() {
         return true;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public CommandMessage createCommandMessage() {
         return new AggregateActionCommandMessage(CommandType.SELECT_AGGREGATE_ACTION, aggregateAction);

@@ -10,6 +10,9 @@ import it.polimi.ingsw.model.command.UseScopeCommand;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * State when the player is selecting targets to use a Scope power up
+ */
 public class SelectScopeTargetState extends SelectedWeaponState implements TargetingPlayerState {
     private final List<Player> shootedPlayers;
     private Player selectedPlayer;
@@ -19,26 +22,47 @@ public class SelectScopeTargetState extends SelectedWeaponState implements Targe
         this.shootedPlayers = shootedPlayers;
     }
 
+    /**
+     * Gets the selected player
+     *
+     * @return selected player
+     */
     public Player getSelectedPlayer() {
         return selectedPlayer;
     }
 
+    /**
+     * Gets a list of the players that have just been shot by the players
+     *
+     * @return list of the shoot players
+     */
     public List<Player> getShootedPlayers() {
         return shootedPlayers;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void addTargetPlayer(Player targetPlayer) {
         if (selectedPlayer != null)
             throw new IllegalStateException();
         selectedPlayer = targetPlayer;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void removeTargetPlayer(Player targetPlayer) {
         if (selectedPlayer != targetPlayer)
             throw new IllegalStateException();
         selectedPlayer = null;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Command> getPossibleCommands(Player player) {
         List<Command> commands = new ArrayList<>();

@@ -52,13 +52,16 @@ public class SelectWeaponModeCommand implements Command {
     }
 
     /**
-     * @return true if the command is undoable
+     * {@inheritDoc}
      */
     @Override
     public boolean isUndoable() {
         return true;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public CommandMessage createCommandMessage() {
         return new WeaponModeCommandMessage(CommandType.SELECT_WEAPON_MODE, weaponMode.getName());

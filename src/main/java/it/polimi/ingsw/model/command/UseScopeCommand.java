@@ -2,7 +2,6 @@ package it.polimi.ingsw.model.command;
 
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.PowerUp;
-import it.polimi.ingsw.model.exception.IllegalUndoException;
 import it.polimi.ingsw.model.playerstate.ScopeState;
 import it.polimi.ingsw.model.playerstate.SelectScopeTargetState;
 import it.polimi.ingsw.view.commandmessage.CommandMessage;
@@ -45,13 +44,16 @@ public class UseScopeCommand implements Command {
     }
 
     /**
-     * @return true if the command is undoable
+     * {@inheritDoc}
      */
     @Override
     public boolean isUndoable() {
         return false;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public CommandMessage createCommandMessage() {
         return new SimpleCommandMessage(CommandType.USE_SCOPE);

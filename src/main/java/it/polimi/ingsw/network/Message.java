@@ -2,6 +2,9 @@ package it.polimi.ingsw.network;
 
 import java.util.List;
 
+/**
+ * This class represents a message that is used to communicate on a network
+ */
 public class Message {
 
     public final Protocol type;

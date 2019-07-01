@@ -8,8 +8,14 @@ import it.polimi.ingsw.model.command.UseTagbackGrenadeCommand;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * State when the player has just been shot
+ */
 public class ShootedState implements PlayerState {
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Command> getPossibleCommands(Player player) {
         List<Command> commands = new ArrayList<>();

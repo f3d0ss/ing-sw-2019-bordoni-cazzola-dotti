@@ -53,13 +53,16 @@ public class UseNewtonCommand implements Command {
     }
 
     /**
-     * @return true if the command is undoable
+     * {@inheritDoc}
      */
     @Override
     public boolean isUndoable() {
         return true;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public CommandMessage createCommandMessage() {
         return new SimpleCommandMessage(CommandType.USE_NEWTON);

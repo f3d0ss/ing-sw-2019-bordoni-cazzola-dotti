@@ -6,7 +6,14 @@ import it.polimi.ingsw.model.command.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Main state of the player
+ */
 public class ManageTurnState implements PlayerState {
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Command> getPossibleCommands(Player player) {
         List<Command> commands = new ArrayList<>();

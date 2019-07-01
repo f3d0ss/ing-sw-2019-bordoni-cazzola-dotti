@@ -2,7 +2,6 @@ package it.polimi.ingsw.model.command;
 
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.PowerUp;
-import it.polimi.ingsw.model.exception.IllegalUndoException;
 import it.polimi.ingsw.view.commandmessage.CommandMessage;
 import it.polimi.ingsw.view.commandmessage.CommandType;
 import it.polimi.ingsw.view.commandmessage.PowerUpCommandMessage;
@@ -43,13 +42,16 @@ public class RespawnCommand implements Command {
     }
 
     /**
-     * @return true if the command is undoable
+     * {@inheritDoc}
      */
     @Override
     public boolean isUndoable() {
         return false;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public CommandMessage createCommandMessage() {
         return new PowerUpCommandMessage(CommandType.RESPAWN, powerUp.getType(), powerUp.getColor());

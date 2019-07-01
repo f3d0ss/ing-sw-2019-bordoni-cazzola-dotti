@@ -1,8 +1,16 @@
 package it.polimi.ingsw.model;
 
+/**
+ * Contains the four basic cardinal directions
+ */
 public enum CardinalDirection {
     NORTH, EAST, WEST, SOUTH;
 
+    /**
+     * Gets opposite direction
+     *
+     * @return Opposite direction
+     */
     public CardinalDirection getOpposite() {
         switch (this) {
             case NORTH:
@@ -13,7 +21,6 @@ public enum CardinalDirection {
                 return NORTH;
             default:
                 return EAST;
-
         }
     }
 }

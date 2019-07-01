@@ -41,13 +41,16 @@ public class SelectTargetPlayerCommand implements WeaponCommand {
     }
 
     /**
-     * @return true if the command is undoable
+     * {@inheritDoc}
      */
     @Override
     public boolean isUndoable() {
         return true;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public CommandMessage createCommandMessage() {
         return new PlayerCommandMessage(CommandType.SELECT_TARGET_PLAYER, targetPlayer.getId());
