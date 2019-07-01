@@ -79,7 +79,7 @@ public enum CommandType {
         }
     }, USE_NEWTON {
         public String getString() {
-            return "Usa il Raggio Cinetico";
+            return "Sposta l'obiettivo in ";
         }
     }, USE_SCOPE {
         public String getString() {

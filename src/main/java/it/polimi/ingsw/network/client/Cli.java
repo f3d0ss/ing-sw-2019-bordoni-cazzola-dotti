@@ -144,7 +144,8 @@ public class Cli implements Ui {
             return ((PlayerCommandMessage) command).getPlayerId().playerIdName();
         if (command.getType() == CommandType.SELECT_TARGET_SQUARE
                 || command.getType() == CommandType.MOVE
-                || command.getType() == CommandType.USE_TELEPORT)
+                || command.getType() == CommandType.USE_TELEPORT
+                || command.getType() == CommandType.USE_NEWTON)
             return (cliManager.getVerticalCoordinateName(((SquareCommandMessage) command).getRow()) + cliManager.getHorizontalCoordinateName(((SquareCommandMessage) command).getCol()));
         if (command.getType() == CommandType.SELECT_WEAPON_MODE)
             return ((WeaponModeCommandMessage) command).getWeaponMode();
@@ -158,7 +159,7 @@ public class Cli implements Ui {
                 if (effectCommandMessage.getMarks() > 0)
                     shootString = new StringBuilder().append(shootString).append(" + ").append(effectCommandMessage.getMarks()).append(" marchi").toString();
                 if (effectCommandMessage.getCol() != null)
-                    shootString = new StringBuilder().append(shootString).append("+ spostalo in ").append(cliManager.getVerticalCoordinateName(effectCommandMessage.getRow())).append(cliManager.getHorizontalCoordinateName(effectCommandMessage.getCol())).toString();
+                    shootString = new StringBuilder().append(shootString).append(" + spostalo in ").append(cliManager.getVerticalCoordinateName(effectCommandMessage.getRow())).append(cliManager.getHorizontalCoordinateName(effectCommandMessage.getCol())).toString();
                 if (effectCommandMessageList.size() > i + 1)
                     shootString = new StringBuilder().append(shootString).append("\n").toString();
             }
