@@ -177,7 +177,6 @@ class WeaponTest {
         player.respawn(Color.BLUE);
         player.move(square);
         match.addPlayer(player);
-        square.addPlayer(player);
         for (Weapon weapon : allWeapons) {
             ReadyToShootState state = new ReadyToShootState(new AggregateAction(0, false, true, false), weapon);
             player.changeState(state);
@@ -209,19 +208,16 @@ class WeaponTest {
         shooter.respawn(Color.BLUE);
         shooter.move(shooterSquare);
         match.addPlayer(shooter);
-        shooterSquare.addPlayer(shooter);
 
         Player player = new Player(match, PlayerId.GREEN, PlayerId.GREEN.playerIdName());
         player.respawn(Color.BLUE);
         player.move(shooterSquare);
         match.addPlayer(player);
-        shooterSquare.addPlayer(player);
 
         Player player1 = new Player(match, PlayerId.GREY, PlayerId.GREY.playerIdName());
         player1.respawn(Color.BLUE);
         player1.move(shooterSquare);
         match.addPlayer(player1);
-        shooterSquare.addPlayer(player1);
 
         for (Weapon weapon : allWeapons) {
             ReadyToShootState state = new ReadyToShootState(new AggregateAction(0, false, true, false), weapon);
@@ -263,33 +259,28 @@ class WeaponTest {
         shooter.respawn(Color.BLUE);
         shooter.move(shooterSquare);
         match.addPlayer(shooter);
-        shooterSquare.addPlayer(shooter);
 
         Player player = new Player(match, PlayerId.GREEN, PlayerId.GREEN.playerIdName());
         player.respawn(Color.BLUE);
         player.move(shooterSquare);
         match.addPlayer(player);
-        shooterSquare.addPlayer(player);
 
         Square square1 = gameBoard.getSquare(1, 1);
         Player player1 = new Player(match, PlayerId.GREY, PlayerId.GREY.playerIdName());
         player1.respawn(Color.BLUE);
         player1.move(square1);
         match.addPlayer(player1);
-        square1.addPlayer(player1);
 
         Player player2 = new Player(match, PlayerId.BLUE, PlayerId.BLUE.playerIdName());
         player2.respawn(Color.BLUE);
         player2.move(square1);
         match.addPlayer(player2);
-        square1.addPlayer(player2);
 
         Square square3 = gameBoard.getSquare(1, 2);
         Player player3 = new Player(match, PlayerId.GREY, PlayerId.GREY.playerIdName());
         player3.respawn(Color.BLUE);
         player3.move(square3);
         match.addPlayer(player3);
-        square3.addPlayer(player3);
 
         for (Weapon weapon : allWeapons) {
             ReadyToShootState state = new ReadyToShootState(new AggregateAction(0, false, true, false), weapon);
@@ -328,33 +319,28 @@ class WeaponTest {
         shooter.respawn(Color.BLUE);
         shooter.move(shooterSquare);
         match.addPlayer(shooter);
-        shooterSquare.addPlayer(shooter);
 
         Player player = new Player(match, PlayerId.GREEN, PlayerId.GREEN.playerIdName());
         player.respawn(Color.BLUE);
         player.move(shooterSquare);
         match.addPlayer(player);
-        shooterSquare.addPlayer(player);
 
         Square square1 = gameBoard.getSquare(1, 1);
         Player player1 = new Player(match, PlayerId.GREY, PlayerId.GREY.playerIdName());
         player1.respawn(Color.BLUE);
         player1.move(square1);
         match.addPlayer(player1);
-        square1.addPlayer(player1);
 
         Player player2 = new Player(match, PlayerId.BLUE, PlayerId.BLUE.playerIdName());
         player2.respawn(Color.BLUE);
         player2.move(square1);
         match.addPlayer(player2);
-        square1.addPlayer(player2);
 
         Square square3 = gameBoard.getSquare(1, 2);
         Player player3 = new Player(match, PlayerId.GREY, PlayerId.GREY.playerIdName());
         player3.respawn(Color.BLUE);
         player3.move(square3);
         match.addPlayer(player3);
-        square3.addPlayer(player3);
 
         for (Weapon weapon : allWeapons) {
             ReadyToShootState state = new ReadyToShootState(new AggregateAction(0, false, true, false), weapon);
@@ -401,28 +387,24 @@ class WeaponTest {
         shooter.respawn(Color.BLUE);
         shooter.move(shooterSquare);
         match.addPlayer(shooter);
-        shooterSquare.addPlayer(shooter);
 
         Square square = gameBoard.getSquare(2, 2);
         Player player = new Player(match, PlayerId.GREEN, PlayerId.GREEN.playerIdName());
         player.respawn(Color.BLUE);
         player.move(square);
         match.addPlayer(player);
-        square.addPlayer(player);
 
         Square square1 = gameBoard.getSquare(2, 2);
         Player player1 = new Player(match, PlayerId.GREY, PlayerId.GREY.playerIdName());
         player1.respawn(Color.BLUE);
         player1.move(square1);
         match.addPlayer(player1);
-        square1.addPlayer(player1);
 
         Square square2 = gameBoard.getSquare(2, 3);
         Player player2 = new Player(match, PlayerId.BLUE, PlayerId.BLUE.playerIdName());
         player2.respawn(Color.BLUE);
         player2.move(square2);
         match.addPlayer(player2);
-        square2.addPlayer(player2);
 
         Weapon flamethrowher = getWeaponByName("Flame");
         ReadyToShootState state = new ReadyToShootState(new AggregateAction(0, false, true, false), flamethrowher);

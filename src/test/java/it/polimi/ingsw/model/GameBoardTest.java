@@ -3,6 +3,7 @@ package it.polimi.ingsw.model;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -214,5 +215,37 @@ class GameBoardTest {
         s2 = gameBoard.getSquare(1, 2);
         s3 = gameBoard.getThirdSquareInTheSameDirection(s1, s2, true);
         assertEquals(gameBoard.getSquare(2, 2), s3);
+    }
+
+    @Test
+    void getPlayersInTheSameDirection() {
+        Match match = new Match();
+        GameBoard gameBoard = match.getBoard();
+        Square s1 = gameBoard.getSquare(2, 2);
+        Square s2 = gameBoard.getSquare(1, 2);
+        Square s3 = gameBoard.getSquare(0, 2);
+        Square s4 = gameBoard.getSquare(0, 2);
+        Player p1 = new Player(match, null, null);
+        Player p2 = new Player(match, null, null);
+        Player p3 = new Player(match, null, null);
+        Player p4 = new Player(match, null, null);
+        match.addPlayer(p1);
+        match.addPlayer(p2);
+        match.addPlayer(p3);
+        match.addPlayer(p4);
+        p1.respawn(Color.YELLOW);
+        p2.respawn(Color.YELLOW);
+        p3.respawn(Color.YELLOW);
+        p4.respawn(Color.YELLOW);
+        p1.move(s1);
+        p2.move(s2);
+        p3.move(s3);
+        p4.move(s4);
+        List<Player> list = new ArrayList<>();
+        list.add(p2);
+        list.add(p3);
+        List<Player> playersInTheSameDirection = gameBoard.getPlayersInTheSameDirection(p1, list, 2, 0, true);
+        assertEquals(p4, playersInTheSameDirection.get(0));
+
     }
 }
