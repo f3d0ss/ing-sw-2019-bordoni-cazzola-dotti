@@ -22,6 +22,7 @@ public class PlayerBoardController extends HBox {
     private static final int MAX_SKULL_PLAYERBOARD = 6;
     private static final int PLAYER_LIFE = 12;
     private static final int MAX_NUMBER_PLAYER_DEATH_SKULL = 6;
+    private static final double OPACITY_WEAPON_UNLOADED = 0.5;
     @FXML
     private HBox boardWithoutAggregateAction;
     @FXML
@@ -142,6 +143,8 @@ public class PlayerBoardController extends HBox {
                         + MainGuiController.BACK
                         + MainGuiController.IMAGE_EXTENSION;
             MainGuiController.setBackgroundImageFromURI(cardHBox, weaponImageURI);
+            if (isMe && !weaponView.isLoaded())
+                cardHBox.setOpacity(OPACITY_WEAPON_UNLOADED);
             HBox.setHgrow(cardHBox, Priority.ALWAYS);
             playerWeaponContainer.getChildren().add(cardHBox);
         });
