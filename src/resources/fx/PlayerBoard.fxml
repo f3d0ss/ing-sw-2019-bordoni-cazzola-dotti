@@ -64,9 +64,6 @@
                             <HBox prefHeight="${mainPane.height*55/175}"
                                   prefWidth="${mainPane.width*500/1045*475/700}"
                                   id="playerHealthBox" fx:id="playerHealthBox"/>
-
-                            <HBox prefHeight="${mainPane.height*60/175}"
-                                  prefWidth="${mainPane.width*500/1045*85/700}"/> <!-- spacing -->
                             <HBox id="playerDeathsGrid" fx:id="playerDeaths"
                                   prefHeight="${mainPane.height*60/175}"
                                   prefWidth="${mainPane.width*500/1045*224/700}"/>

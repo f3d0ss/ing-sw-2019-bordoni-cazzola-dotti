@@ -85,7 +85,7 @@
                             <content>
                                 <AnchorPane minHeight="0" minWidth="0">
                                     <children>
-                                        <VBox id="logContainer" fx:id="logContainer" prefWidth="182"/>
+                                        <VBox id="logContainer" fx:id="logContainer" prefWidth="${mainPane.width*145/1645}"/>
                                     </children>
                                 </AnchorPane>
                             </content>

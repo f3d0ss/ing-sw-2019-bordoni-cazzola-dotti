@@ -99,6 +99,6 @@ public class Gui implements Ui, Runnable {
     }
 
     public void showLeaderBoard(Map<PlayerId, Long> leaderBoard) {
-        Platform.runLater(() ->controller.showLeaderBoard(leaderBoard));
+        Platform.runLater(() -> controller.showLeaderBoard(leaderBoard));
     }
 }

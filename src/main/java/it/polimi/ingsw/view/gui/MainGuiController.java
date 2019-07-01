@@ -34,6 +34,7 @@ public class MainGuiController {
     private static final int NUMBER_OF_STANDAR_SKULL = 8;
     private static final int HEIGHT_RATIO_SQUARE_INPUT = 2;
     private static final int WIDTH_RATIO_SQUARE_INPUT = 3;
+    private static final String EXIT = "Esci dal gioco";
     @FXML
     private VBox logContainer;
     @FXML
@@ -304,12 +305,17 @@ public class MainGuiController {
     }
 
     private void showTextCommand(String command, int commandIndex, Lock lock) {
+        Label commandLabel = createCommandLabel(command);
+        commandLabel.setOnMouseClicked(actionEvent -> handleCommandClick(commandIndex, lock));
+        extraCommandContainer.getChildren().add(commandLabel);
+    }
+
+    private Label createCommandLabel(String command){
         Label commandLabel = new Label(command);
         commandLabel.setWrapText(true);
         commandLabel.maxWidthProperty().bind(extraCommandContainer.widthProperty());
-        commandLabel.setOnMouseClicked(actionEvent -> handleCommandClick(commandIndex, lock));
         commandLabel.setPadding(new Insets(5));
-        extraCommandContainer.getChildren().add(commandLabel);
+        return commandLabel;
     }
 
     public void setModelView(ModelView modelView) {
@@ -424,12 +430,13 @@ public class MainGuiController {
                 leaderBoardText.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 20));
             if (modelView.getPlayerView(entry.getKey()).isDisconnected())
                 leaderBoardText.setStrikethrough(true);
+            leaderBoardText.wrappingWidthProperty().bind(logContainer.widthProperty());
             logContainer.getChildren().add(leaderBoardText);
             i++;
         }
-        Text commandText = new Text("Esci dal gioco");
-        commandText.setOnMouseClicked(actionEvent -> stage.close());
-        extraCommandContainer.getChildren().add(commandText);
+        Label commandLabel = createCommandLabel(EXIT);
+        commandLabel.setOnMouseClicked(actionEvent -> stage.close());
+        extraCommandContainer.getChildren().add(commandLabel);
     }
 
     void setStage(Stage stage) {
