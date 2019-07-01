@@ -26,7 +26,8 @@ public class MatchController implements Runnable {
     private final List<Player> players;
 
     public MatchController(Map<String, ViewInterface> lobby, int gameBoardNumber, int skulls) {
-        match = new Match(gameBoardNumber, skulls);
+        match = new Match(skulls);
+        match.initializeFromStandardFiles(gameBoardNumber);
         PlayerId[] values = PlayerId.values();
         List<String> nicknames = new ArrayList<>(lobby.keySet());
         for (int i = 0; i < nicknames.size(); i++) {

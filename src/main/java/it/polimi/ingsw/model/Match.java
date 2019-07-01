@@ -12,6 +12,9 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Represents the Match, Contains the state of the match
+ */
 public class Match {
 
     private static final int DEFAULT_SKULLS = 8;
@@ -29,21 +32,33 @@ public class Match {
     private Map<PlayerId, ViewInterface> views;
     private Map<PlayerId, Long> leaderBoard;
 
-    public Match(int gameBoardNumber, int skulls) {
-        Parser parser = new Parser();
-        initializeGameBoard(gameBoardNumber, parser);
+    public Match(int skulls) {
         views = new EnumMap<>(PlayerId.class);
         killshotTrack = new ArrayList<>();
         currentPlayers = new ArrayList<>();
         firstPlayerPlayedLastTurn = false;
         deathsCounter = skulls;
+    }
+
+    /**
+     * Creates a new Match and Initializes it with game board 1 and standard settings
+     */
+    public Match() {
+        this(DEFAULT_SKULLS);
+        initializeFromStandardFiles(1);
+    }
+
+    /**
+     * Initializes the Match with standard settings (maps, cards, etc..)
+     *
+     * @param gameBoardId Gameboard ID must be [1,4]
+     */
+    public void initializeFromStandardFiles(int gameBoardId) {
+        Parser parser = new Parser();
+        initializeGameBoard(gameBoardId, parser);
         initializeAmmoTiles(parser);
         initializeWeapons(parser);
         initializePowerUps(parser);
-    }
-
-    public Match() {
-        this(1, DEFAULT_SKULLS);
     }
 
     private void initializeGameBoard(int gameBoardNumber, Parser parser) {
@@ -108,6 +123,10 @@ public class Match {
         views.values().forEach(v -> ((VirtualView) v).setGameOver());
     }
 
+    /**
+     * @param id PlayerId of the player to get
+     * @return Returns the Player with this playerId
+     */
     public Player getPlayer(PlayerId id) {
         for (Player tmp : currentPlayers)
             if (id.equals(tmp.getId())) {
@@ -132,10 +151,11 @@ public class Match {
         return killshotTrack;
     }
 
-    public int getDeathsCounter() {
-        return deathsCounter;
-    }
-
+    /**
+     * Decreases deaths counter, if deaths counter is already 0 it can't be decreased.
+     *
+     * @return true if deaths counter value has been decreased
+     */
     boolean decreaseDeathsCounter() {
         if (deathsCounter == 0) {
             return false;
@@ -149,17 +169,33 @@ public class Match {
         return board;
     }
 
+    /**
+     * Adds player to the match currentPlayers
+     *
+     * @param player Player to add
+     */
     public void addPlayer(Player player) {
         currentPlayers.add(player);
     }
 
+    /**
+     * Adds player to the match currentPlayers
+     *
+     * @param player        Player to add
+     * @param viewInterface View linked to {@code player}
+     */
     public void addPlayer(Player player, ViewInterface viewInterface) {
         currentPlayers.add(player);
         views.put(player.getId(), viewInterface);
     }
 
-    public void addKillshot(PlayerId player) {
-        killshotTrack.add(player);
+    /**
+     * Adds a token to the kill shoot track
+     *
+     * @param playerId PlayerId of who did the kill
+     */
+    public void addKillshot(PlayerId playerId) {
+        killshotTrack.add(playerId);
         update();
     }
 
@@ -175,6 +211,11 @@ public class Match {
         return tmp;
     }
 
+    /**
+     * Removes and return the first powerup from the powerups deck
+     *
+     * @return Powerup drawn
+     */
     public PowerUp drawPowerUpCard() {
         PowerUp powerup;
         powerup = currentPowerUpDeck.drawPowerUp();
@@ -187,22 +228,43 @@ public class Match {
         return powerup;
     }
 
+    /**
+     * Adds the ammotile to the used ammotiles
+     *
+     * @param ammoTile ammotile to discard
+     */
     public void discard(AmmoTile ammoTile) {
         usedAmmoTileDeck.add(ammoTile);
     }
 
+    /**
+     * Adds the powerup to the used powerups
+     *
+     * @param powerUp powerup to discard
+     */
     public void discard(PowerUp powerUp) {
         usedPowerUpDeck.add(powerUp);
     }
 
+    /**
+     * Removes the powerup from the used powerups
+     *
+     * @param powerUp power up to un-discard
+     */
     public void undiscard(PowerUp powerUp) {
         usedPowerUpDeck.remove(powerUp);
     }
 
+    /**
+     * @return true if the match is in the last turn
+     */
     public boolean isLastTurn() {
         return deathsCounter == 0;
     }
 
+    /**
+     * @return true if the first player has played in the last turn
+     */
     public boolean hasFirstPlayerPlayedLastTurn() {
         return firstPlayerPlayedLastTurn;
     }
@@ -225,6 +287,9 @@ public class Match {
         }
     }
 
+    /**
+     * Sets that the first player has played in the last turn
+     */
     public void firstPlayerPlayedLastTurn() {
         this.firstPlayerPlayedLastTurn = true;
     }
@@ -251,6 +316,11 @@ public class Match {
         views.values().forEach(ViewInterface::setViewInitializationDone);
     }
 
+    /**
+     * This method sends the current state of the Model to the player that has just reconnected
+     *
+     * @param player PlayerId of the player to notify
+     */
     public void sendModelAfterReconnection(PlayerId player) {
         views.get(player).update(new MatchView(killshotTrack, deathsCounter, leaderBoard, isLastTurn()));
         currentPlayers.forEach(p -> views.get(player).update(p.getPlayerView(p.getId() == player)));

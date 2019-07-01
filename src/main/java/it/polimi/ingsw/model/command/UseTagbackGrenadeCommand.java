@@ -2,7 +2,6 @@ package it.polimi.ingsw.model.command;
 
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.PowerUp;
-import it.polimi.ingsw.model.exception.IllegalUndoException;
 import it.polimi.ingsw.model.playerstate.IdleState;
 import it.polimi.ingsw.view.commandmessage.CommandMessage;
 import it.polimi.ingsw.view.commandmessage.CommandType;
