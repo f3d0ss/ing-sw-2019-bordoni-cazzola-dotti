@@ -6,6 +6,7 @@ import it.polimi.ingsw.model.Connection;
 import it.polimi.ingsw.model.PlayerId;
 import it.polimi.ingsw.view.*;
 
+@SuppressWarnings("squid:S106")
 public class CliManager {
 
     private static final int INNERWIDTH = 11;

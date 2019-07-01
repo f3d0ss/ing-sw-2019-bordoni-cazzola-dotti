@@ -11,7 +11,7 @@ import java.util.*;
 /**
  * This class manage Command Line Interface as User Interface.
  */
-
+@SuppressWarnings("squid:S106")
 public class Cli implements Ui {
 
     private static final int FIRST_CHOICE_NUMBER = 1;
@@ -41,6 +41,7 @@ public class Cli implements Ui {
 
     @Override
     public void run() {
+        // Do nothing (intentionally-blank override)
     }
 
     /**
