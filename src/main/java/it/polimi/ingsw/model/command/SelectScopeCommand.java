@@ -12,9 +12,9 @@ import it.polimi.ingsw.view.commandmessage.PowerUpCommandMessage;
  * This command represent the action of select a scope
  */
 public class SelectScopeCommand implements Command {
-    private Player player;
-    private ScopeState currentState;
-    private PowerUp powerUp;
+    private final Player player;
+    private final ScopeState currentState;
+    private final PowerUp powerUp;
 
     /**
      * This constructor create a command for select a scope

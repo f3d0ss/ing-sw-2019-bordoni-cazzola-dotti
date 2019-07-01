@@ -12,10 +12,10 @@ import it.polimi.ingsw.view.commandmessage.SimpleCommandMessage;
  * This command represent the action of use a newton
  */
 public class UseNewtonCommand implements Command {
-    private Player player;
-    private TargetingPlayerState currentState;
-    private Player targetPlayer;
-    private Square targetSquare;
+    private final Player player;
+    private final TargetingPlayerState currentState;
+    private final Player targetPlayer;
+    private final Square targetSquare;
     private Square oldSquare;
 
     /**

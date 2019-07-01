@@ -12,9 +12,9 @@ import it.polimi.ingsw.view.commandmessage.CommandType;
  * This command represent the action of select an aggregate action
  */
 public class SelectAggregateActionCommand implements Command {
-    private Player player;
-    private AggregateActionID aggregateAction;
-    private ManageTurnState currentState;
+    private final Player player;
+    private final AggregateActionID aggregateAction;
+    private final ManageTurnState currentState;
 
     /**
      * This constructor create a command for select an aggregate action

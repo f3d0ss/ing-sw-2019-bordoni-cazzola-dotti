@@ -9,6 +9,7 @@ import it.polimi.ingsw.view.ViewInterface;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static it.polimi.ingsw.network.server.ServerManager.MIN_PLAYERS;
 
@@ -97,18 +98,16 @@ public class MatchController implements Runnable {
                 values[index] = mapEntry.getValue();
                 index++;
             }
-            for (Long duplicate : duplicates) {
-                int duplicateFrequency = Collections.frequency(Arrays.asList(values), duplicate);
-                for (int j = 1; j < duplicateFrequency; j++) {
-                    for (int i = 1; i < values.length; i++) {
-                        if (values[i].equals(values[i - 1]) && orderByFirstBlood.indexOf(keys[i - 1]) > orderByFirstBlood.indexOf(keys[i])) {
-                            PlayerId tempId = keys[i];
-                            keys[i] = keys[i - 1];
-                            keys[i - 1] = tempId;
-                        }
-                    }
-                }
-            }
+            duplicates.stream()
+                    .mapToInt(duplicate -> Collections.frequency(Arrays.asList(values), duplicate))
+                    .flatMap(duplicateFrequency -> IntStream.range(1, duplicateFrequency))
+                    .flatMap(j -> IntStream.range(1, values.length))
+                    .filter(i -> values[i].equals(values[i - 1]) && orderByFirstBlood.indexOf(keys[i - 1]) > orderByFirstBlood.indexOf(keys[i]))
+                    .forEach(i -> {
+                        PlayerId tempId = keys[i];
+                        keys[i] = keys[i - 1];
+                        keys[i - 1] = tempId;
+                    });
             LinkedHashMap<PlayerId, Long> sortedMap = new LinkedHashMap<>();
             for (int i = 0; i < keys.length; i++) {
                 sortedMap.put(keys[i], values[i]);

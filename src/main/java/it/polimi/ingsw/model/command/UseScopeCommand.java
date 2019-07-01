@@ -13,8 +13,8 @@ import it.polimi.ingsw.view.commandmessage.SimpleCommandMessage;
  * This command represent the action of use a scope
  */
 public class UseScopeCommand implements Command {
-    private Player player;
-    private SelectScopeTargetState currentState;
+    private final Player player;
+    private final SelectScopeTargetState currentState;
 
     /**
      * This constructor create a command for use a scope
@@ -32,7 +32,7 @@ public class UseScopeCommand implements Command {
      */
     @Override
     public void execute() {
-        currentState.getSelectedPlayer().addDamageSameAction(PowerUp.TRGETING_SCOPE_DAMAGE, player.getId());
+        currentState.getSelectedPlayer().addDamageSameAction(PowerUp.TARGETING_SCOPE_DAMAGE, player.getId());
         player.changeState(new ScopeState(currentState.getSelectedAggregateAction(), currentState.getSelectedWeapon(), currentState.getShootedPlayers()));
     }
 

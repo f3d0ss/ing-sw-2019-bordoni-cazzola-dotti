@@ -13,9 +13,28 @@ import java.util.Objects;
  */
 public class EffectCommand {
 
-    //TODO REMOVE
-    public String tempPrint() {
-        return "Sono: " + shooter + " damage: " + damage + " marks: " + marks + " a: " + player.getId() + " e lo mando in: " + arrivalSquare.getRow() + arrivalSquare.getCol();
+    private final Player player;
+    private final int damage;
+    private final int marks;
+    private final Square arrivalSquare;
+    private final PlayerId shooter;
+
+    /**
+     * @param player        is the player affected
+     * @param damage        is the damage
+     * @param marks         is the number of marks
+     * @param arrivalSquare is the square where the player is moved
+     * @param shooter       is the player who shoot
+     */
+    public EffectCommand(Player player, int damage, int marks, Square arrivalSquare, PlayerId shooter) {
+        this.player = player;
+        this.damage = damage;
+        this.marks = marks;
+        this.arrivalSquare = arrivalSquare;
+        this.shooter = shooter;
+        if (shooter.equals(player.getId()) && (marks != 0 || damage != 0)) {
+            throw new UnsupportedOperationException();
+        }
     }
 
     @Override
@@ -34,30 +53,6 @@ public class EffectCommand {
     @Override
     public int hashCode() {
         return Objects.hash(player, damage, marks, arrivalSquare, shooter);
-    }
-
-    private Player player;
-    private int damage;
-    private int marks;
-    private Square arrivalSquare;
-    private PlayerId shooter;
-
-    /**
-     * @param player        is the player affected
-     * @param damage        is the damage
-     * @param marks         is the number of marks
-     * @param arrivalSquare is the square where the player is moved
-     * @param shooter       is the player who shoot
-     */
-    public EffectCommand(Player player, int damage, int marks, Square arrivalSquare, PlayerId shooter) {
-        this.player = player;
-        this.damage = damage;
-        this.marks = marks;
-        this.arrivalSquare = arrivalSquare;
-        this.shooter = shooter;
-        if (shooter.equals(player.getId()) && (marks != 0 || damage != 0)) {
-            throw new UnsupportedOperationException();
-        }
     }
 
     /**
