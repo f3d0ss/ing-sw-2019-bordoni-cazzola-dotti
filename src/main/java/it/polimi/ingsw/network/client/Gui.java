@@ -1,9 +1,11 @@
 package it.polimi.ingsw.network.client;
 
 import it.polimi.ingsw.model.PlayerId;
+import it.polimi.ingsw.utils.Lock;
 import it.polimi.ingsw.view.ModelView;
 import it.polimi.ingsw.view.commandmessage.CommandMessage;
 import it.polimi.ingsw.view.gui.GuiManager;
+import it.polimi.ingsw.view.gui.MainGuiController;
 import javafx.application.Application;
 import javafx.application.Platform;
 
@@ -19,6 +21,7 @@ public class Gui implements Ui, Runnable {
     private boolean ready = false;
     private boolean inputReady = false;
     private boolean initializationDone = false;
+    private MainGuiController controller;
 
     public String showMessage(String toBeShown, List<String> possibleAnswers, boolean isAnswerRequired) {
         inputReady = false;
@@ -30,17 +33,31 @@ public class Gui implements Ui, Runnable {
             } catch (InterruptedException e) {
             }
         }
-        GuiManager.setInputReady(false);
         System.out.println(answer);//it show answer even on cli
         return answer;
     }
 
     public void refreshView(ModelView modelView) {
-        //TODO:
+        Platform.runLater(() -> {
+            controller.updateModelView(modelView);
+        });
     }
 
-    public void setViewInitializationDone() {
-        initializationDone = true;
+    public void setViewInitializationDone(ModelView modelView) {
+        Lock lock = new Lock();
+        try {
+            lock.lock();
+            Platform.runLater(() -> {
+                GuiManager.startMainGui();
+                controller = GuiManager.getController();
+                controller.setModelView(modelView);
+                lock.unlock();
+            });
+            lock.lock();
+            initializationDone = true;
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     public boolean isViewInitializationDone() {
@@ -69,10 +86,19 @@ public class Gui implements Ui, Runnable {
     }
 
     public int manageCommandChoice(List<CommandMessage> commands, boolean undo) {
-        //TODO:
-        return 0;
+        Lock lock = new Lock();
+        try {
+            lock.lock();
+            Platform.runLater(() -> controller.showCommand(commands, undo, lock));
+            lock.lock();
+            return controller.getSelectedCommand();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return -1;
     }
 
     public void showLeaderBoard(Map<PlayerId, Long> leaderBoard) {
+        Platform.runLater(() -> controller.showLeaderBoard(leaderBoard));
     }
 }

@@ -29,6 +29,7 @@ public class Match {
     private Map<PlayerId, ViewInterface> views;
     private Map<PlayerId, Long> leaderBoard;
     private PlayerId playerOnDuty;
+    private int gameBoardNumber;
 
     public Match(int gameBoardNumber, int skulls) {
         Parser parser = new Parser();
@@ -52,6 +53,7 @@ public class Match {
                 String.format("%03d", gameBoardNumber) + ".json")), GameBoard.class);
         board.initialize();
         board.getSquareList().forEach(square -> square.setMatch(this));
+        this.gameBoardNumber = gameBoardNumber;
     }
 
     private void initializeAmmoTiles(Parser parser) {
@@ -239,7 +241,7 @@ public class Match {
     }
 
     private void update() {
-        views.values().forEach(viewInterface -> viewInterface.update(new MatchView(killshotTrack, deathsCounter, leaderBoard, isLastTurn(), playerOnDuty)));
+        views.values().forEach(viewInterface -> viewInterface.update(new MatchView(killshotTrack, deathsCounter, gameBoardNumber, leaderBoard, isLastTurn(), playerOnDuty)));
     }
 
     /**
@@ -253,7 +255,7 @@ public class Match {
     }
 
     public void sendModelAfterReconnection(PlayerId player) {
-        views.get(player).update(new MatchView(killshotTrack, deathsCounter, leaderBoard, isLastTurn(), playerOnDuty));
+        views.get(player).update(new MatchView(killshotTrack, deathsCounter, gameBoardNumber, leaderBoard, isLastTurn(), playerOnDuty));
         currentPlayers.forEach(p -> views.get(player).update(p.getPlayerView(p.getId() == player)));
         board.getSquareList().forEach(s -> views.get(player).update(s.getSquareView()));
         views.get(player).setViewInitializationDone();

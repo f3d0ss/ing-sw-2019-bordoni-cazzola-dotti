@@ -9,6 +9,11 @@ public enum PowerUpID {
         public String powerUpName() {
             return "TagbackGrenade";
         }
+
+        @Override
+        public String powerUpID() {
+            return "grenade";
+        }
     },
 
     /**
@@ -18,6 +23,11 @@ public enum PowerUpID {
         @Override
         public String powerUpName() {
             return "TargetingScope";
+        }
+
+        @Override
+        public String powerUpID() {
+            return "scope";
         }
     },
 
@@ -29,6 +39,11 @@ public enum PowerUpID {
         public String powerUpName() {
             return "Teleporter";
         }
+
+        @Override
+        public String powerUpID() {
+            return "teleporter";
+        }
     },
 
     /**
@@ -39,7 +54,14 @@ public enum PowerUpID {
         public String powerUpName() {
             return "Newton";
         }
+
+        @Override
+        public String powerUpID() {
+            return "newton";
+        }
     };
 
     public abstract String powerUpName();
+
+    public abstract String powerUpID();
 }

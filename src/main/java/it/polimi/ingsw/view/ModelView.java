@@ -41,6 +41,10 @@ public class ModelView {
         this.enemies.put(playerId, enemie);
     }
 
+    public Map<Color, List<WeaponView>> getWeaponsOnSpawn() {
+        return weaponsOnSpawn;
+    }
+
     public List<WeaponView> getWeaponsOnSpawn(Color color) {
         return weaponsOnSpawn.get(color);
     }
@@ -59,5 +63,12 @@ public class ModelView {
 
     public SquareView getSquareBoard(int row, int col) {
         return board[row][col];
+    }
+
+    public PlayerView getPlayerView(PlayerId key) {
+        if(me.getId().playerId().equals(key.playerId()))
+            return me;
+        else
+            return enemies.get(key);
     }
 }

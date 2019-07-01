@@ -18,7 +18,7 @@ public interface Ui {
 
     int manageCommandChoice(List<CommandMessage> commands, boolean undo);
 
-    void setViewInitializationDone();
+    void setViewInitializationDone(ModelView modelView);
 
     boolean isViewInitializationDone();
 
