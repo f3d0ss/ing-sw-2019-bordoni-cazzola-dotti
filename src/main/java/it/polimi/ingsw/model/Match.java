@@ -31,6 +31,7 @@ public class Match {
     private boolean firstPlayerPlayedLastTurn;
     private Map<PlayerId, ViewInterface> views;
     private Map<PlayerId, Long> leaderBoard;
+    private int gameBoardNumber;
 
     public Match(int skulls) {
         views = new EnumMap<>(PlayerId.class);
@@ -66,6 +67,7 @@ public class Match {
                 String.format("%03d", gameBoardNumber) + ".json")), GameBoard.class);
         board.initialize();
         board.getSquareList().forEach(square -> square.setMatch(this));
+        this.gameBoardNumber = gameBoardNumber;
     }
 
     private void initializeAmmoTiles(Parser parser) {
@@ -339,7 +341,7 @@ public class Match {
     }
 
     private void update() {
-        views.values().forEach(viewInterface -> viewInterface.update(new MatchView(killshotTrack, deathsCounter, leaderBoard, isLastTurn())));
+        views.values().forEach(viewInterface -> viewInterface.update(new MatchView(killshotTrack, deathsCounter, gameBoardNumber, leaderBoard, isLastTurn())));
     }
 
     /**
@@ -358,7 +360,7 @@ public class Match {
      * @param player PlayerId of the player to notify
      */
     public void sendModelAfterReconnection(PlayerId player) {
-        views.get(player).update(new MatchView(killshotTrack, deathsCounter, leaderBoard, isLastTurn()));
+        views.get(player).update(new MatchView(killshotTrack, deathsCounter, gameBoardNumber, leaderBoard, isLastTurn()));
         currentPlayers.forEach(p -> views.get(player).update(p.getPlayerView(p.getId() == player)));
         board.getSquareList().forEach(s -> views.get(player).update(s.getSquareView()));
         views.get(player).setViewInitializationDone();
