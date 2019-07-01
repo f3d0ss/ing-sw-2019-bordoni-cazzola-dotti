@@ -5,7 +5,13 @@ package it.polimi.ingsw.model;
  */
 public class PowerUp {
 
+    /**
+     * Damage of a Scope
+     */
     public static final int TARGETING_SCOPE_DAMAGE = 1;
+    /**
+     * Damage of a tagback grenade
+     */
     public static final int TAGBACK_GRENADE_MARKS = 1;
 
     private final PowerUpID type;

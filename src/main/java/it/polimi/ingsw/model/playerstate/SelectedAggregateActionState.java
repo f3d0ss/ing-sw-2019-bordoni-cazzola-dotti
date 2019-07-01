@@ -14,6 +14,9 @@ public class SelectedAggregateActionState extends AfterSelectedAggregateActionSt
         super(selectedAggregateAction);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Command> getPossibleCommands(Player player) {
         List<Command> commands = new ArrayList<>();
@@ -29,11 +32,17 @@ public class SelectedAggregateActionState extends AfterSelectedAggregateActionSt
         return commands;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void useMoves() {
         getSelectedAggregateAction().useMovements();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void resetMoves() {
         getSelectedAggregateAction().resetMoves();

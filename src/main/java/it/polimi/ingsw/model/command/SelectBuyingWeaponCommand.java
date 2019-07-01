@@ -63,6 +63,9 @@ public class SelectBuyingWeaponCommand extends GrabCommand {
         return true;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public CommandMessage createCommandMessage() {
         return new WeaponCommandMessage(CommandType.SELECT_BUYING_WEAPON, weapon.getName());

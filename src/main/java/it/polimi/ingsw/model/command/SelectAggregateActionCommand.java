@@ -55,6 +55,9 @@ public class SelectAggregateActionCommand implements Command {
         return true;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public CommandMessage createCommandMessage() {
         return new AggregateActionCommandMessage(CommandType.SELECT_AGGREGATE_ACTION, aggregateAction);

@@ -19,12 +19,16 @@ public interface Command {
     void undo();
 
     /**
+     * Gets if it is possible to {@link #undo()} the command
+     *
      * @return True if it is possible to {@link #undo()} the command
      */
     boolean isUndoable();
 
     /**
-     * @return The command message that describes the command
+     * Create the command message that describes this command
+     *
+     * @return The command message that describes this command
      */
     CommandMessage createCommandMessage();
 }

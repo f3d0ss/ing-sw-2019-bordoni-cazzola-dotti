@@ -53,6 +53,9 @@ public class GrabTileCommand extends GrabCommand {
         return false;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public CommandMessage createCommandMessage() {
         return new SimpleCommandMessage(CommandType.GRAB_TILE);

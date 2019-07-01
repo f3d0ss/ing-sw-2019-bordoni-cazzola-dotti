@@ -49,6 +49,9 @@ public class RespawnCommand implements Command {
         return false;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public CommandMessage createCommandMessage() {
         return new PowerUpCommandMessage(CommandType.RESPAWN, powerUp.getType(), powerUp.getColor());

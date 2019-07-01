@@ -96,10 +96,15 @@ public enum AggregateActionID {
     };
 
     /**
+     * Creates Aggregate action associated with this ID
+     *
      * @return Aggregate action associated with this ID
      */
     public abstract AggregateAction create();
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public abstract String toString();
 }

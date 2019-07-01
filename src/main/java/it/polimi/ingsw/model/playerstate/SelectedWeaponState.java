@@ -11,6 +11,11 @@ public abstract class SelectedWeaponState extends AfterSelectedAggregateActionSt
         this.selectedWeapon = selectedWeapon;
     }
 
+    /**
+     * Gets the currently selected weapon
+     *
+     * @return the currently selected weapon
+     */
     public Weapon getSelectedWeapon() {
         return selectedWeapon;
     }

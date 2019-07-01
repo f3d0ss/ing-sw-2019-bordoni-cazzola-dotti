@@ -21,11 +21,17 @@ public class TurretSquare extends Square {
         super(northConnection, eastConnection, southConnection, westConnection, row, col, null, "turret");
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected void update() {
         match.getAllVirtualViews().forEach(viewInterface -> viewInterface.update(getSquareView()));
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<GrabCommand> getGrabCommands(Player player, SelectedAggregateActionState state) {
         ArrayList<GrabCommand> commands = new ArrayList<>();
@@ -34,6 +40,9 @@ public class TurretSquare extends Square {
         return commands;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected SquareView getSquareView() {
         AmmoTileView ammoTileView;

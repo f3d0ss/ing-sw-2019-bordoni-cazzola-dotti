@@ -51,6 +51,9 @@ public class PayWeaponCommand implements Command {
         return false;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public CommandMessage createCommandMessage() {
         return new SimpleCommandMessage(CommandType.PAY);

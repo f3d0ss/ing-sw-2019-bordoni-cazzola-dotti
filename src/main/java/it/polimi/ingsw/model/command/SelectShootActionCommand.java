@@ -49,6 +49,9 @@ public class SelectShootActionCommand implements Command {
         return true;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public CommandMessage createCommandMessage() {
         return new SimpleCommandMessage(CommandType.SELECT_SHOOT_ACTION);

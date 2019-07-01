@@ -14,6 +14,9 @@ public class ChoosingWeaponOptionState extends SelectedWeaponState {
         super(selectedAggregateAction, selectedWeapon);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Command> getPossibleCommands(Player player) {
         return new ArrayList<>(getSelectedWeapon().getSelectWeaponModeCommands(player, this));

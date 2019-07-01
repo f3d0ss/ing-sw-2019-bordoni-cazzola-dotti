@@ -11,6 +11,9 @@ import java.util.List;
 public class SelectedNewtonState implements PlayerState, TargetingPlayerState {
     private Player selectedPlayer = null;
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Command> getPossibleCommands(Player player) {
         List<Command> commands = new ArrayList<>();
@@ -21,6 +24,9 @@ public class SelectedNewtonState implements PlayerState, TargetingPlayerState {
         return commands;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void addTargetPlayer(Player player) {
         if (selectedPlayer != null)
@@ -28,6 +34,9 @@ public class SelectedNewtonState implements PlayerState, TargetingPlayerState {
         selectedPlayer = player;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void removeTargetPlayer(Player player) {
         if (selectedPlayer != player)

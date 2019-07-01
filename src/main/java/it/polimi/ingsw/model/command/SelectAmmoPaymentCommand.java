@@ -52,6 +52,9 @@ public class SelectAmmoPaymentCommand extends SelectPaymentCommand {
         return true;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public CommandMessage createCommandMessage() {
         return new ColorCommandMessage(CommandType.SELECT_AMMO_PAYMENT, color);

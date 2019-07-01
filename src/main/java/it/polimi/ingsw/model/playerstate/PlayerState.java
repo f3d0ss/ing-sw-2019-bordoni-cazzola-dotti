@@ -6,13 +6,13 @@ import it.polimi.ingsw.model.command.Command;
 import java.util.List;
 
 /**
- * A Player changes its behavior based on its player state.
+ * A Player's behavior is based on its PlayerState.
  * This interface must be implemented by every PlayerState
  */
 public interface PlayerState {
     /**
      * @param player Player that is in this state
-     * @return List of possible commands
+     * @return List of the possible commands in this state
      */
     List<Command> getPossibleCommands(Player player);
 }

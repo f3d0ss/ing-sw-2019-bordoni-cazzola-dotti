@@ -24,16 +24,25 @@ public class PendingPaymentScopeState extends SelectedWeaponState implements Pen
         this.shootedPlayers = shootedPlayers;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void addPendingAmmo(Color color) {
         pendingAmmo.put(color, pendingAmmo.getOrDefault(color, 0) + 1);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void addPendingCard(PowerUp powerUp) {
         pendingCardPayment.add(powerUp);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void removePendingAmmo(Color color) {
         if (pendingAmmo.getOrDefault(color, 0) <= 0)
@@ -41,6 +50,9 @@ public class PendingPaymentScopeState extends SelectedWeaponState implements Pen
         pendingAmmo.put(color, pendingAmmo.get(color) - 1);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void removePendingCard(PowerUp powerUp) {
         if (!pendingCardPayment.contains(powerUp))
@@ -48,20 +60,35 @@ public class PendingPaymentScopeState extends SelectedWeaponState implements Pen
         pendingCardPayment.remove(powerUp);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Map<Color, Integer> getPendingAmmoPayment() {
         return pendingAmmo;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<PowerUp> getPendingCardPayment() {
         return pendingCardPayment;
     }
 
+
+    /**
+     * Gets a list of the players that have just been shot by the players
+     *
+     * @return list of the shoot players
+     */
     public List<Player> getShootedPlayers() {
         return shootedPlayers;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Command> getPossibleCommands(Player player) {
 

@@ -55,6 +55,9 @@ public class SelectScopeCommand implements Command {
         return true;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public CommandMessage createCommandMessage() {
         return new PowerUpCommandMessage(CommandType.SELECT_SCOPE, powerUp.getType(), powerUp.getColor());

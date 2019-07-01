@@ -14,6 +14,9 @@ public class ChoosingWeaponState extends AfterSelectedAggregateActionState {
         super(selectedAggregateAction);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Command> getPossibleCommands(Player player) {
         List<Command> commands = new ArrayList<>();

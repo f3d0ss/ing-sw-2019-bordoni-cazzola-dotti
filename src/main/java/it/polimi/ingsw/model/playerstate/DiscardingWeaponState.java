@@ -18,10 +18,18 @@ public class DiscardingWeaponState extends SelectedWeaponState {
         this.spawn = spawn;
     }
 
+    /**
+     * Gets spawn square
+     *
+     * @return spawn square
+     */
     public SpawnSquare getSpawn() {
         return spawn;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Command> getPossibleCommands(Player player) {
         List<Command> commands = new ArrayList<>();

@@ -1,7 +1,7 @@
 package it.polimi.ingsw.model;
 
 /**
- * Contains every standard power up type
+ * Contains every standard {@link PowerUp} types
  */
 public enum PowerUpID {
     /**
@@ -45,6 +45,8 @@ public enum PowerUpID {
     };
 
     /**
+     * Gets standard power up name
+     *
      * @return Standard power up name
      */
     public abstract String powerUpName();

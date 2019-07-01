@@ -19,16 +19,25 @@ public class PendingPaymentWeaponState extends SelectedWeaponState implements Pe
         pendingCardPayment = new ArrayList<>();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void addPendingAmmo(Color color) {
         pendingAmmo.put(color, pendingAmmo.getOrDefault(color, 0) + 1);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void addPendingCard(PowerUp powerUp) {
         pendingCardPayment.add(powerUp);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void removePendingAmmo(Color color) {
         if (pendingAmmo.getOrDefault(color, 0) <= 0)
@@ -36,6 +45,9 @@ public class PendingPaymentWeaponState extends SelectedWeaponState implements Pe
         pendingAmmo.put(color, pendingAmmo.get(color) - 1);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void removePendingCard(PowerUp powerUp) {
         if (!pendingCardPayment.contains(powerUp))
@@ -43,16 +55,25 @@ public class PendingPaymentWeaponState extends SelectedWeaponState implements Pe
         pendingCardPayment.add(powerUp);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Map<Color, Integer> getPendingAmmoPayment() {
         return pendingAmmo;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<PowerUp> getPendingCardPayment() {
         return pendingCardPayment;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Command> getPossibleCommands(Player player) {
         List<Command> commands = new ArrayList<>();

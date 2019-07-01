@@ -68,6 +68,9 @@ public class SelectReloadingWeaponCommand implements Command {
         return true;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public CommandMessage createCommandMessage() {
         return new WeaponCommandMessage(CommandType.SELECT_RELOADING_WEAPON, weapon.getName());

@@ -51,6 +51,9 @@ public class UseScopeCommand implements Command {
         return false;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public CommandMessage createCommandMessage() {
         return new SimpleCommandMessage(CommandType.USE_SCOPE);

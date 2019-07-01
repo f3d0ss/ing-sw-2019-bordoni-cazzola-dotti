@@ -63,6 +63,9 @@ public class SelectDiscardedWeaponCommand implements Command {
         return true;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public CommandMessage createCommandMessage() {
         return new WeaponCommandMessage(CommandType.SELECT_DISCARD_WEAPON, weaponToDiscard.getName());

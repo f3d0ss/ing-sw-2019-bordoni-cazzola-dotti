@@ -46,6 +46,9 @@ public abstract class Square {
         this.color = color;
     }
 
+    /**
+     * Notifies observers
+     */
     protected abstract void update();
 
     /**
@@ -160,6 +163,8 @@ public abstract class Square {
     public abstract List<GrabCommand> getGrabCommands(Player player, SelectedAggregateActionState state);
 
     /**
+     * Gets the square's view
+     *
      * @return view of the square
      */
     protected abstract SquareView getSquareView();

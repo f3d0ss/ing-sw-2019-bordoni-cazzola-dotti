@@ -13,6 +13,9 @@ public class WeaponDeck implements Deck {
         weapons = weaponList;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void shuffle() {
         Collections.shuffle(weapons);

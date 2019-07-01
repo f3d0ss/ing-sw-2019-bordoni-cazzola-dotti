@@ -87,6 +87,9 @@ public class MoveCommand implements Command {
         return undoable;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public CommandMessage createCommandMessage() {
         return new SquareCommandMessage(CommandType.MOVE, newPosition.getRow(), newPosition.getCol());

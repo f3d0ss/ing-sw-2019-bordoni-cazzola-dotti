@@ -57,6 +57,9 @@ public class UseTeleportCommand implements Command {
         return true;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public CommandMessage createCommandMessage() {
         return new SquareCommandMessage(CommandType.USE_TELEPORT, newPosition.getRow(), newPosition.getCol());

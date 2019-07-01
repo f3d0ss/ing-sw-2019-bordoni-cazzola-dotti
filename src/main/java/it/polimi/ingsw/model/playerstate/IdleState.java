@@ -6,7 +6,9 @@ import it.polimi.ingsw.model.command.Command;
 import java.util.List;
 
 public class IdleState implements PlayerState {
-
+    /**
+     * {@inheritDoc}
+     */
     @SuppressWarnings("squid:S1168")
     @Override
     public List<Command> getPossibleCommands(Player player) {

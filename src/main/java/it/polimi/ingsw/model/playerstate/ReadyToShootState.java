@@ -15,6 +15,9 @@ public class ReadyToShootState extends SelectedWeaponState implements TargetingP
         super(selectedAggregateAction, selectedWeapon);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Command> getPossibleCommands(Player player) {
         List<Command> commands = new ArrayList<>();
@@ -23,27 +26,49 @@ public class ReadyToShootState extends SelectedWeaponState implements TargetingP
         return commands;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void addTargetPlayer(Player targetPlayer) {
         getSelectedWeapon().addTargetPlayer(targetPlayer);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void removeTargetPlayer(Player targetPlayer) {
         getSelectedWeapon().removeTargetPlayer(targetPlayer);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void addTargetSquare(Square targetSquare) {
         getSelectedWeapon().addTargetSquare(targetSquare);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void removeTargetSquare(Square targetSquare) {
         getSelectedWeapon().removeTargetSquare(targetSquare);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void useMoves() {
         getSelectedWeapon().useExtraMoves();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void resetMoves() {
         getSelectedWeapon().resetMoves();

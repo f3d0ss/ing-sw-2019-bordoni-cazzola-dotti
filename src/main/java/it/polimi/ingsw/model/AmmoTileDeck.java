@@ -9,6 +9,9 @@ import java.util.Collections;
 public class AmmoTileDeck implements Deck {
     private ArrayList<AmmoTile> ammoTiles = new ArrayList<>();
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void shuffle() {
         Collections.shuffle(ammoTiles);

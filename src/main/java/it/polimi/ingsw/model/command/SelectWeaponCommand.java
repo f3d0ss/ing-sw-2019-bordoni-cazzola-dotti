@@ -53,6 +53,9 @@ public class SelectWeaponCommand implements Command {
         return true;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public CommandMessage createCommandMessage() {
         return new WeaponCommandMessage(CommandType.SELECT_WEAPON, weapon.getName());

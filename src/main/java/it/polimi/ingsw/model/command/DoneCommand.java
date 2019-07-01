@@ -108,6 +108,9 @@ public class DoneCommand implements Command {
         return undoable;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public CommandMessage createCommandMessage() {
         return new SimpleCommandMessage(CommandType.DONE);

@@ -37,5 +37,10 @@ public enum Color {
         }
     };
 
+    /**
+     * Returns Color's Name
+     *
+     * @return color's name
+     */
     public abstract String colorName();
 }

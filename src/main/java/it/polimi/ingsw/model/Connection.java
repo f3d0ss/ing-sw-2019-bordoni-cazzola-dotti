@@ -1,7 +1,7 @@
 package it.polimi.ingsw.model;
 
 /**
- * Contains all possible connections between two squares
+ * Contains all possible connections between two {@link Square}s
  */
 public enum Connection {
     MAP_BORDER, DOOR, WALL, SAME_ROOM;

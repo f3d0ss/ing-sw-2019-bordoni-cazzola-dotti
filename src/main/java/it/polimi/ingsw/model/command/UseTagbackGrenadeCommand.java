@@ -51,6 +51,9 @@ public class UseTagbackGrenadeCommand implements Command {
         return false;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public CommandMessage createCommandMessage() {
         return new PowerUpCommandMessage(CommandType.USE_TAGBACK_GRENADE, grenade.getType(), grenade.getColor());

@@ -48,6 +48,9 @@ public class SelectTargetSquareCommand implements WeaponCommand {
         return true;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public CommandMessage createCommandMessage() {
         return new SquareCommandMessage(CommandType.SELECT_TARGET_SQUARE, targetSquare.getRow(), targetSquare.getCol());

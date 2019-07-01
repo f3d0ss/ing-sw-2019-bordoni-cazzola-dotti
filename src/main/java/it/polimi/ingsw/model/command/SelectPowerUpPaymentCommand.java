@@ -51,6 +51,9 @@ public class SelectPowerUpPaymentCommand extends SelectPaymentCommand {
         return true;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public CommandMessage createCommandMessage() {
         return new PowerUpCommandMessage(CommandType.SELECT_POWER_UP_PAYMENT, powerUp.getType(), powerUp.getColor());

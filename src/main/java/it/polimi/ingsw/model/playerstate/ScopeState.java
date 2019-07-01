@@ -18,10 +18,19 @@ public class ScopeState extends SelectedWeaponState {
         this.shootedPlayer = shootedPlayer;
     }
 
+
+    /**
+     * Gets a list of the players that have just been shot by the players
+     *
+     * @return list of the shoot players
+     */
     public List<Player> getShootedPlayer() {
         return shootedPlayer;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Command> getPossibleCommands(Player player) {
         List<Command> commands = new ArrayList<>();

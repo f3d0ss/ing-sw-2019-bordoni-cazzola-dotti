@@ -59,6 +59,9 @@ public class SelectWeaponModeCommand implements Command {
         return true;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public CommandMessage createCommandMessage() {
         return new WeaponModeCommandMessage(CommandType.SELECT_WEAPON_MODE, weaponMode.getName());

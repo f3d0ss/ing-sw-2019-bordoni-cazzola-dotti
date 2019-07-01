@@ -10,6 +10,9 @@ import java.util.List;
 
 public class ShootedState implements PlayerState {
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Command> getPossibleCommands(Player player) {
         List<Command> commands = new ArrayList<>();

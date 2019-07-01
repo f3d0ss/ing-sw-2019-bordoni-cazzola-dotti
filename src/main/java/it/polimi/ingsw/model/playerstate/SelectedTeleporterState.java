@@ -8,7 +8,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SelectedTeleporterState implements PlayerState {
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Command> getPossibleCommands(Player player) {
         List<Command> commands = new ArrayList<>();

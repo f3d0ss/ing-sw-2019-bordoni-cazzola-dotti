@@ -48,6 +48,9 @@ public class SelectTargetPlayerCommand implements WeaponCommand {
         return true;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public CommandMessage createCommandMessage() {
         return new PlayerCommandMessage(CommandType.SELECT_TARGET_PLAYER, targetPlayer.getId());

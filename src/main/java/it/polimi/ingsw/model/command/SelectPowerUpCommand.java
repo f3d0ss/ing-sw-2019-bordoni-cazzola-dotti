@@ -60,6 +60,9 @@ public class SelectPowerUpCommand implements Command {
         return true;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public CommandMessage createCommandMessage() {
         return new PowerUpCommandMessage(CommandType.SELECT_POWER_UP, powerUp.getType(), powerUp.getColor());

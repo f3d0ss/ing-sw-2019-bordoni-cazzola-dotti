@@ -117,6 +117,11 @@ public class Match {
         usedPowerUpDeck = new PowerUpDeck(new ArrayList<>());
     }
 
+    /**
+     * Sets the final leaderbaord of the match
+     *
+     * @param leaderBoard Leaderboard to set
+     */
     public void setLeaderBoard(Map<PlayerId, Long> leaderBoard) {
         this.leaderBoard = leaderBoard;
         update();
@@ -135,10 +140,21 @@ public class Match {
         return null;
     }
 
+    /**
+     * Gets players of the match
+     *
+     * @return list of the players
+     */
     public List<Player> getCurrentPlayers() {
         return currentPlayers;
     }
 
+    /**
+     * Gets number of kill shots of a player
+     *
+     * @param id player to use
+     * @return number of kill shots of the player
+     */
     public int getPlayerKillshots(PlayerId id) {
         int count = 0;
         for (PlayerId tmp : killshotTrack)
@@ -147,6 +163,11 @@ public class Match {
         return count;
     }
 
+    /**
+     * Gets the kill shoot track of the match
+     *
+     * @return kill shoot track of the match
+     */
     public List<PlayerId> getKillshotTrack() {
         return killshotTrack;
     }
@@ -165,6 +186,11 @@ public class Match {
         return true;
     }
 
+    /**
+     * Gets the match's gameboard
+     *
+     * @return match's board
+     */
     public GameBoard getBoard() {
         return board;
     }
@@ -294,10 +320,20 @@ public class Match {
         this.firstPlayerPlayedLastTurn = true;
     }
 
+    /**
+     * Gets views
+     *
+     * @return the views associated with the player
+     */
     public List<ViewInterface> getAllVirtualViews() {
         return new ArrayList<>(views.values());
     }
 
+    /**
+     * Gets views
+     *
+     * @return the views associated with the player
+     */
     public Map<PlayerId, ViewInterface> getVirtualViews() {
         return views;
     }

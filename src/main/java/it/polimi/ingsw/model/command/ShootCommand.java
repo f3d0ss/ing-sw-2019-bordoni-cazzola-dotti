@@ -71,6 +71,9 @@ public class ShootCommand implements WeaponCommand {
         return false;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public CommandMessage createCommandMessage() {
         List<EffectCommandMessage> effectCommandMessageList = effects

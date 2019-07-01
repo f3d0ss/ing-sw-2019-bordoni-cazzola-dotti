@@ -13,6 +13,9 @@ public class PowerUpDeck implements Deck {
         this.powerUps = powerUps;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void shuffle() {
         Collections.shuffle(powerUps);

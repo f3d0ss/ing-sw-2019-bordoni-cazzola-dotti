@@ -7,6 +7,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ManageTurnState implements PlayerState {
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Command> getPossibleCommands(Player player) {
         List<Command> commands = new ArrayList<>();

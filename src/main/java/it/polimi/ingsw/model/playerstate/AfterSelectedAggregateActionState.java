@@ -9,6 +9,11 @@ public abstract class AfterSelectedAggregateActionState implements PlayerState {
         this.selectedAggregateAction = selectedAggregateAction;
     }
 
+    /**
+     * Gets the selected aggregate action of the player
+     *
+     * @return the selected aggregate action of the player
+     */
     public AggregateAction getSelectedAggregateAction() {
         return selectedAggregateAction;
     }
