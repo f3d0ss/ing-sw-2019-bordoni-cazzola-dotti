@@ -52,7 +52,6 @@ public class RmiClient extends Client implements RmiClientInterface {
                 sleep(TEST_ALIVENESS_TIME);
                 rmiServerInterface.testAliveness();
             } catch (InterruptedException | RemoteException e) {
-                System.out.println(e.getMessage());
                 break;
             }
         }
