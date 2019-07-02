@@ -11,6 +11,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.effect.DropShadow;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.*;
@@ -21,18 +22,20 @@ import java.util.List;
 public class LoginWindow extends GridPane {
 
     private static final String BUTTON_STYLE = "-fx-background-color: #222222; -fx-text-fill: white;";
+    private static final String BACKGROUND_STYLE = "-fx-background-image: url('/images/other/loginscreen.jpg'); -fx-background-size: cover;";
+    private static final int BUTTON_MIN_WIDTH = 100;
+    private static final int INNER_GAP = 10;
+    private static final String WAIT = "Attendi";
+    private static final String NEXT = "Avanti";
+    private static final String QUIT = "Esci";
+    private static final String CANCEL = "Annulla";
     private static ComboBox<String> comboBox;
-    private static String oldMessage = "";
 
     public LoginWindow(Stage stage, Gui gui, String message, List<String> answers, String defaultOption, boolean isAnswerRequired) {
-        Text text = new Text(oldMessage + message);
-        if(!isAnswerRequired)
-            oldMessage = message + "\n";
-        else
-            oldMessage = "";
+        Text text = new Text(message);
         DropShadow shadow = new DropShadow();
         TextField textField = new TextField();
-        Button buttonNext = new Button("Next");
+        Button buttonNext = new Button(NEXT);
 
         shadow.setSpread(0.6);
         shadow.setColor(Color.BLACK);
@@ -44,19 +47,19 @@ public class LoginWindow extends GridPane {
         Platform.setImplicitExit(false);
 
         stage.setOnCloseRequest(e -> {
-            Text secondLabel = new Text("Sicuro di voler uscire?\nLa tua registrazione andrà persa.");
+            Text secondLabel = new Text("Sicuro di voler uscire?");
             secondLabel.setTextAlignment(TextAlignment.CENTER);
             GridPane secondaryLayout = new GridPane();
-            Button buttonQuit = new Button("Esci");
+            Button buttonQuit = new Button(QUIT);
             buttonQuit.setStyle(BUTTON_STYLE);
-            buttonQuit.setMinWidth(100);
-            Button buttonCancel = new Button("Annulla");
+            buttonQuit.setMinWidth(BUTTON_MIN_WIDTH);
+            Button buttonCancel = new Button(CANCEL);
             buttonCancel.setStyle(BUTTON_STYLE);
-            buttonCancel.setMinWidth(100);
+            buttonCancel.setMinWidth(BUTTON_MIN_WIDTH);
 
             Stage secondStage = new Stage();
 
-            buttonQuit.setOnAction(a -> System.exit(1));
+            buttonQuit.setOnAction(a -> System.exit(0));
             buttonCancel.setOnAction(a -> secondStage.close());
 
             secondaryLayout.add(secondLabel, 0, 0);
@@ -69,7 +72,7 @@ public class LoginWindow extends GridPane {
             secondaryLayout.setHalignment(secondLabel, HPos.CENTER);
             secondaryLayout.setHalignment(buttonCancel, HPos.CENTER);
             secondaryLayout.setHalignment(buttonQuit, HPos.CENTER);
-            secondaryLayout.setVgap(10);
+            secondaryLayout.setVgap(INNER_GAP);
 
             secondStage.setTitle("Confirm Exit");
             secondStage.setScene(secondScene);
@@ -82,14 +85,13 @@ public class LoginWindow extends GridPane {
         setHalignment(comboBox, HPos.CENTER);
 
         buttonNext.setStyle(BUTTON_STYLE);
-        buttonNext.setMinWidth(100);
+        buttonNext.setMinWidth(BUTTON_MIN_WIDTH);
 
         setMinSize(730, 510);
 
-        setPadding(new Insets(10, 10, 10, 10));
+        setPadding(new Insets(INNER_GAP));
 
-        setVgap(10);
-        //setHgap(100);
+        setVgap(INNER_GAP);
 
         add(text, 0, 0);
         if (isAnswerRequired) {
@@ -103,24 +105,28 @@ public class LoginWindow extends GridPane {
         }
         add(buttonNext, 0, 2);
 
-        //TODO: remove next button if user action is not required
-
-        if(!isAnswerRequired) {
+        if (!isAnswerRequired) {
             gui.setAnswer(Protocol.ACK);
             gui.setInputReady(true);
-            buttonNext.setText("Attendi");
+            buttonNext.setText(WAIT);
             buttonNext.setDisable(true);
         } else {
             textField.setOnAction(e -> {
-                if (answers == null)
-                    gui.setAnswer(textField.getText());
-                else
-                    gui.setAnswer(comboBox.getValue());
+                gui.setAnswer(textField.getText());
                 gui.setInputReady(true);
-                comboBox.setDisable(false);
                 textField.setDisable(false);
-                buttonNext.setText("Attendi");
+                buttonNext.setText(WAIT);
                 buttonNext.setDisable(true);
+            });
+
+            comboBox.setOnKeyPressed(e -> {
+                if(e.getCode().equals(KeyCode.ENTER)) {
+                    gui.setAnswer(comboBox.getValue());
+                    gui.setInputReady(true);
+                    comboBox.setDisable(false);
+                    buttonNext.setText(WAIT);
+                    buttonNext.setDisable(true);
+                }
             });
 
             buttonNext.setOnAction(e -> {
@@ -131,7 +137,7 @@ public class LoginWindow extends GridPane {
                 gui.setInputReady(true);
                 comboBox.setDisable(false);
                 textField.setDisable(false);
-                buttonNext.setText("Attendi");
+                buttonNext.setText(WAIT);
                 buttonNext.setDisable(true);
             });
         }
@@ -140,10 +146,6 @@ public class LoginWindow extends GridPane {
         setHalignment(text, HPos.CENTER);
         setHalignment(buttonNext, HPos.CENTER);
 
-        setStyle("-fx-background-image: url('/images/other/loginscreen.jpg')");
-    }
-
-    public void setMessage(String string) {
-        //message = string;
+        setStyle(BACKGROUND_STYLE);
     }
 }

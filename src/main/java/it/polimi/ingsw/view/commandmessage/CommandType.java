@@ -3,7 +3,7 @@ package it.polimi.ingsw.view.commandmessage;
 public enum CommandType {
     DONE {
         public String getString() {
-            return "Conferma";
+            return "Avanti";
         }
     }, GRAB_TILE {
         public String getString() {
@@ -35,7 +35,7 @@ public enum CommandType {
         }
     }, SELECT_DISCARD_WEAPON {
         public String getString() {
-            return "Scegli l'arma che vuoi scartare";
+            return "Scarta l'arma ";
         }
     }, SELECT_POWER_UP {
         public String getString() {
@@ -51,7 +51,7 @@ public enum CommandType {
         }
     }, SELECT_SCOPE {
         public String getString() {
-            return "Seleziona un Mirino";
+            return "Usa ";
         }
     }, SELECT_SHOOT_ACTION {
         public String getString() {
@@ -59,7 +59,7 @@ public enum CommandType {
         }
     }, SELECT_TARGET_PLAYER {
         public String getString() {
-            return "Spara a ";
+            return "Scegli come obiettivo ";
         }
     }, SELECT_TARGET_SQUARE {
         public String getString() {
@@ -79,15 +79,15 @@ public enum CommandType {
         }
     }, USE_NEWTON {
         public String getString() {
-            return "Usa il Raggio Cinetico su ";
+            return "Sposta l'obiettivo in ";
         }
     }, USE_SCOPE {
         public String getString() {
-            return "Usa il Mirino contro ";
+            return "Usa il Mirino";
         }
     }, USE_TAGBACK_GRENADE {
         public String getString() {
-            return "Usa Granata Venom contro ";
+            return "Sei stato colpito, rispondi con ";
         }
     }, USE_TELEPORT {
         public String getString() {
@@ -95,7 +95,7 @@ public enum CommandType {
         }
     }, UNDO {
         public String getString() {
-            return "Annulla";
+            return "Indietro";
         }
     };
 

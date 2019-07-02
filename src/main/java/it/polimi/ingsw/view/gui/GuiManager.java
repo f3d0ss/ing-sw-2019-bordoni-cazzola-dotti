@@ -34,6 +34,7 @@ public class GuiManager extends Application {
 
         Scene scene = new Scene(controller.getRoot());
         controller.setStage(stage);
+        stage.setTitle("Adrenalina");
         stage.setScene(scene);
         stage.setFullScreen(true);
         stage.show();

@@ -124,6 +124,7 @@ public class MatchController implements Runnable {
      */
     private void runFirstTurn() {
         for (Player currentPlayer : players) {
+            match.setPlayerOnDuty(currentPlayer.getId());
             spawnFirstTime(currentPlayer);
             if (!currentPlayer.isDisconnected()) {
                 new TurnController(currentPlayer, players, virtualViews).runTurn();
@@ -154,6 +155,7 @@ public class MatchController implements Runnable {
     private int runTurn(int currentPlayerIndex) {
         Player currentPlayer = players.get(currentPlayerIndex);
         if (!currentPlayer.isDisconnected()) {
+            match.setPlayerOnDuty(currentPlayer.getId());
             new TurnController(currentPlayer, players, virtualViews).runTurn();
             endTurnControls(currentPlayer);
         }

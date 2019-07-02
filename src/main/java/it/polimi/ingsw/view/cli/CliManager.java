@@ -11,6 +11,7 @@ public class CliManager {
 
     private static final int INNERWIDTH = 11;
     private static final int SEPARATOR_LENGTH = 100;
+    private static final int MAX_DAMAGE_SHOWABLE = 12;
     private static final String SEPARATOR = "█";
     private static final String VERTICAL_WALL = "║";
     private static final String HORIZONTAL_WALL = "═";
@@ -22,6 +23,7 @@ public class CliManager {
     private static final int SQUARE_HEIGHT = 5;
     private static final String ANSI_RESET = "\u001B[0m";
     private static final String ANSI_RED = "\u001B[91m";
+    private static final String ANSI_GREEN = "\u001B[92m";
     private static final String ANSI_YELLOW = "\u001B[93m";
     private static final String ANSI_BLUE = "\u001B[94m";
 
@@ -39,7 +41,7 @@ public class CliManager {
                 System.out.printf("%n");
             }
         for (PlayerView player : modelView.getEnemies().values())
-            displayEnemiesInformation(player);
+            displayEnemiesInformation(player, player.getId() == modelView.getMatch().getPlayerOnDuty());
     }
 
     private void displaySquare(SquareView square, int printingRow) {
@@ -167,7 +169,7 @@ public class CliManager {
                 System.out.print("(" + modelView.getMatch().getDeathsCounter() + " skulls left)");
                 break;
             case 7:
-                System.out.print(modelView.getMe().getId().playerIdName().toUpperCase() + " (" + modelView.getMe().getNickname() + ")");
+                System.out.print(getPlayerIdAndNickname(modelView.getMe(), modelView.getMe().getId() == modelView.getMatch().getPlayerOnDuty()));
                 break;
             case 8:
                 System.out.print("Dead " + modelView.getMe().getDeaths() + " times");
@@ -189,16 +191,16 @@ public class CliManager {
                 break;
             case 12:
                 System.out.print("Damages: ");
-                modelView.getMe().getHealth().forEach(id -> System.out.print(id.playerIdName().substring(0, 1)));
+                printDamages(modelView.getMe());
                 if (modelView.getMatch().isLastTurn())
-                    System.out.print(" (final frenzy)");
+                    System.out.print("(final frenzy)");
                 else if (modelView.getMe().isFirstAdrenalina())
                     if (modelView.getMe().isSecondAdrenalina())
-                        System.out.print(" (adrenaline action lv 2 unlocked)");
+                        System.out.print("(adrenaline action lv 2 unlocked)");
                     else
-                        System.out.print(" (adrenaline action lv 1 unlocked)");
+                        System.out.print("(adrenaline action lv 1 unlocked)");
                 else
-                    System.out.print(" (adrenaline action locked)");
+                    System.out.print("(adrenaline action locked)");
                 break;
             case 13:
                 System.out.print("Marks: ");
@@ -207,8 +209,8 @@ public class CliManager {
         }
     }
 
-    private void displayEnemiesInformation(PlayerView enemy) {
-        System.out.print("\n" + enemy.getId().playerIdName().toUpperCase() + " (" + enemy.getNickname() + (enemy.isDisconnected() ? " - DISCONNESSO" : "") + ") has " + enemy.getPowerUps().size() + " powerups.");
+    private void displayEnemiesInformation(PlayerView enemy, boolean isOnDuty) {
+        System.out.print("\n" + getPlayerIdAndNickname(enemy, isOnDuty) + (enemy.isDisconnected() ? " - DISCONNESSO " : " ") + "has " + enemy.getPowerUps().size() + " powerups.");
         System.out.print(" Ammos: ");
         enemy.getAmmo().forEach((color, value) -> {
             if (value > 0)
@@ -217,7 +219,7 @@ public class CliManager {
         System.out.print("\n     Weapons: ");
         enemy.getWeapons().forEach(weapon -> System.out.print(weapon.isLoaded() ? "XXXXXX; " : weapon.getName() + "; "));
         System.out.print("\n     Damages: ");
-        enemy.getHealth().forEach(id -> System.out.print(id.playerIdName().substring(0, 1) + " "));
+        printDamages(enemy);
         System.out.print("Marks: ");
         enemy.getMarks().forEach((id, n) -> System.out.print(n + " from " + id.playerIdName() + " "));
         System.out.println("(dead " + enemy.getDeaths() + " times)");
@@ -248,5 +250,15 @@ public class CliManager {
             else out.append(ammoTile, i, i + 1);
         }
         return out.toString();
+    }
+
+    private String getPlayerIdAndNickname(PlayerView player, boolean isOnDuty) {
+        return (isOnDuty ? ANSI_GREEN : "") + player.getId().playerIdName().toUpperCase() + " (" + player.getNickname() + ")" + ANSI_RESET;
+    }
+
+    private void printDamages(PlayerView player) {
+        player.getHealth().forEach(id -> System.out.print(id.playerIdName().substring(0, 1) + " "));
+        for (int i = 0; i + player.getHealth().size() < MAX_DAMAGE_SHOWABLE; i++)
+            System.out.print("_ ");
     }
 }

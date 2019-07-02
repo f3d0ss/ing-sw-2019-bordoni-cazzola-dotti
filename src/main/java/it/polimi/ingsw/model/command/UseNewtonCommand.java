@@ -6,7 +6,7 @@ import it.polimi.ingsw.model.playerstate.ManageTurnState;
 import it.polimi.ingsw.model.playerstate.TargetingPlayerState;
 import it.polimi.ingsw.view.commandmessage.CommandMessage;
 import it.polimi.ingsw.view.commandmessage.CommandType;
-import it.polimi.ingsw.view.commandmessage.SimpleCommandMessage;
+import it.polimi.ingsw.view.commandmessage.SquareCommandMessage;
 
 /**
  * This command represent the action of use a newton
@@ -65,6 +65,6 @@ public class UseNewtonCommand implements Command {
      */
     @Override
     public CommandMessage createCommandMessage() {
-        return new SimpleCommandMessage(CommandType.USE_NEWTON);
+        return new SquareCommandMessage(CommandType.USE_NEWTON, targetSquare.getRow(), targetSquare.getCol());
     }
 }
