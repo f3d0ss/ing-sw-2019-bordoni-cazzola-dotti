@@ -8,10 +8,10 @@
 | Functionality | State |
 |:-----------------------|:------------------------------------:|
 | Basic rules | [![GREEN](https://placehold.it/15/44bb44/44bb44)](#) |
-| Complete rules | [![YELLOW](https://placehold.it/15/ffdd00/ffdd00)](#) |
+| Complete rules | [![GREEN](https://placehold.it/15/44bb44/44bb44)](#) |
 | Socket | [![GREEN](https://placehold.it/15/44bb44/44bb44)](#) |
 | RMI | [![GREEN](https://placehold.it/15/44bb44/44bb44)](#) |
-| GUI | [![YELLOW](https://placehold.it/15/ffdd00/ffdd00)](#) |
+| GUI | [![GREEN](https://placehold.it/15/44bb44/44bb44)](#) |
 | CLI | [![GREEN](https://placehold.it/15/44bb44/44bb44)](#) |
 | Multiple games | [![GREEN](https://placehold.it/15/44bb44/44bb44)](#) |
 | Persistence | [![YELLOW](https://placehold.it/15/ffdd00/ffdd00)](#) |
@@ -24,8 +24,23 @@
 [![GREEN](https://placehold.it/15/44bb44/44bb44)](#)
 -->
 
+
+### Build instructions
+
+The jar are built using the [Maven Shade Plugin](https://maven.apache.org/plugins/maven-shade-plugin/)
+If you want to build yourself the executables jar files run:
+```
+mvn clean package
+```
+
 ### Istruzioni per l'avvio
 #### Server
+Requires java 11+ 
+
+Run:
+```
+java -jar server.jar
+```
 
 Verranno chiesti in ordine i seguenti parametri:
 1. Porta per il server socket
@@ -44,6 +59,12 @@ Esempio:
 ```
 
 #### Client
+Requires java 11+ and [javafx 11.0.2+](https://openjfx.io/)
+
+Run:
+```
+java --module-path /path/to/javfx/lib --add-modules javafx.controls,javafx.fxml -jar client.jar
+````
 
 Verranno chiesti in ordine i seguenti parametri, sia per cli che per gui:
 1. Tipo di interfaccia utente (1 cli, 2 gui)
