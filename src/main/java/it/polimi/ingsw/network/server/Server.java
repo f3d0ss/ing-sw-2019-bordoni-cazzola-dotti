@@ -9,6 +9,7 @@ import java.util.Scanner;
  * This class is the executable class for the server-side of the game.
  */
 
+@SuppressWarnings("squid:S106")
 class Server {
 
     private static final int MIN_PORT = 1000;

@@ -7,8 +7,13 @@ import java.util.stream.Collectors;
  * This class represents the game map
  */
 public class GameBoard {
-
+    /**
+     * Number of rows
+     */
     static final int ROWS = 3;
+    /**
+     * Number of columns
+     */
     static final int COLUMNS = 4;
     private int gameBoardId;
     private Square[][] board;
@@ -16,6 +21,9 @@ public class GameBoard {
     private List<TurretSquare> turrets = new ArrayList<>();
     private List<Square> squareList = new ArrayList<>();
 
+    /**
+     * Initialize {@link #spawns} {@link #turrets} {@link #squareList} after json initialization
+     */
     void initialize() {
         for (int i = 0; i < ROWS; i++) {
             for (int j = 0; j < COLUMNS; j++) {
@@ -32,6 +40,8 @@ public class GameBoard {
     }
 
     /**
+     * Gets a square given its coordinates
+     *
      * @param row is the row's value, first is 0
      * @param col is the column's value, first is 0
      * @return the square placed in specified coordinates
@@ -42,6 +52,8 @@ public class GameBoard {
     }
 
     /**
+     * Gets a spawn square by its color
+     *
      * @param color is the color of the spawn square requested
      * @return the uniqe spawn square of that color
      * @author Bordoni
@@ -50,11 +62,18 @@ public class GameBoard {
         return spawns.get(color);
     }
 
+    /**
+     * Gets all turret squares
+     *
+     * @return list of turret squares
+     */
     List<TurretSquare> getTurrets() {
         return turrets;
     }
 
     /**
+     * Gets a square adjacent to {@code current} in the {@code dir} direction
+     *
      * @param current is the starting position
      * @param dir     is the direction detected
      * @return the square near to current in dir direction
@@ -91,6 +110,12 @@ public class GameBoard {
             }
     }
 
+    /**
+     * Gets the squares which are in the same room of {@code square}
+     *
+     * @param square square in the room wanted
+     * @return List of squares
+     */
     List<Square> getRoomSquares(Square square) {
         List<Square> list = new ArrayList<>();
         getSameRoomSquares(list, square);
@@ -98,6 +123,8 @@ public class GameBoard {
     }
 
     /**
+     * Gets visible squares
+     *
      * @param position       starting position
      * @param maxRange       maximum distance of returned squares
      * @param minRange       minimum distance of returned squares
@@ -137,10 +164,13 @@ public class GameBoard {
     }
 
     /**
+     * Gets squares only in the four {@link CardinalDirection}
+     *
      * @param position    is the position from where get straight direction squares
      * @param maxRange    maximum distance of gotten squares
      * @param minRange    minimum distance of gotten squares
      * @param ignoreWalls specify if ignore or consider walls
+     * @return List of squares in the 4 basic cardinal directions (diagonal squares are not returned)
      * @author supernivem
      */
     public List<Square> getCardinalDirectionSquares(Square position, int maxRange, int minRange, boolean ignoreWalls) {
@@ -154,12 +184,21 @@ public class GameBoard {
                     adjacent = this.getAdjacentSquare(position, dir);
                     list.add(adjacent);
                     if (maxRange > 1)
-                        getStraightSquares(list, adjacent, maxRange--, ignoreWalls, dir);
+                        getStraightSquares(list, adjacent, maxRange - 1, ignoreWalls, dir);
                 }
         }
         return list;
     }
 
+    /**
+     * Gets players on squares only in the four {@link CardinalDirection}
+     *
+     * @param shooter     Player that is searching for other player (his position is used to get the other players)
+     * @param maxRange    maximum distance of gotten squares
+     * @param minRange    minimum distance of gotten squares
+     * @param ignoreWalls specify if ignore or consider walls
+     * @return List of players on squares in the 4 basic cardinal directions (diagonal squares are not returned)
+     */
     List<Player> getPlayersOnCardinalDirectionSquares(Player shooter, int maxRange, int minRange, boolean ignoreWalls) {
         List<Player> players = new ArrayList<>();
         getCardinalDirectionSquares(shooter.getPosition(), maxRange, minRange, ignoreWalls)
@@ -170,6 +209,8 @@ public class GameBoard {
     }
 
     /**
+     * Gets straight squares on {@code list}
+     *
      * @param list        is a list passed by caller, needed to allow recursion
      * @param position    is the position from where get straight direction squares
      * @param maxRange    maximum distance of got squares
@@ -187,6 +228,8 @@ public class GameBoard {
     }
 
     /**
+     * Gets reachable squares
+     *
      * @param position starting position
      * @param maxMoves number of steps allowed
      * @return the list of squares reachable in at most maxMoves steps
@@ -199,6 +242,8 @@ public class GameBoard {
     }
 
     /**
+     * Gets reachable squares that have at least another player on
+     *
      * @param position starting position
      * @param maxMoves max distance of the squares
      * @param player   player to exclude
@@ -214,19 +259,8 @@ public class GameBoard {
     }
 
     /**
-     * @param squares  list of squares to use as starting position
-     * @param maxMoves max distance of the squares
-     * @param player   player to exclude
-     * @return the list of squares reachable in at most maxMoves steps with at least another player on
-     */
-    public List<Square> getReachableSquaresWithOtherPlayers(List<Square> squares, int maxMoves, Player player) {
-        List<Square> reachableSquares = new ArrayList<>();
-        for (Square square : squares)
-            reachableSquares.addAll(getReachableSquaresWithOtherPlayers(square, maxMoves, player));
-        return reachableSquares.stream().distinct().collect(Collectors.toList());
-    }
-
-    /**
+     * Gets reachable squares
+     *
      * @param position starting position
      * @param maxMoves number of steps allowed
      * @param list     is a list passed by caller, needed to allow recursion
@@ -247,6 +281,8 @@ public class GameBoard {
     }
 
     /**
+     * Gets all visible targets
+     *
      * @param shooter     Player who's searching for targets
      * @param maxDistance Max targets distance
      * @param minDistance Min targets distance
@@ -262,6 +298,8 @@ public class GameBoard {
     }
 
     /**
+     * Gets accessible directions from the current {@code position}
+     *
      * @param position current position
      * @return a list of accessible direction
      * @author supernivem
@@ -296,6 +334,7 @@ public class GameBoard {
      *
      * @param firstSquare  FirstSquare
      * @param secondSquare Second Square
+     * @param ignoreWall   true to ignore walls
      * @return Square adjacent to the second square in the same direction
      */
     Square getThirdSquareInTheSameDirection(Square firstSquare, Square secondSquare, boolean ignoreWall) {
@@ -398,10 +437,20 @@ public class GameBoard {
         return squareList;
     }
 
+    /**
+     * Gets all spawns
+     *
+     * @return list of spawns
+     */
     public List<SpawnSquare> getSpawnSquares() {
         return new ArrayList<>(spawns.values());
     }
 
+    /**
+     * Gets ID
+     *
+     * @return Gameboard ID
+     */
     public int getId() {
         return gameBoardId;
     }

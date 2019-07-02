@@ -14,6 +14,7 @@ public abstract class SquareView {
     private final Map<CardinalDirection, Connection> connection;
     private final Color color;
     private final List<PlayerId> hostedPlayers;
+    @SuppressWarnings("squid:S0017")
     private final String type;
 
     SquareView(int row, int col, Map<CardinalDirection, Connection> connection, Color color, List<PlayerId> hostedPlayers, String type) {

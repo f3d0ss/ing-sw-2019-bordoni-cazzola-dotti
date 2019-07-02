@@ -16,6 +16,10 @@ public class PowerUpView {
         return type.powerUpName();
     }
 
+    public PowerUpID getType() {
+        return type;
+    }
+
     public Color getColor() {
         return color;
     }

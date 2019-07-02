@@ -10,6 +10,9 @@ import it.polimi.ingsw.model.command.SelectDiscardedWeaponCommand;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * State of the player while discarding a weapon
+ */
 public class DiscardingWeaponState extends SelectedWeaponState {
     private final SpawnSquare spawn;
 
@@ -18,10 +21,18 @@ public class DiscardingWeaponState extends SelectedWeaponState {
         this.spawn = spawn;
     }
 
+    /**
+     * Gets spawn square
+     *
+     * @return spawn square
+     */
     public SpawnSquare getSpawn() {
         return spawn;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Command> getPossibleCommands(Player player) {
         List<Command> commands = new ArrayList<>();

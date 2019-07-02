@@ -11,11 +11,13 @@ public class MatchView {
     private final int deathsCounter;
     private final Map<PlayerId, Long> leaderBoard;
     private final boolean lastTurn;
+    private final int gameBoardId;
 
-    public MatchView(List<PlayerId> killshotTrack, int deathsCounter, Map<PlayerId, Long> leaderBoard, boolean lastTurn) {
+    public MatchView(List<PlayerId> killshotTrack, int deathsCounter, int gameBoardId, Map<PlayerId, Long> leaderBoard, boolean lastTurn) {
         this.killshotTrack = killshotTrack;
         this.deathsCounter = deathsCounter;
         this.leaderBoard = leaderBoard;
+        this.gameBoardId = gameBoardId;
         this.lastTurn = lastTurn;
     }
 
@@ -33,5 +35,9 @@ public class MatchView {
 
     public boolean isLastTurn() {
         return lastTurn;
+    }
+
+    public int getGameBoardId() {
+        return gameBoardId;
     }
 }

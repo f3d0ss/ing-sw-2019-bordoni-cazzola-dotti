@@ -10,6 +10,9 @@ import it.polimi.ingsw.model.command.SelectScopeCommand;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * State when te player uses a Scope powerup
+ */
 public class ScopeState extends SelectedWeaponState {
     private final List<Player> shootedPlayer;
 
@@ -18,10 +21,19 @@ public class ScopeState extends SelectedWeaponState {
         this.shootedPlayer = shootedPlayer;
     }
 
+
+    /**
+     * Gets a list of the players that have just been shot by the players
+     *
+     * @return list of the shoot players
+     */
     public List<Player> getShootedPlayer() {
         return shootedPlayer;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Command> getPossibleCommands(Player player) {
         List<Command> commands = new ArrayList<>();

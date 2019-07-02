@@ -11,6 +11,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Represents a non-spawn location
+ */
 public class TurretSquare extends Square {
     private AmmoTile ammoTile;
 
@@ -18,11 +21,17 @@ public class TurretSquare extends Square {
         super(northConnection, eastConnection, southConnection, westConnection, row, col, null, "turret");
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected void update() {
         match.getAllVirtualViews().forEach(viewInterface -> viewInterface.update(getSquareView()));
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<GrabCommand> getGrabCommands(Player player, SelectedAggregateActionState state) {
         ArrayList<GrabCommand> commands = new ArrayList<>();
@@ -31,6 +40,9 @@ public class TurretSquare extends Square {
         return commands;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected SquareView getSquareView() {
         AmmoTileView ammoTileView;
@@ -41,10 +53,20 @@ public class TurretSquare extends Square {
         return new TurretSquareView(getRow(), getCol(), getConnections(), ammoTileView, getHostedPlayers().stream().map(Player::getId).collect(Collectors.toList()));
     }
 
+    /**
+     * Gets ammo tile on the square
+     *
+     * @return ammotile contained
+     */
     public AmmoTile getAmmoTile() {
         return ammoTile;
     }
 
+    /**
+     * Adds ammotile to the square
+     *
+     * @param ammoTile ammotile to add
+     */
     public void setAmmoTile(AmmoTile ammoTile) {
         if (this.ammoTile != null)
             throw new IllegalStateException();
@@ -52,6 +74,11 @@ public class TurretSquare extends Square {
         update();
     }
 
+    /**
+     * Removes an ammotile from the square
+     *
+     * @param ammoTile ammotile to remove
+     */
     public void remove(AmmoTile ammoTile) {
         if (this.ammoTile != ammoTile)
             throw new IllegalStateException();

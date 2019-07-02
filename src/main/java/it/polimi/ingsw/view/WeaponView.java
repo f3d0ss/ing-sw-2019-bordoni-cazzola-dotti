@@ -16,4 +16,8 @@ public class WeaponView {
     public String getName() {
         return name;
     }
+
+    public String getID() {
+        return name.toLowerCase().replace(' ', '_');
+    }
 }

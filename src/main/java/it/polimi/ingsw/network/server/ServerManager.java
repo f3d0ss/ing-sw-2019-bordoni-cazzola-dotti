@@ -326,7 +326,6 @@ public class ServerManager implements Runnable {
             nicknames.put(i, lobby.get(i));
         });
         gamers.values().forEach(v -> ((VirtualView) v).setController(match));
-        //TODO handle disconnections during modelupdate
         match.sendFirstStateOfModel();
         new Thread(match).start();
     }

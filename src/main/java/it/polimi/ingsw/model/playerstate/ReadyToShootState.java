@@ -10,11 +10,17 @@ import it.polimi.ingsw.model.command.DoneCommand;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * State when the player is shooting and selecting targets
+ */
 public class ReadyToShootState extends SelectedWeaponState implements TargetingPlayerState, TargetingSquareState, MovableState {
     public ReadyToShootState(AggregateAction selectedAggregateAction, Weapon selectedWeapon) {
         super(selectedAggregateAction, selectedWeapon);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Command> getPossibleCommands(Player player) {
         List<Command> commands = new ArrayList<>();
@@ -23,27 +29,49 @@ public class ReadyToShootState extends SelectedWeaponState implements TargetingP
         return commands;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void addTargetPlayer(Player targetPlayer) {
         getSelectedWeapon().addTargetPlayer(targetPlayer);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void removeTargetPlayer(Player targetPlayer) {
         getSelectedWeapon().removeTargetPlayer(targetPlayer);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void addTargetSquare(Square targetSquare) {
         getSelectedWeapon().addTargetSquare(targetSquare);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void removeTargetSquare(Square targetSquare) {
         getSelectedWeapon().removeTargetSquare(targetSquare);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void useMoves() {
         getSelectedWeapon().useExtraMoves();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void resetMoves() {
         getSelectedWeapon().resetMoves();
