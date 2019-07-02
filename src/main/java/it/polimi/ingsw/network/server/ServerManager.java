@@ -199,10 +199,8 @@ public class ServerManager implements Runnable {
 
     private void login(int id) {
         String name;
-        if (sendMessageAndWaitForAnswer(id, new Message(Protocol.WELCOME, String.valueOf(id), null)).equals(Protocol.ERR))
-            return;
         notifyNewConnection(id);
-        name = sendMessageAndWaitForAnswer(id, new Message(Protocol.LOGIN_FIRST, "", null));
+        name = sendMessageAndWaitForAnswer(id, new Message(Protocol.WELCOME, String.valueOf(id), null));
         if (name.equals(Protocol.ERR))
             return;
         while (lobby.containsValue(name)) {

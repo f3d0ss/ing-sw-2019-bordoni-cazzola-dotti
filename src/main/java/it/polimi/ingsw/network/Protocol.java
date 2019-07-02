@@ -99,11 +99,11 @@ public enum Protocol {
         }
     }, WELCOME {
         public String getQuestion() {
-            return "Benvenuto su Adrenalina!\nSei stato accettato con il codice %s.\nMemorizzalo per riconnetterti a seguito di disconnessioni impreviste.";
+            return "Benvenuto su Adrenalina!\nSei stato accettato con il codice %s.\nMemorizzalo per riconnetterti a seguito di disconnessioni impreviste.\nDigita il tuo nickname:";
         }
 
         public boolean requiresAnswer() {
-            return false;
+            return true;
         }
     }, WELCOME_BACK {
         public String getQuestion() {
@@ -112,14 +112,6 @@ public enum Protocol {
 
         public boolean requiresAnswer() {
             return false;
-        }
-    }, LOGIN_FIRST {
-        public String getQuestion() {
-            return "Digita il tuo nickname:";
-        }
-
-        public boolean requiresAnswer() {
-            return true;
         }
     }, LOGIN_REPEAT {
         public String getQuestion() {
