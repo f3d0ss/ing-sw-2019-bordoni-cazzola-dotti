@@ -3,7 +3,7 @@ package it.polimi.ingsw.view.commandmessage;
 public enum CommandType {
     DONE {
         public String getString() {
-            return "Conferma";
+            return "Avanti";
         }
     }, GRAB_TILE {
         public String getString() {
@@ -95,7 +95,7 @@ public enum CommandType {
         }
     }, UNDO {
         public String getString() {
-            return "Annulla";
+            return "Indietro";
         }
     };
 
