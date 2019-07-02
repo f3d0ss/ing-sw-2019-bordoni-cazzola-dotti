@@ -97,6 +97,10 @@ public enum CommandType {
         public String getString() {
             return "Indietro";
         }
+    }, END_TURN {
+        public String getString() {
+            return "Fine turno";
+        }
     };
 
     public abstract String getString();
