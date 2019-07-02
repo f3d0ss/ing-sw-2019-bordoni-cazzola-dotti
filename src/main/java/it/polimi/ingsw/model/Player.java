@@ -634,4 +634,14 @@ public class Player {
             availableAggregateActionCounter = 2;
         update();
     }
+
+    public void reloadWeapon(Weapon selectedWeapon) {
+        selectedWeapon.reload();
+        update();
+    }
+
+    public void unloadWeapon(Weapon selectedWeapon) {
+        selectedWeapon.unload();
+        update();
+    }
 }

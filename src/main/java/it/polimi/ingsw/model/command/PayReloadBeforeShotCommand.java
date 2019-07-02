@@ -30,7 +30,7 @@ public class PayReloadBeforeShotCommand implements Command {
      */
     @Override
     public void execute() {
-        currentState.getSelectedWeapon().reload();
+        player.reloadWeapon(currentState.getSelectedWeapon());
         player.changeState(new ChoosingWeaponOptionState(currentState.getSelectedAggregateAction(), currentState.getSelectedWeapon()));
     }
 
@@ -39,7 +39,7 @@ public class PayReloadBeforeShotCommand implements Command {
      */
     @Override
     public void undo() {
-        currentState.getSelectedWeapon().unload();
+        player.unloadWeapon(currentState.getSelectedWeapon());
         player.changeState(currentState);
     }
 
