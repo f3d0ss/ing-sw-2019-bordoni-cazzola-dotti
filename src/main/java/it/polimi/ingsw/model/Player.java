@@ -29,10 +29,13 @@ public class Player {
      */
     public static final int MAX_WEAPONS = 3;
     /**
+     * Max number of each type of ammo cube a player can have at same moment
+     */
+    public static final int MAX_AMMO = 3;
+    /**
      * Initial number of each ammo cube
      */
     static final int INITIAL_AMMO_NUMBER = 1;
-    public static final int MAX_AMMO = 3;
     private static final int MAX_POWERUP = 3;
     private static final int MAX_MARKS = 3;
     private static final int DAMAGE_BEFORE_FIRST_ADRENALINA = 2;

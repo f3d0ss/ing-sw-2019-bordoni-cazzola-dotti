@@ -5,10 +5,10 @@ import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 
-public class CliTest {
+class CliTest {
 
     @Test
-    public void displayBoard() {
+    void displayBoard() {
         Match match = new Match();
         PlayerId client = PlayerId.GREEN;
         Player player = new Player(match, client, "Paolito");
@@ -20,12 +20,12 @@ public class CliTest {
         enemy1.respawn(Color.RED);
         match.addPlayer(enemy2);
         enemy2.respawn(Color.RED);
-        player.addAmmoTile(new AmmoTile(0, new HashMap<Color, Integer>() {{
+        player.addAmmoTile(new AmmoTile(0, new HashMap<>() {{
             put(Color.BLUE, 1);
             put(Color.RED, 4);
             put(Color.YELLOW, 1);
         }}));
-        enemy1.addAmmoTile(new AmmoTile(0, new HashMap<Color, Integer>() {{
+        enemy1.addAmmoTile(new AmmoTile(0, new HashMap<>() {{
             put(Color.BLUE, 1);
             put(Color.RED, 0);
             put(Color.YELLOW, 2);
