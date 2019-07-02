@@ -18,7 +18,7 @@ class GameBoardTest {
     //test the correct search of visible squares - only some cases are tested
 
     @Test
-    public void testGetVisibleSquares() {
+    void testGetVisibleSquares() {
         GameBoard board = new Match().getBoard();
         Square square;
         List<Square> list;
@@ -94,7 +94,7 @@ class GameBoardTest {
     //test the correct search accessible directions from given position
 
     @Test
-    public void testGetAccessibleDirections() {
+    void testGetAccessibleDirections() {
         GameBoard board = new Match().getBoard();
         Square square;
         List<CardinalDirection> list;
@@ -125,7 +125,7 @@ class GameBoardTest {
     //test the correct visibility of players from given position - only one case is tested
 
     @Test
-    public void testGetVisibleTarget() {
+    void testGetVisibleTarget() {
 //        Match match = new Match();
 //        Square square = match.getBoard().getSquare(0, 0);
 //        ArrayList<Square> competitors;
@@ -152,7 +152,7 @@ class GameBoardTest {
     //test the correct visibility through walls
 
     @Test
-    public void testGetCardinalDirectionSquares() {
+    void testGetCardinalDirectionSquares() {
         Match match = new Match();
         Square square, temp;
         List<Square> list;
@@ -174,7 +174,7 @@ class GameBoardTest {
     //test the correct square's reachability
 
     @Test
-    public void testGetReachableSquares() {
+    void testGetReachableSquares() {
         int maxMove = 6;
         Match match = new Match();
         Square square_one, square_two;

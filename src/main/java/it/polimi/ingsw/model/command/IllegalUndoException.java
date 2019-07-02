@@ -1,4 +1,7 @@
 package it.polimi.ingsw.model.command;
 
-public class IllegalUndoException extends RuntimeException {
+/**
+ * Thrown when an UN-doable Command {@link Command#undo()} method is invoked
+ */
+class IllegalUndoException extends RuntimeException {
 }

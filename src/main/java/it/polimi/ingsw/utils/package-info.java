@@ -1,4 +1,4 @@
 /**
- * Contains classes used to serialize and deserialize Objects
+ * Contains utilities classes for various purpose
  */
 package it.polimi.ingsw.utils;

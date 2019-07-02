@@ -58,7 +58,7 @@ public class GameBoard {
      * @return the uniqe spawn square of that color
      * @author Bordoni
      */
-    SpawnSquare getSpawn(Color color) {
+    public SpawnSquare getSpawn(Color color) {
         return spawns.get(color);
     }
 
@@ -67,7 +67,7 @@ public class GameBoard {
      *
      * @return list of turret squares
      */
-    List<TurretSquare> getTurrets() {
+    public List<TurretSquare> getTurrets() {
         return turrets;
     }
 
