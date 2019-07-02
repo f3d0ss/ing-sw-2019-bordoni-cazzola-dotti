@@ -246,6 +246,12 @@ class GameBoardTest {
         list.add(p3);
         List<Player> playersInTheSameDirection = gameBoard.getPlayersInTheSameDirection(p1, list, 2, 0, true);
         assertEquals(p4, playersInTheSameDirection.get(0));
+    }
 
+    @Test
+    void testId() {
+        Match match = new Match();
+        //must create a match with default (1) board
+        assertEquals(1, match.getBoard().getId());
     }
 }

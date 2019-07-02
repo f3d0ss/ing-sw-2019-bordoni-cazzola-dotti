@@ -11,11 +11,9 @@ import static org.junit.jupiter.api.Assertions.*;
 class PlayerTest {
 
     private final static int MAX_AMMO = 3;
-    private final static int MAX_POWERUP = 3;
     private final static int MAX_MARK = 3;
     private final static int MAX_DAMAGE = 12;
-    final int ROWS = 3;
-    final int COLUMNS = 4;
+    private final static int SKULLS = 8;
 
     //verify the correct insertion of ammos and powerups
 
@@ -232,12 +230,16 @@ class PlayerTest {
         assertEquals(1, player.getPowerUps().size());
         if (powerUp.getType().equals(PowerUpID.NEWTON))
             assertEquals(1, player.getNewtons().size());
+        else assertEquals(0, player.getNewtons().size());
         if (powerUp.getType().equals(PowerUpID.TARGETING_SCOPE))
             assertEquals(1, player.getTargetingScopes().size());
+        else assertEquals(0, player.getNewtons().size());
         if (powerUp.getType().equals(PowerUpID.TAGBACK_GRENADE))
             assertEquals(1, player.getTagbackGrenades().size());
+        else assertEquals(0, player.getTagbackGrenades().size());
         if (powerUp.getType().equals(PowerUpID.TELEPORTER))
             assertEquals(1, player.getTeleports().size());
+        else assertEquals(0, player.getTeleports().size());
 
         player.pay(powerUp);
         assertEquals(0, player.getPowerUps().size());
@@ -257,5 +259,22 @@ class PlayerTest {
         if (nOfWeapons > Player.MAX_WEAPONS)
             nOfWeapons = Player.MAX_WEAPONS;
         assertEquals(nOfWeapons, player.getWeapons().size());
+    }
+
+    @Test
+    void testInit() {
+        Match match = new Match();
+        Player player = new Player(match, null, null);
+        player.initialize();
+        short standardCounter = 2;
+        short finalfrenzyAfter1stPlayer = 1;
+        assertEquals(standardCounter, player.getAvailableAggregateActionCounter());
+        //8 deaths triggers final frenzy mode
+        for (int i = 0; i < SKULLS; i++)
+            player.addDeaths();
+        match.firstPlayerPlayedLastTurn();
+        player.initialize();
+        //now it should return
+        assertEquals(finalfrenzyAfter1stPlayer, player.getAvailableAggregateActionCounter());
     }
 }
