@@ -42,13 +42,16 @@ public class SelectShootActionCommand implements Command {
     }
 
     /**
-     * @return true if the command is undoable
+     * {@inheritDoc}
      */
     @Override
     public boolean isUndoable() {
         return true;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public CommandMessage createCommandMessage() {
         return new SimpleCommandMessage(CommandType.SELECT_SHOOT_ACTION);

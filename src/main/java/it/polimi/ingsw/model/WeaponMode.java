@@ -45,122 +45,271 @@ public class WeaponMode {
     private boolean moveOnTarget;
     private boolean hellionMod;
 
+    /**
+     * Gets name
+     *
+     * @return value of name
+     */
     public String getName() {
         return name;
     }
 
-    String getDescription() {
+    /**
+     * Gets description
+     *
+     * @return value of description
+     */
+    public String getDescription() {
         return description;
     }
 
+    /**
+     * Gets cost
+     *
+     * @return value of cost
+     */
     public Map<Color, Integer> getCost() {
         return Objects.requireNonNullElseGet(cost, LinkedHashMap::new);
     }
 
-    int getMaxNumberOfTargetPlayers() {
+    /**
+     * Gets maxNumberOfTargetPlayers
+     *
+     * @return value of maxNumberOfTargetPlayers
+     */
+    public int getMaxNumberOfTargetPlayers() {
         return maxNumberOfTargetPlayers;
     }
 
-    int getMinNumberOfTargetPlayers() {
+    /**
+     * Gets minNumberOfTargetPlayers
+     *
+     * @return value of minNumberOfTargetPlayers
+     */
+    public int getMinNumberOfTargetPlayers() {
         return minNumberOfTargetPlayers;
     }
 
-    boolean isTargetPlayers() {
+    /**
+     * Gets targetPlayers
+     *
+     * @return value of targetPlayers
+     */
+    public boolean isTargetPlayers() {
         return targetPlayers;
     }
 
-    boolean isTargetSquare() {
+    /**
+     * Gets targetSquare
+     *
+     * @return value of targetSquare
+     */
+    public boolean isTargetSquare() {
         return targetSquare;
     }
 
-    boolean isTargetRoom() {
+    /**
+     * Gets targetRoom
+     *
+     * @return value of targetRoom
+     */
+    public boolean isTargetRoom() {
         return targetRoom;
     }
 
-    boolean isEachTargetOnDifferentSquares() {
+    /**
+     * Gets eachTargetOnDifferentSquares
+     *
+     * @return value of eachTargetOnDifferentSquares
+     */
+    public boolean isEachTargetOnDifferentSquares() {
         return eachTargetOnDifferentSquares;
     }
 
-    boolean isTargetVisibleByOtherTarget() {
+    /**
+     * Gets targetVisibleByOtherTarget
+     *
+     * @return value of targetVisibleByOtherTarget
+     */
+    public boolean isTargetVisibleByOtherTarget() {
         return targetVisibleByOtherTarget;
     }
 
-    boolean isTargetVisibleByShooter() {
+    /**
+     * Gets targetVisibleByShooter
+     *
+     * @return value of targetVisibleByShooter
+     */
+    public boolean isTargetVisibleByShooter() {
         return targetVisibleByShooter;
     }
 
+    /**
+     * Gets cardinalDirectionMode
+     *
+     * @return value of cardinalDirectionMode
+     */
     public boolean isCardinalDirectionMode() {
         return cardinalDirectionMode;
     }
 
-    int getMaxTargetDistance() {
+    /**
+     * Gets maxTargetDistance
+     *
+     * @return value of maxTargetDistance
+     */
+    public int getMaxTargetDistance() {
         return maxTargetDistance;
     }
 
-    int getMinTargetDistance() {
+    /**
+     * Gets minTargetDistance
+     *
+     * @return value of minTargetDistance
+     */
+    public int getMinTargetDistance() {
         return minTargetDistance;
     }
 
-    int getMarks() {
+    /**
+     * Gets marks
+     *
+     * @return value of marks
+     */
+    public int getMarks() {
         return marks;
     }
 
-    List<Integer> getDamage() {
+    /**
+     * Gets damage
+     *
+     * @return value of damage
+     */
+    public List<Integer> getDamage() {
         return damage;
     }
 
+    /**
+     * Gets damage for a specific player or square
+     *
+     * @param index index
+     * @return value of the damage
+     */
     int getDamage(int index) {
         return damage.get(index);
     }
 
-    int getAdditionalDamageAvailable() {
+    /**
+     * Gets additionalDamageAvailable
+     *
+     * @return value of additionalDamageAvailable
+     */
+    public int getAdditionalDamageAvailable() {
         return additionalDamageAvailable;
     }
 
-    int getMaxAdditionalDamagePerPlayer() {
+    /**
+     * Gets maxAdditionalDamagePerPlayer
+     *
+     * @return value of maxAdditionalDamagePerPlayer
+     */
+    public int getMaxAdditionalDamagePerPlayer() {
         return maxAdditionalDamagePerPlayer;
     }
 
-    boolean isMoveTargetBeforeShoot() {
+    /**
+     * Gets moveTargetBeforeShoot
+     *
+     * @return value of moveTargetBeforeShoot
+     */
+    public boolean isMoveTargetBeforeShoot() {
         return moveTargetBeforeShoot;
     }
 
-    boolean isMoveTargetAfterShoot() {
+    /**
+     * Gets moveTargetAfterShoot
+     *
+     * @return value of moveTargetAfterShoot
+     */
+    public boolean isMoveTargetAfterShoot() {
         return moveTargetAfterShoot;
     }
 
-    boolean isMoveShooter() {
+    /**
+     * Gets moveShooter
+     *
+     * @return value of moveShooter
+     */
+    public boolean isMoveShooter() {
         return moveShooter;
     }
 
-    int getMaxTargetMove() {
+    /**
+     * Gets maxTargetMove
+     *
+     * @return value of maxTargetMove
+     */
+    public int getMaxTargetMove() {
         return maxTargetMove;
     }
 
-    int getMaxShooterMove() {
+    /**
+     * Gets maxShooterMove
+     *
+     * @return value of maxShooterMove
+     */
+    public int getMaxShooterMove() {
         return maxShooterMove;
     }
 
+    /**
+     * Gets multiAction
+     *
+     * @return value of multiAction
+     */
     public boolean isMultiAction() {
         return multiAction;
     }
 
+    /**
+     * Gets spinner
+     *
+     * @return value of spinner
+     */
     public boolean isSpinner() {
         return spinner;
     }
 
+    /**
+     * Gets fragmentingWarHeadMod
+     *
+     * @return value of fragmentingWarHeadMod
+     */
     public boolean isFragmentingWarHeadMod() {
         return fragmentingWarHeadMod;
     }
 
+    /**
+     * Gets moveOnTarget
+     *
+     * @return value of moveOnTarget
+     */
     public boolean isMoveOnTarget() {
         return moveOnTarget;
     }
 
+    /**
+     * Gets hellionMod
+     *
+     * @return value of hellionMod
+     */
     public boolean isHellionMod() {
         return hellionMod;
     }
 
+    /**
+     * This method should be called after loading weapons from json files to decrease some values from 2^31-1
+     */
     void postDeserialization() {
         final int maxSteps = GameBoard.ROWS * GameBoard.COLUMNS - 1;
         if (maxShooterMove > maxSteps)

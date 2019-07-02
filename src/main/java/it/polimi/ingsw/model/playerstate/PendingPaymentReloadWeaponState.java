@@ -12,6 +12,9 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * State when the player is paying to reload
+ */
 public class PendingPaymentReloadWeaponState implements PendingPaymentState, PlayerState {
 
     private final Map<Color, Integer> pendingAmmo;
@@ -28,16 +31,25 @@ public class PendingPaymentReloadWeaponState implements PendingPaymentState, Pla
         return selectedReloadingWeapon;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void addPendingAmmo(Color color) {
         pendingAmmo.put(color, pendingAmmo.getOrDefault(color, 0) + 1);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void addPendingCard(PowerUp powerUp) {
         pendingCardPayment.add(powerUp);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void removePendingAmmo(Color color) {
         if (pendingAmmo.getOrDefault(color, 0) <= 0)
@@ -45,6 +57,9 @@ public class PendingPaymentReloadWeaponState implements PendingPaymentState, Pla
         pendingAmmo.put(color, pendingAmmo.get(color) - 1);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void removePendingCard(PowerUp powerUp) {
         if (!pendingCardPayment.contains(powerUp))
@@ -52,16 +67,25 @@ public class PendingPaymentReloadWeaponState implements PendingPaymentState, Pla
         pendingCardPayment.add(powerUp);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Map<Color, Integer> getPendingAmmoPayment() {
         return pendingAmmo;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<PowerUp> getPendingCardPayment() {
         return pendingCardPayment;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Command> getPossibleCommands(Player player) {
         List<Command> commands = new ArrayList<>();

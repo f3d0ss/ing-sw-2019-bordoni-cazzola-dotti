@@ -11,8 +11,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Represents a spawn location
+ */
 public class SpawnSquare extends Square {
-
+    /**
+     * max nuber of weapons per spawn
+     */
     public static final int MAX_WEAPON = 3;
     private List<Weapon> weapons;
 
@@ -21,11 +26,17 @@ public class SpawnSquare extends Square {
         weapons = new ArrayList<>();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected void update() {
         match.getAllVirtualViews().forEach(viewInterface -> viewInterface.update(getSquareView()));
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<GrabCommand> getGrabCommands(Player player, SelectedAggregateActionState state) {
         ArrayList<GrabCommand> commands = new ArrayList<>();
@@ -33,16 +44,29 @@ public class SpawnSquare extends Square {
         return commands;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     protected SquareView getSquareView() {
         return new SpawnSquareView(getRow(), getCol(), getConnections(), getColor(), weapons.stream().map(weapon -> new WeaponView(weapon.getName(), weapon.isLoaded())).collect(Collectors.toList()), getHostedPlayers().stream().map(Player::getId).collect(Collectors.toList()));
     }
 
+    /**
+     * Removes the weapon from the spawn's shop
+     *
+     * @param weapon weapon to remove
+     */
     public void removeWeapon(Weapon weapon) {
         weapons.remove(weapon);
         update();
     }
 
+    /**
+     * Adds the weapon to the spawn's shop
+     *
+     * @param weapon weapon to add
+     */
     public void addWeapon(Weapon weapon) {
         if (weapons.size() >= MAX_WEAPON)
             throw new IllegalStateException();
@@ -50,10 +74,20 @@ public class SpawnSquare extends Square {
         update();
     }
 
+    /**
+     * Returns all weapons on the spawn's shop
+     *
+     * @return all weapons on the spawn's shop
+     */
     public List<Weapon> getWeapons() {
         return weapons;
     }
 
+    /**
+     * Gets if the spawn's shop is not full
+     *
+     * @return true if the spawn's shop is not full
+     */
     public boolean lackWeapon() {
         return weapons.size() < MAX_WEAPON;
     }

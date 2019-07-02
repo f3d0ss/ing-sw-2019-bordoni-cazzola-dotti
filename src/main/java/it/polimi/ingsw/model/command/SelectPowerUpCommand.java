@@ -53,13 +53,16 @@ public class SelectPowerUpCommand implements Command {
     }
 
     /**
-     * @return true if the command is undoable
+     * {@inheritDoc}
      */
     @Override
     public boolean isUndoable() {
         return true;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public CommandMessage createCommandMessage() {
         return new PowerUpCommandMessage(CommandType.SELECT_POWER_UP, powerUp.getType(), powerUp.getColor());

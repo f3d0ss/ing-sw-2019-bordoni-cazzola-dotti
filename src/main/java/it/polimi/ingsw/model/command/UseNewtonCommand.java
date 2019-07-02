@@ -53,13 +53,16 @@ public class UseNewtonCommand implements Command {
     }
 
     /**
-     * @return true if the command is undoable
+     * {@inheritDoc}
      */
     @Override
     public boolean isUndoable() {
         return true;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public CommandMessage createCommandMessage() {
         return new SquareCommandMessage(CommandType.USE_NEWTON, targetSquare.getRow(), targetSquare.getCol());

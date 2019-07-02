@@ -50,13 +50,16 @@ public class UseTeleportCommand implements Command {
     }
 
     /**
-     * @return true if the command is undoable
+     * {@inheritDoc}
      */
     @Override
     public boolean isUndoable() {
         return true;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public CommandMessage createCommandMessage() {
         return new SquareCommandMessage(CommandType.USE_TELEPORT, newPosition.getRow(), newPosition.getCol());

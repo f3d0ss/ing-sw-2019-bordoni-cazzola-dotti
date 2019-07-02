@@ -14,7 +14,8 @@ import java.util.stream.IntStream;
 import static it.polimi.ingsw.network.server.ServerManager.MIN_PLAYERS;
 
 /**
- * This class manages an entire match
+ * This class manages an entire match.
+ * Controls the flow of a game, modifies the model using inputs received from the views.
  */
 public class MatchController implements Runnable {
     private static final int[] POINTS_PER_KILL = {8, 6, 4, 2, 1};
@@ -26,7 +27,8 @@ public class MatchController implements Runnable {
     private final List<Player> players;
 
     public MatchController(Map<String, ViewInterface> lobby, int gameBoardNumber, int skulls) {
-        match = new Match(gameBoardNumber, skulls);
+        match = new Match(skulls);
+        match.initializeFromStandardFiles(gameBoardNumber);
         PlayerId[] values = PlayerId.values();
         List<String> nicknames = new ArrayList<>(lobby.keySet());
         for (int i = 0; i < nicknames.size(); i++) {

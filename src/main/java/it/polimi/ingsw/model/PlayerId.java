@@ -1,5 +1,8 @@
 package it.polimi.ingsw.model;
 
+/**
+ * Contains all standard {@link PlayerId} types
+ */
 public enum PlayerId {
     BLUE {
         @Override
@@ -61,6 +64,11 @@ public enum PlayerId {
         }
     };
 
+    /**
+     * Gets standard player's name
+     *
+     * @return Standard name of the player
+     */
     public abstract String playerIdName();
 
     public abstract String playerId();

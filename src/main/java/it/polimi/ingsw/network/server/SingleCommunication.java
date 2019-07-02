@@ -33,6 +33,8 @@ class SingleCommunication implements Runnable {
 
     /**
      * Sets client's answer and prints it on server log.
+     *
+     * @param answer client's answer
      */
 
     void showAndSetAnswer(String answer) {

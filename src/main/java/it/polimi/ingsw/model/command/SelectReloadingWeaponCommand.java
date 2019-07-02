@@ -61,13 +61,16 @@ public class SelectReloadingWeaponCommand implements Command {
     }
 
     /**
-     * @return true if the command is undoable
+     * {@inheritDoc}
      */
     @Override
     public boolean isUndoable() {
         return true;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public CommandMessage createCommandMessage() {
         return new WeaponCommandMessage(CommandType.SELECT_RELOADING_WEAPON, weapon.getName());

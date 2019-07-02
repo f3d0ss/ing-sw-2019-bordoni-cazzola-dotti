@@ -37,6 +37,9 @@ public class EffectCommand {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -50,6 +53,9 @@ public class EffectCommand {
                 shooter.equals(that.shooter);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public int hashCode() {
         return Objects.hash(player, damage, marks, arrivalSquare, shooter);
@@ -84,6 +90,11 @@ public class EffectCommand {
         return damage > 0;
     }
 
+    /**
+     * Create the command message that describes the command
+     *
+     * @return The command message that describes the command
+     */
     EffectCommandMessage createCommandMessage() {
         if (arrivalSquare == player.getPosition())
             return new EffectCommandMessage(player.getId(), damage, marks, null, null);

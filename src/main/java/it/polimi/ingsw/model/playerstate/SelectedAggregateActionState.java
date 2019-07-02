@@ -9,11 +9,17 @@ import it.polimi.ingsw.model.command.SelectShootActionCommand;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * State when the player just selected an {@link AggregateAction}
+ */
 public class SelectedAggregateActionState extends AfterSelectedAggregateActionState implements MovableState {
     public SelectedAggregateActionState(AggregateAction selectedAggregateAction) {
         super(selectedAggregateAction);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Command> getPossibleCommands(Player player) {
         List<Command> commands = new ArrayList<>();
@@ -29,11 +35,17 @@ public class SelectedAggregateActionState extends AfterSelectedAggregateActionSt
         return commands;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void useMoves() {
         getSelectedAggregateAction().useMovements();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void resetMoves() {
         getSelectedAggregateAction().resetMoves();
