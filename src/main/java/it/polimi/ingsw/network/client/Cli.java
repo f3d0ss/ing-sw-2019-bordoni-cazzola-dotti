@@ -128,35 +128,36 @@ public class Cli implements Ui {
      */
 
     private String getParameter(CommandMessage command) {
-        if (command.getType() == CommandType.RESPAWN
-                || command.getType() == CommandType.SELECT_POWER_UP
-                || command.getType() == CommandType.SELECT_POWER_UP_PAYMENT
-                || command.getType() == CommandType.SELECT_SCOPE
-                || command.getType() == CommandType.USE_TAGBACK_GRENADE)
-            return ((PowerUpCommandMessage) command).getPowerUpID().powerUpName() + " " + ((PowerUpCommandMessage) command).getColor().colorName();
-        if (command.getType() == CommandType.SELECT_AGGREGATE_ACTION)
-            return ((AggregateActionCommandMessage) command).getAggregateActionID().toString();
-        if (command.getType() == CommandType.SELECT_AMMO_PAYMENT)
-            return ((ColorCommandMessage) command).getColor().colorName();
-        if (command.getType() == CommandType.SELECT_BUYING_WEAPON
-                || command.getType() == CommandType.SELECT_DISCARD_WEAPON
-                || command.getType() == CommandType.SELECT_RELOADING_WEAPON
-                || command.getType() == CommandType.SELECT_WEAPON)
-            return ((WeaponCommandMessage) command).getWeapon();
-        if (command.getType() == CommandType.SELECT_TARGET_PLAYER)
-            return ((PlayerCommandMessage) command).getPlayerId().playerIdName();
-        if (command.getType() == CommandType.SELECT_TARGET_SQUARE
-                || command.getType() == CommandType.MOVE
-                || command.getType() == CommandType.USE_TELEPORT
-                || command.getType() == CommandType.USE_NEWTON)
-            return (ConcreteView.getVerticalCoordinateName(((SquareCommandMessage) command).getRow()) + ConcreteView.getHorizontalCoordinateName(((SquareCommandMessage) command).getCol()));
-        if (command.getType() == CommandType.SELECT_WEAPON_MODE)
-            return ((WeaponModeCommandMessage) command).getWeaponMode();
-        if (command.getType() == CommandType.SHOOT) {
-            ShootCommandMessage shootCommandMessage = (ShootCommandMessage) command;
-            return shootCommandMessage.printCommand();
+        switch (command.getType()) {
+            case RESPAWN:
+            case SELECT_POWER_UP:
+            case SELECT_POWER_UP_PAYMENT:
+            case SELECT_SCOPE:
+            case USE_TAGBACK_GRENADE:
+                return ((PowerUpCommandMessage) command).getPowerUpID().powerUpName() + " " + ((PowerUpCommandMessage) command).getColor().colorName();
+            case SELECT_AGGREGATE_ACTION:
+                return ((AggregateActionCommandMessage) command).getAggregateActionID().toString();
+            case SELECT_AMMO_PAYMENT:
+                return ((ColorCommandMessage) command).getColor().colorName();
+            case SELECT_BUYING_WEAPON:
+            case SELECT_DISCARD_WEAPON:
+            case SELECT_RELOADING_WEAPON:
+            case SELECT_WEAPON:
+                return ((WeaponCommandMessage) command).getWeapon();
+            case SELECT_TARGET_PLAYER:
+                return ((PlayerCommandMessage) command).getPlayerId().playerIdName();
+            case SELECT_TARGET_SQUARE:
+            case MOVE:
+            case USE_TELEPORT:
+            case USE_NEWTON:
+                return (ConcreteView.getVerticalCoordinateName(((SquareCommandMessage) command).getRow()) + ConcreteView.getHorizontalCoordinateName(((SquareCommandMessage) command).getCol()));
+            case SELECT_WEAPON_MODE:
+                return ((WeaponModeCommandMessage) command).getWeaponMode();
+            case SHOOT:
+                return ((ShootCommandMessage) command).printCommand();
+            default:
+                return "";
         }
-        return "";
     }
 
     /**
