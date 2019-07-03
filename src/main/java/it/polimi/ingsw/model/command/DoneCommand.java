@@ -14,6 +14,7 @@ public class DoneCommand implements Command {
     private final PlayerState currentState;
     private final PlayerState nextState;
     private final boolean undoable;
+    private boolean endTurn = false;
 
     /**
      * This constructor create a command that change the player state from ManageTurnState to IdleState
@@ -26,6 +27,7 @@ public class DoneCommand implements Command {
         this.player = player;
         nextState = new IdleState();
         undoable = false;
+        this.endTurn = true;
     }
 
     /**
@@ -39,19 +41,6 @@ public class DoneCommand implements Command {
         this.currentState = currentState;
         nextState = new IdleState();
         undoable = false;
-    }
-
-    /**
-     * This constructor create a command that change the player state from ChoosingWeaponOptionState to ReadyToShootState
-     *
-     * @param player       is the current player
-     * @param currentState is the current state
-     */
-    public DoneCommand(Player player, ChoosingWeaponOptionState currentState) {
-        this.player = player;
-        this.currentState = currentState;
-        nextState = new ReadyToShootState(currentState.getSelectedAggregateAction(), currentState.getSelectedWeapon());
-        undoable = true;
     }
 
     /**
@@ -113,6 +102,8 @@ public class DoneCommand implements Command {
      */
     @Override
     public CommandMessage createCommandMessage() {
+        if (endTurn)
+            return new SimpleCommandMessage(CommandType.END_TURN);
         return new SimpleCommandMessage(CommandType.DONE);
     }
 }

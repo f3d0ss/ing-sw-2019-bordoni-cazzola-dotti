@@ -9,6 +9,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -32,9 +33,15 @@ public class MainGuiController {
     static final int WEAPON_WIDTH = 240;
     private static final int WEAPON_SPAWN_MARGIN_RATIO = 30;
     private static final int NUMBER_OF_STANDAR_SKULL = 8;
-    private static final int HEIGHT_RATIO_SQUARE_INPUT = 2;
+    private static final int HEIGHT_RATIO_SQUARE_INPUT = 1;
     private static final int WIDTH_RATIO_SQUARE_INPUT = 3;
+    private static final int ROW_IN_SQUARE = 2;
+    private static final int COL_IN_SQUARE = 3;
+    private static final double OPACITY_FOR_SELECTION = 0.5;
     private static final String EXIT = "Esci dal gioco";
+    private static final double RADIUS_HIGLIGHT = 0.1;
+    private static final int GAMEBOARD_H_GAP_RATIO = 40;
+    private static final int GAMEBOARD_V_GAP_RATIO = 40;
     @FXML
     private VBox logContainer;
     @FXML
@@ -60,7 +67,7 @@ public class MainGuiController {
     @FXML
     private HBox killShotTrackBox;
 
-    private HBox[][] squareBoxes;
+    private VBox[][] squareBoxes;
     private ModelView modelView;
     private static final String LANG = "IT";
     static final String SPACE = "_";
@@ -84,6 +91,7 @@ public class MainGuiController {
     private static final String YELLOW_SPAWN_WEAPON_URI = IMAGES_DIR + "gameboards/yellowSpawn" + IMAGE_EXTENSION;
     private Map<PlayerId, PlayerBoardController> otherPlayerBoardControllers = new EnumMap<>(PlayerId.class);
     private List<HBox> clickableNode = new ArrayList<>();
+    private List<HBox> clickableSquare = new ArrayList<>();
     private int selectedCommand;
     private int startSkullNumber;
     private Map<String, HBox> weaponsOnSpawnBoxes = new HashMap<>();
@@ -91,11 +99,19 @@ public class MainGuiController {
     private Stage stage;
 
     public void initialize() {
-        squareBoxes = new HBox[gameBoard.getRowCount()][gameBoard.getColumnCount()];
+        squareBoxes = new VBox[gameBoard.getRowCount()][gameBoard.getColumnCount()];
+        gameBoard.hgapProperty().bind(gameBoard.widthProperty().divide(GAMEBOARD_H_GAP_RATIO));
+        gameBoard.vgapProperty().bind(gameBoard.heightProperty().divide(GAMEBOARD_V_GAP_RATIO));
         //set squares
         for (int i = 0; i < gameBoard.getRowCount(); i++) {
             for (int j = 0; j < gameBoard.getColumnCount(); j++) {
-                squareBoxes[i][j] = new HBox();
+                squareBoxes[i][j] = new VBox();
+                for (int k = 0; k < ROW_IN_SQUARE; k++) {
+                    HBox row = new HBox();
+                    bindToParent(row, squareBoxes[i][j], ROW_IN_SQUARE, 1);
+                    squareBoxes[i][j].getChildren().add(row);
+                    VBox.setVgrow(row, Priority.ALWAYS);
+                }
                 gameBoard.add(squareBoxes[i][j], j, i);
             }
         }
@@ -119,7 +135,7 @@ public class MainGuiController {
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board[i].length; j++) {
                 if (board[i][j] != null) {
-                    squareBoxes[i][j].getChildren().clear();
+                    squareBoxes[i][j].getChildren().forEach(node -> ((Pane) node).getChildren().clear());
                     if (board[i][j].getColor() == null) {
                         HBox ammoBox = new HBox();
                         AmmoTileView ammoTileView = ((TurretSquareView) board[i][j]).getAmmoTile();
@@ -127,17 +143,13 @@ public class MainGuiController {
                                 + ((!ammoTileView.isEmpty()) ? ammoTileView.toString() : BACK)
                                 + IMAGE_EXTENSION;
                         setBackgroundImageFromURI(ammoBox, ammoTileURI);
-                        bindToParent(ammoBox, squareBoxes[i][j], HEIGHT_RATIO_SQUARE_INPUT, WIDTH_RATIO_SQUARE_INPUT);
-                        squareBoxes[i][j].getChildren().add(ammoBox);
-                        HBox.setHgrow(ammoBox, Priority.ALWAYS);
+                        addToSquareBox(squareBoxes[i][j], ammoBox);
                     }
                     int finalI = i;
                     int finalJ = j;
                     board[i][j].getHostedPlayers().forEach(playerId -> {
                         HBox tokenBox = getHBoxWithTokenBackground(playerId);
-                        bindToParent(tokenBox, squareBoxes[finalI][finalJ], HEIGHT_RATIO_SQUARE_INPUT, WIDTH_RATIO_SQUARE_INPUT);
-                        squareBoxes[finalI][finalJ].getChildren().add(tokenBox);
-                        HBox.setHgrow(tokenBox, Priority.ALWAYS);
+                        addToSquareBox(squareBoxes[finalI][finalJ], tokenBox);
                         playerBoxes.put(playerId, tokenBox);
                     });
                 }
@@ -237,7 +249,9 @@ public class MainGuiController {
 
     private void handleCommandClick(int index, Lock lock) {
         clickableNode.forEach(this::setNodeUnClickable);
+        clickableSquare.forEach(this::setSquareUnClickable);
         clickableNode.clear();
+        clickableSquare.clear();
         extraCommandContainer.getChildren().clear();
         selectedCommand = index;
         lock.unlock();
@@ -245,13 +259,27 @@ public class MainGuiController {
 
     private void setNodeClickable(HBox node, int commandIndex, Lock lock) {
         HBox overlay = new HBox();
-        overlay.setStyle("-fx-background-color: yellow; -fx-background-radius: 10; -fx-opacity: 0.5");
+        overlay.setBackground((new Background(new BackgroundFill(javafx.scene.paint.Color.YELLOW, new CornerRadii(RADIUS_HIGLIGHT), Insets.EMPTY))));
+        overlay.setOpacity(OPACITY_FOR_SELECTION);
         overlay.setOnMouseClicked(mouseEvent -> handleCommandClick(commandIndex, lock));
-        if (!node.getChildren().isEmpty())
-            overlay.getChildren().setAll(node.getChildrenUnmodifiable());
-        node.getChildren().setAll(overlay);
         HBox.setHgrow(overlay, Priority.ALWAYS);
         clickableNode.add(node);
+        if (!node.getChildren().isEmpty()) {
+            overlay.getChildren().setAll(node.getChildrenUnmodifiable());
+        }
+        node.getChildren().setAll(overlay);
+    }
+
+    private void setSquareClickable(VBox node, int commandIndex, Lock lock) {
+        HBox overlay = new HBox();
+        overlay.setBackground((new Background(new BackgroundFill(javafx.scene.paint.Color.YELLOW, new CornerRadii(RADIUS_HIGLIGHT), Insets.EMPTY))));
+        overlay.setOpacity(OPACITY_FOR_SELECTION);
+        overlay.setOnMouseClicked(mouseEvent -> handleCommandClick(commandIndex, lock));
+        clickableSquare.add(addToSquareBox(node, overlay));
+    }
+
+    private void setSquareUnClickable(HBox node) {
+        node.getChildren().remove(node.getChildren().size() - 1);
     }
 
     private void setNodeUnClickable(HBox node) {
@@ -281,7 +309,7 @@ public class MainGuiController {
                 case SELECT_TARGET_SQUARE:
                 case USE_TELEPORT:
                 case USE_NEWTON:
-                    setNodeClickable(squareBoxes[((SquareCommandMessage) commands.get(i)).getRow()][((SquareCommandMessage) commands.get(i)).getCol()], i, lock);
+                    setSquareClickable(squareBoxes[((SquareCommandMessage) commands.get(i)).getRow()][((SquareCommandMessage) commands.get(i)).getCol()], i, lock);
                     break;
                 case SELECT_TARGET_PLAYER:
                     setNodeClickable(playerBoxes.get(((PlayerCommandMessage) commands.get(i)).getPlayerId()), i, lock);
@@ -444,6 +472,21 @@ public class MainGuiController {
         Label commandLabel = createCommandLabel(EXIT);
         commandLabel.setOnMouseClicked(actionEvent -> stage.close());
         extraCommandContainer.getChildren().add(commandLabel);
+    }
+
+    private HBox addToSquareBox(VBox squareBox, Pane elementToAdd) {
+        for (Node child : squareBox.getChildren()) {
+            if (((HBox) child).getChildren().size() < COL_IN_SQUARE) {
+                bindToParent(elementToAdd, ((HBox) child), HEIGHT_RATIO_SQUARE_INPUT, WIDTH_RATIO_SQUARE_INPUT);
+                ((HBox) child).getChildren().add(elementToAdd);
+                HBox.setHgrow(elementToAdd, Priority.ALWAYS);
+                return ((HBox) child);
+            }
+        }
+        bindToParent(elementToAdd, ((HBox) squareBox.getChildren().get(squareBox.getChildren().size() - 1)), HEIGHT_RATIO_SQUARE_INPUT, WIDTH_RATIO_SQUARE_INPUT);
+        ((HBox) squareBox.getChildren().get(squareBox.getChildren().size() - 1)).getChildren().add(elementToAdd);
+        HBox.setHgrow(elementToAdd, Priority.ALWAYS);
+        return ((HBox) squareBox.getChildren().get(squareBox.getChildren().size() - 1));
     }
 
     void setStage(Stage stage) {

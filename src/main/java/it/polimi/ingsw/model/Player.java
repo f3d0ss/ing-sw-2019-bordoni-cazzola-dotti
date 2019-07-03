@@ -634,4 +634,24 @@ public class Player {
             availableAggregateActionCounter = 2;
         update();
     }
+
+    /**
+     * Reload the weapon
+     *
+     * @param selectedWeapon The weapon to reload
+     */
+    public void reloadWeapon(Weapon selectedWeapon) {
+        selectedWeapon.reload();
+        update();
+    }
+
+    /**
+     * Unload the weapon
+     *
+     * @param selectedWeapon The weapon to unload
+     */
+    public void unloadWeapon(Weapon selectedWeapon) {
+        selectedWeapon.unload();
+        update();
+    }
 }
