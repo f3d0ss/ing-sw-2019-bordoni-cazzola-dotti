@@ -16,14 +16,13 @@ public class PlayerView {
     private final List<WeaponView> weapons;
     private final List<PowerUpView> powerUps;
     private final Map<Color, Integer> ammo;
-    private final int availableAggregateActionCounter;
     private final boolean flippedBoard;
     private final boolean disconnected;
     private final boolean firstAdrenalina;
     private final boolean secondAdrenalina;
 
     @SuppressWarnings("squid:S00107")
-    public PlayerView(PlayerId id, boolean isMe, List<PlayerId> health, int deaths, Map<PlayerId, Integer> marks, String nickname, List<WeaponView> weapons, List<PowerUpView> powerUps, Map<Color, Integer> ammo, int availableAggregateActionCounter, boolean flippedBoard, boolean disconnected, boolean firstAdrenalina, boolean secondAdrenalina) {
+    public PlayerView(PlayerId id, boolean isMe, List<PlayerId> health, int deaths, Map<PlayerId, Integer> marks, String nickname, List<WeaponView> weapons, List<PowerUpView> powerUps, Map<Color, Integer> ammo, boolean flippedBoard, boolean disconnected, boolean firstAdrenalina, boolean secondAdrenalina) {
         this.id = id;
         this.isMe = isMe;
         this.health = health;
@@ -33,7 +32,6 @@ public class PlayerView {
         this.weapons = weapons;
         this.powerUps = powerUps;
         this.ammo = ammo;
-        this.availableAggregateActionCounter = availableAggregateActionCounter;
         this.flippedBoard = flippedBoard;
         this.disconnected = disconnected;
         this.firstAdrenalina = firstAdrenalina;

@@ -86,7 +86,7 @@ public class Player {
         List<PowerUpView> pvs = new ArrayList<>();
         weapons.forEach(weapon -> wvs.add(new WeaponView(weapon.getName(), weapon.isLoaded())));
         powerUps.forEach(powerUp -> pvs.add(new PowerUpView(powerUp.getType(), powerUp.getColor())));
-        return new PlayerView(id, isMe, health, deaths, marks, nickname, wvs, pvs, ammo, availableAggregateActionCounter, flippedBoard, disconnected, health.size() > DAMAGE_BEFORE_FIRST_ADRENALINA, health.size() > DAMAGE_BEFORE_SECOND_ADRENALINA);
+        return new PlayerView(id, isMe, health, deaths, marks, nickname, wvs, pvs, ammo, flippedBoard, disconnected, health.size() > DAMAGE_BEFORE_FIRST_ADRENALINA, health.size() > DAMAGE_BEFORE_SECOND_ADRENALINA);
     }
 
     /**

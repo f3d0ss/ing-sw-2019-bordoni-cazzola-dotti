@@ -1,6 +1,5 @@
 package it.polimi.ingsw.view;
 
-import it.polimi.ingsw.network.client.Ui;
 import it.polimi.ingsw.view.commandmessage.CommandMessage;
 
 import java.util.List;
