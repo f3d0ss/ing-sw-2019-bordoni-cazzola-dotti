@@ -319,6 +319,7 @@ public class MainGuiController {
      */
     private void setNodeClickable(HBox node, int commandIndex, Lock lock) {
         HBox overlay = new HBox();
+        overlay.setFocusTraversable(true);
         overlay.setBackground((new Background(new BackgroundFill(javafx.scene.paint.Color.YELLOW, new CornerRadii(RADIUS_HIGLIGHT), Insets.EMPTY))));
         overlay.setOpacity(OPACITY_FOR_SELECTION);
         overlay.setOnMouseClicked(mouseEvent -> handleCommandClick(commandIndex, lock));
@@ -342,6 +343,7 @@ public class MainGuiController {
         overlay.setBackground((new Background(new BackgroundFill(javafx.scene.paint.Color.YELLOW, new CornerRadii(RADIUS_HIGLIGHT), Insets.EMPTY))));
         overlay.setOpacity(OPACITY_FOR_SELECTION);
         overlay.setOnMouseClicked(mouseEvent -> handleCommandClick(commandIndex, lock));
+        overlay.setFocusTraversable(true);
         clickableSquare.add(addToSquareBox(square, overlay));
     }
 
