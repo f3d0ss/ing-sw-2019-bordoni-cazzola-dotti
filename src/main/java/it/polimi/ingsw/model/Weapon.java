@@ -25,6 +25,7 @@ public class Weapon {
     private List<Player> targetPlayers = new ArrayList<>();
     private List<Square> targetSquares = new ArrayList<>();
     private int damageToDo;
+    private List<Player> lastAddedTargetPlayers;
 
 
     /**
@@ -346,7 +347,10 @@ public class Weapon {
                     }
             possibleRooms.forEach(square -> possibleCommands.add(new SelectTargetSquareCommand(state, square)));
         } else if (targetPlayers.isEmpty()) //add all players in the room
-            gameboard.getRoomSquares(targetSquares.get(0)).forEach(square -> targetPlayers.addAll(square.getHostedPlayers()));
+            gameboard.getRoomSquares(targetSquares.get(0)).forEach(square -> {
+                targetPlayers.addAll(square.getHostedPlayers());
+                lastAddedTargetPlayers.addAll(square.getHostedPlayers());
+            });
         return possibleCommands;
     }
 
@@ -385,16 +389,18 @@ public class Weapon {
         List<WeaponCommand> possibleCommands = new ArrayList<>();
         if (targetPlayers.isEmpty()) {
             List<Player> visibleTargets = gameboard.getVisibleTargets(shooter, selectedWeaponMode.getMaxTargetDistance(), selectedWeaponMode.getMinTargetDistance());
-            if (selectedWeaponMode.isSpinner()) //directly pick targets
+            if (selectedWeaponMode.isSpinner()) { //directly pick targets
                 targetPlayers.addAll(visibleTargets);
-            else
+                lastAddedTargetPlayers.addAll(visibleTargets);
+            } else
                 visibleTargets.stream()
                         .filter(possibleTargetPlayer -> !possibleTargetPlayer.getId().equals(shooter.getId()))
                         .forEach(player -> possibleCommands.add(new SelectTargetPlayerCommand(state, player)));
         } else {
-            if (selectedWeaponMode.isHellionMod() && targetPlayers.size() == MIN_SIZE) //add other players on the same square (shooter cant be on this square)
+            if (selectedWeaponMode.isHellionMod() && targetPlayers.size() == MIN_SIZE) { //add other players on the same square (shooter cant be on this square)
                 targetPlayers.addAll(targetPlayers.get(0).getPosition().getHostedPlayers(targetPlayers.get(0)));
-            else if (selectedWeaponMode.isTargetVisibleByOtherTarget()) { //THOR
+                lastAddedTargetPlayers.addAll(targetPlayers.get(0).getPosition().getHostedPlayers(targetPlayers.get(0)));
+            } else if (selectedWeaponMode.isTargetVisibleByOtherTarget()) { //THOR
                 possibleCommands.addAll(getPossibleSelectTargetCommandsTargetPlayersVisibleByOtherTarget(gameboard, shooter, state));
             } else if (!selectedWeaponMode.isSpinner()) { //otherweapons
                 possibleCommands.addAll(getPossibleSelectTargetCommandsTargetPlayersVisibleStandard(gameboard, shooter, state));
@@ -479,15 +485,19 @@ public class Weapon {
                         .distinct()
                         .forEach(player -> possibleCommands.add(new SelectTargetPlayerCommand(state, player)));
             }
-            if (selectedWeaponMode.getMaxNumberOfTargetPlayers() == maxTargets)
+            if (selectedWeaponMode.getMaxNumberOfTargetPlayers() == maxTargets) {
                 targetPlayers.addAll(targetSquares.get(0).getHostedPlayers(shooter));
+                lastAddedTargetPlayers.addAll(targetSquares.get(0).getHostedPlayers(shooter));
+            }
         } else { //manage 2nd square
             if (selectedWeaponMode.getMaxNumberOfTargetPlayers() != maxTargets) {
                 targetSquares.get(MIN_SIZE).getHostedPlayers(shooter).stream()
                         .filter(possibleTargetPlayer -> !possibleTargetPlayer.getId().equals(targetPlayers.get(0).getId()))
                         .forEach(player -> possibleCommands.add(new SelectTargetPlayerCommand(state, player)));
-            } else if (!targetPlayers.containsAll(targetSquares.get(MIN_SIZE).getHostedPlayers(shooter)))
+            } else if (!targetPlayers.containsAll(targetSquares.get(MIN_SIZE).getHostedPlayers(shooter))) {
                 targetPlayers.addAll(targetSquares.get(MIN_SIZE).getHostedPlayers(shooter));
+                lastAddedTargetPlayers.addAll(targetSquares.get(MIN_SIZE).getHostedPlayers(shooter));
+            }
         }
         targetPlayers = targetPlayers.stream().distinct().collect(Collectors.toList());
         return possibleCommands;
@@ -502,8 +512,10 @@ public class Weapon {
             possibleTargetPlayers.stream()
                     .filter(possibleTargetPlayer -> !possibleTargetPlayer.getId().equals(shooter.getId()))
                     .forEach(player -> possibleCommands.add(new SelectTargetPlayerCommand(state, player)));
-        } else if (targetPlayers.size() == MIN_SIZE) //add other players on the square (fragmenting warhead effect)
+        } else if (targetPlayers.size() == MIN_SIZE) { //add other players on the square (fragmenting warhead effect)
             targetPlayers.addAll(targetPlayers.get(0).getPosition().getHostedPlayers(new ArrayList<>(Arrays.asList(shooter, targetPlayers.get(0)))));
+            lastAddedTargetPlayers.addAll(targetPlayers.get(0).getPosition().getHostedPlayers(new ArrayList<>(Arrays.asList(shooter, targetPlayers.get(0)))));
+        }
         return possibleCommands;
     }
 
@@ -522,7 +534,10 @@ public class Weapon {
             } else if (selectedWeaponMode.isFragmentingWarHeadMod()) {//rocketlaunch
                 possibleCommands.addAll(getPossibleSelectTargetCommandsTargetSquareFragmentingWarhead(shooter, state));
             } else if (targetPlayers.isEmpty()) //Other modes target all players
-                targetSquares.stream().map(square -> square.getHostedPlayers(shooter)).forEach(targetPlayers::addAll);
+                targetSquares.stream().map(square -> square.getHostedPlayers(shooter)).forEach(collection -> {
+                    targetPlayers.addAll(collection);
+                    lastAddedTargetPlayers.addAll(collection);
+                });
         }
         return possibleCommands;
     }
@@ -539,6 +554,7 @@ public class Weapon {
      */
     public List<Command> getPossibleCommands(GameBoard gameboard, Player shooter, ReadyToShootState state) {
         List<Command> possibleCommands = new ArrayList<>();
+        lastAddedTargetPlayers = new ArrayList<>();
         if (hasExtraMove())
             possibleCommands.addAll(getPossibleExtraMoveCommands(gameboard, shooter, state));
         if (hasNotMaximumTargets() && hasDamageToDo())
@@ -610,6 +626,7 @@ public class Weapon {
      */
     public void removeTargetPlayer(Player targetPlayer) {
         targetPlayers.remove(targetPlayer);
+        targetPlayers.removeAll(lastAddedTargetPlayers);
     }
 
     /**
