@@ -13,6 +13,7 @@ public class Client implements Runnable {
     final Parser parser = new Parser();
     String ip;
     int port;
+    boolean clientReady = false;
     boolean keepAlive = true;
     private ConcreteView view;
     private String type;
@@ -122,5 +123,18 @@ public class Client implements Runnable {
             portString = manageMessage(parser.serialize(new Message(Protocol.INSERT_PORT_AGAIN, "", null)));
             port = isValidPort(portString);
         }
+    }
+
+    boolean isServerReachable(){
+        return false;
+    }
+
+    boolean isClientReady() {
+        return clientReady;
+    }
+
+    public void stop(){
+        // Do nothing (intentionally-blank override)
+
     }
 }
