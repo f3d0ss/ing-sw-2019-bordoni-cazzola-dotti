@@ -81,10 +81,7 @@ public class PlayerBoardController extends HBox {
     }
 
     void setPlayer(PlayerView playerView, boolean isLastTurn) {
-        String playerBoardImageURI = MainGuiController.PLAYERBOARD_IMAGES_DIR
-                + playerView.getId().playerId()
-                + MainGuiController.BOARD_FILE_PATTERN;
-        MainGuiController.setBackgroundImageFromURI(boardWithoutAggregateAction, playerBoardImageURI);
+
         printPlayerBoard(playerView, isLastTurn);
     }
 
@@ -163,6 +160,12 @@ public class PlayerBoardController extends HBox {
                                   HBox playerDeaths,
                                   VBox playerAmmo,
                                   boolean isLastTurn) {
+
+        String playerBoardImageURI = MainGuiController.PLAYERBOARD_IMAGES_DIR
+                + playerView.getId().playerId()
+                + /**(playerView.isFlippedBoard() ? MainGuiController.FLIPPED_BOARD_FILE_PATTERN :**/ MainGuiController.BOARD_FILE_PATTERN;
+        MainGuiController.setBackgroundImageFromURI(boardWithoutAggregateAction, playerBoardImageURI);
+
         String aggregateActionImageURI = MainGuiController.PLAYERBOARD_IMAGES_DIR
                 + playerView.getId().playerId()
                 + (isLastTurn ? MainGuiController.AGGREGATE_ACTION_FLIPPED_FILE_PATTERN : MainGuiController.AGGREGATE_ACTION_FILE_PATTERN);
@@ -183,7 +186,7 @@ public class PlayerBoardController extends HBox {
             HBox healthBox = new HBox();
             MainGuiController.bindToParent(healthBox, playerHealthBox, 1, Player.MAX_DAMAGE);
             String tokenImageURI = MainGuiController.TOKEN_IMAGES_DIR
-                    + playerView.getId().playerId()
+                    + playerView.getHealth().get(i).playerId()
                     + IMAGE_EXTENSION;
             MainGuiController.setBackgroundImageFromURI(healthBox, tokenImageURI);
 

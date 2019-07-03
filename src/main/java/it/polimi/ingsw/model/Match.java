@@ -30,7 +30,7 @@ public class Match {
     private GameBoard board;
     private boolean firstPlayerPlayedLastTurn;
     private Map<PlayerId, ViewInterface> views;
-    private Map<PlayerId, Long> leaderBoard;
+    private Map<PlayerId, Long> leaderBoard = null;
     private PlayerId playerOnDuty;
     private int gameBoardNumber;
 
