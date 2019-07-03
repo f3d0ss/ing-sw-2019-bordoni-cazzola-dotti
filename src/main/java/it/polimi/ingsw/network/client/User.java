@@ -20,10 +20,12 @@ class User {
     private static final String SOCKET = "Socket";
     private static final String RMI = "RMI";
     private static final int MILLIS_IN_SECOND = 1000;
+    private static final int SECONDS_TO_PING_SERVER = 2;
 
     /**
      * Runs the client-side process asking for ui preference (cli or gui)
-     * and connection technology (socket or rmi).
+     * and connection technology (socket or rmi). Then checks periodically the connection to server.
+     * When a problem occurs, it closes the process after having notified the disconnection
      *
      * @param args are command line inputs
      */
@@ -57,5 +59,14 @@ class User {
             client = new RmiClient(ui);
         }
         new Thread(client).start();
+        while (client.isClientReady() && !client.isServerReachable()) {
+            try {
+                sleep(MILLIS_IN_SECOND * SECONDS_TO_PING_SERVER);
+            } catch (InterruptedException e) {
+                break;
+            }
+        }
+        client.manageMessage(parser.serialize(new Message(Protocol.UNREACHABLE_SERVER, "", null)));
+        client.stop();
     }
 }
