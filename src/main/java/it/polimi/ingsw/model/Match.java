@@ -362,7 +362,7 @@ public class Match {
      */
     public void sendModelAfterReconnection(PlayerId player) {
         views.get(player).update(new MatchView(killshotTrack, deathsCounter, gameBoardNumber, leaderBoard, isLastTurn(), playerOnDuty));
-        currentPlayers.forEach(p -> views.get(player).update(p.getPlayerView(p.getId() == player)));
+        currentPlayers.forEach(p -> views.get(player).update(p.getPlayerView(p.getId().equals(player))));
         board.getSquareList().forEach(s -> views.get(player).update(s.getSquareView()));
         views.get(player).setViewInitializationDone();
     }

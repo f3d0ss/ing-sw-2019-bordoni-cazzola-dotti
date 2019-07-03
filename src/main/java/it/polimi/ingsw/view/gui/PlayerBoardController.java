@@ -6,6 +6,7 @@ import it.polimi.ingsw.model.PowerUpID;
 import it.polimi.ingsw.view.PlayerView;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
@@ -16,6 +17,9 @@ import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 
+import static it.polimi.ingsw.view.gui.MainGuiController.IMAGE_EXTENSION;
+import static it.polimi.ingsw.view.gui.MainGuiController.bindToParent;
+
 public class PlayerBoardController extends HBox {
     private static final int POWERUP_HEIGHT = 264;
     private static final int POWERUP_WIDTH = 169;
@@ -23,6 +27,7 @@ public class PlayerBoardController extends HBox {
     private static final int PLAYER_LIFE = 12;
     private static final int MAX_NUMBER_PLAYER_DEATH_SKULL = 6;
     private static final double OPACITY_WEAPON_UNLOADED = 0.5;
+    private static final int DEATH_MARGIN_RATIO = 6;
     @FXML
     private HBox boardWithoutAggregateAction;
     @FXML
@@ -75,16 +80,16 @@ public class PlayerBoardController extends HBox {
         }
     }
 
-    void setPlayer(PlayerView playerView) {
+    void setPlayer(PlayerView playerView, boolean isLastTurn) {
         String playerBoardImageURI = MainGuiController.PLAYERBOARD_IMAGES_DIR
                 + playerView.getId().playerId()
                 + MainGuiController.BOARD_FILE_PATTERN;
         MainGuiController.setBackgroundImageFromURI(boardWithoutAggregateAction, playerBoardImageURI);
-        printPlayerBoard(playerView);
+        printPlayerBoard(playerView, isLastTurn);
     }
 
-    void printPlayerBoard(PlayerView playerView) {
-        printPlayerBoard(playerView, aggregateActionBox, playerMarks, playerHealthBox, playerDeaths, playerAmmo);
+    void printPlayerBoard(PlayerView playerView, boolean isLastTurn) {
+        printPlayerBoard(playerView, aggregateActionBox, playerMarks, playerHealthBox, playerDeaths, playerAmmo, isLastTurn);
         printPlayerCard(playerView, playerPowerUpContainer, playerWeaponContainer, isMe);
     }
 
@@ -92,8 +97,8 @@ public class PlayerBoardController extends HBox {
         stage.close();
     }
 
-    public void update(PlayerView playerView) {
-        printPlayerBoard(playerView);
+    public void update(PlayerView playerView, boolean isLastTurn) {
+        printPlayerBoard(playerView, isLastTurn);
     }
 
     private void printPlayerCard(PlayerView playerView,
@@ -112,14 +117,14 @@ public class PlayerBoardController extends HBox {
                         + playerView.getPowerUps().get(i).getColor().colorID()
                         + MainGuiController.SPACE
                         + playerView.getPowerUps().get(i).getType().powerUpID()
-                        + MainGuiController.IMAGE_EXTENSION;
+                        + IMAGE_EXTENSION;
                 Map<Color, HBox> tempMap = powerUpBoxes.getOrDefault(playerView.getPowerUps().get(i).getType(), new EnumMap<>(Color.class));
                 tempMap.put(playerView.getPowerUps().get(i).getColor(), cardHBox);
                 powerUpBoxes.put(playerView.getPowerUps().get(i).getType(), tempMap);
             } else
                 powerUpImageURI = MainGuiController.POWERUP_IMAGES_DIR
                         + MainGuiController.BACK
-                        + MainGuiController.IMAGE_EXTENSION;
+                        + IMAGE_EXTENSION;
 
             MainGuiController.setBackgroundImageFromURI(cardHBox, powerUpImageURI);
             playerPowerUpContainer.getChildren().add(cardHBox);
@@ -136,12 +141,12 @@ public class PlayerBoardController extends HBox {
             if (isMe || !weaponView.isLoaded()) {
                 weaponImageURI = MainGuiController.WEAPON_IMAGES_DIR
                         + weaponView.getID()
-                        + MainGuiController.IMAGE_EXTENSION;
+                        + IMAGE_EXTENSION;
                 weaponBoxes.put(weaponView.getName(), cardHBox);
             } else
                 weaponImageURI = MainGuiController.WEAPON_IMAGES_DIR
                         + MainGuiController.BACK
-                        + MainGuiController.IMAGE_EXTENSION;
+                        + IMAGE_EXTENSION;
             MainGuiController.setBackgroundImageFromURI(cardHBox, weaponImageURI);
             if (isMe && !weaponView.isLoaded())
                 cardHBox.setOpacity(OPACITY_WEAPON_UNLOADED);
@@ -156,10 +161,11 @@ public class PlayerBoardController extends HBox {
                                   HBox playerMarks,
                                   HBox playerHealthBox,
                                   HBox playerDeaths,
-                                  VBox playerAmmo) {
+                                  VBox playerAmmo,
+                                  boolean isLastTurn) {
         String aggregateActionImageURI = MainGuiController.PLAYERBOARD_IMAGES_DIR
                 + playerView.getId().playerId()
-                + (playerView.isFlippedBoard() ? MainGuiController.AGGREGATE_ACTION_FLIPPED_FILE_PATTERN : MainGuiController.AGGREGATE_ACTION_FILE_PATTERN);
+                + (isLastTurn ? MainGuiController.AGGREGATE_ACTION_FLIPPED_FILE_PATTERN : MainGuiController.AGGREGATE_ACTION_FILE_PATTERN);
         MainGuiController.setBackgroundImageFromURI(aggregateActionBox, aggregateActionImageURI);
 
 
@@ -174,15 +180,28 @@ public class PlayerBoardController extends HBox {
 
         playerHealthBox.getChildren().clear();
         for (int i = 0; i < playerView.getHealth().size(); i++) {
-            HBox healthBox = MainGuiController.getHBoxWithTokenBackgroundWithHighFixedToParent(playerView.getHealth().get(i), playerHealthBox);
+            HBox healthBox = new HBox();
+            MainGuiController.bindToParent(healthBox, playerHealthBox, 1, Player.MAX_DAMAGE);
+            String tokenImageURI = MainGuiController.TOKEN_IMAGES_DIR
+                    + playerView.getId().playerId()
+                    + IMAGE_EXTENSION;
+            MainGuiController.setBackgroundImageFromURI(healthBox, tokenImageURI);
+
             healthBox.maxWidthProperty().bind(playerHealthBox.widthProperty().divide(PLAYER_LIFE));
             playerHealthBox.getChildren().add(healthBox);
             HBox.setHgrow(healthBox, Priority.ALWAYS);
         }
 
         playerDeaths.getChildren().clear();
+        HBox margin = new HBox();
+        bindToParent(margin, playerDeaths, 1, DEATH_MARGIN_RATIO);
+        HBox.setHgrow(margin, Priority.ALWAYS);
+        playerDeaths.getChildren().add(margin);
         for (int i = 0; i < playerView.getDeaths() && i < MAX_SKULL_PLAYERBOARD; i++) {
-            HBox deathBox = MainGuiController.getHBoxWithSkullBackground(playerDeaths, MAX_NUMBER_PLAYER_DEATH_SKULL);
+            HBox deathBox = new HBox();
+            MainGuiController.setBackgroundImageFromURI(deathBox, MainGuiController.SKULL_IMAGE_URI);
+            MainGuiController.bindToParent(deathBox, playerDeaths, 1, Player.MAX_DAMAGE);
+            HBox.setHgrow(deathBox,Priority.ALWAYS);
             playerDeaths.getChildren().add(deathBox);
             HBox.setHgrow(deathBox, Priority.ALWAYS);
         }
@@ -201,7 +220,7 @@ public class PlayerBoardController extends HBox {
                 HBox singleAmmoBox = new HBox();
                 String ammoURI = MainGuiController.AMMO_IMAGES_DIR
                         + color.colorID()
-                        + MainGuiController.IMAGE_EXTENSION;
+                        + IMAGE_EXTENSION;
                 MainGuiController.setBackgroundImageFromURI(singleAmmoBox, ammoURI);
                 MainGuiController.bindToParent(singleAmmoBox, colorAmmoContainer, 1, Player.MAX_AMMO);
                 colorAmmoContainer.getChildren().add(singleAmmoBox);

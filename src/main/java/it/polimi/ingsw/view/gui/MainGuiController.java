@@ -80,10 +80,10 @@ public class MainGuiController {
     private static final String GAMEBOARD_IMAGES_DIR = IMAGES_DIR + "gameboards/GameBoard00";
     static final String POWERUP_IMAGES_DIR = IMAGES_DIR + "cards/AD_powerups_" + LANG + SPACE;
     static final String WEAPON_IMAGES_DIR = IMAGES_DIR + "cards/AD_weapons_" + LANG + SPACE;
-    private static final String TOKEN_IMAGES_DIR = IMAGES_DIR + "tokens/";
+    static final String TOKEN_IMAGES_DIR = IMAGES_DIR + "tokens/";
     private static final String AMMO_TILE_IMAGES_DIR = IMAGES_DIR + "ammotiles/";
     static final String AMMO_IMAGES_DIR = IMAGES_DIR + "ammos/";
-    private static final String SKULL_IMAGE_URI = IMAGES_DIR + "other/skull" + IMAGE_EXTENSION;
+    static final String SKULL_IMAGE_URI = IMAGES_DIR + "other/skull" + IMAGE_EXTENSION;
     static final String BACK = "back";
     static final String PLAYERBOARD_IMAGES_DIR = IMAGES_DIR + "playerboards/";
     static final String AGGREGATE_ACTION_FILE_PATTERN = "_aggregate_action" + IMAGE_EXTENSION;
@@ -142,9 +142,9 @@ public class MainGuiController {
         this.modelView = modelView;
         printSpawnWeapons(modelView.getWeaponsOnSpawn());
         printKillshotTrack(modelView.getMatch().getKillshotTrack());
-        playerBoardController.printPlayerBoard(modelView.getMe());
+        playerBoardController.printPlayerBoard(modelView.getMe(), modelView.getMatch().isLastTurn());
         printBoard(modelView.getBoard());
-        otherPlayerBoardControllers.forEach((playerId, otherPlayerBoardController) -> otherPlayerBoardController.update(modelView.getEnemies().get(playerId)));
+        otherPlayerBoardControllers.forEach((playerId, otherPlayerBoardController) -> otherPlayerBoardController.update(modelView.getEnemies().get(playerId), modelView.getMatch().isLastTurn()));
     }
 
     /**
@@ -283,7 +283,7 @@ public class MainGuiController {
             Stage otherPlayerStage = new Stage();
             PlayerBoardController controller = new PlayerBoardController(false, otherPlayerStage);
             otherPlayerBoardControllers.put(playerId, controller);
-            otherPlayerBoardControllers.get(playerId).setPlayer(modelView.getEnemies().get(playerId));
+            otherPlayerBoardControllers.get(playerId).setPlayer(modelView.getEnemies().get(playerId), modelView.getMatch().isLastTurn());
             otherPlayerStage.setScene(new Scene(controller));
             otherPlayerStage.setAlwaysOnTop(true);
             otherPlayerStage.setOnCloseRequest(windowEvent -> otherPlayerBoardControllers.remove(playerId));
@@ -468,7 +468,7 @@ public class MainGuiController {
         String gameboardImageURI = GAMEBOARD_IMAGES_DIR + modelView.getMatch().getGameBoardId() + IMAGE_EXTENSION;
         setBackgroundImageFromURI(gameBoard, gameboardImageURI);
 
-        playerBoardController.setPlayer(modelView.getMe());
+        playerBoardController.setPlayer(modelView.getMe(), modelView.getMatch().isLastTurn());
 
         setBackgroundImageFromURI(killShotTrackBox, KILL_SHOT_TRACK_URI);
 
@@ -519,12 +519,12 @@ public class MainGuiController {
      * @param child       The child
      * @param parent      The parent
      * @param heightRatio The ratio for the height
-     * @param widthRatio
+     * @param widthRatio  The ratio for the width
      */
     static void bindToParent(Region child, Pane parent, int heightRatio, int widthRatio) {
         child.maxHeightProperty().bind(parent.heightProperty().divide(heightRatio));
         child.maxWidthProperty().bind(parent.widthProperty().divide(widthRatio));
-        HBox.setMargin(child, new Insets(0, 0, 0, 1));
+        HBox.setMargin(child, new Insets(0, 0, 1, 0));
     }
 
     /**
@@ -532,7 +532,7 @@ public class MainGuiController {
      *
      * @param parent     The parent of the HBox
      * @param widthRatio The ratio of the width
-     * @return
+     * @return The HBox created
      */
     static HBox getHBoxWithSkullBackground(Pane parent, int widthRatio) {
         HBox tokenBox = new HBox();
