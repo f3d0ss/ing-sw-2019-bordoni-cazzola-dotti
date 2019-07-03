@@ -7,6 +7,7 @@ import it.polimi.ingsw.utils.Parser;
 import it.polimi.ingsw.view.ViewInterface;
 import it.polimi.ingsw.view.VirtualView;
 
+import java.io.IOException;
 import java.net.Socket;
 import java.rmi.RemoteException;
 import java.util.*;
@@ -494,13 +495,24 @@ public class ServerManager implements Runnable {
             try {
                 sleep(MILLIS_TO_WAIT);
                 counter++;
-                if (counter % 10 == 0 && rmiClients.containsKey(number)) {
-                    try {
-                        rmiClients.get(number).testAliveness();
-                    } catch (RemoteException e) {
-                        System.out.println("Impossibile raggiungere il client. " + e.getMessage());
-                        rmiServer.unregister(rmiClients.get(number));
-                        return Protocol.ERR;
+                if (counter % MILLIS_TO_WAIT == 0){
+                    if(rmiClients.containsKey(number)) {
+                        try {
+                            rmiClients.get(number).testAliveness();
+                        } catch (RemoteException e) {
+                            System.out.println("Impossibile raggiungere il client. " + e.getMessage());
+                            rmiServer.unregister(rmiClients.get(number));
+                            return Protocol.ERR;
+                        }
+                    }
+                    if(socketClients.containsKey(number)) {
+                        try {
+                            socketClients.get(number).getInetAddress().isReachable(MILLIS_IN_SECOND);
+                        } catch (IOException e) {
+                            System.out.println("Impossibile raggiungere il client. " + e.getMessage());
+                            socketServer.unregister(socketClients.get(number));
+                            return Protocol.ERR;
+                        }
                     }
                 }
             } catch (InterruptedException e) {
