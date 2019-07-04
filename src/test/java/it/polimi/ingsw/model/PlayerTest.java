@@ -7,7 +7,9 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-
+/**
+ * Contains tests for {@link Player}'s methods
+ */
 class PlayerTest {
 
     private final static int MAX_AMMO = 3;
@@ -15,14 +17,14 @@ class PlayerTest {
     private final static int MAX_DAMAGE = 12;
     private final static int SKULLS = 8;
 
-    //verify the correct insertion of ammos and powerups
-
+    /**
+     * verifies the correct insertion of ammos and powerups
+     */
     @Test
     void testAddAmmoTile() {
         Map<Color, Integer> ammo = new HashMap<>();
         int colorcubes;
         int addingammo = 5;
-//        Map<Color,Integer> resources;
         Player player = new Player(new Match(), null, null);
         for (Color c : Color.values()) {
             ammo.put(c, 1);
@@ -36,23 +38,11 @@ class PlayerTest {
                     assertEquals(MAX_AMMO, colorcubes);
             }
         }
-
-        //bisogna istanziare i powerup prima
-        /*
-        AmmoTile tile = new AmmoTile(1, ammo);
-        int addingpowerup = 5;
-        for (int i=1; i<addingpowerup; i++){
-            player.addAmmoTile(tile);
-            if (i < MAX_POWERUP)
-               assertEquals(player.getPowerUps().size(), i);
-            else
-                assertEquals(player.getPowerUps().size(), MAX_POWERUP);
-        }
-        */
     }
 
-    //verify the correct insertion of damages
-
+    /**
+     * verifies the correct insertion of damages
+     */
     @Test
     void testAddDamage() {
         Player player = new Player(new Match(), null, null);
@@ -65,8 +55,9 @@ class PlayerTest {
         assertTrue(player.isDead());
     }
 
-    //verify the correct insertion of marks and their changing in damages
-
+    /**
+     * verifies the correct insertion of marks and their changing in damages
+     */
     @Test
     void testAddMarks() {
 
@@ -95,47 +86,9 @@ class PlayerTest {
         assertTrue(player.isDead());
     }
 
-    //verify the correct movements from all position in game board
-
-    @Test
-    void testMove() {
-//        Match match = new Match();
-//        Square square;
-//        CardinalDirection dir;
-//        Player player;
-//        for(int i = 0; i < ROWS; i++) {
-//            for (int j = 0; j < COLUMNS; j++) {
-//                square = match.getBoard().getSquare(i, j);
-//                if (square != null) {
-//                    player = new Player(match, null, null, square);
-//                    assertEquals(player.getPosition(), square);
-//                    for (CardinalDirection c : CardinalDirection.values()) {
-//                        dir = c;
-//                        if (square.getConnection(dir) != Connection.MAP_BORDER && square.getConnection(dir) != Connection.WALL) {
-//                            player.move(dir);
-//                            switch (dir) {
-//                                case NORTH:
-//                                    assertEquals(player.getPosition(), match.getBoard().getSquare(i - 1, j));
-//                                    break;
-//                                case EAST:
-//                                    assertEquals(player.getPosition(), match.getBoard().getSquare(i, j + 1));
-//                                    break;
-//                                case SOUTH:
-//                                    assertEquals(player.getPosition(), match.getBoard().getSquare(i + 1, j));
-//                                    break;
-//                                case WEST:
-//                                    assertEquals(player.getPosition(), match.getBoard().getSquare(i, j - 1));
-//                                    break;
-//                            }
-//                            player.move(dir.getOpposite());
-//                            assertEquals(player.getPosition(), square);
-//                        }
-//                    }
-//                }
-//            }
-//        }
-    }
-
+    /**
+     * Tests spawncommands logic
+     */
     @Test
     void testGetSpawnCommands() {
         Match match = new Match();
@@ -148,6 +101,9 @@ class PlayerTest {
         assertEquals(size, nOfCommands);
     }
 
+    /**
+     * Tests Respawn commands logic
+     */
     @Test
     void testGetReSpawnCommands() {
         Match match = new Match();
@@ -160,6 +116,9 @@ class PlayerTest {
         assertEquals(size, nOfCommands);
     }
 
+    /**
+     * Tests available aggregate actions
+     */
     @Test
     void testAggregateActions() {
         Match match = new Match();
@@ -173,6 +132,9 @@ class PlayerTest {
         assertEquals(availableAggregateActionCounter, player.getAvailableAggregateActionCounter());
     }
 
+    /**
+     * Tests add deaths
+     */
     @Test
     void testDeaths() {
         Match match = new Match();
@@ -183,6 +145,9 @@ class PlayerTest {
         assertEquals(times, player.getDeaths());
     }
 
+    /**
+     * Tests points addition
+     */
     @Test
     void testPoints() {
         int points = 4;
@@ -192,6 +157,9 @@ class PlayerTest {
         assertEquals(points, player.getPoints());
     }
 
+    /**
+     * Tests board flip
+     */
     @Test
     void testFlipBoard() {
         Match match = new Match();
@@ -201,6 +169,9 @@ class PlayerTest {
         assertTrue(player.isFlippedBoard());
     }
 
+    /**
+     * Tests if player ammo cubes are added and removed correctly
+     */
     @Test
     void testAmmoCubes() {
         Match match = new Match();
@@ -221,6 +192,9 @@ class PlayerTest {
         assertEquals(1, ammo.get(Color.YELLOW));
     }
 
+    /**
+     * Tests if player power ups are added and removed correctly
+     */
     @Test
     void testPowerUp() {
         Match match = new Match();
@@ -233,7 +207,7 @@ class PlayerTest {
         else assertEquals(0, player.getNewtons().size());
         if (powerUp.getType().equals(PowerUpID.TARGETING_SCOPE))
             assertEquals(1, player.getTargetingScopes().size());
-        else assertEquals(0, player.getNewtons().size());
+        else assertEquals(0, player.getTargetingScopes().size());
         if (powerUp.getType().equals(PowerUpID.TAGBACK_GRENADE))
             assertEquals(1, player.getTagbackGrenades().size());
         else assertEquals(0, player.getTagbackGrenades().size());
@@ -245,6 +219,9 @@ class PlayerTest {
         assertEquals(0, player.getPowerUps().size());
     }
 
+    /**
+     * Tests if player weapons are added and removed correctly
+     */
     @Test
     void testWeapons() {
         Match match = new Match();
@@ -261,6 +238,9 @@ class PlayerTest {
         assertEquals(nOfWeapons, player.getWeapons().size());
     }
 
+    /**
+     * Tests init of a player at the start of his turn
+     */
     @Test
     void testInit() {
         Match match = new Match();
@@ -276,5 +256,45 @@ class PlayerTest {
         player.initialize();
         //now it should return
         assertEquals(finalfrenzyAfter1stPlayer, player.getAvailableAggregateActionCounter());
+    }
+
+    /**
+     * Tests if damage in the same action does not remove marks
+     */
+    @Test
+    void testSameActionDamage() {
+        Match match = new Match();
+        Player p1 = new Player(match, PlayerId.VIOLET, null);
+        Player p2 = new Player(match, PlayerId.BLUE, null);
+        match.addPlayer(p1);
+        match.addPlayer(p2);
+        int marks = 2;
+        p1.addMarks(marks, p2.getId());
+        int damage = 3;
+        p1.addDamageSameAction(damage, p2.getId());
+        assertEquals(marks, p1.getMarks().get(p2.getId()));
+        assertEquals(damage, p1.getHealth().size());
+    }
+
+    /**
+     * Tests if the last shooter is added correctly
+     */
+    @Test
+    void testLastShooter() {
+        Match match = new Match();
+        Player p1 = new Player(match, PlayerId.VIOLET, null);
+        Player p2 = new Player(match, PlayerId.BLUE, null);
+        match.addPlayer(p1);
+        match.addPlayer(p2);
+        int damage = 3;
+        p1.addDamageSameAction(damage, p2.getId());
+        assertEquals(p2, p1.getLastShooter());
+    }
+
+    @Test
+    void testNickName() {
+        Player player = new Player(null, PlayerId.BLUE, PlayerId.BLUE.playerIdName());
+        assertEquals(PlayerId.BLUE.playerIdName(), player.toString());
+        assertEquals(PlayerId.BLUE.playerIdName(), player.getNickname());
     }
 }

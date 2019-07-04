@@ -25,7 +25,7 @@ public class Weapon {
     private List<Player> targetPlayers = new ArrayList<>();
     private List<Square> targetSquares = new ArrayList<>();
     private int damageToDo;
-    private List<Player> lastAddedTargetPlayers;
+    private List<Player> lastAddedTargetPlayers = new ArrayList<>();
 
 
     /**

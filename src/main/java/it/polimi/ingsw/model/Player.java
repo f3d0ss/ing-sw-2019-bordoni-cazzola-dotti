@@ -57,6 +57,7 @@ public class Player {
     private int availableAggregateActionCounter;
     private PlayerId lastShooter;
     private boolean flippedBoard = false;
+    private boolean diedInFinalFrenzy = false;
 
     public Player(Match match, PlayerId id, String nickname) {
         this.match = match;
@@ -302,8 +303,13 @@ public class Player {
         position = match.getBoard().getSpawn(color);
         position.addPlayer(this);
         health = new ArrayList<>();
-        if (match.isLastTurn())
+        if (match.isLastTurn()) {
+            if (flippedBoard && !diedInFinalFrenzy) {
+                deaths = 0;
+                diedInFinalFrenzy = true;
+            }
             flippedBoard = true;
+        }
         update();
     }
 
