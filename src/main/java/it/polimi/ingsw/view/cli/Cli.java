@@ -78,6 +78,10 @@ public class Cli implements Ui {
         refreshView(modelView);
     }
 
+    public void setViewInitializationUndone() {
+        initializationDone = false;
+    }
+
     public boolean isViewInitializationDone() {
         return initializationDone;
     }
@@ -91,6 +95,8 @@ public class Cli implements Ui {
      */
 
     public int manageCommandChoice(List<CommandMessage> commands, boolean undo) {
+        if (isViewInitializationDone())
+            refreshView(modelView);
         List<String> possibleAnswers = new ArrayList<>();
         commands.forEach(c -> possibleAnswers.add(c.getType().getString() + getParameter(c)));
         if (undo)
@@ -191,8 +197,6 @@ public class Cli implements Ui {
             System.out.println(i + "° classificato: " + entry.getKey().playerIdName() + " con " + entry.getValue() + " punti");
             i++;
         }
-        System.out.println("Digita qualcosa per uscire:");
-        stdin.nextLine();
         System.exit(0);
     }
 }

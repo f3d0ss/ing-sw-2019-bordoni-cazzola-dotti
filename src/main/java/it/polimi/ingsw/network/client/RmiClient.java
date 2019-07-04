@@ -11,8 +11,6 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.server.UnicastRemoteObject;
 
-import static java.lang.Thread.sleep;
-
 /**
  * This class represent a client using rmi connection and
  * implements the Rmi-client interface exposed to rmi server.
@@ -20,22 +18,19 @@ import static java.lang.Thread.sleep;
 
 public class RmiClient extends Client implements RmiClientInterface {
 
-    private static final int TEST_ALIVENESS_TIME = 2000;
     private static final String TYPE = "RMI";
+    private RmiServerInterface rmiServerInterface;
 
     RmiClient(Ui ui) {
         super(ui);
     }
 
     /**
-     * Starts a client according to the rmi communication and
-     * calls periodically a server's method in order to check connection.
-     * When a problem occurs, it closes the process after having notified the disconnection.
+     * Starts a client according to the rmi technology.
      */
 
     @Override
     public void run() {
-        RmiServerInterface rmiServerInterface;
         manageIpAndPortInsertion();
         while (true) {
             manageMessage(parser.serialize(new Message(Protocol.CONNECTING, TYPE, null)));
@@ -48,20 +43,7 @@ public class RmiClient extends Client implements RmiClientInterface {
                 manageIpAndPortInsertion();
             }
         }
-        while (keepAlive) {
-            try {
-                sleep(TEST_ALIVENESS_TIME);
-                rmiServerInterface.testAliveness();
-            } catch (InterruptedException | RemoteException e) {
-                break;
-            }
-        }
-        manageMessage(parser.serialize(new Message(Protocol.UNREACHABLE_SERVER, "", null)));
-        try {
-            UnicastRemoteObject.unexportObject(this, true);
-        } catch (NoSuchObjectException e) {
-            System.out.println("Impossibile chiudere l'interfaccia rmi: " + e.getMessage());
-        }
+        clientReady = true;
     }
 
     /**
@@ -83,5 +65,34 @@ public class RmiClient extends Client implements RmiClientInterface {
 
     public boolean testAliveness() {
         return true;
+    }
+
+    /**
+     * Detects if the rmi server is reachable.
+     *
+     * @return true if is reachable, false otherwise
+     */
+
+    @Override
+    boolean isServerReachable() {
+        try {
+            rmiServerInterface.testAliveness();
+            return true;
+        } catch (RemoteException e) {
+            return false;
+        }
+    }
+
+    /**
+     * Closes the rmi client.
+     */
+
+    @Override
+    public void stop() {
+        try {
+            UnicastRemoteObject.unexportObject(this, true);
+        } catch (NoSuchObjectException e) {
+            System.out.println("Impossibile chiudere l'interfaccia rmi: " + e.getMessage());
+        }
     }
 }

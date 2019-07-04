@@ -14,6 +14,7 @@ public class ConcreteView implements ViewInterface {
 
     public ConcreteView(Ui ui) {
         this.ui = ui;
+        ui.setViewInitializationUndone();
         modelView = new ModelView();
     }
 
@@ -51,8 +52,6 @@ public class ConcreteView implements ViewInterface {
 
     @Override
     public int sendCommands(List<CommandMessage> commands, boolean undo) {
-        if (ui.isViewInitializationDone())
-            ui.refreshView(modelView);
         return ui.manageCommandChoice(commands, undo);
     }
 

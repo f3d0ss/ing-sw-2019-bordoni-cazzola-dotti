@@ -13,11 +13,11 @@ import java.util.Map;
 public interface Ui {
     String showMessage(String toBeShown, List<String> possibleAnswers, boolean isAnswerRequired);
 
-    void refreshView(ModelView modelView);
-
     int manageCommandChoice(List<CommandMessage> commands, boolean undo);
 
     void setViewInitializationDone(ModelView modelView);
+
+    void setViewInitializationUndone();
 
     boolean isViewInitializationDone();
 

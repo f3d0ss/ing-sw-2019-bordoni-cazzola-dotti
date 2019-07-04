@@ -4,6 +4,7 @@ import it.polimi.ingsw.model.command.*;
 import it.polimi.ingsw.model.playerstate.ChoosingWeaponOptionState;
 import it.polimi.ingsw.model.playerstate.ReadyToShootState;
 import it.polimi.ingsw.utils.Parser;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -20,9 +21,9 @@ import static org.junit.jupiter.api.Assertions.*;
  * Test for {@link Weapon}'s methods
  */
 class WeaponTest {
-    private static final List<Weapon> allWeapons = getAllWeapons();
+    private List<Weapon> allWeapons;
 
-    static private List<Weapon> getAllWeapons() {
+    private List<Weapon> getAllWeapons() {
         Parser parser = new Parser();
         List<Weapon> weaponList = new ArrayList<>();
         File file = new File("src/resources/weapons/");
@@ -35,6 +36,11 @@ class WeaponTest {
             }
         }
         return weaponList;
+    }
+
+    @BeforeEach
+    void setUp() {
+        allWeapons = getAllWeapons();
     }
 
     private Weapon getWeaponByName(String name) {
@@ -439,4 +445,3 @@ class WeaponTest {
         assertEquals(1, player2.getHealth().size());
     }
 }
-

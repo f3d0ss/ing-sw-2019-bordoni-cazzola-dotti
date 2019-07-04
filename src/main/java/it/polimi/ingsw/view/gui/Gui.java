@@ -36,10 +36,6 @@ public class Gui implements Ui, Runnable {
         return answer;
     }
 
-    public void refreshView(ModelView modelView) {
-//        Platform.runLater(() -> controller.updateModelView(modelView));
-    }
-
     public void setViewInitializationDone(ModelView modelView) {
         Lock lock = new Lock();
         try {
@@ -55,6 +51,10 @@ public class Gui implements Ui, Runnable {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    public void setViewInitializationUndone() {
+        initializationDone = false;
     }
 
     public boolean isViewInitializationDone() {
