@@ -37,6 +37,12 @@ class GameCountDown extends Thread {
         seconds = secondsToWait;
     }
 
+    /**
+     * Gets the time left.
+     *
+     * @return the time left (in seconds)
+     */
+
     int getTimeLeft() {
         return seconds;
     }

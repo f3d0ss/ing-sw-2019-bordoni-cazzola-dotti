@@ -14,6 +14,9 @@ class ClientReception implements Runnable {
         this.number = number;
     }
 
+    /**
+     * Starts a client enrollment.
+     */
     @Override
     public void run() {
         serverManager.addClientToLog(number);

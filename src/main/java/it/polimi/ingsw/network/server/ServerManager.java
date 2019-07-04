@@ -89,6 +89,13 @@ public class ServerManager implements Runnable {
         idClient++;
     }
 
+    /**
+     * Gets the nickname associated to an user id-code.
+     *
+     * @param playerId is the user id-code
+     * @return is the nickname of user the id-code in input
+     */
+
     public String getNickname(int playerId) {
         return nicknames.get(playerId);
     }

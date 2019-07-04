@@ -8,7 +8,19 @@ import java.rmi.RemoteException;
  */
 
 public interface RmiClientInterface extends Remote {
+
+    /**
+     * Manages message sending and answer getting.
+     *
+     * @param message is the string containing message
+     * @return the user's answer
+     */
     String sendMessageAndGetAnswer(String message) throws RemoteException;
 
+    /**
+     * Tests client presence calling a remote method of it.
+     *
+     * @return always true
+     */
     boolean testAliveness() throws RemoteException;
 }
