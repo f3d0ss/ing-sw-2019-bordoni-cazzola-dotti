@@ -60,6 +60,10 @@ public class Gui implements Ui, Runnable {
         }
     }
 
+    public void setViewInitializationUndone() {
+        initializationDone = false;
+    }
+
     public boolean isViewInitializationDone() {
         return initializationDone;
     }

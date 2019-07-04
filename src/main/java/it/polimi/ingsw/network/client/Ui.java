@@ -20,6 +20,8 @@ public interface Ui {
 
     void setViewInitializationDone(ModelView modelView);
 
+    void setViewInitializationUndone();
+
     boolean isViewInitializationDone();
 
     void showLeaderBoard(Map<PlayerId, Long> leaderBoard);

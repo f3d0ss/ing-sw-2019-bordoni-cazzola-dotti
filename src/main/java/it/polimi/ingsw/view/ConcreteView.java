@@ -15,6 +15,7 @@ public class ConcreteView implements ViewInterface {
 
     public ConcreteView(Ui ui) {
         this.ui = ui;
+        ui.setViewInitializationUndone();
         modelView = new ModelView();
     }
 
