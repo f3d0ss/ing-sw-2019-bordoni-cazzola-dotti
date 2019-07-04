@@ -24,4 +24,10 @@ public interface Ui {
     void showLeaderBoard(Map<PlayerId, Long> leaderBoard);
 
     void run();
+
+    void refreshView(PlayerView pw);
+
+    void refreshView(SquareView sw);
+
+    void refreshView(MatchView mw);
 }

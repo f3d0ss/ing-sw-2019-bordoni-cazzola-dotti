@@ -130,7 +130,7 @@ public class MainGuiController {
      *
      * @return Index of the selected command
      */
-    public int getSelectedCommand() {
+    int getSelectedCommand() {
         return selectedCommand;
     }
 
@@ -139,13 +139,50 @@ public class MainGuiController {
      *
      * @param modelView The data to be displayed
      */
-    public void updateModelView(ModelView modelView) {
+    void updateModelView(ModelView modelView) {
         this.modelView = modelView;
-        printSpawnWeapons(modelView.getWeaponsOnSpawn());
-        printKillshotTrack(modelView.getMatch().getKillshotTrack());
-        playerBoardController.printPlayerBoard(modelView.getMe(), modelView.getMatch().isLastTurn());
-        printBoard(modelView.getBoard());
-        otherPlayerBoardControllers.forEach((playerId, otherPlayerBoardController) -> otherPlayerBoardController.update(modelView.getEnemies().get(playerId), modelView.getMatch().isLastTurn()));
+        updatePlayer(modelView.getMe());
+        for (SquareView[] squareViews : modelView.getBoard()) {
+            for (SquareView squareView : squareViews) {
+                if (squareView != null)
+                    updateSquare(squareView);
+            }
+        }
+        updateMatchView(modelView.getMatch()); }
+
+    void updateSquare(SquareView sw){
+        int row = sw.getRow();
+        int col = sw.getCol();
+        squareBoxes[row][col].getChildren().forEach(node -> ((Pane) node).getChildren().clear());
+        if (sw.getColor() == null) {
+            HBox ammoBox = new HBox();
+            AmmoTileView ammoTileView = ((TurretSquareView) sw).getAmmoTile();
+            String ammoTileURI = AMMO_TILE_IMAGES_DIR
+                    + ((!ammoTileView.isEmpty()) ? ammoTileView.toString() : BACK)
+                    + IMAGE_EXTENSION;
+            setBackgroundImageFromURI(ammoBox, ammoTileURI);
+            addToSquareBox(squareBoxes[row][col], ammoBox);
+        }else
+            printSpawnWeapons(modelView.getWeaponsOnSpawn());
+        sw.getHostedPlayers().forEach(playerId -> {
+            HBox tokenBox = getHBoxWithTokenBackground(playerId);
+            addToSquareBox(squareBoxes[row][col], tokenBox);
+            playerBoxes.put(playerId, tokenBox);
+        });
+    }
+
+    void updatePlayer(PlayerView playerView){
+        if(playerView.isMe())
+            playerBoardController.update(playerView);
+        else if(otherPlayerBoardControllers.containsKey(playerView.getId())){
+            otherPlayerBoardControllers.get(playerView.getId()).update(playerView);
+        }
+    }
+
+    void updateMatchView(MatchView matchView) {
+        printKillshotTrack(matchView.getKillshotTrack());
+        playerBoardController.update(matchView.isLastTurn());
+        otherPlayerBoardControllers.forEach((playerId, playerBoardController1) -> playerBoardController1.update(matchView.isLastTurn()));
     }
 
     /**
@@ -652,4 +689,6 @@ public class MainGuiController {
     void setStage(Stage stage) {
         this.stage = stage;
     }
+
+
 }

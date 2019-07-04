@@ -49,6 +49,7 @@ public class PlayerBoardController extends HBox {
     private Map<Color, HBox> ammoBoxes = new EnumMap<>(Color.class);
     private Map<String, HBox> weaponBoxes = new HashMap<>();
     private Map<PowerUpID, Map<Color, HBox>> powerUpBoxes = new EnumMap<>(PowerUpID.class);
+    private boolean lastTurn;
 
     public PlayerBoardController(boolean isMe, Stage stage) {
         this.stage = stage;
@@ -80,12 +81,12 @@ public class PlayerBoardController extends HBox {
     }
 
     void setPlayer(PlayerView playerView, boolean isLastTurn) {
-
-        printPlayerBoard(playerView, isLastTurn);
+        this.lastTurn = isLastTurn;
+        printPlayerBoard(playerView);
     }
 
-    void printPlayerBoard(PlayerView playerView, boolean isLastTurn) {
-        printPlayerBoard(playerView, aggregateActionBox, playerMarks, playerHealthBox, playerDeaths, playerAmmo, isLastTurn);
+    void printPlayerBoard(PlayerView playerView) {
+        printPlayerBoard(playerView, aggregateActionBox, playerMarks, playerHealthBox, playerDeaths, playerAmmo);
         printPlayerCard(playerView, playerPowerUpContainer, playerWeaponContainer, isMe);
     }
 
@@ -93,8 +94,8 @@ public class PlayerBoardController extends HBox {
         stage.close();
     }
 
-    public void update(PlayerView playerView, boolean isLastTurn) {
-        printPlayerBoard(playerView, isLastTurn);
+    public void update(PlayerView playerView) {
+        printPlayerBoard(playerView);
     }
 
     private void printPlayerCard(PlayerView playerView,
@@ -156,8 +157,7 @@ public class PlayerBoardController extends HBox {
                                   HBox playerMarks,
                                   HBox playerHealthBox,
                                   HBox playerDeaths,
-                                  VBox playerAmmo,
-                                  boolean isLastTurn) {
+                                  VBox playerAmmo) {
 
         String playerBoardImageURI = MainGuiController.PLAYERBOARD_IMAGES_DIR
                 + playerView.getId().playerId()
@@ -166,7 +166,7 @@ public class PlayerBoardController extends HBox {
 
         String aggregateActionImageURI = MainGuiController.PLAYERBOARD_IMAGES_DIR
                 + playerView.getId().playerId()
-                + (isLastTurn ? MainGuiController.AGGREGATE_ACTION_FLIPPED_FILE_PATTERN : MainGuiController.AGGREGATE_ACTION_FILE_PATTERN);
+                + (lastTurn ? MainGuiController.AGGREGATE_ACTION_FLIPPED_FILE_PATTERN : MainGuiController.AGGREGATE_ACTION_FILE_PATTERN);
         MainGuiController.setBackgroundImageFromURI(aggregateActionBox, aggregateActionImageURI);
 
 
@@ -246,5 +246,9 @@ public class PlayerBoardController extends HBox {
 
     public HBox getPowerUpBox(PowerUpID powerUpID, Color color) {
         return powerUpBoxes.get(powerUpID).get(color);
+    }
+
+    public void update(boolean lastTurn) {
+        this.lastTurn = lastTurn;
     }
 }
