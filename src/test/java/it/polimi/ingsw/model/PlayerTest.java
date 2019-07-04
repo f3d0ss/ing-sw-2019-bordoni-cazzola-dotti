@@ -290,4 +290,11 @@ class PlayerTest {
         p1.addDamageSameAction(damage, p2.getId());
         assertEquals(p2, p1.getLastShooter());
     }
+
+    @Test
+    void testNickName() {
+        Player player = new Player(null, PlayerId.BLUE, PlayerId.BLUE.playerIdName());
+        assertEquals(PlayerId.BLUE.playerIdName(), player.toString());
+        assertEquals(PlayerId.BLUE.playerIdName(), player.getNickname());
+    }
 }
