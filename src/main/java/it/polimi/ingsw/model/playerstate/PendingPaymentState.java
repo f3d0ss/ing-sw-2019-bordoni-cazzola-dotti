@@ -8,6 +8,7 @@ import it.polimi.ingsw.model.command.SelectAmmoPaymentCommand;
 import it.polimi.ingsw.model.command.SelectPowerUpPaymentCommand;
 
 import java.util.ArrayList;
+import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
@@ -39,6 +40,20 @@ public interface PendingPaymentState {
             }
         });
         return commands;
+    }
+
+    /**
+     * This method return the total value associated with the power ups and ammo passed
+     *
+     * @param pendingPowerUpPayment This is the list of the power up
+     * @param pendingAmmo           This is the total ammo
+     * @return This is total value associated with the power ups and ammo passed
+     */
+    static Map<Color, Integer> getTotalPendingPayment(List<PowerUp> pendingPowerUpPayment, Map<Color, Integer> pendingAmmo) {
+        Map<Color, Integer> totalPending = new EnumMap<>(Color.class);
+        pendingPowerUpPayment.forEach(powerUp -> totalPending.put(powerUp.getColor(), totalPending.getOrDefault(powerUp.getColor(), 0) + 1));
+        pendingAmmo.forEach((color, integer) -> totalPending.put(color, totalPending.getOrDefault(color, 0) + integer));
+        return totalPending;
     }
 
     /**

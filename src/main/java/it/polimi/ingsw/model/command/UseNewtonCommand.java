@@ -12,10 +12,25 @@ import it.polimi.ingsw.view.commandmessage.SquareCommandMessage;
  * This command represent the action of use a newton
  */
 public class UseNewtonCommand implements Command {
+    /**
+     * This is the player is the player doing the command
+     */
     private final Player player;
+    /**
+     * This is the current state of the player
+     */
     private final TargetingPlayerState currentState;
+    /**
+     * This is the player selected as target for the newton
+     */
     private final Player targetPlayer;
+    /**
+     * This is the square where target player will be moved
+     */
     private final Square targetSquare;
+    /**
+     * This is the square where the target player is before the command is executed
+     */
     private Square oldSquare;
 
     /**

@@ -16,17 +16,35 @@ import java.util.Map;
  * State when the player is paying to reload
  */
 public class PendingPaymentReloadWeaponState implements PendingPaymentState, PlayerState {
-
+    /**
+     * Those are the ammo selected for pay the weapon reloading
+     */
     private final Map<Color, Integer> pendingAmmo;
+    /**
+     * This are the power up selected for paying the weapon reloading
+     */
     private final List<PowerUp> pendingCardPayment;
+    /**
+     * This is the weapon selected for the reloading
+     */
     private final Weapon selectedReloadingWeapon;
 
+    /**
+     * This constructor create the state of the player when paying for reload a weapon
+     *
+     * @param selectedWeapon This is the weapon selected for the reloading
+     */
     public PendingPaymentReloadWeaponState(Weapon selectedWeapon) {
         pendingCardPayment = new ArrayList<>();
         pendingAmmo = new EnumMap<>(Color.class);
         this.selectedReloadingWeapon = selectedWeapon;
     }
 
+    /**
+     * This method return the selected weapon
+     *
+     * @return the selected weapon
+     */
     public Weapon getSelectedReloadingWeapon() {
         return selectedReloadingWeapon;
     }
@@ -89,9 +107,7 @@ public class PendingPaymentReloadWeaponState implements PendingPaymentState, Pla
     @Override
     public List<Command> getPossibleCommands(Player player) {
         List<Command> commands = new ArrayList<>();
-        Map<Color, Integer> totalPending = new EnumMap<>(Color.class);
-        pendingCardPayment.forEach(powerUp -> totalPending.put(powerUp.getColor(), totalPending.getOrDefault(powerUp.getColor(), 0) + 1));
-        pendingAmmo.forEach((color, integer) -> totalPending.put(color, totalPending.getOrDefault(color, 0) + integer));
+        Map<Color, Integer> totalPending = PendingPaymentState.getTotalPendingPayment(pendingCardPayment, pendingAmmo);
 
         if (getSelectedReloadingWeapon().getReloadingCost().equals(totalPending)) {
             commands.add(new PayReloadWeaponCommand(player, this));

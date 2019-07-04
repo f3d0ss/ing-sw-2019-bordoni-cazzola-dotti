@@ -8,6 +8,11 @@ import it.polimi.ingsw.model.AggregateAction;
 public abstract class AfterSelectedAggregateActionState implements PlayerState {
     private final AggregateAction selectedAggregateAction;
 
+    /**
+     * This constructor create the state of the player after selecting an aggregate action
+     *
+     * @param selectedAggregateAction This is the aggregate action selected
+     */
     AfterSelectedAggregateActionState(AggregateAction selectedAggregateAction) {
         this.selectedAggregateAction = selectedAggregateAction;
     }

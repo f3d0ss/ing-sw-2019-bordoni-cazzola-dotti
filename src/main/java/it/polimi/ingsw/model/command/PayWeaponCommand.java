@@ -11,7 +11,13 @@ import it.polimi.ingsw.view.commandmessage.SimpleCommandMessage;
  * This command represents the action of buy a weapon
  */
 public class PayWeaponCommand implements Command {
+    /**
+     * This is the player is the player doing the command
+     */
     private final Player player;
+    /**
+     * This is the current state of the player
+     */
     private final PendingPaymentWeaponState currentState;
 
     /**

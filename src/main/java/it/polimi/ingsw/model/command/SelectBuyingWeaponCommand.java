@@ -14,8 +14,17 @@ import it.polimi.ingsw.view.commandmessage.WeaponCommandMessage;
  * This command represent the action of select the weapon to buy
  */
 public class SelectBuyingWeaponCommand extends GrabCommand {
+    /**
+     * This is the weapon selected for the purchase
+     */
     private final Weapon weapon;
+    /**
+     * This is the current state of the player
+     */
     private final SelectedAggregateActionState currentState;
+    /**
+     * This is the spawn where the player want to buy a weapon
+     */
     private final SpawnSquare spawn;
 
     /**

@@ -13,9 +13,21 @@ import java.util.Map;
  * State when the player is paying to buy a Weapon
  */
 public class PendingPaymentWeaponState extends SelectedWeaponState implements PendingPaymentState {
+    /**
+     * Those are the ammo selected for pay the weapon
+     */
     private final Map<Color, Integer> pendingAmmo;
+    /**
+     * This are the power up selected for pay the weapon
+     */
     private final List<PowerUp> pendingCardPayment;
 
+    /**
+     * This constructor create the state of the player paying to buy a weapon
+     *
+     * @param selectedAggregateAction This is the aggregate action the player is executing
+     * @param selectedWeapon          This is the weapon selected in the action
+     */
     public PendingPaymentWeaponState(AggregateAction selectedAggregateAction, Weapon selectedWeapon) {
         super(selectedAggregateAction, selectedWeapon);
         pendingAmmo = new EnumMap<>(Color.class);
@@ -80,9 +92,7 @@ public class PendingPaymentWeaponState extends SelectedWeaponState implements Pe
     @Override
     public List<Command> getPossibleCommands(Player player) {
         List<Command> commands = new ArrayList<>();
-        Map<Color, Integer> totalPending = new EnumMap<>(Color.class);
-        pendingCardPayment.forEach(powerUp -> totalPending.put(powerUp.getColor(), totalPending.getOrDefault(powerUp.getColor(), 0) + 1));
-        pendingAmmo.forEach((color, integer) -> totalPending.put(color, totalPending.getOrDefault(color, 0) + integer));
+        Map<Color, Integer> totalPending = PendingPaymentState.getTotalPendingPayment(pendingCardPayment, pendingAmmo);
 
         if (getSelectedWeapon().getWeaponBuyCost().equals(totalPending)) {
             commands.add(new PayWeaponCommand(player, this));

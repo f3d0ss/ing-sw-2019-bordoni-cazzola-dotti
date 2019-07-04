@@ -11,6 +11,9 @@ import it.polimi.ingsw.view.commandmessage.PowerUpCommandMessage;
  * This command represent the action of select a power up for a payment
  */
 public class SelectPowerUpPaymentCommand extends SelectPaymentCommand {
+    /**
+     * This is the power up selected for the payment
+     */
     private final PowerUp powerUp;
 
     /**

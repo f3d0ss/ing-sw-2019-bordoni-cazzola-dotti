@@ -10,7 +10,13 @@ import it.polimi.ingsw.view.commandmessage.PlayerCommandMessage;
  * This command represent the action of select a player as target
  */
 public class SelectTargetPlayerCommand implements WeaponCommand {
+    /**
+     * This is the current state of the player
+     */
     private final TargetingPlayerState currentState;
+    /**
+     * This is the player selected as a target
+     */
     private final Player targetPlayer;
 
     /**

@@ -13,6 +13,11 @@ import java.util.List;
  * State when the player just selected an {@link AggregateAction}
  */
 public class SelectedAggregateActionState extends AfterSelectedAggregateActionState implements MovableState {
+    /**
+     * This constructor create the state of the player when he have selected an aggregate action
+     *
+     * @param selectedAggregateAction This is the aggregate action the player select
+     */
     public SelectedAggregateActionState(AggregateAction selectedAggregateAction) {
         super(selectedAggregateAction);
     }

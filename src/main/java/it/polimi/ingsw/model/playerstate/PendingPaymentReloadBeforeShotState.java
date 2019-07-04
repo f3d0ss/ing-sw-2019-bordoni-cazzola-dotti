@@ -10,13 +10,24 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * State when the player is paying to use a weapon mode
+ * State when the player is paying to reload a weapon
  */
 public class PendingPaymentReloadBeforeShotState extends SelectedWeaponState implements PendingPaymentState {
-
+    /**
+     * Those are the ammo selected for pay the weapon reloading
+     */
     private final Map<Color, Integer> pendingAmmo;
+    /**
+     * This are the power up selected for paying the weapon reloading
+     */
     private final List<PowerUp> pendingCardPayment;
 
+    /**
+     * This constructor create the state of the player when is paying for reloading a weapon
+     *
+     * @param selectedAggregateAction This is the aggregate action the player is executing
+     * @param selectedWeapon          This is the weapon the player is willing to reload
+     */
     public PendingPaymentReloadBeforeShotState(AggregateAction selectedAggregateAction, Weapon selectedWeapon) {
         super(selectedAggregateAction, selectedWeapon);
         pendingCardPayment = new ArrayList<>();
@@ -81,9 +92,7 @@ public class PendingPaymentReloadBeforeShotState extends SelectedWeaponState imp
     @Override
     public List<Command> getPossibleCommands(Player player) {
         List<Command> commands = new ArrayList<>();
-        Map<Color, Integer> totalPending = new EnumMap<>(Color.class);
-        pendingCardPayment.forEach(powerUp -> totalPending.put(powerUp.getColor(), totalPending.getOrDefault(powerUp.getColor(), 0) + 1));
-        pendingAmmo.forEach((color, integer) -> totalPending.put(color, totalPending.getOrDefault(color, 0) + integer));
+        Map<Color, Integer> totalPending = PendingPaymentState.getTotalPendingPayment(pendingCardPayment, pendingAmmo);
 
         if (getSelectedWeapon().getReloadingCost().equals(totalPending)) {
             commands.add(new PayReloadBeforeShotCommand(player, this));
