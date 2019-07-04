@@ -2,10 +2,7 @@ package it.polimi.ingsw.view.cli;
 
 import it.polimi.ingsw.model.PlayerId;
 import it.polimi.ingsw.network.Protocol;
-import it.polimi.ingsw.network.client.Ui;
-import it.polimi.ingsw.view.ConcreteView;
-import it.polimi.ingsw.view.ModelView;
-import it.polimi.ingsw.view.cli.CliManager;
+import it.polimi.ingsw.view.*;
 import it.polimi.ingsw.view.commandmessage.*;
 
 import java.util.*;
@@ -20,6 +17,7 @@ public class Cli implements Ui {
     private final Scanner stdin = new Scanner(System.in);
     private final CliManager cliManager = new CliManager();
     private boolean initializationDone = false;
+    private ModelView modelView;
 
     /**
      * Prints a message coming from server.
@@ -46,6 +44,24 @@ public class Cli implements Ui {
         // Do nothing (intentionally-blank override)
     }
 
+    @Override
+    public void refreshView(PlayerView pw) {
+        modelView.setPlayerView(pw);
+        refreshView(modelView);
+    }
+
+    @Override
+    public void refreshView(SquareView sw) {
+        modelView.setSquareBoard(sw.getRow(), sw.getCol(), sw);
+        refreshView(modelView);
+    }
+
+    @Override
+    public void refreshView(MatchView mw) {
+        modelView.setMatch(mw);
+        refreshView(modelView);
+    }
+
     /**
      * Updates the game displayed on command line.
      *
@@ -58,6 +74,7 @@ public class Cli implements Ui {
 
     public void setViewInitializationDone(ModelView modelView) {
         initializationDone = true;
+        this.modelView = modelView;
         refreshView(modelView);
     }
 
@@ -78,6 +95,8 @@ public class Cli implements Ui {
      */
 
     public int manageCommandChoice(List<CommandMessage> commands, boolean undo) {
+        if (isViewInitializationDone())
+            refreshView(modelView);
         List<String> possibleAnswers = new ArrayList<>();
         commands.forEach(c -> possibleAnswers.add(c.getType().getString() + getParameter(c)));
         if (undo)

@@ -3,6 +3,7 @@ package it.polimi.ingsw.network.client;
 import it.polimi.ingsw.network.Message;
 import it.polimi.ingsw.network.Protocol;
 import it.polimi.ingsw.network.server.RmiClientInterface;
+import it.polimi.ingsw.view.Ui;
 
 import java.rmi.NoSuchObjectException;
 import java.rmi.NotBoundException;

@@ -1,9 +1,8 @@
 package it.polimi.ingsw.view.gui;
 
 import it.polimi.ingsw.model.PlayerId;
-import it.polimi.ingsw.network.client.Ui;
 import it.polimi.ingsw.utils.Lock;
-import it.polimi.ingsw.view.ModelView;
+import it.polimi.ingsw.view.*;
 import it.polimi.ingsw.view.commandmessage.CommandMessage;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -30,16 +29,11 @@ public class Gui implements Ui, Runnable {
             try {
                 sleep(TIME_TO_SLEEP);
             } catch (InterruptedException e) {
+
             }
         }
         System.out.println(answer);//it show answer even on cli
         return answer;
-    }
-
-    public void refreshView(ModelView modelView) {
-        Platform.runLater(() -> {
-            controller.updateModelView(modelView);
-        });
     }
 
     public void setViewInitializationDone(ModelView modelView) {
@@ -82,6 +76,21 @@ public class Gui implements Ui, Runnable {
     @Override
     public void run() {
         Application.launch(GuiManager.class);
+    }
+
+    @Override
+    public void refreshView(PlayerView pw) {
+        Platform.runLater(() -> controller.updatePlayer(pw));
+    }
+
+    @Override
+    public void refreshView(SquareView sw) {
+        Platform.runLater(() -> controller.updateSquare(sw));
+    }
+
+    @Override
+    public void refreshView(MatchView mw) {
+        Platform.runLater(() -> controller.updateMatchView(mw));
     }
 
     public void setInputReady(boolean inputReady) {

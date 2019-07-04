@@ -3,6 +3,7 @@ package it.polimi.ingsw.network.client;
 import it.polimi.ingsw.network.*;
 import it.polimi.ingsw.utils.Parser;
 import it.polimi.ingsw.view.ConcreteView;
+import it.polimi.ingsw.view.Ui;
 
 /**
  * This class represent a client regardless of the type of connection (Rmi or Socket)

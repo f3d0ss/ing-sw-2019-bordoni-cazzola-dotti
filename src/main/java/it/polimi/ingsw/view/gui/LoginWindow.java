@@ -68,9 +68,9 @@ public class LoginWindow extends GridPane {
             Scene secondScene = new Scene(secondaryLayout, 300, 200);
 
             secondaryLayout.setAlignment(Pos.CENTER);
-            secondaryLayout.setHalignment(secondLabel, HPos.CENTER);
-            secondaryLayout.setHalignment(buttonCancel, HPos.CENTER);
-            secondaryLayout.setHalignment(buttonQuit, HPos.CENTER);
+            setHalignment(secondLabel, HPos.CENTER);
+            setHalignment(buttonCancel, HPos.CENTER);
+            setHalignment(buttonQuit, HPos.CENTER);
             secondaryLayout.setVgap(INNER_GAP);
 
             secondStage.setTitle("Confirm Exit");
@@ -119,7 +119,7 @@ public class LoginWindow extends GridPane {
             });
 
             comboBox.setOnKeyPressed(e -> {
-                if(e.getCode().equals(KeyCode.ENTER)) {
+                if (e.getCode().equals(KeyCode.ENTER)) {
                     gui.setAnswer(comboBox.getValue());
                     gui.setInputReady(true);
                     comboBox.setDisable(false);

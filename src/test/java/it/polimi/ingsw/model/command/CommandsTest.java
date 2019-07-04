@@ -1,12 +1,17 @@
 package it.polimi.ingsw.model.command;
 
 import it.polimi.ingsw.model.*;
-import it.polimi.ingsw.model.playerstate.ManageTurnState;
-import it.polimi.ingsw.model.playerstate.SelectedTeleporterState;
+import it.polimi.ingsw.model.playerstate.*;
 import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Tests some Commands
+ */
 class CommandsTest {
 
     @Test
@@ -14,8 +19,12 @@ class CommandsTest {
         Player player = new Player(null, null, null);
         ManageTurnState manageTurnState = new ManageTurnState();
         player.changeState(manageTurnState);
-        new DoneCommand(player, manageTurnState).execute(); //the player now must be in Idle State
+        DoneCommand doneCommand = new DoneCommand(player, manageTurnState); //the player now must be in Idle State
+        doneCommand.execute();
         assertNull(player.getPossibleCommands()); //In idle state getCommands must return null
+        doneCommand.createCommandMessage();
+        if (doneCommand.isUndoable())
+            doneCommand.undo();
     }
 
     @Test
@@ -88,4 +97,85 @@ class CommandsTest {
         assertEquals(match.getBoard().getSpawn(Color.YELLOW), player.getPosition());
     }
 
+    @Test
+    void testEffect() {
+        Match match = new Match();
+        Player player = new Player(match, PlayerId.BLUE, PlayerId.BLUE.playerIdName());
+        player.respawn(Color.YELLOW);
+        EffectCommand effectCommand = new EffectCommand(player, 1, 1, player.getPosition(), PlayerId.GREY);
+        effectCommand.createCommandMessage();
+        effectCommand.execute();
+        assertEquals(player, effectCommand.getPlayer());
+    }
+
+    @Test
+    void testMove() {
+        Match match = new Match();
+        GameBoard gameBoard = match.getBoard();
+        Player player = new Player(match, PlayerId.BLUE, PlayerId.BLUE.playerIdName());
+        match.addPlayer(player);
+        player.respawn(Color.RED);
+        Square square1 = gameBoard.getSquareList().get(0);
+        player.move(square1);
+        Square square = gameBoard.getSquareList().get(1);
+        MoveCommand moveCommand = new MoveCommand(player, square, new SelectedAggregateActionState(AggregateActionID.MOVE_MOVE_GRAB.create()));
+        MoveCommand moveCommand1 = new MoveCommand(player, square1, new ReadyToShootState(AggregateActionID.SHOOT.create(), new Weapon()));
+        moveCommand1.createCommandMessage();
+        moveCommand.execute();
+        assertEquals(square, player.getPosition());
+        if (moveCommand.isUndoable())
+            moveCommand.undo();
+        assertEquals(square1, player.getPosition());
+        moveCommand1.execute();
+        assertEquals(square1, player.getPosition());
+    }
+
+    @Test
+    void testPayReloadBeforeShot() {
+        Match match = new Match();
+        Player player = new Player(match, PlayerId.BLUE, PlayerId.BLUE.playerIdName());
+        player.respawn(Color.YELLOW);
+        Weapon weapon = new Weapon();
+        weapon.unload();
+        PayReloadBeforeShotCommand payReloadBeforeShotCommand = new PayReloadBeforeShotCommand(player, new PendingPaymentReloadBeforeShotState(
+                AggregateActionID.SHOOT.create(), weapon));
+        payReloadBeforeShotCommand.execute();
+        assertTrue(weapon.isLoaded());
+        payReloadBeforeShotCommand.createCommandMessage();
+        if (payReloadBeforeShotCommand.isUndoable())
+            payReloadBeforeShotCommand.undo();
+        assertFalse(weapon.isLoaded());
+    }
+
+    @Test
+    void testPayReloadBeforeWeaponCommand() {
+        Match match = new Match();
+        Player player = new Player(match, PlayerId.BLUE, PlayerId.BLUE.playerIdName());
+        player.respawn(Color.YELLOW);
+        Weapon weapon = new Weapon();
+        weapon.unload();
+        PayReloadWeaponCommand payReloadBeforeShotCommand = new PayReloadWeaponCommand(player, new PendingPaymentReloadWeaponState(weapon));
+        payReloadBeforeShotCommand.execute();
+        assertTrue(weapon.isLoaded());
+        payReloadBeforeShotCommand.createCommandMessage();
+        if (payReloadBeforeShotCommand.isUndoable())
+            payReloadBeforeShotCommand.undo();
+        assertFalse(weapon.isLoaded());
+    }
+
+    @Test
+    void testPayScope() {
+        Match match = new Match();
+        Player player = new Player(match, PlayerId.BLUE, PlayerId.BLUE.playerIdName());
+        player.respawn(Color.YELLOW);
+        Weapon weapon = new Weapon();
+        Player player1 = new Player(match, PlayerId.GREY, null);
+        List<Player> list = new ArrayList<>();
+        list.add(player1);
+        PayScopeCommand payScopeCommand = new PayScopeCommand(player, new PendingPaymentScopeState(AggregateActionID.SHOOT.create(), weapon, list));
+        payScopeCommand.execute();
+        payScopeCommand.createCommandMessage();
+        if (payScopeCommand.isUndoable())
+            payScopeCommand.undo();
+    }
 }

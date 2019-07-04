@@ -30,7 +30,7 @@ public class Match {
     private GameBoard board;
     private boolean firstPlayerPlayedLastTurn;
     private Map<PlayerId, ViewInterface> views;
-    private Map<PlayerId, Long> leaderBoard;
+    private Map<PlayerId, Long> leaderBoard = null;
     private PlayerId playerOnDuty;
     private int gameBoardNumber;
 
@@ -172,7 +172,7 @@ public class Match {
      * @return kill shoot track of the match
      */
     public List<PlayerId> getKillshotTrack() {
-        return killshotTrack;
+        return new ArrayList<>(killshotTrack);
     }
 
     /**
@@ -362,7 +362,7 @@ public class Match {
      */
     public void sendModelAfterReconnection(PlayerId player) {
         views.get(player).update(new MatchView(killshotTrack, deathsCounter, gameBoardNumber, leaderBoard, isLastTurn(), playerOnDuty));
-        currentPlayers.forEach(p -> views.get(player).update(p.getPlayerView(p.getId() == player)));
+        currentPlayers.forEach(p -> views.get(player).update(p.getPlayerView(p.getId().equals(player))));
         board.getSquareList().forEach(s -> views.get(player).update(s.getSquareView()));
         views.get(player).setViewInitializationDone();
     }

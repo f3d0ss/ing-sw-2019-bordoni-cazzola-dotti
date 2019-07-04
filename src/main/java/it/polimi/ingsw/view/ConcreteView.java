@@ -1,6 +1,5 @@
 package it.polimi.ingsw.view;
 
-import it.polimi.ingsw.network.client.Ui;
 import it.polimi.ingsw.view.commandmessage.CommandMessage;
 
 import java.util.List;
@@ -23,7 +22,7 @@ public class ConcreteView implements ViewInterface {
     public void update(MatchView mw) {
         modelView.setMatch(mw);
         if (ui.isViewInitializationDone())
-            ui.refreshView(modelView);
+            ui.refreshView(mw);
         if (mw.getLeaderBoard() != null)
             ui.showLeaderBoard(mw.getLeaderBoard());
     }
@@ -36,17 +35,14 @@ public class ConcreteView implements ViewInterface {
         if (sw.getColor() != null)
             modelView.setWeaponsOnSpawn(sw.getColor(), ((SpawnSquareView) sw).getWeapons());
         if (ui.isViewInitializationDone())
-            ui.refreshView(modelView);
+            ui.refreshView(sw);
     }
 
     @Override
     public void update(PlayerView pw) {
-        if (pw.isMe())
-            modelView.setMe(pw);
-        else
-            modelView.setEnemie(pw.getId(), pw);
+        modelView.setPlayerView(pw);
         if (ui.isViewInitializationDone())
-            ui.refreshView(modelView);
+            ui.refreshView(pw);
     }
 
     @Override
@@ -56,8 +52,6 @@ public class ConcreteView implements ViewInterface {
 
     @Override
     public int sendCommands(List<CommandMessage> commands, boolean undo) {
-        if (ui.isViewInitializationDone())
-            ui.refreshView(modelView);
         return ui.manageCommandChoice(commands, undo);
     }
 

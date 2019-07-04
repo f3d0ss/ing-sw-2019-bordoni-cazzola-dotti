@@ -57,6 +57,7 @@ public class Player {
     private int availableAggregateActionCounter;
     private PlayerId lastShooter;
     private boolean flippedBoard = false;
+    private boolean diedInFinalFrenzy = false;
 
     public Player(Match match, PlayerId id, String nickname) {
         this.match = match;
@@ -86,7 +87,7 @@ public class Player {
         List<PowerUpView> pvs = new ArrayList<>();
         weapons.forEach(weapon -> wvs.add(new WeaponView(weapon.getName(), weapon.isLoaded())));
         powerUps.forEach(powerUp -> pvs.add(new PowerUpView(powerUp.getType(), powerUp.getColor())));
-        return new PlayerView(id, isMe, health, deaths, marks, nickname, wvs, pvs, ammo, availableAggregateActionCounter, flippedBoard, disconnected, health.size() > DAMAGE_BEFORE_FIRST_ADRENALINA, health.size() > DAMAGE_BEFORE_SECOND_ADRENALINA);
+        return new PlayerView(id, isMe, health, deaths, marks, nickname, wvs, pvs, ammo, flippedBoard, disconnected, health.size() > DAMAGE_BEFORE_FIRST_ADRENALINA, health.size() > DAMAGE_BEFORE_SECOND_ADRENALINA);
     }
 
     /**
@@ -302,8 +303,9 @@ public class Player {
         position = match.getBoard().getSpawn(color);
         position.addPlayer(this);
         health = new ArrayList<>();
-        if (match.isLastTurn())
-            flippedBoard = true;
+        if (match.isLastTurn() && !flippedBoard) {
+            flipBoard();
+        }
         update();
     }
 
@@ -584,6 +586,7 @@ public class Player {
      */
     public void flipBoard() {
         this.flippedBoard = true;
+        this.deaths = 0;
         update();
     }
 

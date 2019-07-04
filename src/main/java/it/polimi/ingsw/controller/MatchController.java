@@ -25,6 +25,7 @@ public class MatchController implements Runnable {
     private final Match match;
     private final Map<PlayerId, ViewInterface> virtualViews = new LinkedHashMap<>();
     private final List<Player> players;
+    private boolean endMatch = false;
 
     public MatchController(Map<String, ViewInterface> lobby, int gameBoardNumber, int skulls) {
         match = new Match(skulls);
@@ -175,8 +176,8 @@ public class MatchController implements Runnable {
         for (Player player : players) {
             if (player.isDead()) {
                 numberOfKills++;
-                player.addDeaths();
                 calculateTrackScores(player);
+                player.addDeaths();
                 respawn(player);
             }
         }
@@ -193,10 +194,12 @@ public class MatchController implements Runnable {
     private void runFinalFrenzyTurn(int currentPlayerIndex) {
         //player with no damage get flipped board
         giveFlippedBoards();
+        players.forEach(Player::update);
         for (int i = 0; i < players.size(); i++) {
             if (currentPlayerIndex == 0)
                 match.firstPlayerPlayedLastTurn();
             currentPlayerIndex = runTurn(currentPlayerIndex);
+
         }
         calculateFinalScores();
     }
@@ -220,6 +223,7 @@ public class MatchController implements Runnable {
         Map<PlayerId, Long> leaderBoard = players.stream()
                 .collect(Collectors.toMap(Player::getId, player -> (long) player.getPoints(), (a, b) -> b, LinkedHashMap::new));
         leaderBoard = sort(leaderBoard, killShootTrackLeaderBoard);
+        endMatch = true;
         match.setLeaderBoard(leaderBoard);
     }
 
@@ -241,10 +245,6 @@ public class MatchController implements Runnable {
         return killShotTrack;
     }
 
-    private void endMatch() {
-        //TODO send end-game message
-    }
-
     /**
      * This method adds the points for the deadPlayer's track. Adds marks to kill shot Track
      *
@@ -256,7 +256,9 @@ public class MatchController implements Runnable {
             if (!deadPlayer.isFlippedBoard())
                 Objects.requireNonNull(getPlayerById(track.get(0))).addPoints(POINTS_PER_FIRST_BLOOD);
             PlayerId playerId11thDamage = track.get(track.size() - 1);
-            match.addKillshot(playerId11thDamage);
+            if (track.size() >= Player.MAX_DAMAGE - 1) {
+                match.addKillshot(playerId11thDamage);
+            }
             if (track.size() == Player.MAX_DAMAGE) {
                 Objects.requireNonNull(getPlayerById(playerId11thDamage)).addMarks(MARKS_PER_EXTRA_DAMAGE, deadPlayer.getId());
                 match.addKillshot(playerId11thDamage);
@@ -373,11 +375,10 @@ public class MatchController implements Runnable {
             if (!player.isDisconnected())
                 counter++;
         }
-        if (counter < MIN_PLAYERS) {
+        if (counter < MIN_PLAYERS && !endMatch) {
             System.out.println("Too many disconnections --- ENDING MATCH");
             //end match
             calculateFinalScores();
-            endMatch();
         }
     }
 

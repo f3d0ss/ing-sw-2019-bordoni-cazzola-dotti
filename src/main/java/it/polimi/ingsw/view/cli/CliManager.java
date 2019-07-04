@@ -45,7 +45,6 @@ public class CliManager {
     }
 
     private void displaySquare(SquareView square, int printingRow) {
-        boolean isMiddle = false;
         if (square == null) {
             for (int i = 0; i < INNERWIDTH + 3; i++)
                 System.out.print(SPACE);
@@ -55,18 +54,14 @@ public class CliManager {
             case 0:
                 displayTopHorizontalConnection(square);
                 break;
-            case 2:
-                isMiddle = true;
-            case 1:
-            case 3:
-                displayVerticalConnection(square.getConnection(CardinalDirection.WEST), isMiddle, square.getRow());
-                System.out.print(displaySquareInformation(square, printingRow));
-                displayVerticalConnection(square.getConnection(CardinalDirection.EAST), isMiddle, square.getRow());
-                System.out.print(SPACE);
-                break;
             case 4:
                 displayBottomHorizontalConnection(square);
                 break;
+            default:
+                displayVerticalConnection(square.getConnection(CardinalDirection.WEST), printingRow == 2, square.getRow());
+                System.out.print(displaySquareInformation(square, printingRow));
+                displayVerticalConnection(square.getConnection(CardinalDirection.EAST), printingRow == 2, square.getRow());
+                System.out.print(SPACE);
         }
     }
 
@@ -143,8 +138,9 @@ public class CliManager {
                 for (PlayerId p : square.getHostedPlayers())
                     out.append(" ").append(p.playerIdName(), 0, 1);
                 return String.format("%-" + INNERWIDTH + "s", out.toString()).substring(0, INNERWIDTH);
+            default:
+                return String.format("%-" + INNERWIDTH + "s", " ").substring(0, INNERWIDTH);
         }
-        return String.format("%-" + INNERWIDTH + "s", " ").substring(0, INNERWIDTH);
     }
 
     //TODO: implement SpawnSquare.getWeapons

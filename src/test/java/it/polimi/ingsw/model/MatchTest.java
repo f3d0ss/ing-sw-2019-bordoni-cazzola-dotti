@@ -4,13 +4,18 @@ package it.polimi.ingsw.model;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+/**
+ * Tests for {@link Match}'s methods
+ */
 class MatchTest {
 
     private final static int SKULLS = 8;
 
-//verify the correct insertion of players
-
+    /**
+     * Verifies the correct insertion of players
+     */
     @Test
     void testAddPlayer() {
         Match match = new Match();
@@ -22,8 +27,9 @@ class MatchTest {
         }
     }
 
-//verify the correct deaths count
-
+    /**
+     * Verifies the correct deaths count
+     */
     @Test
     void testDecreaseDeaths() {
         Match match = new Match();
@@ -32,8 +38,9 @@ class MatchTest {
             assertEquals(match.decreaseDeathsCounter(), k < SKULLS);
     }
 
-//verify the correct count of killshots
-
+    /**
+     * Verifies the correct count of killshots
+     */
     @Test
     void testAddKillshot() {
         Match match = new Match();
@@ -46,13 +53,14 @@ class MatchTest {
         }
     }
 
-    //verify the correct drawing of PowerUp
-
-    /*to be verified once powerups are added
-
+    /**
+     * verifies the correct drawing of PowerUp
+     */
     @Test
-    public void testDrawPowerUpCard() {
+    void testDrawPowerUpCard() {
         Match match = new Match();
-        assertEquals(match.drawPowerUpCard(),null);
-    }*/
+        assertNotNull(match.drawPowerUpCard());
+    }
+
+
 }

@@ -71,4 +71,11 @@ public class ModelView {
         else
             return enemies.get(key);
     }
+
+    public void setPlayerView(PlayerView pw) {
+        if (pw.isMe())
+            setMe(pw);
+        else
+            setEnemie(pw.getId(), pw);
+    }
 }

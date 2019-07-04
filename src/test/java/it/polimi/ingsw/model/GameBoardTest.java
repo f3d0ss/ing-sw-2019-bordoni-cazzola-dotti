@@ -8,15 +8,17 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-
+/**
+ * Contains tests for {@link GameBoard}'s methods
+ */
 class GameBoardTest {
-
     private final static int ROWS = 3;
     private final static int COLUMNS = 4;
     private final static int INF = 4;
 
-    //test the correct search of visible squares - only some cases are tested
-
+    /**
+     * Tests the correct search of visible squares - only some cases are tested
+     */
     @Test
     void testGetVisibleSquares() {
         GameBoard board = new Match().getBoard();
@@ -91,8 +93,9 @@ class GameBoardTest {
             }
     }
 
-    //test the correct search accessible directions from given position
-
+    /**
+     * Tests the correct search accessible directions from given position
+     */
     @Test
     void testGetAccessibleDirections() {
         GameBoard board = new Match().getBoard();
@@ -122,35 +125,36 @@ class GameBoardTest {
         }
     }
 
-    //test the correct visibility of players from given position - only one case is tested
-
+    /**
+     * Test the correct visibility of players from given position - only one case is tested
+     */
     @Test
     void testGetVisibleTarget() {
-//        Match match = new Match();
-//        Square square = match.getBoard().getSquare(0, 0);
-//        ArrayList<Square> competitors;
-//        Player one = new Player(match, null, null, null);
-//        one.respawn(Color.RED);
-//        one.move(CardinalDirection.NORTH);
-//        one.getPosition().addPlayer(one);
-//        Player two = new Player(match, null, null, null);
-//        two.respawn(Color.RED);
-//        two.getPosition().addPlayer(two);
-//        Player three = new Player(match, null, null, null);
-//        three.respawn(Color.BLUE);
-//        three.getPosition().addPlayer(three);
-//        Player four = new Player(match, null, null, null);
-//        four.respawn(Color.YELLOW);
-//        four.getPosition().addPlayer(four);
-//        competitors = match.getBoard().getVisibleSquares(square, INF, 0, true);
-//        assertEquals(competitors.contains(one.getPosition()), true);
-//        assertEquals(competitors.contains(two.getPosition()), true);
-//        assertEquals(competitors.contains(three.getPosition()), true);
-//        assertEquals(competitors.contains(four.getPosition()), false);
+        Match match = new Match();
+        Square square = match.getBoard().getSquare(0, 0);
+        List<Square> competitors;
+        Player one = new Player(match, null, null);
+        one.respawn(Color.RED);
+        one.getPosition().addPlayer(one);
+        Player two = new Player(match, null, null);
+        two.respawn(Color.RED);
+        two.getPosition().addPlayer(two);
+        Player three = new Player(match, null, null);
+        three.respawn(Color.BLUE);
+        three.getPosition().addPlayer(three);
+        Player four = new Player(match, null, null);
+        four.respawn(Color.YELLOW);
+        four.getPosition().addPlayer(four);
+        competitors = match.getBoard().getVisibleSquares(square, INF, 0, true);
+        assertTrue(competitors.contains(one.getPosition()));
+        assertTrue(competitors.contains(two.getPosition()));
+        assertTrue(competitors.contains(three.getPosition()));
+        assertFalse(competitors.contains(four.getPosition()));
     }
 
-    //test the correct visibility through walls
-
+    /**
+     * Tests the correct visibility through walls
+     */
     @Test
     void testGetCardinalDirectionSquares() {
         Match match = new Match();
@@ -171,7 +175,9 @@ class GameBoardTest {
             }
     }
 
-    //test the correct square's reachability
+    /**
+     * Tests the correct square's reachability
+     */
 
     @Test
     void testGetReachableSquares() {
@@ -197,6 +203,9 @@ class GameBoardTest {
             }
     }
 
+    /**
+     * Tests if the {@link GameBoard#getThirdSquareInTheSameDirection(Square, Square, boolean)} method works
+     */
     @Test
     void getThirdSquareInTheSameDirection() {
         Match match = new Match();
@@ -217,6 +226,9 @@ class GameBoardTest {
         assertEquals(gameBoard.getSquare(2, 2), s3);
     }
 
+    /**
+     * Tests if the {@link GameBoard#getPlayersInTheSameDirection(Player, List, int, int, boolean)} method works
+     */
     @Test
     void getPlayersInTheSameDirection() {
         Match match = new Match();

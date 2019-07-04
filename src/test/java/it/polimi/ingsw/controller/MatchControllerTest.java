@@ -10,9 +10,14 @@ import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-
+/**
+ * Contains tests for {@link MatchController}'s methods
+ */
 class MatchControllerTest {
-
+    /**
+     * Tests the scoring of a track. The player with the most tokens is first.
+     * If multiple players dealt the same amount of damage, break the tie in favor of the player whose damage landed first.
+     */
     @Test
     void sortTest() {
         List<PlayerId> track = new ArrayList<>();
