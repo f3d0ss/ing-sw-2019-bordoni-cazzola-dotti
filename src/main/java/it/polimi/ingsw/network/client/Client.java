@@ -70,7 +70,7 @@ public class Client implements Runnable {
      * @return the answer to be sent to server
      */
 
-    String manageMessage(String gsonCoded) {
+    synchronized String manageMessage(String gsonCoded) {
         Message fromServer = parser.deserialize(gsonCoded, Message.class);
         if (fromServer.type == Protocol.UPDATE_MATCH) {
             view.update(((MatchViewTransfer) fromServer).getAttachment());
