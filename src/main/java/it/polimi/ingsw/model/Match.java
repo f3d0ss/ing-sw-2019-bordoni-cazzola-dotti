@@ -172,7 +172,7 @@ public class Match {
      * @return kill shoot track of the match
      */
     public List<PlayerId> getKillshotTrack() {
-        return killshotTrack;
+        return new ArrayList<>(killshotTrack);
     }
 
     /**

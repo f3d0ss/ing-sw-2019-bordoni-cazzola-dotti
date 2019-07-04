@@ -303,12 +303,8 @@ public class Player {
         position = match.getBoard().getSpawn(color);
         position.addPlayer(this);
         health = new ArrayList<>();
-        if (match.isLastTurn()) {
-            if (flippedBoard && !diedInFinalFrenzy) {
-                deaths = 0;
-                diedInFinalFrenzy = true;
-            }
-            flippedBoard = true;
+        if (match.isLastTurn() && !flippedBoard) {
+            flipBoard();
         }
         update();
     }
@@ -590,6 +586,7 @@ public class Player {
      */
     public void flipBoard() {
         this.flippedBoard = true;
+        this.deaths = 0;
         update();
     }
 
