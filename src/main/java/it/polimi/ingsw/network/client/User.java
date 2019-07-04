@@ -19,6 +19,8 @@ class User {
     private static final String GUI = "GUI";
     private static final String SOCKET = "Socket";
     private static final String RMI = "RMI";
+    private static final String EXIT = "Esci";
+    private static final String RECONNECT = "Riconnetti";
     private static final int MILLIS_IN_SECOND = 1000;
     private static final int SECONDS_TO_PING_SERVER = 2;
 
@@ -31,6 +33,8 @@ class User {
      */
 
     public static void main(String[] args) {
+        boolean keepAlive;
+        boolean reconnect = true;
         String connectionType;
         String uiChoice;
         Ui ui = new Cli();
@@ -52,21 +56,27 @@ class User {
             client.setUi(gui);
             ui = gui;
         }
-        connectionType = client.manageMessage(parser.serialize(new Message(Protocol.CHOOSE_CONNECTION, "", Arrays.asList(SOCKET, RMI))));
-        if (connectionType.equals(SOCKET))
-            client = new SocketClient(ui);
-        else {
-            client = new RmiClient(ui);
-        }
-        new Thread(client).start();
-        while (client.isClientReady() && !client.isServerReachable()) {
-            try {
-                sleep(MILLIS_IN_SECOND * SECONDS_TO_PING_SERVER);
-            } catch (InterruptedException e) {
-                break;
+        while(reconnect) {
+            keepAlive = true;
+            connectionType = client.manageMessage(parser.serialize(new Message(Protocol.CHOOSE_CONNECTION, "", Arrays.asList(SOCKET, RMI))));
+            if (connectionType.equals(SOCKET))
+                client = new SocketClient(ui);
+            else {
+                client = new RmiClient(ui);
             }
+            new Thread(client).start();
+            while (keepAlive) {
+                try {
+                    sleep(MILLIS_IN_SECOND * SECONDS_TO_PING_SERVER);
+                } catch (InterruptedException e) {
+                    keepAlive = false;
+                }
+                if ((client.isClientReady() && !client.isServerReachable()))
+                    keepAlive = false;
+            }
+            reconnect = client.manageMessage(parser.serialize(new Message(Protocol.UNREACHABLE_SERVER, "", Arrays.asList(EXIT, RECONNECT)))).equals(RECONNECT);
+            client.stop();
         }
-        client.manageMessage(parser.serialize(new Message(Protocol.UNREACHABLE_SERVER, "", null)));
-        client.stop();
+        System.exit(0);
     }
 }
