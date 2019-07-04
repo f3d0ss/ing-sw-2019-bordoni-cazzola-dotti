@@ -179,4 +179,51 @@ class CommandsTest {
         if (payScopeCommand.isUndoable())
             payScopeCommand.undo();
     }
+
+    @Test
+    void testPayWeaponCommand() {
+        Match match = new Match();
+        Player player = new Player(match, PlayerId.BLUE, PlayerId.BLUE.playerIdName());
+        player.respawn(Color.YELLOW);
+        Weapon weapon = new Weapon();
+        PayWeaponCommand payWeaponCommand = new PayWeaponCommand(player, new PendingPaymentWeaponState(AggregateActionID.SHOOT.create(), weapon));
+        payWeaponCommand.execute();
+        assertTrue(player.getWeapons().contains(weapon));
+        payWeaponCommand.createCommandMessage();
+        if (payWeaponCommand.isUndoable()) {
+            payWeaponCommand.undo();
+            assertFalse(player.getWeapons().contains(weapon));
+        } else {
+            payWeaponCommand.undo();
+            assertFalse(player.getWeapons().contains(weapon));
+        }
+    }
+
+    @Test
+    void testPayWeaponOptionCommand() {
+        Match match = new Match();
+        Player player = new Player(match, PlayerId.BLUE, PlayerId.BLUE.playerIdName());
+        player.respawn(Color.YELLOW);
+        Weapon weapon = new Weapon();
+        PayWeaponOptionCommand payWeaponOptionCommand = new PayWeaponOptionCommand(player, new PendingPaymentWeaponOptionState(AggregateActionID.SHOOT.create(), weapon, weapon.getReloadingCost()));
+        payWeaponOptionCommand.execute();
+        payWeaponOptionCommand.createCommandMessage();
+        if (payWeaponOptionCommand.isUndoable())
+            payWeaponOptionCommand.undo();
+    }
+
+    @Test
+    void testRespawnCommand() {
+        Match match = new Match();
+        Player player = new Player(match, PlayerId.BLUE, PlayerId.BLUE.playerIdName());
+        player.respawn(Color.YELLOW);
+        PowerUp powerUp = match.drawPowerUpCard();
+        RespawnCommand respawnCommand = new RespawnCommand(player, powerUp);
+        respawnCommand.execute();
+        assertFalse(player.getPowerUps().contains(powerUp));
+        assertEquals(match.getBoard().getSpawn(powerUp.getColor()), player.getPosition());
+        respawnCommand.createCommandMessage();
+        assertFalse(respawnCommand.isUndoable());
+        assertThrows(IllegalUndoException.class, respawnCommand::undo);
+    }
 }
