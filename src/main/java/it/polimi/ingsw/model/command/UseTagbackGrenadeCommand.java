@@ -3,6 +3,7 @@ package it.polimi.ingsw.model.command;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.PowerUp;
 import it.polimi.ingsw.model.playerstate.IdleState;
+import it.polimi.ingsw.model.playerstate.ShootedState;
 import it.polimi.ingsw.view.commandmessage.CommandMessage;
 import it.polimi.ingsw.view.commandmessage.CommandType;
 import it.polimi.ingsw.view.commandmessage.PowerUpCommandMessage;
@@ -32,7 +33,7 @@ public class UseTagbackGrenadeCommand implements Command {
     public void execute() {
         player.pay(grenade);
         player.getLastShooter().addMarks(PowerUp.TAGBACK_GRENADE_MARKS, player.getId());
-        player.changeState(new IdleState());
+        player.changeState(new ShootedState());
     }
 
     /**

@@ -4,7 +4,6 @@ import it.polimi.ingsw.model.command.*;
 import it.polimi.ingsw.model.playerstate.ChoosingWeaponOptionState;
 import it.polimi.ingsw.model.playerstate.ReadyToShootState;
 import it.polimi.ingsw.utils.Parser;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -17,10 +16,13 @@ import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Test for {@link Weapon}'s methods
+ */
 class WeaponTest {
-    private List<Weapon> allWeapons;
+    private static final List<Weapon> allWeapons = getAllWeapons();
 
-    private List<Weapon> getAllWeapons() {
+    static private List<Weapon> getAllWeapons() {
         Parser parser = new Parser();
         List<Weapon> weaponList = new ArrayList<>();
         File file = new File("src/resources/weapons/");
@@ -49,12 +51,6 @@ class WeaponTest {
 
     private Square getRandomSquare(GameBoard gameBoard) {
         return gameBoard.getSquareList().get(new Random().nextInt(gameBoard.getSquareList().size()));
-    }
-
-
-    @BeforeEach
-    void setUp() {
-        allWeapons = getAllWeapons();
     }
 
     @Test
@@ -123,6 +119,9 @@ class WeaponTest {
             }
     }
 
+    /**
+     * Test if without targets the weapon does not create commands
+     */
     @Test
     void getPossibleCommandsWithoutTargetPlayers() {
         Match match = new Match();
@@ -151,6 +150,9 @@ class WeaponTest {
         }
     }
 
+    /**
+     * Tests if commands to select a weapon mode are generated correctly
+     */
     @Test
     void getSelectWeaponModeCommands() {
         Match match = new Match();
@@ -168,6 +170,9 @@ class WeaponTest {
         }
     }
 
+    /**
+     * Tests correct generation of move commands
+     */
     @Test
     void testExtraMoveCommands() {
         Match match = new Match();
@@ -199,6 +204,9 @@ class WeaponTest {
         }
     }
 
+    /**
+     * Test creation of commands for targets and shooter on the same square
+     */
     @Test
     void getPossibleCommandsTargetsOnSameSquare() {
         Match match = new Match();
@@ -249,6 +257,9 @@ class WeaponTest {
         }
     }
 
+    /**
+     * Test creation of commands for targets in the same room
+     */
     @Test
     void getPossibleCommandsTargetsInTheSameRoom() {
         Match match = new Match();
@@ -309,6 +320,10 @@ class WeaponTest {
         }
     }
 
+
+    /**
+     * Tests creation of shoot commands
+     */
     @Test
     void getPossibleShootCommandsTest() {
         Match match = new Match();
@@ -378,6 +393,9 @@ class WeaponTest {
         }
     }
 
+    /**
+     * Tests barbecue mod
+     */
     @Test
     void flamethrowerSecondModeTest() {
         Match match = new Match();

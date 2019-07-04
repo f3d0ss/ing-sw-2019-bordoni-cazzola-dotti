@@ -1,7 +1,6 @@
-package it.polimi.ingsw.network.client;
+package it.polimi.ingsw.view;
 
 import it.polimi.ingsw.model.PlayerId;
-import it.polimi.ingsw.view.ModelView;
 import it.polimi.ingsw.view.commandmessage.CommandMessage;
 
 import java.util.List;
@@ -25,4 +24,10 @@ public interface Ui {
     void showLeaderBoard(Map<PlayerId, Long> leaderBoard);
 
     void run();
+
+    void refreshView(PlayerView pw);
+
+    void refreshView(SquareView sw);
+
+    void refreshView(MatchView mw);
 }

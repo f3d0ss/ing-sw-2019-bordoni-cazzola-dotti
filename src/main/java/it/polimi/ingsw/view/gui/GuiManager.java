@@ -1,6 +1,5 @@
 package it.polimi.ingsw.view.gui;
 
-import it.polimi.ingsw.network.client.Gui;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;

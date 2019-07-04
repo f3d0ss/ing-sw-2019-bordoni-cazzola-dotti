@@ -26,12 +26,16 @@ import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
+/**
+ * This class is the controller of the main GUI
+ */
 public class MainGuiController {
 
 
     static final int WEAPON_HEIGHT = 406;
     static final int WEAPON_WIDTH = 240;
     private static final int WEAPON_SPAWN_MARGIN_RATIO = 30;
+    private static final double WEAPON_PREF_SPAWN_MARGIN_RATIO = 10;
     private static final int NUMBER_OF_STANDAR_SKULL = 8;
     private static final int HEIGHT_RATIO_SQUARE_INPUT = 1;
     private static final int WIDTH_RATIO_SQUARE_INPUT = 3;
@@ -42,6 +46,7 @@ public class MainGuiController {
     private static final double RADIUS_HIGLIGHT = 0.1;
     private static final int GAMEBOARD_H_GAP_RATIO = 40;
     private static final int GAMEBOARD_V_GAP_RATIO = 40;
+    private static final int MARING_FOR_TEXT_COMMAND = 5;
     @FXML
     private VBox logContainer;
     @FXML
@@ -76,15 +81,16 @@ public class MainGuiController {
     private static final String GAMEBOARD_IMAGES_DIR = IMAGES_DIR + "gameboards/GameBoard00";
     static final String POWERUP_IMAGES_DIR = IMAGES_DIR + "cards/AD_powerups_" + LANG + SPACE;
     static final String WEAPON_IMAGES_DIR = IMAGES_DIR + "cards/AD_weapons_" + LANG + SPACE;
-    private static final String TOKEN_IMAGES_DIR = IMAGES_DIR + "tokens/";
+    static final String TOKEN_IMAGES_DIR = IMAGES_DIR + "tokens/";
     private static final String AMMO_TILE_IMAGES_DIR = IMAGES_DIR + "ammotiles/";
     static final String AMMO_IMAGES_DIR = IMAGES_DIR + "ammos/";
-    private static final String SKULL_IMAGE_URI = IMAGES_DIR + "other/skull" + IMAGE_EXTENSION;
+    static final String SKULL_IMAGE_URI = IMAGES_DIR + "other/skull" + IMAGE_EXTENSION;
     static final String BACK = "back";
     static final String PLAYERBOARD_IMAGES_DIR = IMAGES_DIR + "playerboards/";
     static final String AGGREGATE_ACTION_FILE_PATTERN = "_aggregate_action" + IMAGE_EXTENSION;
     static final String AGGREGATE_ACTION_FLIPPED_FILE_PATTERN = "_aggregate_action_flipped" + IMAGE_EXTENSION;
     static final String BOARD_FILE_PATTERN = "_board_without_aggregate_action" + IMAGE_EXTENSION;
+    static String FLIPPED_BOARD_FILE_PATTERN = "_flipped_board_without_aggregate_action" + IMAGE_EXTENSION;
     private static final String KILL_SHOT_TRACK_URI = IMAGES_DIR + "gameboards/killShootTrack" + IMAGE_EXTENSION;
     private static final String BLUE_SPAWN_WEAPON_URI = IMAGES_DIR + "gameboards/blueSpawn" + IMAGE_EXTENSION;
     private static final String RED_SPAWN_WEAPON_URI = IMAGES_DIR + "gameboards/redSpawn" + IMAGE_EXTENSION;
@@ -98,6 +104,9 @@ public class MainGuiController {
     private Map<PlayerId, HBox> playerBoxes = new EnumMap<>(PlayerId.class);
     private Stage stage;
 
+    /**
+     * This method initialize the main content of the GUI
+     */
     public void initialize() {
         squareBoxes = new VBox[gameBoard.getRowCount()][gameBoard.getColumnCount()];
         gameBoard.hgapProperty().bind(gameBoard.widthProperty().divide(GAMEBOARD_H_GAP_RATIO));
@@ -117,46 +126,87 @@ public class MainGuiController {
         }
     }
 
-    public int getSelectedCommand() {
+    /**
+     * This method return the index of the selected command
+     *
+     * @return Index of the selected command
+     */
+    int getSelectedCommand() {
         return selectedCommand;
     }
 
-    public void updateModelView(ModelView modelView) {
+    /**
+     * This method update the content of the stage based on the data passed
+     *
+     * @param modelView The data to be displayed
+     */
+    private void updateModelView(ModelView modelView) {
         this.modelView = modelView;
-        printSpawnWeapons(modelView.getWeaponsOnSpawn());
-        printKillshotTrack(modelView.getMatch().getKillshotTrack());
-        playerBoardController.printPlayerBoard(modelView.getMe());
-        printBoard(modelView.getBoard());
-        otherPlayerBoardControllers.forEach((playerId, otherPlayerBoardController) -> otherPlayerBoardController.update(modelView.getEnemies().get(playerId)));
-    }
-
-    private void printBoard(SquareView[][] board) {
-        playerBoxes.clear();
-        for (int i = 0; i < board.length; i++) {
-            for (int j = 0; j < board[i].length; j++) {
-                if (board[i][j] != null) {
-                    squareBoxes[i][j].getChildren().forEach(node -> ((Pane) node).getChildren().clear());
-                    if (board[i][j].getColor() == null) {
-                        HBox ammoBox = new HBox();
-                        AmmoTileView ammoTileView = ((TurretSquareView) board[i][j]).getAmmoTile();
-                        String ammoTileURI = AMMO_TILE_IMAGES_DIR
-                                + ((!ammoTileView.isEmpty()) ? ammoTileView.toString() : BACK)
-                                + IMAGE_EXTENSION;
-                        setBackgroundImageFromURI(ammoBox, ammoTileURI);
-                        addToSquareBox(squareBoxes[i][j], ammoBox);
-                    }
-                    int finalI = i;
-                    int finalJ = j;
-                    board[i][j].getHostedPlayers().forEach(playerId -> {
-                        HBox tokenBox = getHBoxWithTokenBackground(playerId);
-                        addToSquareBox(squareBoxes[finalI][finalJ], tokenBox);
-                        playerBoxes.put(playerId, tokenBox);
-                    });
-                }
+        updatePlayer(modelView.getMe());
+        updateMatchView(modelView.getMatch());
+        for (SquareView[] squareViews : modelView.getBoard()) {
+            for (SquareView squareView : squareViews) {
+                if (squareView != null)
+                    updateSquare(squareView);
             }
         }
     }
 
+    /**
+     * This method update a square in the stage based on the data passed
+     *
+     * @param squareView The square to be displayed
+     */
+    void updateSquare(SquareView squareView) {
+        int row = squareView.getRow();
+        int col = squareView.getCol();
+        squareBoxes[row][col].getChildren().forEach(node -> ((Pane) node).getChildren().clear());
+        if (squareView.getColor() == null) {
+            HBox ammoBox = new HBox();
+            AmmoTileView ammoTileView = ((TurretSquareView) squareView).getAmmoTile();
+            String ammoTileURI = AMMO_TILE_IMAGES_DIR
+                    + ((!ammoTileView.isEmpty()) ? ammoTileView.toString() : BACK)
+                    + IMAGE_EXTENSION;
+            setBackgroundImageFromURI(ammoBox, ammoTileURI);
+            addToSquareBox(squareBoxes[row][col], ammoBox);
+        } else
+            printWeaponsOnSpawn(squareView.getColor(), ((SpawnSquareView) squareView).getWeapons());
+        squareView.getHostedPlayers().forEach(playerId -> {
+            HBox tokenBox = getHBoxWithTokenBackground(playerId);
+            addToSquareBox(squareBoxes[row][col], tokenBox);
+            playerBoxes.put(playerId, tokenBox);
+        });
+    }
+
+    /**
+     * This method update a player in the stage based on the data passed
+     *
+     * @param playerView The player to be displayed
+     */
+    void updatePlayer(PlayerView playerView) {
+        if (playerView.isMe())
+            playerBoardController.update(playerView);
+        else if (otherPlayerBoardControllers.containsKey(playerView.getId())) {
+            otherPlayerBoardControllers.get(playerView.getId()).update(playerView);
+        }
+    }
+
+    /**
+     * This method update the match in the stage based on the data passed
+     *
+     * @param matchView The match to be displayed
+     */
+    void updateMatchView(MatchView matchView) {
+        printKillshotTrack(matchView.getKillshotTrack());
+        playerBoardController.update(matchView.isLastTurn());
+        otherPlayerBoardControllers.forEach((playerId, playerBoardController1) -> playerBoardController1.update(matchView.isLastTurn()));
+    }
+
+    /**
+     * Print the killShot track
+     *
+     * @param killShotTrack The killShot track to be displayed
+     */
     private void printKillshotTrack(List<PlayerId> killShotTrack) {
         killShotTrackBoxStandard.getChildren().clear();
         killShotTrackBoxExtra.getChildren().clear();
@@ -184,6 +234,12 @@ public class MainGuiController {
         }
     }
 
+    /**
+     * Retrurn a HBox with the background image of the player's token
+     *
+     * @param playerId The ID of the player's token
+     * @return The HBox with the background image
+     */
     private HBox getHBoxWithTokenBackground(PlayerId playerId) {
         HBox tokenBox = new HBox();
         String tokenImageURI = TOKEN_IMAGES_DIR
@@ -193,41 +249,47 @@ public class MainGuiController {
         return tokenBox;
     }
 
-    private void printSpawnWeapons(Map<Color, List<WeaponView>> weaponsOnSpawn) {
-        weaponsOnSpawnBoxes.clear();
-        weaponsOnSpawn.forEach((color, weaponViews) -> {
-            switch (color) {
-                case RED:
-                    printWeaponsOnSpawn(redSpawnWeapons, weaponViews);
-                    break;
-                case BLUE:
-                    printWeaponsOnSpawn(blueSpawnWeapons, weaponViews);
-                    break;
-                case YELLOW:
-                    printWeaponsOnSpawn(yellowSpawnWeapons, weaponViews);
-                    break;
-            }
-        });
-    }
-
-    private void printWeaponsOnSpawn(HBox spawn, List<WeaponView> weaponViews) {
+    /**
+     * Show the weapon of a single spawn
+     *
+     * @param color       Thw Color representing the spawn
+     * @param weaponViews The weapons available in the spawn
+     */
+    private void printWeaponsOnSpawn(Color color, List<WeaponView> weaponViews) {
+        HBox spawn = new HBox();
+        switch (color) {
+            case RED:
+                spawn = redSpawnWeapons;
+                break;
+            case BLUE:
+                spawn = blueSpawnWeapons;
+                break;
+            case YELLOW:
+                spawn = yellowSpawnWeapons;
+                break;
+        }
         spawn.getChildren().clear();
+        HBox finalSpawn = spawn;
         weaponViews.forEach(weaponView -> {
             HBox weaponBox = new HBox();
-            bindHeightToParent(weaponBox, spawn, WEAPON_HEIGHT, WEAPON_WIDTH);
+            bindHeightToParent(weaponBox, finalSpawn, WEAPON_HEIGHT, WEAPON_WIDTH);
             String weaponImageURI = WEAPON_IMAGES_DIR
                     + weaponView.getID()
                     + IMAGE_EXTENSION;
             setBackgroundImageFromURI(weaponBox, weaponImageURI);
-            HBox.setMargin(weaponBox, new Insets(0, spawn.getWidth() / WEAPON_SPAWN_MARGIN_RATIO, 0, spawn.getWidth() / WEAPON_SPAWN_MARGIN_RATIO));
-            spawn.getChildren().add(weaponBox);
+            HBox.setMargin(weaponBox, new Insets(0, (finalSpawn.getWidth() != 0)? finalSpawn.getWidth() / WEAPON_SPAWN_MARGIN_RATIO: finalSpawn.getPrefWidth() / WEAPON_PREF_SPAWN_MARGIN_RATIO, 0, (finalSpawn.getWidth() != 0)? finalSpawn.getWidth() / WEAPON_SPAWN_MARGIN_RATIO: finalSpawn.getPrefWidth() / WEAPON_PREF_SPAWN_MARGIN_RATIO));
+            finalSpawn.getChildren().add(weaponBox);
             HBox.setHgrow(weaponBox, Priority.ALWAYS);
             weaponsOnSpawnBoxes.put(weaponView.getName(), weaponBox);
         });
     }
 
+    /**
+     * Event handler for the button of the other player
+     *
+     * @param playerId The ID of the player associated with the button
+     */
     private void handlePlayerButton(PlayerId playerId) {
-
         try {
             if (otherPlayerBoardControllers.get(playerId) != null) {
                 return;
@@ -235,7 +297,7 @@ public class MainGuiController {
             Stage otherPlayerStage = new Stage();
             PlayerBoardController controller = new PlayerBoardController(false, otherPlayerStage);
             otherPlayerBoardControllers.put(playerId, controller);
-            otherPlayerBoardControllers.get(playerId).setPlayer(modelView.getEnemies().get(playerId));
+            otherPlayerBoardControllers.get(playerId).setPlayer(modelView.getEnemies().get(playerId), modelView.getMatch().isLastTurn());
             otherPlayerStage.setScene(new Scene(controller));
             otherPlayerStage.setAlwaysOnTop(true);
             otherPlayerStage.setOnCloseRequest(windowEvent -> otherPlayerBoardControllers.remove(playerId));
@@ -244,9 +306,14 @@ public class MainGuiController {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
+    /**
+     * Event handler for the click of something associated with a command
+     *
+     * @param index The index of the command
+     * @param lock  The lock used to let the other thread get the index of the command
+     */
     private void handleCommandClick(int index, Lock lock) {
         clickableNode.forEach(this::setNodeUnClickable);
         clickableSquare.forEach(this::setSquareUnClickable);
@@ -257,8 +324,16 @@ public class MainGuiController {
         lock.unlock();
     }
 
+    /**
+     * Set a node clickable and associate it with a command index
+     *
+     * @param node         The node that need to become clickable
+     * @param commandIndex The index of the command
+     * @param lock         The lock used to let the other thread get the index of the command
+     */
     private void setNodeClickable(HBox node, int commandIndex, Lock lock) {
         HBox overlay = new HBox();
+        overlay.setFocusTraversable(true);
         overlay.setBackground((new Background(new BackgroundFill(javafx.scene.paint.Color.YELLOW, new CornerRadii(RADIUS_HIGLIGHT), Insets.EMPTY))));
         overlay.setOpacity(OPACITY_FOR_SELECTION);
         overlay.setOnMouseClicked(mouseEvent -> handleCommandClick(commandIndex, lock));
@@ -270,27 +345,57 @@ public class MainGuiController {
         node.getChildren().setAll(overlay);
     }
 
-    private void setSquareClickable(VBox node, int commandIndex, Lock lock) {
+    /**
+     * Set a square clickable and associate it with a command index
+     *
+     * @param square       The square that need to become clickable
+     * @param commandIndex The index of the command
+     * @param lock         The lock used to let the other thread get the index of the command
+     */
+    private void setSquareClickable(VBox square, int commandIndex, Lock lock) {
         HBox overlay = new HBox();
         overlay.setBackground((new Background(new BackgroundFill(javafx.scene.paint.Color.YELLOW, new CornerRadii(RADIUS_HIGLIGHT), Insets.EMPTY))));
         overlay.setOpacity(OPACITY_FOR_SELECTION);
         overlay.setOnMouseClicked(mouseEvent -> handleCommandClick(commandIndex, lock));
-        clickableSquare.add(addToSquareBox(node, overlay));
+        overlay.setFocusTraversable(true);
+        clickableSquare.add(addToSquareBox(square, overlay));
     }
 
-    private void setSquareUnClickable(HBox node) {
-        node.getChildren().remove(node.getChildren().size() - 1);
+    /**
+     * Restore the square as before it became clickable
+     *
+     * @param square The square to restore
+     */
+    private void setSquareUnClickable(HBox square) {
+        square.getChildren().remove(square.getChildren().size() - 1);
     }
 
+    /**
+     * Restore the node as before it became clickable
+     *
+     * @param node The node to restore
+     */
     private void setNodeUnClickable(HBox node) {
         node.getChildren().setAll(((HBox) node.getChildren().get(0)).getChildren());
     }
 
+    /**
+     * Return the root of the stage
+     *
+     * @return The root of the stage
+     */
     Pane getRoot() {
         return mainPane;
     }
 
-    public void showCommand(List<CommandMessage> commands, boolean undo, Lock lock) {
+    /**
+     * Display commands
+     *
+     * @param commands List of commands to be shown
+     * @param undo     True when it need to show the undo
+     * @param lock     The lock used to let the other thread get the index of the command
+     */
+    void showCommand(List<CommandMessage> commands, boolean undo, Lock lock) {
         int i;
         for (i = 0; i < commands.size(); i++) {
             switch (commands.get(i).getType()) {
@@ -339,27 +444,45 @@ public class MainGuiController {
             showTextCommand(CommandType.UNDO.getString(), i, lock);
     }
 
+    /**
+     * Show the command that need to be displayed as text
+     *
+     * @param command      The command
+     * @param commandIndex The index of the command
+     * @param lock         The lock used to let the other thread get the index of the command
+     */
     private void showTextCommand(String command, int commandIndex, Lock lock) {
         Label commandLabel = createCommandLabel(command);
         commandLabel.setOnMouseClicked(actionEvent -> handleCommandClick(commandIndex, lock));
         extraCommandContainer.getChildren().add(commandLabel);
     }
 
+    /**
+     * Create the label for a command to be shown
+     *
+     * @param command The command
+     * @return The label
+     */
     private Label createCommandLabel(String command) {
         Label commandLabel = new Label(command);
         commandLabel.setWrapText(true);
         commandLabel.maxWidthProperty().bind(extraCommandContainer.widthProperty());
-        commandLabel.setPadding(new Insets(5));
+        commandLabel.setPadding(new Insets(MARING_FOR_TEXT_COMMAND));
         return commandLabel;
     }
 
-    public void setModelView(ModelView modelView) {
+    /**
+     * Set for the first time the data to be displayed in the UI
+     *
+     * @param modelView The data to be shown
+     */
+    void setModelView(ModelView modelView) {
         this.modelView = modelView;
         startSkullNumber = modelView.getMatch().getDeathsCounter();
         String gameboardImageURI = GAMEBOARD_IMAGES_DIR + modelView.getMatch().getGameBoardId() + IMAGE_EXTENSION;
         setBackgroundImageFromURI(gameBoard, gameboardImageURI);
 
-        playerBoardController.setPlayer(modelView.getMe());
+        playerBoardController.setPlayer(modelView.getMe(), modelView.getMatch().isLastTurn());
 
         setBackgroundImageFromURI(killShotTrackBox, KILL_SHOT_TRACK_URI);
 
@@ -372,7 +495,7 @@ public class MainGuiController {
         AtomicInteger i = new AtomicInteger(0);
         AtomicInteger j = new AtomicInteger(0);
         modelView.getEnemies().forEach((playerId, playerView) -> {
-            Button playerButton = new Button(playerId.playerIdName());
+            Button playerButton = new Button(playerId.playerIdName() + "\n(" + playerView.getNickname() + ")");
             playerButton.setOnMouseClicked(mouseEvent -> handlePlayerButton(playerId));
             bindToParent(playerButton, otherPlayerGrid, otherPlayerGrid.getRowCount(), otherPlayerGrid.getColumnCount());
             otherPlayerGrid.add(playerButton, i.getAndIncrement() % otherPlayerGrid.getColumnCount(), j.getAndIncrement() / otherPlayerGrid.getColumnCount());
@@ -388,6 +511,11 @@ public class MainGuiController {
         updateModelView(modelView);
     }
 
+    /**
+     * Return the instance of this controller
+     *
+     * @return The instance of this controller
+     */
     static MainGuiController getInstance() {
         FXMLLoader fxmlLoader = new FXMLLoader();
         fxmlLoader.setLocation(MainGuiController.class.getResource("/fx/MainGui.fxml"));
@@ -399,13 +527,28 @@ public class MainGuiController {
         return fxmlLoader.getController();
     }
 
+    /**
+     * Bind the size of the child to the parent with the specified ratio
+     *
+     * @param child       The child
+     * @param parent      The parent
+     * @param heightRatio The ratio for the height
+     * @param widthRatio  The ratio for the width
+     */
     static void bindToParent(Region child, Pane parent, int heightRatio, int widthRatio) {
         child.maxHeightProperty().bind(parent.heightProperty().divide(heightRatio));
         child.maxWidthProperty().bind(parent.widthProperty().divide(widthRatio));
-        HBox.setMargin(child, new Insets(0, 0, 0, 1));
+        HBox.setMargin(child, new Insets(0, 0, 1, 0));
     }
 
-    static HBox getHBoxWithSkullBackground(Pane parent, int widthRatio) {
+    /**
+     * Return an HBox with the skull image as background with height fixed to the parent and width fixed to the parent with a specified ratio
+     *
+     * @param parent     The parent of the HBox
+     * @param widthRatio The ratio of the width
+     * @return The HBox created
+     */
+    private static HBox getHBoxWithSkullBackground(Pane parent, int widthRatio) {
         HBox tokenBox = new HBox();
         tokenBox.setPrefHeight(parent.getPrefHeight());
         tokenBox.maxWidthProperty().bind(parent.widthProperty().divide(widthRatio));
@@ -414,6 +557,13 @@ public class MainGuiController {
         return tokenBox;
     }
 
+    /**
+     * Return an HBox square with the height fixed to parent and background of player's token
+     *
+     * @param playerId The ID of the player
+     * @param parent   The parent of the HBox
+     * @return The HBox with the height fixed to parent and background of player's token
+     */
     static HBox getHBoxWithTokenBackgroundWithHighFixedToParent(PlayerId playerId, Pane parent) {
         HBox hbox = new HBox();
         bindHeightToParent(hbox, parent);
@@ -424,8 +574,14 @@ public class MainGuiController {
         return hbox;
     }
 
+    /**
+     * Set the image pointed by the URI as background of the pane
+     *
+     * @param pane The pane
+     * @param uri  The URI
+     */
     static void setBackgroundImageFromURI(Pane pane, String uri) {
-        Image image = new Image(MainGuiController.class.getResource(uri).toExternalForm());
+        Image image = ImageCache.getImage(uri);
         pane.setBackground(new Background(new BackgroundFill(new ImagePattern(image), CornerRadii.EMPTY, Insets.EMPTY)));
     }
 
@@ -455,7 +611,12 @@ public class MainGuiController {
         HBox.setMargin(child, new Insets(0, 0, 0, 1));
     }
 
-    public void showLeaderBoard(Map<PlayerId, Long> leaderBoard) {
+    /**
+     * Show the leader board
+     *
+     * @param leaderBoard The leader board to be shown
+     */
+    void showLeaderBoard(Map<PlayerId, Long> leaderBoard) {
         int i = 1;
         String playerRecord;
         for (Map.Entry<PlayerId, Long> entry : leaderBoard.entrySet()) {
@@ -474,6 +635,13 @@ public class MainGuiController {
         extraCommandContainer.getChildren().add(commandLabel);
     }
 
+    /**
+     * Add the elementToAdd to the squareBox
+     *
+     * @param squareBox    The squareBox
+     * @param elementToAdd The element to add
+     * @return The row of the square where the element is added
+     */
     private HBox addToSquareBox(VBox squareBox, Pane elementToAdd) {
         for (Node child : squareBox.getChildren()) {
             if (((HBox) child).getChildren().size() < COL_IN_SQUARE) {
@@ -489,7 +657,14 @@ public class MainGuiController {
         return ((HBox) squareBox.getChildren().get(squareBox.getChildren().size() - 1));
     }
 
+    /**
+     * Set the stage
+     *
+     * @param stage The stage
+     */
     void setStage(Stage stage) {
         this.stage = stage;
     }
+
+
 }
