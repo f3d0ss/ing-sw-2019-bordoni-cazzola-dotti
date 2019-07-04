@@ -35,6 +35,7 @@ public class MainGuiController {
     static final int WEAPON_HEIGHT = 406;
     static final int WEAPON_WIDTH = 240;
     private static final int WEAPON_SPAWN_MARGIN_RATIO = 30;
+    private static final double WEAPON_PREF_SPAWN_MARGIN_RATIO = 10;
     private static final int NUMBER_OF_STANDAR_SKULL = 8;
     private static final int HEIGHT_RATIO_SQUARE_INPUT = 1;
     private static final int WIDTH_RATIO_SQUARE_INPUT = 3;
@@ -139,82 +140,66 @@ public class MainGuiController {
      *
      * @param modelView The data to be displayed
      */
-    void updateModelView(ModelView modelView) {
+    private void updateModelView(ModelView modelView) {
         this.modelView = modelView;
         updatePlayer(modelView.getMe());
+        updateMatchView(modelView.getMatch());
         for (SquareView[] squareViews : modelView.getBoard()) {
             for (SquareView squareView : squareViews) {
                 if (squareView != null)
                     updateSquare(squareView);
             }
         }
-        updateMatchView(modelView.getMatch()); }
+    }
 
-    void updateSquare(SquareView sw){
-        int row = sw.getRow();
-        int col = sw.getCol();
+    /**
+     * This method update a square in the stage based on the data passed
+     *
+     * @param squareView The square to be displayed
+     */
+    void updateSquare(SquareView squareView) {
+        int row = squareView.getRow();
+        int col = squareView.getCol();
         squareBoxes[row][col].getChildren().forEach(node -> ((Pane) node).getChildren().clear());
-        if (sw.getColor() == null) {
+        if (squareView.getColor() == null) {
             HBox ammoBox = new HBox();
-            AmmoTileView ammoTileView = ((TurretSquareView) sw).getAmmoTile();
+            AmmoTileView ammoTileView = ((TurretSquareView) squareView).getAmmoTile();
             String ammoTileURI = AMMO_TILE_IMAGES_DIR
                     + ((!ammoTileView.isEmpty()) ? ammoTileView.toString() : BACK)
                     + IMAGE_EXTENSION;
             setBackgroundImageFromURI(ammoBox, ammoTileURI);
             addToSquareBox(squareBoxes[row][col], ammoBox);
-        }else
-            printSpawnWeapons(modelView.getWeaponsOnSpawn());
-        sw.getHostedPlayers().forEach(playerId -> {
+        } else
+            printWeaponsOnSpawn(squareView.getColor(), ((SpawnSquareView) squareView).getWeapons());
+        squareView.getHostedPlayers().forEach(playerId -> {
             HBox tokenBox = getHBoxWithTokenBackground(playerId);
             addToSquareBox(squareBoxes[row][col], tokenBox);
             playerBoxes.put(playerId, tokenBox);
         });
     }
 
-    void updatePlayer(PlayerView playerView){
-        if(playerView.isMe())
+    /**
+     * This method update a player in the stage based on the data passed
+     *
+     * @param playerView The player to be displayed
+     */
+    void updatePlayer(PlayerView playerView) {
+        if (playerView.isMe())
             playerBoardController.update(playerView);
-        else if(otherPlayerBoardControllers.containsKey(playerView.getId())){
+        else if (otherPlayerBoardControllers.containsKey(playerView.getId())) {
             otherPlayerBoardControllers.get(playerView.getId()).update(playerView);
         }
     }
 
+    /**
+     * This method update the match in the stage based on the data passed
+     *
+     * @param matchView The match to be displayed
+     */
     void updateMatchView(MatchView matchView) {
         printKillshotTrack(matchView.getKillshotTrack());
         playerBoardController.update(matchView.isLastTurn());
         otherPlayerBoardControllers.forEach((playerId, playerBoardController1) -> playerBoardController1.update(matchView.isLastTurn()));
-    }
-
-    /**
-     * Print the board and what's in it
-     *
-     * @param board The board to be displayed
-     */
-    private void printBoard(SquareView[][] board) {
-        playerBoxes.clear();
-        for (int i = 0; i < board.length; i++) {
-            for (int j = 0; j < board[i].length; j++) {
-                if (board[i][j] != null) {
-                    squareBoxes[i][j].getChildren().forEach(node -> ((Pane) node).getChildren().clear());
-                    if (board[i][j].getColor() == null) {
-                        HBox ammoBox = new HBox();
-                        AmmoTileView ammoTileView = ((TurretSquareView) board[i][j]).getAmmoTile();
-                        String ammoTileURI = AMMO_TILE_IMAGES_DIR
-                                + ((!ammoTileView.isEmpty()) ? ammoTileView.toString() : BACK)
-                                + IMAGE_EXTENSION;
-                        setBackgroundImageFromURI(ammoBox, ammoTileURI);
-                        addToSquareBox(squareBoxes[i][j], ammoBox);
-                    }
-                    int finalI = i;
-                    int finalJ = j;
-                    board[i][j].getHostedPlayers().forEach(playerId -> {
-                        HBox tokenBox = getHBoxWithTokenBackground(playerId);
-                        addToSquareBox(squareBoxes[finalI][finalJ], tokenBox);
-                        playerBoxes.put(playerId, tokenBox);
-                    });
-                }
-            }
-        }
     }
 
     /**
@@ -265,44 +250,35 @@ public class MainGuiController {
     }
 
     /**
-     * Show the weapon on each spawn
-     *
-     * @param weaponsOnSpawn The association with the color of the spawn and his weapon
-     */
-    private void printSpawnWeapons(Map<Color, List<WeaponView>> weaponsOnSpawn) {
-        weaponsOnSpawnBoxes.clear();
-        weaponsOnSpawn.forEach((color, weaponViews) -> {
-            switch (color) {
-                case RED:
-                    printWeaponsOnSpawn(redSpawnWeapons, weaponViews);
-                    break;
-                case BLUE:
-                    printWeaponsOnSpawn(blueSpawnWeapons, weaponViews);
-                    break;
-                case YELLOW:
-                    printWeaponsOnSpawn(yellowSpawnWeapons, weaponViews);
-                    break;
-            }
-        });
-    }
-
-    /**
      * Show the weapon of a single spawn
      *
-     * @param spawn       Thw HBow representing the spawn
+     * @param color       Thw Color representing the spawn
      * @param weaponViews The weapons available in the spawn
      */
-    private void printWeaponsOnSpawn(HBox spawn, List<WeaponView> weaponViews) {
+    private void printWeaponsOnSpawn(Color color, List<WeaponView> weaponViews) {
+        HBox spawn = new HBox();
+        switch (color) {
+            case RED:
+                spawn = redSpawnWeapons;
+                break;
+            case BLUE:
+                spawn = blueSpawnWeapons;
+                break;
+            case YELLOW:
+                spawn = yellowSpawnWeapons;
+                break;
+        }
         spawn.getChildren().clear();
+        HBox finalSpawn = spawn;
         weaponViews.forEach(weaponView -> {
             HBox weaponBox = new HBox();
-            bindHeightToParent(weaponBox, spawn, WEAPON_HEIGHT, WEAPON_WIDTH);
+            bindHeightToParent(weaponBox, finalSpawn, WEAPON_HEIGHT, WEAPON_WIDTH);
             String weaponImageURI = WEAPON_IMAGES_DIR
                     + weaponView.getID()
                     + IMAGE_EXTENSION;
             setBackgroundImageFromURI(weaponBox, weaponImageURI);
-            HBox.setMargin(weaponBox, new Insets(0, spawn.getWidth() / WEAPON_SPAWN_MARGIN_RATIO, 0, spawn.getWidth() / WEAPON_SPAWN_MARGIN_RATIO));
-            spawn.getChildren().add(weaponBox);
+            HBox.setMargin(weaponBox, new Insets(0, (finalSpawn.getWidth() != 0)? finalSpawn.getWidth() / WEAPON_SPAWN_MARGIN_RATIO: finalSpawn.getPrefWidth() / WEAPON_PREF_SPAWN_MARGIN_RATIO, 0, (finalSpawn.getWidth() != 0)? finalSpawn.getWidth() / WEAPON_SPAWN_MARGIN_RATIO: finalSpawn.getPrefWidth() / WEAPON_PREF_SPAWN_MARGIN_RATIO));
+            finalSpawn.getChildren().add(weaponBox);
             HBox.setHgrow(weaponBox, Priority.ALWAYS);
             weaponsOnSpawnBoxes.put(weaponView.getName(), weaponBox);
         });
@@ -419,7 +395,7 @@ public class MainGuiController {
      * @param undo     True when it need to show the undo
      * @param lock     The lock used to let the other thread get the index of the command
      */
-    public void showCommand(List<CommandMessage> commands, boolean undo, Lock lock) {
+    void showCommand(List<CommandMessage> commands, boolean undo, Lock lock) {
         int i;
         for (i = 0; i < commands.size(); i++) {
             switch (commands.get(i).getType()) {
@@ -500,7 +476,7 @@ public class MainGuiController {
      *
      * @param modelView The data to be shown
      */
-    public void setModelView(ModelView modelView) {
+    void setModelView(ModelView modelView) {
         this.modelView = modelView;
         startSkullNumber = modelView.getMatch().getDeathsCounter();
         String gameboardImageURI = GAMEBOARD_IMAGES_DIR + modelView.getMatch().getGameBoardId() + IMAGE_EXTENSION;
@@ -519,7 +495,7 @@ public class MainGuiController {
         AtomicInteger i = new AtomicInteger(0);
         AtomicInteger j = new AtomicInteger(0);
         modelView.getEnemies().forEach((playerId, playerView) -> {
-            Button playerButton = new Button(playerId.playerIdName() + "\n(" +playerView.getNickname() + ")");
+            Button playerButton = new Button(playerId.playerIdName() + "\n(" + playerView.getNickname() + ")");
             playerButton.setOnMouseClicked(mouseEvent -> handlePlayerButton(playerId));
             bindToParent(playerButton, otherPlayerGrid, otherPlayerGrid.getRowCount(), otherPlayerGrid.getColumnCount());
             otherPlayerGrid.add(playerButton, i.getAndIncrement() % otherPlayerGrid.getColumnCount(), j.getAndIncrement() / otherPlayerGrid.getColumnCount());
@@ -572,7 +548,7 @@ public class MainGuiController {
      * @param widthRatio The ratio of the width
      * @return The HBox created
      */
-    static HBox getHBoxWithSkullBackground(Pane parent, int widthRatio) {
+    private static HBox getHBoxWithSkullBackground(Pane parent, int widthRatio) {
         HBox tokenBox = new HBox();
         tokenBox.setPrefHeight(parent.getPrefHeight());
         tokenBox.maxWidthProperty().bind(parent.widthProperty().divide(widthRatio));
@@ -586,7 +562,7 @@ public class MainGuiController {
      *
      * @param playerId The ID of the player
      * @param parent   The parent of the HBox
-     * @return
+     * @return The HBox with the height fixed to parent and background of player's token
      */
     static HBox getHBoxWithTokenBackgroundWithHighFixedToParent(PlayerId playerId, Pane parent) {
         HBox hbox = new HBox();
@@ -640,7 +616,7 @@ public class MainGuiController {
      *
      * @param leaderBoard The leader board to be shown
      */
-    public void showLeaderBoard(Map<PlayerId, Long> leaderBoard) {
+    void showLeaderBoard(Map<PlayerId, Long> leaderBoard) {
         int i = 1;
         String playerRecord;
         for (Map.Entry<PlayerId, Long> entry : leaderBoard.entrySet()) {
