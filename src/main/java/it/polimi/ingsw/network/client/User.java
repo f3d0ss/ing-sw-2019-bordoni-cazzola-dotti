@@ -3,6 +3,8 @@ package it.polimi.ingsw.network.client;
 import it.polimi.ingsw.network.Message;
 import it.polimi.ingsw.network.Protocol;
 import it.polimi.ingsw.utils.Parser;
+import it.polimi.ingsw.view.cli.Cli;
+import it.polimi.ingsw.view.gui.Gui;
 import it.polimi.ingsw.view.gui.GuiManager;
 
 import java.util.Arrays;

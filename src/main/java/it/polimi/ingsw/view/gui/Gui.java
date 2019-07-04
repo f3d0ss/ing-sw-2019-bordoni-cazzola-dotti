@@ -1,11 +1,10 @@
-package it.polimi.ingsw.network.client;
+package it.polimi.ingsw.view.gui;
 
 import it.polimi.ingsw.model.PlayerId;
+import it.polimi.ingsw.network.client.Ui;
 import it.polimi.ingsw.utils.Lock;
 import it.polimi.ingsw.view.ModelView;
 import it.polimi.ingsw.view.commandmessage.CommandMessage;
-import it.polimi.ingsw.view.gui.GuiManager;
-import it.polimi.ingsw.view.gui.MainGuiController;
 import javafx.application.Application;
 import javafx.application.Platform;
 
@@ -72,7 +71,7 @@ public class Gui implements Ui, Runnable {
         this.answer = answer;
     }
 
-    boolean isReady() {
+    public boolean isReady() {
         return ready;
     }
 

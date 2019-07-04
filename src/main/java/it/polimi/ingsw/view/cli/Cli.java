@@ -1,7 +1,8 @@
-package it.polimi.ingsw.network.client;
+package it.polimi.ingsw.view.cli;
 
 import it.polimi.ingsw.model.PlayerId;
 import it.polimi.ingsw.network.Protocol;
+import it.polimi.ingsw.network.client.Ui;
 import it.polimi.ingsw.view.ConcreteView;
 import it.polimi.ingsw.view.ModelView;
 import it.polimi.ingsw.view.cli.CliManager;
