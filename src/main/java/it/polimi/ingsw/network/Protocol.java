@@ -95,7 +95,7 @@ public enum Protocol {
         }
 
         public boolean requiresAnswer() {
-            return false;
+            return true;
         }
     }, WELCOME {
         public String getQuestion() {
@@ -195,7 +195,7 @@ public enum Protocol {
         }
     }, CHOOSE_BOARD {
         public String getQuestion() {
-            return "Sei il primo giocagore: scegli l'arena di gioco.";
+            return "Sei il primo giocatore: scegli l'arena di gioco.";
         }
 
         public boolean requiresAnswer() {
