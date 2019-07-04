@@ -6,7 +6,6 @@ import it.polimi.ingsw.model.PowerUpID;
 import it.polimi.ingsw.view.PlayerView;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Insets;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
@@ -25,9 +24,9 @@ public class PlayerBoardController extends HBox {
     private static final int POWERUP_WIDTH = 169;
     private static final int MAX_SKULL_PLAYERBOARD = 6;
     private static final int PLAYER_LIFE = 12;
-    private static final int MAX_NUMBER_PLAYER_DEATH_SKULL = 6;
     private static final double OPACITY_WEAPON_UNLOADED = 0.5;
-    private static final int DEATH_MARGIN_RATIO = 6;
+    private static final int DEATH_MARGIN_RATIO_NOT_FLIPPED = 6;
+    private static final int DEATH_MARGIN_RATIO_FLIPPED = 4;
     @FXML
     private HBox boardWithoutAggregateAction;
     @FXML
@@ -147,10 +146,9 @@ public class PlayerBoardController extends HBox {
             MainGuiController.setBackgroundImageFromURI(cardHBox, weaponImageURI);
             if (isMe && !weaponView.isLoaded())
                 cardHBox.setOpacity(OPACITY_WEAPON_UNLOADED);
-            HBox.setHgrow(cardHBox, Priority.ALWAYS);
             playerWeaponContainer.getChildren().add(cardHBox);
+            HBox.setHgrow(cardHBox, Priority.ALWAYS);
         });
-
     }
 
     private void printPlayerBoard(PlayerView playerView,
@@ -163,7 +161,7 @@ public class PlayerBoardController extends HBox {
 
         String playerBoardImageURI = MainGuiController.PLAYERBOARD_IMAGES_DIR
                 + playerView.getId().playerId()
-                + /**(playerView.isFlippedBoard() ? MainGuiController.FLIPPED_BOARD_FILE_PATTERN :**/ MainGuiController.BOARD_FILE_PATTERN;
+                + (playerView.isFlippedBoard() ? MainGuiController.FLIPPED_BOARD_FILE_PATTERN : MainGuiController.BOARD_FILE_PATTERN);
         MainGuiController.setBackgroundImageFromURI(boardWithoutAggregateAction, playerBoardImageURI);
 
         String aggregateActionImageURI = MainGuiController.PLAYERBOARD_IMAGES_DIR
@@ -197,17 +195,21 @@ public class PlayerBoardController extends HBox {
 
         playerDeaths.getChildren().clear();
         HBox margin = new HBox();
-        bindToParent(margin, playerDeaths, 1, DEATH_MARGIN_RATIO);
+        if (!playerView.isFlippedBoard())
+            bindToParent(margin, playerDeaths, 1, DEATH_MARGIN_RATIO_NOT_FLIPPED);
+        else
+            bindToParent(margin, playerDeaths, 1, DEATH_MARGIN_RATIO_FLIPPED);
         HBox.setHgrow(margin, Priority.ALWAYS);
         playerDeaths.getChildren().add(margin);
         for (int i = 0; i < playerView.getDeaths() && i < MAX_SKULL_PLAYERBOARD; i++) {
             HBox deathBox = new HBox();
             MainGuiController.setBackgroundImageFromURI(deathBox, MainGuiController.SKULL_IMAGE_URI);
             MainGuiController.bindToParent(deathBox, playerDeaths, 1, Player.MAX_DAMAGE);
-            HBox.setHgrow(deathBox,Priority.ALWAYS);
+            HBox.setHgrow(deathBox, Priority.ALWAYS);
             playerDeaths.getChildren().add(deathBox);
             HBox.setHgrow(deathBox, Priority.ALWAYS);
         }
+
 
         playerAmmo.getChildren().clear();
         ammoBoxes.clear();

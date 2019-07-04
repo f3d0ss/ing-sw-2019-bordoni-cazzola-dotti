@@ -482,7 +482,7 @@ public class MainGuiController {
         AtomicInteger i = new AtomicInteger(0);
         AtomicInteger j = new AtomicInteger(0);
         modelView.getEnemies().forEach((playerId, playerView) -> {
-            Button playerButton = new Button(playerId.playerIdName());
+            Button playerButton = new Button(playerId.playerIdName() + "/n(" +playerView.getNickname() + ")");
             playerButton.setOnMouseClicked(mouseEvent -> handlePlayerButton(playerId));
             bindToParent(playerButton, otherPlayerGrid, otherPlayerGrid.getRowCount(), otherPlayerGrid.getColumnCount());
             otherPlayerGrid.add(playerButton, i.getAndIncrement() % otherPlayerGrid.getColumnCount(), j.getAndIncrement() / otherPlayerGrid.getColumnCount());
