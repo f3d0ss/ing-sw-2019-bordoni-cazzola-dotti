@@ -482,7 +482,7 @@ public class MainGuiController {
         AtomicInteger i = new AtomicInteger(0);
         AtomicInteger j = new AtomicInteger(0);
         modelView.getEnemies().forEach((playerId, playerView) -> {
-            Button playerButton = new Button(playerId.playerIdName() + "/n(" +playerView.getNickname() + ")");
+            Button playerButton = new Button(playerId.playerIdName() + "\n(" +playerView.getNickname() + ")");
             playerButton.setOnMouseClicked(mouseEvent -> handlePlayerButton(playerId));
             bindToParent(playerButton, otherPlayerGrid, otherPlayerGrid.getRowCount(), otherPlayerGrid.getColumnCount());
             otherPlayerGrid.add(playerButton, i.getAndIncrement() % otherPlayerGrid.getColumnCount(), j.getAndIncrement() / otherPlayerGrid.getColumnCount());
@@ -568,7 +568,7 @@ public class MainGuiController {
      * @param uri  The URI
      */
     static void setBackgroundImageFromURI(Pane pane, String uri) {
-        Image image = new Image(MainGuiController.class.getResource(uri).toExternalForm());
+        Image image = ImageCache.getImage(uri);
         pane.setBackground(new Background(new BackgroundFill(new ImagePattern(image), CornerRadii.EMPTY, Insets.EMPTY)));
     }
 

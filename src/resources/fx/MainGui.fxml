@@ -74,7 +74,9 @@
                         </HBox>
                         <HBox prefHeight="${mainPane.height*125/925}" prefWidth="${mainPane.width*1500/1645}">
                             <children>
-                                <PlayerBoardController fx:id="playerBoardController"/>
+                                <PlayerBoardController fx:id="playerBoardController"
+                                                       prefHeight="${mainPane.height*125/925}"
+                                                       prefWidth="${mainPane.width*1045/1645}"/>
                             </children>
                         </HBox>
                     </children>
