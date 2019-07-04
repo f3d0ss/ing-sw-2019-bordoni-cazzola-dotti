@@ -57,7 +57,6 @@ public class Player {
     private int availableAggregateActionCounter;
     private PlayerId lastShooter;
     private boolean flippedBoard = false;
-    private boolean diedInFinalFrenzy = false;
 
     public Player(Match match, PlayerId id, String nickname) {
         this.match = match;

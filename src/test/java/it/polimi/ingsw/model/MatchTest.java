@@ -3,8 +3,7 @@ package it.polimi.ingsw.model;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * Tests for {@link Match}'s methods
@@ -62,5 +61,29 @@ class MatchTest {
         assertNotNull(match.drawPowerUpCard());
     }
 
+    @Test
+    void testColor() {
+        for (Color color : Color.values()) {
+            assertEquals(color.colorName().substring(0, 1), color.colorInitial() + "");
+            assertEquals(color.colorID().substring(0, 1).toUpperCase(), color.colorInitial() + "");
+        }
+    }
+
+    @Test
+    void setPlayerOnDutyTest() {
+        Match match = new Match();
+        match.setPlayerOnDuty(PlayerId.VIOLET);
+        assertTrue(match.getKillshotTrack().isEmpty());
+    }
+
+    /**
+     * Tests if {@link Match#sendModelAfterReconnection(PlayerId)} throws NullPointer
+     */
+    @Test
+    void noUpdateTest() {
+        Match match = new Match();
+        match.updateAllModel();
+        assertThrows(NullPointerException.class, () -> match.sendModelAfterReconnection(PlayerId.BLUE));
+    }
 
 }

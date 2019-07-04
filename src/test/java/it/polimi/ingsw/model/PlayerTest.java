@@ -297,4 +297,12 @@ class PlayerTest {
         assertEquals(PlayerId.BLUE.playerIdName(), player.toString());
         assertEquals(PlayerId.BLUE.playerIdName(), player.getNickname());
     }
+
+    @Test
+    void testPlayerID() {
+        for (PlayerId playerId : PlayerId.values()) {
+            assertNotNull(playerId.playerIdName());
+            assertNotNull(playerId.playerId());
+        }
+    }
 }

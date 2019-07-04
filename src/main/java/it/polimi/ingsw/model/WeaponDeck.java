@@ -40,15 +40,6 @@ public class WeaponDeck implements Deck {
     }
 
     /**
-     * Removes a weapon from the deck
-     *
-     * @param weapon weapon to remove
-     */
-    public void remove(Weapon weapon) {
-        weapons.remove(weapon);
-    }
-
-    /**
      * @return true if deck is empty
      */
     public boolean isEmpty() {

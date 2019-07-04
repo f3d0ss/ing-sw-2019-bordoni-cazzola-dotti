@@ -66,6 +66,7 @@ class CommandsTest {
         //player created with 0 power ups and 1 ammo cube per color
         TurretSquare square = match.getBoard().getTurrets().get(0);
         AmmoTile ammoTile = square.getAmmoTile();
+        assertNotNull(ammoTile.toString());
         GrabTileCommand grabTileCommand = new GrabTileCommand(player, ammoTile, square);
         grabTileCommand.execute();
         //test ammo add with maps

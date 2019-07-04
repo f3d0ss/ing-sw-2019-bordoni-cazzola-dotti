@@ -73,7 +73,7 @@ class AggregateActionTest {
     @Test
     void testToStringID() {
         for (AggregateActionID aggregateActionID : AggregateActionID.values()) {
-            aggregateActionID.toString();
+            assertNotNull(aggregateActionID.toString());
         }
     }
 }

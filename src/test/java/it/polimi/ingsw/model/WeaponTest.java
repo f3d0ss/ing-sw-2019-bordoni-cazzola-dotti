@@ -4,6 +4,7 @@ import it.polimi.ingsw.model.command.*;
 import it.polimi.ingsw.model.playerstate.ChoosingWeaponOptionState;
 import it.polimi.ingsw.model.playerstate.ReadyToShootState;
 import it.polimi.ingsw.utils.Parser;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -20,9 +21,9 @@ import static org.junit.jupiter.api.Assertions.*;
  * Test for {@link Weapon}'s methods
  */
 class WeaponTest {
-    private static final List<Weapon> allWeapons = getAllWeapons();
+    private List<Weapon> allWeapons;
 
-    static private List<Weapon> getAllWeapons() {
+    private List<Weapon> getAllWeapons() {
         Parser parser = new Parser();
         List<Weapon> weaponList = new ArrayList<>();
         File file = new File("src/resources/weapons/");
@@ -35,6 +36,11 @@ class WeaponTest {
             }
         }
         return weaponList;
+    }
+
+    @BeforeEach
+    void setUp() {
+        allWeapons = getAllWeapons();
     }
 
     private Weapon getWeaponByName(String name) {
@@ -438,5 +444,33 @@ class WeaponTest {
         assertEquals(2, player1.getHealth().size());
         assertEquals(1, player2.getHealth().size());
     }
+
+    @Test
+    void testWeaponModeOptions() {
+        for (Weapon weapon : allWeapons) {
+            for (WeaponMode weaponMode : weapon.getWeaponModes()) {
+                String description = weapon.getDescription();
+                assertNull(description);
+                assertTrue(weaponMode.getDamage().size() > 0);
+                assertNotNull(weaponMode.getDescription());
+                assertNotNull(weaponMode.getName());
+            }
+        }
+    }
+
+    @Test
+    void testWeaponDeck() {
+        int size = allWeapons.size();
+        WeaponDeck weaponDeck = new WeaponDeck(allWeapons);
+        assertFalse(weaponDeck.isEmpty());
+        Weapon weapon = weaponDeck.drawWeapon();
+        assertNotNull(weapon);
+        weaponDeck.add(weapon);
+        for (int i = 0; i < size; i++) {
+            weaponDeck.drawWeapon();
+        }
+        assertTrue(weaponDeck.isEmpty());
+    }
+
 }
 
