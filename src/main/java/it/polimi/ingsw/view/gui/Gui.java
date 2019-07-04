@@ -37,9 +37,7 @@ public class Gui implements Ui, Runnable {
     }
 
     public void refreshView(ModelView modelView) {
-        Platform.runLater(() -> {
-            controller.updateModelView(modelView);
-        });
+//        Platform.runLater(() -> controller.updateModelView(modelView));
     }
 
     public void setViewInitializationDone(ModelView modelView) {
@@ -92,7 +90,7 @@ public class Gui implements Ui, Runnable {
 
     @Override
     public void refreshView(MatchView mw) {
-//        Platform.runLater(() -> controller.updateMatchView(mw));
+        Platform.runLater(() -> controller.updateMatchView(mw));
     }
 
     public void setInputReady(boolean inputReady) {
