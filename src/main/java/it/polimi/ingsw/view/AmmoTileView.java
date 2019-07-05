@@ -4,6 +4,9 @@ import it.polimi.ingsw.model.Color;
 
 import java.util.Map;
 
+/**
+ * This class represent an {@link it.polimi.ingsw.model.AmmoTile} on view side.
+ */
 public class AmmoTileView {
     private final int powerUp;
     private final Map<Color, Integer> ammo;
@@ -17,7 +20,11 @@ public class AmmoTileView {
         return (powerUp == 0) && (ammo == null);
     }
 
-
+    /**
+     * Gets a string representing the ammotile.
+     *
+     * @return a string representing the ammotile with acronym
+     */
     @Override
     public String toString() {
         StringBuilder id = new StringBuilder();

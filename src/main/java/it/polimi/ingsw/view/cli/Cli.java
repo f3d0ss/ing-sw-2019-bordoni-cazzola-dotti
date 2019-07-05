@@ -23,7 +23,7 @@ public class Cli implements Ui {
      * Prints a message coming from server.
      *
      * @param toBeShown        is a string represent a question or a statement
-     * @param possibleAnswers  is the list of the possibile answers that user can choose
+     * @param possibleAnswers  is the list of the possible answers that user can choose
      * @param isAnswerRequired specify if an answer is required (the message is a question)
      *                         or is not (the message is a notice)
      * @return the user's answer or a reception acknowledgement

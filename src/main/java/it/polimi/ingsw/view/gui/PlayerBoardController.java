@@ -19,6 +19,9 @@ import java.util.Map;
 import static it.polimi.ingsw.view.gui.MainGuiController.IMAGE_EXTENSION;
 import static it.polimi.ingsw.view.gui.MainGuiController.bindToParent;
 
+/**
+ * This class manages the player board show on gui.
+ */
 public class PlayerBoardController extends HBox {
     private static final int POWERUP_HEIGHT = 264;
     private static final int POWERUP_WIDTH = 169;
