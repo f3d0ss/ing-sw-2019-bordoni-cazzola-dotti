@@ -1,0 +1,12 @@
+it.polimi.ingsw.controller
+it.polimi.ingsw.model
+it.polimi.ingsw.model.command
+it.polimi.ingsw.model.playerstate
+it.polimi.ingsw.network
+it.polimi.ingsw.network.client
+it.polimi.ingsw.network.server
+it.polimi.ingsw.utils
+it.polimi.ingsw.view
+it.polimi.ingsw.view.cli
+it.polimi.ingsw.view.commandmessage
+it.polimi.ingsw.view.gui
