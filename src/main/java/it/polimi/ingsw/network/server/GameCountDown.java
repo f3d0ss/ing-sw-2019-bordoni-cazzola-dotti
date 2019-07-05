@@ -5,7 +5,7 @@ package it.polimi.ingsw.network.server;
  * Game starts when countdown reach 0 or the maximum players number is reached.
  */
 
-class GameCountDown extends Thread {
+class GameCountDown implements Runnable {
 
     private static final int MILLIS_IN_SECOND = 1000;
     private final int secondsToWait;
@@ -66,9 +66,9 @@ class GameCountDown extends Thread {
             seconds--;
             System.out.println(seconds);
             try {
-                sleep(MILLIS_IN_SECOND);
+                Thread.sleep(MILLIS_IN_SECOND);
             } catch (InterruptedException e) {
-                break;
+                Thread.currentThread().interrupt();
             }
         }
         if (!stopped)

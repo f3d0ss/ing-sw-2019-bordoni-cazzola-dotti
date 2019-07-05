@@ -230,8 +230,7 @@ public class ServerManager implements Runnable {
         }
         lobby.put(id, name);
         notifyNewEntry(id, name);
-        if (sendMessageAndWaitForAnswer(id, new Message(Protocol.LOGIN_CONFIRM, name, null)).equals(Protocol.ERR))
-            return;
+        sendMessageAndWaitForAnswer(id, new Message(Protocol.LOGIN_CONFIRM, name, null));
     }
 
     /**
@@ -357,10 +356,9 @@ public class ServerManager implements Runnable {
      */
 
     int getNumber(Socket client) {
-        for (int i : socketClients.keySet()) {
-            if (socketClients.get(i) == client)
-                return i;
-        }
+        for (Map.Entry<Integer, Socket> entry : socketClients.entrySet())
+            if (entry.getValue() == client)
+                return entry.getKey();
         throw new NoSuchElementException();
     }
 
@@ -370,9 +368,9 @@ public class ServerManager implements Runnable {
      */
 
     int getNumber(RmiClientInterface client) {
-        for (int i : rmiClients.keySet())
-            if (rmiClients.get(i) == client)
-                return i;
+        for (Map.Entry<Integer, RmiClientInterface> entry : rmiClients.entrySet())
+            if (entry.getValue() == client)
+                return entry.getKey();
         throw new NoSuchElementException();
     }
 
@@ -401,6 +399,7 @@ public class ServerManager implements Runnable {
             socketClients.remove(number);
             removeClient(number);
         } catch (NoSuchElementException e) {
+            //Do nothing
         }
     }
 
@@ -416,6 +415,7 @@ public class ServerManager implements Runnable {
             rmiClients.remove(number);
             removeClient(number);
         } catch (NoSuchElementException e) {
+            //Do nothing
         }
     }
 
@@ -481,7 +481,7 @@ public class ServerManager implements Runnable {
             try {
                 sleep(MILLIS_TO_WAIT);
             } catch (InterruptedException e) {
-                break;
+                Thread.currentThread().interrupt();
             }
         }
         answerReady.put(number, false);
@@ -501,29 +501,29 @@ public class ServerManager implements Runnable {
         while (!answerReady.get(number)) {
             try {
                 sleep(MILLIS_TO_WAIT);
-                counter++;
-                if (counter % MILLIS_TO_WAIT == 0){
-                    if(rmiClients.containsKey(number)) {
-                        try {
-                            rmiClients.get(number).testAliveness();
-                        } catch (RemoteException e) {
-                            System.out.println("Impossibile raggiungere il client. " + e.getMessage());
-                            rmiServer.unregister(rmiClients.get(number));
-                            return Protocol.ERR;
-                        }
-                    }
-                    if(socketClients.containsKey(number)) {
-                        try {
-                            socketClients.get(number).getInetAddress().isReachable(MILLIS_IN_SECOND);
-                        } catch (IOException e) {
-                            System.out.println("Impossibile raggiungere il client. " + e.getMessage());
-                            socketServer.unregister(socketClients.get(number));
-                            return Protocol.ERR;
-                        }
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+            counter++;
+            if (counter % MILLIS_TO_WAIT == 0) {
+                if (rmiClients.containsKey(number)) {
+                    try {
+                        rmiClients.get(number).testAliveness();
+                    } catch (RemoteException e) {
+                        System.out.println("Impossibile raggiungere il client. " + e.getMessage());
+                        rmiServer.unregister(rmiClients.get(number));
+                        return Protocol.ERR;
                     }
                 }
-            } catch (InterruptedException e) {
-                break;
+                if (socketClients.containsKey(number)) {
+                    try {
+                        socketClients.get(number).getInetAddress().isReachable(MILLIS_IN_SECOND);
+                    } catch (IOException e) {
+                        System.out.println("Impossibile raggiungere il client. " + e.getMessage());
+                        socketServer.unregister(socketClients.get(number));
+                        return Protocol.ERR;
+                    }
+                }
             }
             if (counter > secondsDuringTurn * MILLIS_IN_SECOND / MILLIS_TO_WAIT) {
                 isTimeExceeded = true;
