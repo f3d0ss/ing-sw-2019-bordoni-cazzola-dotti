@@ -7,7 +7,7 @@ import it.polimi.ingsw.model.Player;
  */
 public abstract class GrabCommand implements Command {
     /**
-     * This is the player is the player doing the command
+     * This is the player doing the command
      */
     final Player player;
 

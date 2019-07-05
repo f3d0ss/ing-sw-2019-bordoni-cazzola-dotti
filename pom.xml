@@ -169,7 +169,7 @@
                             <finalName>server</finalName>
                         </configuration>
                     </execution>
-                    <execution>
+                    <execution  >
                         <id>build-second</id>
                         <phase>package</phase>
                         <goals>

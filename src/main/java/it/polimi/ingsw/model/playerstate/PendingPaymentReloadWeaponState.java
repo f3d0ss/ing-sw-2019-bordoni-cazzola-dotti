@@ -82,7 +82,7 @@ public class PendingPaymentReloadWeaponState implements PendingPaymentState, Pla
     public void removePendingCard(PowerUp powerUp) {
         if (!pendingCardPayment.contains(powerUp))
             throw new IllegalStateException();
-        pendingCardPayment.add(powerUp);
+        pendingCardPayment.remove(powerUp);
     }
 
     /**

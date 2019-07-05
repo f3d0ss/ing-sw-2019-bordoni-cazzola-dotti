@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 public class ShootCommand implements WeaponCommand {
     private final List<EffectCommand> effects;
     /**
-     * This is the player is the player doing the command
+     * This is the player doing the command
      */
     private final Player player;
     /**

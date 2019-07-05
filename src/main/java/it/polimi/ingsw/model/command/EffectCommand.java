@@ -13,7 +13,7 @@ import java.util.Objects;
  */
 public class EffectCommand {
     /**
-     * This is the player is the player getting the effect
+     * This is the player getting the effect
      */
     private final Player player;
     /**

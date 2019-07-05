@@ -656,4 +656,8 @@ public class Player {
         selectedWeapon.unload();
         update();
     }
+
+    public PlayerState getCurrentState() {
+        return playerState;
+    }
 }

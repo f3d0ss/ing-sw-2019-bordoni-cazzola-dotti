@@ -13,7 +13,7 @@ import it.polimi.ingsw.view.commandmessage.CommandType;
  */
 public class SelectAggregateActionCommand implements Command {
     /**
-     * This is the player is the player doing the command
+     * This is the player doing the command
      */
     private final Player player;
     /**

@@ -8,7 +8,7 @@ import it.polimi.ingsw.model.playerstate.PendingPaymentState;
  */
 abstract class SelectPaymentCommand implements Command {
     /**
-     * This is the player is the player doing the command
+     * This is the player doing the command
      */
     final Player player;
     /**

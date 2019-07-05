@@ -15,7 +15,7 @@ import it.polimi.ingsw.view.commandmessage.PowerUpCommandMessage;
  */
 public class SelectPowerUpCommand implements Command {
     /**
-     * This is the player is the player doing the command
+     * This is the player doing the command
      */
     private final Player player;
     /**

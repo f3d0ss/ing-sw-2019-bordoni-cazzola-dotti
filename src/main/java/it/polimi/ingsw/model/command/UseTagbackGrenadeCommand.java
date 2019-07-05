@@ -13,7 +13,7 @@ import it.polimi.ingsw.view.commandmessage.PowerUpCommandMessage;
 public class UseTagbackGrenadeCommand implements Command {
     private final PowerUp grenade;
     /**
-     * This is the player is the player doing the command
+     * This is the player doing the command
      */
     private final Player player;
 

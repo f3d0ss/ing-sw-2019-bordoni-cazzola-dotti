@@ -12,7 +12,7 @@ import it.polimi.ingsw.view.commandmessage.SimpleCommandMessage;
  */
 public class PayReloadBeforeShotCommand implements Command {
     /**
-     * This is the player is the player doing the command
+     * This is the player doing the command
      */
     private final Player player;
     /**

@@ -74,7 +74,7 @@ public class PendingPaymentWeaponOptionState extends SelectedWeaponState impleme
     public void removePendingCard(PowerUp powerUp) {
         if (!pendingCardPayment.contains(powerUp))
             throw new IllegalStateException();
-        pendingCardPayment.add(powerUp);
+        pendingCardPayment.remove(powerUp);
     }
 
     /**

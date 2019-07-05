@@ -14,7 +14,7 @@ import it.polimi.ingsw.view.commandmessage.WeaponModeCommandMessage;
  */
 public class SelectWeaponModeCommand implements Command {
     /**
-     * This is the player is the player doing the command
+     * This is the player doing the command
      */
     private final Player player;
     /**

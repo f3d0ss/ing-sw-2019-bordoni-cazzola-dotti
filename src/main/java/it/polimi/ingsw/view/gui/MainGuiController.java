@@ -47,6 +47,7 @@ public class MainGuiController {
     private static final int GAMEBOARD_H_GAP_RATIO = 40;
     private static final int GAMEBOARD_V_GAP_RATIO = 40;
     private static final int MARING_FOR_TEXT_COMMAND = 5;
+    private static final double OPACITY_FOR_DISCONNECTED_PLAYER = 0.5;
     @FXML
     private VBox logContainer;
     @FXML
@@ -101,7 +102,8 @@ public class MainGuiController {
     private int selectedCommand;
     private int startSkullNumber;
     private Map<String, HBox> weaponsOnSpawnBoxes = new HashMap<>();
-    private Map<PlayerId, HBox> playerBoxes = new EnumMap<>(PlayerId.class);
+    private Map<PlayerId, HBox> playerBoxesOnBoard = new EnumMap<>(PlayerId.class);
+    private Map<PlayerId, Button> playerButtons = new EnumMap<>(PlayerId.class);
     private Stage stage;
 
     /**
@@ -174,7 +176,7 @@ public class MainGuiController {
         squareView.getHostedPlayers().forEach(playerId -> {
             HBox tokenBox = getHBoxWithTokenBackground(playerId);
             addToSquareBox(squareBoxes[row][col], tokenBox);
-            playerBoxes.put(playerId, tokenBox);
+            playerBoxesOnBoard.put(playerId, tokenBox);
         });
     }
 
@@ -186,8 +188,13 @@ public class MainGuiController {
     void updatePlayer(PlayerView playerView) {
         if (playerView.isMe())
             playerBoardController.update(playerView);
-        else if (otherPlayerBoardControllers.containsKey(playerView.getId())) {
-            otherPlayerBoardControllers.get(playerView.getId()).update(playerView);
+        else {
+            if (playerView.isDisconnected()) {
+                playerButtons.get(playerView.getId()).setOpacity(OPACITY_FOR_DISCONNECTED_PLAYER);
+            }
+            if (otherPlayerBoardControllers.containsKey(playerView.getId())) {
+                otherPlayerBoardControllers.get(playerView.getId()).update(playerView);
+            }
         }
     }
 
@@ -198,6 +205,11 @@ public class MainGuiController {
      */
     void updateMatchView(MatchView matchView) {
         printKillshotTrack(matchView.getKillshotTrack());
+        if (matchView.getLeaderBoard() == null && matchView.getPlayerOnDuty() != null){
+            playerButtons.forEach((playerId, button) -> button.setBorder(Border.EMPTY));
+            playerButtons.get(matchView.getPlayerOnDuty()).setBorder(new Border(new BorderStroke(javafx.scene.paint.Color.GREEN,
+                    BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(5))));
+        }
         playerBoardController.update(matchView.isLastTurn());
         otherPlayerBoardControllers.forEach((playerId, playerBoardController1) -> playerBoardController1.update(matchView.isLastTurn()));
     }
@@ -277,7 +289,7 @@ public class MainGuiController {
                     + weaponView.getID()
                     + IMAGE_EXTENSION;
             setBackgroundImageFromURI(weaponBox, weaponImageURI);
-            HBox.setMargin(weaponBox, new Insets(0, (finalSpawn.getWidth() != 0)? finalSpawn.getWidth() / WEAPON_SPAWN_MARGIN_RATIO: finalSpawn.getPrefWidth() / WEAPON_PREF_SPAWN_MARGIN_RATIO, 0, (finalSpawn.getWidth() != 0)? finalSpawn.getWidth() / WEAPON_SPAWN_MARGIN_RATIO: finalSpawn.getPrefWidth() / WEAPON_PREF_SPAWN_MARGIN_RATIO));
+            HBox.setMargin(weaponBox, new Insets(0, (finalSpawn.getWidth() != 0) ? finalSpawn.getWidth() / WEAPON_SPAWN_MARGIN_RATIO : finalSpawn.getPrefWidth() / WEAPON_PREF_SPAWN_MARGIN_RATIO, 0, (finalSpawn.getWidth() != 0) ? finalSpawn.getWidth() / WEAPON_SPAWN_MARGIN_RATIO : finalSpawn.getPrefWidth() / WEAPON_PREF_SPAWN_MARGIN_RATIO));
             finalSpawn.getChildren().add(weaponBox);
             HBox.setHgrow(weaponBox, Priority.ALWAYS);
             weaponsOnSpawnBoxes.put(weaponView.getName(), weaponBox);
@@ -417,7 +429,7 @@ public class MainGuiController {
                     setSquareClickable(squareBoxes[((SquareCommandMessage) commands.get(i)).getRow()][((SquareCommandMessage) commands.get(i)).getCol()], i, lock);
                     break;
                 case SELECT_TARGET_PLAYER:
-                    setNodeClickable(playerBoxes.get(((PlayerCommandMessage) commands.get(i)).getPlayerId()), i, lock);
+                    setNodeClickable(playerBoxesOnBoard.get(((PlayerCommandMessage) commands.get(i)).getPlayerId()), i, lock);
                     break;
                 case RESPAWN:
                 case SELECT_POWER_UP:
@@ -499,6 +511,7 @@ public class MainGuiController {
             playerButton.setOnMouseClicked(mouseEvent -> handlePlayerButton(playerId));
             bindToParent(playerButton, otherPlayerGrid, otherPlayerGrid.getRowCount(), otherPlayerGrid.getColumnCount());
             otherPlayerGrid.add(playerButton, i.getAndIncrement() % otherPlayerGrid.getColumnCount(), j.getAndIncrement() / otherPlayerGrid.getColumnCount());
+            playerButtons.put(playerId, playerButton);
         });
 
         mainPane.setOnMouseClicked(mouseEvent -> {
@@ -631,7 +644,10 @@ public class MainGuiController {
             i++;
         }
         Label commandLabel = createCommandLabel(EXIT);
-        commandLabel.setOnMouseClicked(actionEvent -> stage.close());
+        commandLabel.setOnMouseClicked(actionEvent -> {
+            stage.close();
+            System.exit(0);
+        });
         extraCommandContainer.getChildren().add(commandLabel);
     }
 

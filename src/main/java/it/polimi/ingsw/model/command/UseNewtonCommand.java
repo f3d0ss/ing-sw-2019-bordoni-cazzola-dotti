@@ -13,7 +13,7 @@ import it.polimi.ingsw.view.commandmessage.SquareCommandMessage;
  */
 public class UseNewtonCommand implements Command {
     /**
-     * This is the player is the player doing the command
+     * This is the player doing the command
      */
     private final Player player;
     /**
