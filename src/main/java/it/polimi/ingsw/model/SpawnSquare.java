@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
  */
 public class SpawnSquare extends Square {
     /**
-     * max nuber of weapons per spawn
+     * max number of weapons per spawn
      */
     public static final int MAX_WEAPON = 3;
     private List<Weapon> weapons;

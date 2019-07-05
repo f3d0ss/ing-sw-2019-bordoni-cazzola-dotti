@@ -23,6 +23,11 @@ import static org.junit.jupiter.api.Assertions.*;
 class WeaponTest {
     private List<Weapon> allWeapons;
 
+    /**
+     * Gets standard weapons from files
+     *
+     * @return List containing standard weapons
+     */
     private List<Weapon> getAllWeapons() {
         Parser parser = new Parser();
         List<Weapon> weaponList = new ArrayList<>();
@@ -38,11 +43,20 @@ class WeaponTest {
         return weaponList;
     }
 
+    /**
+     * Initializes field before each test
+     */
     @BeforeEach
     void setUp() {
         allWeapons = getAllWeapons();
     }
 
+    /**
+     * Gets a standard weapon by name
+     *
+     * @param name name of weapon
+     * @return returns the standard weapon which matches the name specified
+     */
     private Weapon getWeaponByName(String name) {
         for (Weapon weapon : allWeapons) {
             if (weapon.getName().contains(name))
@@ -51,14 +65,28 @@ class WeaponTest {
         return null;
     }
 
+    /**
+     * Gets a random standard weapon
+     *
+     * @return a standard weapon
+     */
     Weapon getRandomWeapon() {
         return allWeapons.get(new Random().nextInt(allWeapons.size()));
     }
 
+    /**
+     * Gets a random square
+     *
+     * @param gameBoard gameboard that contains the squares
+     * @return A square from the gameboard
+     */
     private Square getRandomSquare(GameBoard gameBoard) {
         return gameBoard.getSquareList().get(new Random().nextInt(gameBoard.getSquareList().size()));
     }
 
+    /**
+     * Tests weapon costs getters and if reloading cost is greater or equal than buy cost
+     */
     @Test
     void getWeaponCosts() {
         for (Weapon weapon : allWeapons) {
@@ -70,6 +98,9 @@ class WeaponTest {
         }
     }
 
+    /**
+     * Test if deselect sets selectedWeaponMode to null
+     */
     @Test
     void deselectWeaponMode() {
         Weapon weapon = getRandomWeapon();
@@ -83,6 +114,9 @@ class WeaponTest {
         assertFalse(weapon.getWeaponModes().isEmpty());
     }
 
+    /**
+     * Tests add and remove of target player
+     */
     @Test
     void addRemoveTargetPlayer() {
         Weapon weapon = getRandomWeapon();
@@ -91,6 +125,9 @@ class WeaponTest {
         weapon.removeTargetPlayer(player);
     }
 
+    /**
+     * Tests add and remove of a target square
+     */
     @Test
     void addRemoveTargetSquare() {
         Square square = new TurretSquare(null, null, null, null, 0, 0);
@@ -99,6 +136,9 @@ class WeaponTest {
         weapon.removeTargetSquare(square);
     }
 
+    /**
+     * Tests if weapon is reloaded correctly
+     */
     @Test
     void reload() {
         Weapon weapon = getRandomWeapon();
@@ -106,6 +146,9 @@ class WeaponTest {
         assertTrue(weapon.isLoaded());
     }
 
+    /**
+     * Tests if weapon is unloaded correctly
+     */
     @Test
     void unload() {
         Weapon weapon = getRandomWeapon();
@@ -113,6 +156,9 @@ class WeaponTest {
         assertFalse(weapon.isLoaded());
     }
 
+    /**
+     * Tests adding of extra move
+     */
     @Test
     void setExtraMoveTest() {
         for (Weapon weapon : getAllWeapons())

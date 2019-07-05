@@ -16,7 +16,9 @@ import java.util.Map;
  * Represents the Match, Contains the state of the match
  */
 public class Match {
-
+    /**
+     * Default number of deaths needed to trigger final frenzy round
+     */
     private static final int DEFAULT_SKULLS = 8;
 
     private List<PlayerId> killshotTrack;
@@ -367,6 +369,11 @@ public class Match {
         views.get(player).setViewInitializationDone();
     }
 
+    /**
+     * Sets the player who's currently in his turn
+     *
+     * @param playerOnDuty player who's currently in his turn
+     */
     public void setPlayerOnDuty(PlayerId playerOnDuty) {
         this.playerOnDuty = playerOnDuty;
         update();
