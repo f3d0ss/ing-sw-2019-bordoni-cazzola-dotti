@@ -12,7 +12,13 @@ import it.polimi.ingsw.view.commandmessage.SquareCommandMessage;
  * This command represent the action of use a teleport
  */
 public class UseTeleportCommand implements Command {
+    /**
+     * This is the player doing the command
+     */
     private final Player player;
+    /**
+     * This is the current state of the player
+     */
     private final SelectedTeleporterState currentState;
     private final Square newPosition;
     private Square oldSquare;

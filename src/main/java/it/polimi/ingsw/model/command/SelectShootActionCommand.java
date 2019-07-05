@@ -11,7 +11,13 @@ import it.polimi.ingsw.view.commandmessage.SimpleCommandMessage;
  * This command represent the action of select a shoot action
  */
 public class SelectShootActionCommand implements Command {
+    /**
+     * This is the player doing the command
+     */
     private final Player player;
+    /**
+     * This is the current state of the player
+     */
     private final SelectedAggregateActionState currentState;
 
     /**

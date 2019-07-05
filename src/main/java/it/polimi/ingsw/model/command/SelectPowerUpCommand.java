@@ -14,7 +14,13 @@ import it.polimi.ingsw.view.commandmessage.PowerUpCommandMessage;
  * This command represent the action of select a power up
  */
 public class SelectPowerUpCommand implements Command {
+    /**
+     * This is the player doing the command
+     */
     private final Player player;
+    /**
+     * This is the current state of the player
+     */
     private final ManageTurnState currentState;
     private final PowerUp powerUp;
 

@@ -2,7 +2,10 @@ package it.polimi.ingsw.view.gui;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCombination;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 import java.util.List;
 
@@ -53,6 +56,16 @@ public class GuiManager extends Application {
         controller.setStage(stage);
         stage.setTitle("Adrenalina");
         stage.setScene(scene);
+        stage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
+        scene.setOnKeyPressed(t -> {
+            KeyCode key = t.getCode();
+            if (key == KeyCode.ESCAPE) {
+                stage.getOnCloseRequest().handle(new WindowEvent(
+                        stage,
+                        WindowEvent.WINDOW_CLOSE_REQUEST
+                ));
+            }
+        });
         stage.setFullScreen(true);
         stage.show();
     }

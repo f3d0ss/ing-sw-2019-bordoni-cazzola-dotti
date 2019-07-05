@@ -12,6 +12,9 @@ import java.util.List;
  * State when the player is using a Newton powerup
  */
 public class SelectedNewtonState implements PlayerState, TargetingPlayerState {
+    /**
+     * This is the player selected as target of the newton
+     */
     private Player selectedPlayer = null;
 
     /**

@@ -12,8 +12,17 @@ import it.polimi.ingsw.view.commandmessage.WeaponCommandMessage;
  * This command represent the action of select a weapon
  */
 public class SelectWeaponCommand implements Command {
+    /**
+     * This is the player doing the command
+     */
     private final Player player;
+    /**
+     * This is the weapon selected
+     */
     private final Weapon weapon;
+    /**
+     * This is the current state of the player
+     */
     private final ChoosingWeaponState currentState;
 
     /**

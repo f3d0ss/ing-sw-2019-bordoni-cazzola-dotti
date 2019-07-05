@@ -10,7 +10,13 @@ import it.polimi.ingsw.view.commandmessage.PowerUpCommandMessage;
  * This command represent the reSpawn action
  */
 public class RespawnCommand implements Command {
+    /**
+     * This is the player doing the command
+     */
     private final Player player;
+    /**
+     * This is the power up used for the respawn
+     */
     private final PowerUp powerUp;
 
     /**

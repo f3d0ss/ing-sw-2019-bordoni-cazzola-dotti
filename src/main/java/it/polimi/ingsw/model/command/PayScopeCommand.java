@@ -11,7 +11,13 @@ import it.polimi.ingsw.view.commandmessage.SimpleCommandMessage;
  * This command actualize the payment for the scope
  */
 public class PayScopeCommand implements Command {
+    /**
+     * This is the player doing the command
+     */
     private final Player player;
+    /**
+     * This is the current state of the player
+     */
     private final PendingPaymentScopeState currentState;
 
     /**

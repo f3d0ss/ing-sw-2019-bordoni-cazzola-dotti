@@ -13,18 +13,57 @@ import java.util.stream.IntStream;
  */
 public class Weapon {
 
+    /**
+     * Min size of targets
+     */
     private static final int MIN_SIZE = 1;
+    /**
+     * Name of the weapon
+     */
     private String name;
+    /**
+     * Short description of the weapon
+     */
     private String description;
+    /**
+     * Ammocubes needed to pay the reloading cost of the weapon
+     */
     private Map<Color, Integer> reloadingCost;
+    /**
+     * Ammocubes needed to buy the weapon
+     */
     private Map<Color, Integer> buyCost;
+    /**
+     * Contains all the different fire mods of the weapon
+     */
     private List<WeaponMode> weaponModes;
+    /**
+     * True if weapon effect can move his owner
+     */
     private boolean extraMoveToDo = false;
+    /**
+     * True if the weapon is loaded
+     */
     private boolean loaded = true;
+    /**
+     * Contains the currently selected weapon mode
+     */
     private WeaponMode selectedWeaponMode = null;
+    /**
+     * TargetPlayers that Shooter has selected
+     */
     private List<Player> targetPlayers = new ArrayList<>();
+    /**
+     * TargetSquares that Shooter has selected
+     */
     private List<Square> targetSquares = new ArrayList<>();
+    /**
+     * Number of available ShootActions
+     */
     private int damageToDo;
+    /**
+     * TargetPlayers that Shooter has selected in the last executed {@link SelectTargetPlayerCommand}
+     */
     private List<Player> lastAddedTargetPlayers = new ArrayList<>();
 
 
@@ -111,6 +150,14 @@ public class Weapon {
         return weaponModes;
     }
 
+
+    /**
+     * This method returns the possible ({@link ShootCommand}s
+     *
+     * @param shooter Player who is using the weapon
+     * @param state   Shooter's state
+     * @return List of all possible commands to execute
+     */
     private List<WeaponCommand> getPossibleShootCommands(GameBoard gameboard, Player shooter, ReadyToShootState state) {
         List<WeaponCommand> possibleCommands = new ArrayList<>();
         if (selectedWeaponMode.isMoveTargetBeforeShoot())
@@ -126,6 +173,14 @@ public class Weapon {
         return possibleCommands;
     }
 
+    /**
+     * This method returns the possible ({@link ShootCommand}s generated
+     * by {@link WeaponMode}s whose {@link WeaponMode#isTargetPlayers()} and {@link WeaponMode#isTargetSquare()} returns true
+     *
+     * @param shooter Player who is using the weapon
+     * @param state   Shooter's state
+     * @return List of all possible commands to execute
+     */
     private List<WeaponCommand> getPossibleShootCommandsMultiTarget(GameBoard gameboard, Player shooter, ReadyToShootState state) {
         List<WeaponCommand> possibleCommands = new ArrayList<>();
         if (!targetSquares.isEmpty() && !targetPlayers.isEmpty()) {
@@ -145,6 +200,14 @@ public class Weapon {
         return possibleCommands;
     }
 
+    /**
+     * This method returns the possible ({@link ShootCommand}s generated
+     * by {@link WeaponMode}s whose {@link WeaponMode#isTargetRoom()} returns true
+     *
+     * @param shooter Player who is using the weapon
+     * @param state   Shooter's state
+     * @return List of all possible commands to execute
+     */
     private List<WeaponCommand> getPossibleShootCommandsTargetRoom(Player shooter, ReadyToShootState state) {
         List<WeaponCommand> possibleCommands = new ArrayList<>();
         possibleCommands.add(createShootCommandGetDamageZero(shooter, state));
@@ -163,12 +226,18 @@ public class Weapon {
     }
 
     /**
-     * Create a ShootCommand with all target players (no moves)
+     * Creates a ShootCommand with all target players (no moves)
      */
     private ShootCommand createSimpleShootCommand(Player shooter, ReadyToShootState state) {
         return new ShootCommand(state, createSimpleEffectCommandList(shooter), shooter);
     }
 
+    /**
+     * Creates an EffectCommand for each target player (no moves)
+     *
+     * @param shooter Player who is using the weapon
+     * @return List of EffectCommands (one for each targets)
+     */
     private List<EffectCommand> createSimpleEffectCommandList(Player shooter) {
         LinkedHashSet<EffectCommand> effectCommands = new LinkedHashSet<>();
         for (int i = 0; i < targetPlayers.size(); i++) {
@@ -178,6 +247,14 @@ public class Weapon {
         return new ArrayList<>(effectCommands);
     }
 
+    /**
+     * This method returns the possible ({@link ShootCommand}s generated
+     * by {@link WeaponMode}s whose {@link WeaponMode#getAdditionalDamageAvailable()} is not zero
+     *
+     * @param shooter Player who is using the weapon
+     * @param state   Shooter's state
+     * @return List of all possible commands to execute
+     */
     @SuppressWarnings("squid:S3776")
     private List<WeaponCommand> getPossibleShootCommandsTargetPlayersAdditionalDamage(Player shooter, ReadyToShootState state) {
         List<WeaponCommand> possibleCommands = new ArrayList<>();
@@ -205,6 +282,14 @@ public class Weapon {
         return possibleCommands;
     }
 
+    /**
+     * This method returns the possible ({@link ShootCommand}s generated
+     * by {@link WeaponMode}s whose {@link WeaponMode#isTargetPlayers()} returns true
+     *
+     * @param shooter Player who is using the weapon
+     * @param state   Shooter's state
+     * @return List of all possible commands to execute
+     */
     private List<WeaponCommand> getPossibleShootCommandsTargetPlayers(GameBoard gameboard, Player shooter, ReadyToShootState state) {
         List<WeaponCommand> possibleCommands = new ArrayList<>();
         if (!selectedWeaponMode.isMoveTargetAfterShoot()) {
@@ -227,6 +312,14 @@ public class Weapon {
         return possibleCommands;
     }
 
+    /**
+     * This method returns the possible ({@link ShootCommand}s generated
+     * by {@link WeaponMode}s whose {@link WeaponMode#isTargetSquare()} returns true
+     *
+     * @param shooter Player who is using the weapon
+     * @param state   Shooter's state
+     * @return List of all possible commands to execute
+     */
     private List<WeaponCommand> getPossibleShootCommandsTargetSquareFlameThrower(Player shooter, ReadyToShootState state) {
         List<WeaponCommand> possibleCommands = new ArrayList<>();
         List<EffectCommand> effectCommands = new ArrayList<>();
@@ -246,6 +339,13 @@ public class Weapon {
         return possibleCommands;
     }
 
+    /**
+     * This method returns the possible ({@link ShootCommand}s generated by flamethrower
+     *
+     * @param shooter Player who is using the weapon
+     * @param state   Shooter's state
+     * @return List of all possible commands to execute
+     */
     private List<WeaponCommand> getPossibleShootCommandsTargetSquareFragmentingWarhead(GameBoard gameBoard, Player shooter, ReadyToShootState state) {
         List<WeaponCommand> possibleCommands = new ArrayList<>();
         for (Square square : gameBoard.getReachableSquare(targetSquares.get(0), selectedWeaponMode.getMaxTargetMove())) {
@@ -258,6 +358,14 @@ public class Weapon {
         return possibleCommands;
     }
 
+    /**
+     * This method returns the possible ({@link ShootCommand}s generated
+     * by {@link WeaponMode}s whose {@link WeaponMode#isTargetSquare()} returns true
+     *
+     * @param shooter Player who is using the weapon
+     * @param state   Shooter's state
+     * @return List of all possible commands to execute
+     */
     private List<WeaponCommand> getPossibleShootCommandsTargetSquare(GameBoard gameboard, Player shooter, ReadyToShootState state) {
         List<WeaponCommand> possibleCommands = new ArrayList<>();
         if (selectedWeaponMode.isCardinalDirectionMode())
@@ -268,6 +376,14 @@ public class Weapon {
         return possibleCommands;
     }
 
+    /**
+     * This method returns the possible ({@link ShootCommand}s generated
+     * by {@link WeaponMode}s whose {@link WeaponMode#isMoveTargetBeforeShoot()} returns true
+     *
+     * @param shooter Player who is using the weapon
+     * @param state   Shooter's state
+     * @return List of all possible commands to execute
+     */
     private List<WeaponCommand> getPossibleShootCommandsTargetCanMoveBeforeShoot(Player shooter, ReadyToShootState state) {
         List<WeaponCommand> possibleCommands = new ArrayList<>();
         List<EffectCommand> effectCommands = new ArrayList<>();
@@ -283,6 +399,14 @@ public class Weapon {
         return possibleCommands;
     }
 
+    /**
+     * This method returns the possible SelectTargetsCommands ({@link SelectTargetPlayerCommand} {@link SelectTargetSquareCommand})
+     *
+     * @param gameboard Gameboard of the shooter's match
+     * @param shooter   Player who is using the weapon
+     * @param state     Shooter's state
+     * @return List of all possible commands to execute
+     */
     private List<WeaponCommand> getPossibleSelectTargetCommands(GameBoard gameboard, Player shooter, ReadyToShootState state) {
         List<WeaponCommand> possibleCommands = new ArrayList<>();
         if (selectedWeaponMode.isMoveTargetBeforeShoot())
@@ -298,6 +422,15 @@ public class Weapon {
         return possibleCommands;
     }
 
+    /**
+     * This method returns the possible SelectTargetsCommands ({@link SelectTargetPlayerCommand} {@link SelectTargetSquareCommand}) generated
+     * by {@link WeaponMode}s that can move a target before the actual shooting action
+     *
+     * @param gameboard Gameboard of the shooter's match
+     * @param shooter   Player who is using the weapon
+     * @param state     Shooter's state
+     * @return List of all possible commands to execute
+     */
     private List<WeaponCommand> getPossibleSelectTargetCommandsTargetCanMoveBeforeShoot(GameBoard gameboard, Player shooter, ReadyToShootState state) {
         List<WeaponCommand> possibleCommands = new ArrayList<>();
         if (targetSquares.isEmpty()) { //select a square (first call)
@@ -321,6 +454,15 @@ public class Weapon {
         return possibleCommands;
     }
 
+    /**
+     * This method returns the possible SelectTargetsCommands ({@link SelectTargetPlayerCommand} {@link SelectTargetSquareCommand}) generated
+     * by {@link WeaponMode}s that need to target a square and a player simultaneously
+     *
+     * @param gameboard Gameboard of the shooter's match
+     * @param shooter   Player who is using the weapon
+     * @param state     Shooter's state
+     * @return List of all possible commands to execute
+     */
     private List<WeaponCommand> getPossibleSelectTargetCommandsMultiTarget(GameBoard gameboard, Player shooter, ReadyToShootState state) {
         List<WeaponCommand> possibleCommands = new ArrayList<>();
         if (targetPlayers.isEmpty())
@@ -333,6 +475,15 @@ public class Weapon {
         return possibleCommands;
     }
 
+    /**
+     * This method returns the possible SelectTargetsCommands ({@link SelectTargetPlayerCommand} {@link SelectTargetSquareCommand}) generated
+     * by {@link WeaponMode}s that need to target an entire Room
+     *
+     * @param gameboard Gameboard of the shooter's match
+     * @param shooter   Player who is using the weapon
+     * @param state     Shooter's state
+     * @return List of all possible commands to execute
+     */
     private List<WeaponCommand> getPossibleSelectTargetCommandsTargetRoom(GameBoard gameboard, Player shooter, ReadyToShootState state) {
         //Furnace basic mode
         List<WeaponCommand> possibleCommands = new ArrayList<>();
@@ -354,6 +505,14 @@ public class Weapon {
         return possibleCommands;
     }
 
+    /**
+     * This method returns the possible SelectTargetsCommands ({@link SelectTargetPlayerCommand} {@link SelectTargetSquareCommand}) generated
+     * by {@link WeaponMode}s whose {@link WeaponMode#()} returns true
+     *
+     * @param shooter Player who is using the weapon
+     * @param state   Shooter's state
+     * @return List of all possible commands to execute
+     */
     private List<WeaponCommand> getPossibleSelectTargetCommandsTargetPlayersVisibleStandard(GameBoard gameboard, Player shooter, ReadyToShootState state) {
         List<Player> visibleTargets = gameboard.getVisibleTargets(shooter, selectedWeaponMode.getMaxTargetDistance(), selectedWeaponMode.getMinTargetDistance());
         for (Player targetPlayer1 : targetPlayers)
@@ -371,6 +530,14 @@ public class Weapon {
                 .map(player -> new SelectTargetPlayerCommand(state, player)).collect(Collectors.toList());
     }
 
+    /**
+     * This method returns the possible SelectTargetsCommands ({@link SelectTargetPlayerCommand} {@link SelectTargetSquareCommand}) generated
+     * by {@link WeaponMode}s whose {@link WeaponMode#isTargetVisibleByOtherTarget()} returns true
+     *
+     * @param shooter Player who is using the weapon
+     * @param state   Shooter's state
+     * @return List of all possible commands to execute
+     */
     private List<WeaponCommand> getPossibleSelectTargetCommandsTargetPlayersVisibleByOtherTarget(GameBoard gameboard, Player shooter, ReadyToShootState state) {
         List<WeaponCommand> possibleCommands = new ArrayList<>();
         List<Player> visibleTargets = gameboard.getVisibleTargets(targetPlayers.get(targetPlayers.size() - 1), selectedWeaponMode.getMaxTargetDistance(), selectedWeaponMode.getMinTargetDistance());
@@ -385,6 +552,14 @@ public class Weapon {
         return possibleCommands;
     }
 
+    /**
+     * This method returns the possible SelectTargetsCommands ({@link SelectTargetPlayerCommand} {@link SelectTargetSquareCommand}) generated
+     * by {@link WeaponMode}s whose {@link WeaponMode#isTargetVisibleByShooter()} returns true
+     *
+     * @param shooter Player who is using the weapon
+     * @param state   Shooter's state
+     * @return List of all possible commands to execute
+     */
     private List<WeaponCommand> getPossibleSelectTargetCommandsTargetPlayersVisible(GameBoard gameboard, Player shooter, ReadyToShootState state) {
         List<WeaponCommand> possibleCommands = new ArrayList<>();
         if (targetPlayers.isEmpty()) {
@@ -409,6 +584,14 @@ public class Weapon {
         return possibleCommands;
     }
 
+    /**
+     * This method returns the possible SelectTargetsCommands ({@link SelectTargetPlayerCommand} {@link SelectTargetSquareCommand}) generated
+     * by {@link WeaponMode}s whose {@link WeaponMode#isCardinalDirectionMode()}L returns true
+     *
+     * @param shooter Player who is using the weapon
+     * @param state   Shooter's state
+     * @return List of all possible commands to execute
+     */
     private List<WeaponCommand> getPossibleSelectTargetCommandsTargetPlayersCardinalDirection(GameBoard gameboard, Player shooter, ReadyToShootState state) {
         List<WeaponCommand> possibleCommands = new ArrayList<>();
         if (selectedWeaponMode.isTargetVisibleByShooter()) {//PowerGlove rocketfistmode
@@ -451,6 +634,14 @@ public class Weapon {
         return possibleCommands;
     }
 
+    /**
+     * This method returns the possible SelectTargetsCommands ({@link SelectTargetPlayerCommand} {@link SelectTargetSquareCommand}) generated
+     * by {@link WeaponMode}s whose {@link WeaponMode#isTargetVisibleByShooter()} returns false
+     *
+     * @param shooter Player who is using the weapon
+     * @param state   Shooter's state
+     * @return List of all possible commands to execute
+     */
     private List<WeaponCommand> getPossibleSelectTargetCommandsTargetPlayersNotVisible(GameBoard gameboard, Player shooter, ReadyToShootState state) {
         List<Player> allOtherPlayers = new ArrayList<>(shooter.getMatch().getCurrentPlayers());
         allOtherPlayers.remove(shooter);
@@ -459,6 +650,15 @@ public class Weapon {
                 .map(player -> new SelectTargetPlayerCommand(state, player)).collect(Collectors.toList());
     }
 
+    /**
+     * This method returns the possible SelectTargetsCommands ({@link SelectTargetPlayerCommand} {@link SelectTargetSquareCommand}) generated
+     * by {@link WeaponMode}s that need to target a Player
+     *
+     * @param gameboard Gameboard of the shooter's match
+     * @param shooter   Player who is using the weapon
+     * @param state     Shooter's state
+     * @return List of all possible commands to execute
+     */
     private List<WeaponCommand> getPossibleSelectTargetCommandsTargetPlayers(GameBoard gameboard, Player shooter, ReadyToShootState state) {
         List<WeaponCommand> possibleCommands = new ArrayList<>();
         if (selectedWeaponMode.isTargetVisibleByShooter() && !selectedWeaponMode.isCardinalDirectionMode())
@@ -470,6 +670,14 @@ public class Weapon {
         return possibleCommands;
     }
 
+    /**
+     * This method returns the possible SelectTargetsCommands ({@link SelectTargetPlayerCommand} {@link SelectTargetSquareCommand}) generated by flamethrower
+     *
+     * @param gameBoard Gameboard of the shooter's match
+     * @param shooter   Player who is using the weapon
+     * @param state     Shooter's state
+     * @return List of all possible commands to execute
+     */
     private List<WeaponCommand> getPossibleSelectTargetCommandsTargetSquareFlameThrower(GameBoard gameBoard, Player shooter, ReadyToShootState state) {
         List<WeaponCommand> possibleCommands = new ArrayList<>();
         final int maxTargets = 4;
@@ -503,6 +711,14 @@ public class Weapon {
         return possibleCommands;
     }
 
+    /**
+     * This method returns the possible SelectTargetsCommands ({@link SelectTargetPlayerCommand} {@link SelectTargetSquareCommand}) generated
+     * by {@link WeaponMode}s whose {@link WeaponMode#isFragmentingWarHeadMod()} returns true
+     *
+     * @param shooter Player who is using the weapon
+     * @param state   Shooter's state
+     * @return List of all possible commands to execute
+     */
     private List<WeaponCommand> getPossibleSelectTargetCommandsTargetSquareFragmentingWarhead(Player shooter, ReadyToShootState state) {
         List<WeaponCommand> possibleCommands = new ArrayList<>();
         List<Player> possibleTargetPlayers = new ArrayList<>();
@@ -519,6 +735,15 @@ public class Weapon {
         return possibleCommands;
     }
 
+    /**
+     * This method returns the possible SelectTargetsCommands ({@link SelectTargetPlayerCommand} {@link SelectTargetSquareCommand}) generated
+     * by {@link WeaponMode}s that need to target a square
+     *
+     * @param gameboard Gameboard of the shooter's match
+     * @param shooter   Player who is using the weapon
+     * @param state     Shooter's state
+     * @return List of all possible commands to execute
+     */
     private List<WeaponCommand> getPossibleSelectTargetCommandsTargetSquare(GameBoard gameboard, Player shooter, ReadyToShootState state) {
         List<WeaponCommand> possibleCommands = new ArrayList<>();
         if (targetSquares.isEmpty()) { //selectSquare(s) first
@@ -547,7 +772,7 @@ public class Weapon {
      * SelectTargetsCommands {@link SelectTargetPlayerCommand} {@link SelectTargetSquareCommand},
      * ShootCommands {@link ShootCommand})
      *
-     * @param gameboard Gameboard
+     * @param gameboard Gameboard of the shooter's match
      * @param shooter   Player who is using the weapon
      * @param state     Shooter's state
      * @return List of all possible commands to execute
@@ -564,6 +789,13 @@ public class Weapon {
         return possibleCommands;
     }
 
+    /**
+     * This method returns the possibles ExtraMoveCommands ( {@link MoveCommand}s generated by weapon effect )
+     *
+     * @param shooter Player who is using the weapon
+     * @param state   Shooter's state
+     * @return List of all possible commands to execute
+     */
     private List<MoveCommand> getPossibleExtraMoveCommands(GameBoard gameBoard, Player shooter, ReadyToShootState state) {
         Square currentPosition = shooter.getPosition();
         List<MoveCommand> list = new ArrayList<>();
@@ -580,10 +812,20 @@ public class Weapon {
         return list;
     }
 
+    /**
+     * Returns true if player has not selected the max number of targets
+     *
+     * @return true if player has not selected the max number of targets
+     */
     private boolean hasNotMaximumTargets() {
         return selectedWeaponMode.getMaxNumberOfTargetPlayers() != targetPlayers.size();
     }
 
+    /**
+     * Returns true if player has selected the minimum number of targets
+     *
+     * @return true if player has selected the minimum number of targets
+     */
     private boolean hasSufficientTargets() {
         return selectedWeaponMode.getMinNumberOfTargetPlayers() <= targetPlayers.size();
     }
@@ -718,6 +960,9 @@ public class Weapon {
         resetTargetLists();
     }
 
+    /**
+     * Resets targets
+     */
     private void resetTargetLists() {
         targetPlayers = new ArrayList<>();
         targetSquares = new ArrayList<>();

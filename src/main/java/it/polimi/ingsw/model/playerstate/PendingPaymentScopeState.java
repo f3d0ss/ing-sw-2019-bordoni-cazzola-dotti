@@ -15,11 +15,26 @@ import java.util.Map;
  * State when the player is paying to use a Scope power up
  */
 public class PendingPaymentScopeState extends SelectedWeaponState implements PendingPaymentState {
-
+    /**
+     * Those are the ammo selected for pay the scope
+     */
     private final Map<Color, Integer> pendingAmmo;
+    /**
+     * This are the power up selected for pay the scope
+     */
     private final List<PowerUp> pendingCardPayment;
+    /**
+     * This is the list of the player selectable for the shot
+     */
     private final List<Player> shootedPlayers;
 
+    /**
+     * This constructor create the state of the player when he is paying to use a Scope power up
+     *
+     * @param selectedAggregateAction This is the aggregate action the player is executing
+     * @param selectedWeapon          This is the weapon associated with this action
+     * @param shootedPlayers          This is the list of the player hit by the last shoot
+     */
     public PendingPaymentScopeState(AggregateAction selectedAggregateAction, Weapon selectedWeapon, List<Player> shootedPlayers) {
         super(selectedAggregateAction, selectedWeapon);
         pendingCardPayment = new ArrayList<>();

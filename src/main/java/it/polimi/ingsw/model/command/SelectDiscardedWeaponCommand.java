@@ -12,10 +12,21 @@ import it.polimi.ingsw.view.commandmessage.WeaponCommandMessage;
  * This command represent the action of discard a weapon used only when a player has already 3 weapons
  */
 public class SelectDiscardedWeaponCommand implements Command {
-
+    /**
+     * This is the player doing the command
+     */
     private final Player player;
+    /**
+     * This is the current state of the player
+     */
     private final DiscardingWeaponState currentState;
+    /**
+     * This represent the weapon selected to discard
+     */
     private final Weapon weaponToDiscard;
+    /**
+     * This store if the weapon was loaded
+     */
     private boolean wasLoaded;
 
     /**

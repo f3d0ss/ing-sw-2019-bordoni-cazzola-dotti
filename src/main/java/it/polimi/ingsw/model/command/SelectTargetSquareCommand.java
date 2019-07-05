@@ -10,7 +10,13 @@ import it.polimi.ingsw.view.commandmessage.SquareCommandMessage;
  * This command represent the action of select a square as target
  */
 public class SelectTargetSquareCommand implements WeaponCommand {
+    /**
+     * This is the square selected as a target
+     */
     private final Square targetSquare;
+    /**
+     * This is the current state of the player
+     */
     private final TargetingSquareState currentState;
 
     /**

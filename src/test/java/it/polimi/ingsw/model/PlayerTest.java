@@ -291,10 +291,21 @@ class PlayerTest {
         assertEquals(p2, p1.getLastShooter());
     }
 
+    /**
+     * Test getters of player's name
+     */
     @Test
     void testNickName() {
         Player player = new Player(null, PlayerId.BLUE, PlayerId.BLUE.playerIdName());
         assertEquals(PlayerId.BLUE.playerIdName(), player.toString());
         assertEquals(PlayerId.BLUE.playerIdName(), player.getNickname());
+    }
+
+    @Test
+    void testPlayerID() {
+        for (PlayerId playerId : PlayerId.values()) {
+            assertNotNull(playerId.playerIdName());
+            assertNotNull(playerId.playerId());
+        }
     }
 }

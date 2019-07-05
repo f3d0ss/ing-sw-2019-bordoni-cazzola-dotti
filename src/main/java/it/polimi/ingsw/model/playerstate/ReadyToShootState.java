@@ -14,6 +14,12 @@ import java.util.List;
  * State when the player is shooting and selecting targets
  */
 public class ReadyToShootState extends SelectedWeaponState implements TargetingPlayerState, TargetingSquareState, MovableState {
+    /**
+     * This constructor create the state of the player
+     *
+     * @param selectedAggregateAction This is the aggregate action the player is executing
+     * @param selectedWeapon          This is the weapon selected in the action
+     */
     public ReadyToShootState(AggregateAction selectedAggregateAction, Weapon selectedWeapon) {
         super(selectedAggregateAction, selectedWeapon);
     }

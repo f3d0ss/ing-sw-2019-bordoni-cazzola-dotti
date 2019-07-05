@@ -12,7 +12,13 @@ import it.polimi.ingsw.view.commandmessage.SimpleCommandMessage;
  * This command represent the action of grab a tile
  */
 public class GrabTileCommand extends GrabCommand {
+    /**
+     * This represent the ammo tile to be grabbed
+     */
     private final AmmoTile ammoTile;
+    /**
+     * This is the square where the grab start
+     */
     private final TurretSquare square;
 
     /**

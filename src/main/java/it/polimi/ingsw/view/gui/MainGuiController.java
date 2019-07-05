@@ -53,6 +53,8 @@ public class MainGuiController {
     private static final int GAMEBOARD_H_GAP_RATIO = 40;
     private static final int GAMEBOARD_V_GAP_RATIO = 40;
     private static final int MARING_FOR_TEXT_COMMAND = 5;
+    private static final double OPACITY_FOR_DISCONNECTED_PLAYER = 0.5;
+    private static final double MAX_OPACITY = 1;
     private static final String LANG = "IT";
     private static final String IMAGES_DIR = "/images/";
     static final String POWERUP_IMAGES_DIR = IMAGES_DIR + "cards/AD_powerups_" + LANG + SPACE;
@@ -100,7 +102,8 @@ public class MainGuiController {
     private int selectedCommand;
     private int startSkullNumber;
     private Map<String, HBox> weaponsOnSpawnBoxes = new HashMap<>();
-    private Map<PlayerId, HBox> playerBoxes = new EnumMap<>(PlayerId.class);
+    private Map<PlayerId, HBox> playerBoxesOnBoard = new EnumMap<>(PlayerId.class);
+    private Map<PlayerId, Button> playerButtons = new EnumMap<>(PlayerId.class);
     private Stage stage;
 
     /**
@@ -273,7 +276,7 @@ public class MainGuiController {
         squareView.getHostedPlayers().forEach(playerId -> {
             HBox tokenBox = getHBoxWithTokenBackground(playerId);
             addToSquareBox(squareBoxes[row][col], tokenBox);
-            playerBoxes.put(playerId, tokenBox);
+            playerBoxesOnBoard.put(playerId, tokenBox);
         });
     }
 
@@ -285,8 +288,15 @@ public class MainGuiController {
     void updatePlayer(PlayerView playerView) {
         if (playerView.isMe())
             playerBoardController.update(playerView);
-        else if (otherPlayerBoardControllers.containsKey(playerView.getId())) {
-            otherPlayerBoardControllers.get(playerView.getId()).update(playerView);
+        else {
+            if (playerView.isDisconnected()) {
+                playerButtons.get(playerView.getId()).setOpacity(OPACITY_FOR_DISCONNECTED_PLAYER);
+            } else {
+                playerButtons.get(playerView.getId()).setOpacity(MAX_OPACITY);
+            }
+            if (otherPlayerBoardControllers.containsKey(playerView.getId())) {
+                otherPlayerBoardControllers.get(playerView.getId()).update(playerView);
+            }
         }
     }
 
@@ -297,6 +307,11 @@ public class MainGuiController {
      */
     void updateMatchView(MatchView matchView) {
         printKillshotTrack(matchView.getKillshotTrack());
+        if (matchView.getLeaderBoard() == null && matchView.getPlayerOnDuty() != null && modelView.getMe().getId() != matchView.getPlayerOnDuty()) {
+            playerButtons.forEach((playerId, button) -> button.setBorder(Border.EMPTY));
+            playerButtons.get(matchView.getPlayerOnDuty()).setBorder(new Border(new BorderStroke(javafx.scene.paint.Color.GREEN,
+                    BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(5))));
+        }
         playerBoardController.update(matchView.isLastTurn());
         otherPlayerBoardControllers.forEach((playerId, playerBoardController1) -> playerBoardController1.update(matchView.isLastTurn()));
     }
@@ -516,7 +531,7 @@ public class MainGuiController {
                     setSquareClickable(squareBoxes[((SquareCommandMessage) commands.get(i)).getRow()][((SquareCommandMessage) commands.get(i)).getCol()], i, lock);
                     break;
                 case SELECT_TARGET_PLAYER:
-                    setNodeClickable(playerBoxes.get(((PlayerCommandMessage) commands.get(i)).getPlayerId()), i, lock);
+                    setNodeClickable(playerBoxesOnBoard.get(((PlayerCommandMessage) commands.get(i)).getPlayerId()), i, lock);
                     break;
                 case RESPAWN:
                 case SELECT_POWER_UP:
@@ -598,6 +613,7 @@ public class MainGuiController {
             playerButton.setOnMouseClicked(mouseEvent -> handlePlayerButton(playerId));
             bindToParent(playerButton, otherPlayerGrid, otherPlayerGrid.getRowCount(), otherPlayerGrid.getColumnCount());
             otherPlayerGrid.add(playerButton, i.getAndIncrement() % otherPlayerGrid.getColumnCount(), j.getAndIncrement() / otherPlayerGrid.getColumnCount());
+            playerButtons.put(playerId, playerButton);
         });
 
         mainPane.setOnMouseClicked(mouseEvent -> {
@@ -623,14 +639,15 @@ public class MainGuiController {
             Text leaderBoardText = new Text(playerRecord);
             if (i == 1)
                 leaderBoardText.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 20));
-            if (modelView.getPlayerView(entry.getKey()).isDisconnected())
-                leaderBoardText.setStrikethrough(true);
             leaderBoardText.wrappingWidthProperty().bind(logContainer.widthProperty());
             logContainer.getChildren().add(leaderBoardText);
             i++;
         }
         Label commandLabel = createCommandLabel(EXIT);
-        commandLabel.setOnMouseClicked(actionEvent -> stage.close());
+        commandLabel.setOnMouseClicked(actionEvent -> {
+            stage.close();
+            System.exit(0);
+        });
         extraCommandContainer.getChildren().add(commandLabel);
     }
 

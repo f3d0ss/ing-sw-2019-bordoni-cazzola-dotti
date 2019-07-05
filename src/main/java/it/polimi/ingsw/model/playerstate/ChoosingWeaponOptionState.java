@@ -12,7 +12,12 @@ import java.util.List;
  * State of the player while choosing a {@link it.polimi.ingsw.model.WeaponMode}
  */
 public class ChoosingWeaponOptionState extends SelectedWeaponState {
-
+    /**
+     * This constructor create the state of the player while choosing a weapon mode
+     *
+     * @param selectedAggregateAction This is the aggregate action the player is executing
+     * @param selectedWeapon          This is the weapon the player selected
+     */
     public ChoosingWeaponOptionState(AggregateAction selectedAggregateAction, Weapon selectedWeapon) {
         super(selectedAggregateAction, selectedWeapon);
     }

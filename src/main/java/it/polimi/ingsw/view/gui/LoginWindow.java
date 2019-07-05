@@ -78,6 +78,7 @@ public class LoginWindow extends GridPane {
 
             secondStage.setTitle("Confirm Exit");
             secondStage.setScene(secondScene);
+            secondStage.setAlwaysOnTop(true);
 
             secondStage.show();
             e.consume();

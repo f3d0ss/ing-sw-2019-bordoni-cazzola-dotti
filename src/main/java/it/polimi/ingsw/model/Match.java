@@ -16,7 +16,9 @@ import java.util.Map;
  * Represents the Match, Contains the state of the match
  */
 public class Match {
-
+    /**
+     * Default number of deaths needed to trigger final frenzy round
+     */
     private static final int DEFAULT_SKULLS = 8;
 
     private List<PlayerId> killshotTrack;
@@ -288,6 +290,7 @@ public class Match {
      * @return true if the match is in the last turn
      */
     public boolean isLastTurn() {
+        update();
         return deathsCounter == 0;
     }
 
@@ -342,7 +345,7 @@ public class Match {
     }
 
     private void update() {
-        views.values().forEach(viewInterface -> viewInterface.update(new MatchView(killshotTrack, deathsCounter, gameBoardNumber, leaderBoard, isLastTurn(), playerOnDuty)));
+        views.values().forEach(viewInterface -> viewInterface.update(new MatchView(killshotTrack, deathsCounter, gameBoardNumber, leaderBoard, deathsCounter == 0, playerOnDuty)));
     }
 
     /**
@@ -367,6 +370,11 @@ public class Match {
         views.get(player).setViewInitializationDone();
     }
 
+    /**
+     * Sets the player who's currently in his turn
+     *
+     * @param playerOnDuty player who's currently in his turn
+     */
     public void setPlayerOnDuty(PlayerId playerOnDuty) {
         this.playerOnDuty = playerOnDuty;
         update();

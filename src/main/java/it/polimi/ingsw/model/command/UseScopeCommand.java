@@ -12,7 +12,13 @@ import it.polimi.ingsw.view.commandmessage.SimpleCommandMessage;
  * This command represent the action of use a scope
  */
 public class UseScopeCommand implements Command {
+    /**
+     * This is the player doing the command
+     */
     private final Player player;
+    /**
+     * This is the current state of the player
+     */
     private final SelectScopeTargetState currentState;
 
     /**

@@ -12,11 +12,25 @@ import java.util.Objects;
  * This command represent an effect that a weapon can have on a single player
  */
 public class EffectCommand {
-
+    /**
+     * This is the player getting the effect
+     */
     private final Player player;
+    /**
+     * This represent the damage
+     */
     private final int damage;
+    /**
+     * This represent the marks
+     */
     private final int marks;
+    /**
+     * This represent the square where the player will be sent
+     */
     private final Square arrivalSquare;
+    /**
+     * This is the ID of the shooter
+     */
     private final PlayerId shooter;
 
     /**

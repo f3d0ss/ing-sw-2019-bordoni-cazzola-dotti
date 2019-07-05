@@ -10,10 +10,25 @@ import it.polimi.ingsw.view.commandmessage.SimpleCommandMessage;
  * This command change the player state from currentState to nextState
  */
 public class DoneCommand implements Command {
+    /**
+     * This is the player doing the command
+     */
     private final Player player;
+    /**
+     * This is the current state of the player
+     */
     private final PlayerState currentState;
+    /**
+     * This is the future state of the player
+     */
     private final PlayerState nextState;
+    /**
+     * This is true if the command is undoable
+     */
     private final boolean undoable;
+    /**
+     * This is true if the command end the turn
+     */
     private boolean endTurn = false;
 
     /**

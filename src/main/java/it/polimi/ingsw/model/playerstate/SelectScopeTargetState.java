@@ -14,9 +14,22 @@ import java.util.List;
  * State when the player is selecting targets to use a Scope power up
  */
 public class SelectScopeTargetState extends SelectedWeaponState implements TargetingPlayerState {
+    /**
+     * This is the list of the players hit by the last shot and selectable by the scope
+     */
     private final List<Player> shootedPlayers;
-    private Player selectedPlayer;
+    /**
+     * This is the player selected as target of the Scope
+     */
+    private Player selectedPlayer = null;
 
+    /**
+     * This constructor create the state of the player when he is selecting targets to use a Scope power up
+     *
+     * @param selectedAggregateAction This is the aggregate action the player is executing
+     * @param selectedWeapon          This is the weapon selected in the action
+     * @param shootedPlayers          This is the list of the players hit by the last shot and selectable by the scope
+     */
     public SelectScopeTargetState(AggregateAction selectedAggregateAction, Weapon selectedWeapon, List<Player> shootedPlayers) {
         super(selectedAggregateAction, selectedWeapon);
         this.shootedPlayers = shootedPlayers;

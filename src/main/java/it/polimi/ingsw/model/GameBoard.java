@@ -396,6 +396,16 @@ public class GameBoard {
         return null;
     }
 
+    /**
+     * Gets squares in a direction starting from Origin
+     *
+     * @param origin            Current square
+     * @param direction         Direction of a target square from the Origin (ex. square 2.2 is WEST from 2.3)
+     * @param maxTargetDistance max distance of a square from origin
+     * @param minTargetDistance min distance of a square from origin
+     * @param ignoreWalls       true if walls must be ignored
+     * @return squares in the direction specified starting from Origin
+     */
     private List<Square> getSquaresInADirection(Square origin, CardinalDirection direction, int maxTargetDistance, int minTargetDistance, boolean ignoreWalls) {
         List<Square> squares = new ArrayList<>();
         Square square = origin;

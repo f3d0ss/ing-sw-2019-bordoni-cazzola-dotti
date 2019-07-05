@@ -14,15 +14,31 @@ import java.util.Map;
  */
 public class PendingPaymentWeaponOptionState extends SelectedWeaponState implements PendingPaymentState {
 
+    /**
+     * Those are the ammo selected for pay the weapon mode
+     */
     private final Map<Color, Integer> pendingAmmo;
+    /**
+     * This are the power up selected for pay the weapon mode
+     */
     private final List<PowerUp> pendingCardPayment;
+    /**
+     * This is the cost of the weapon mode selected
+     */
     private final Map<Color, Integer> modeCost;
 
-    public PendingPaymentWeaponOptionState(AggregateAction selectedAggregateAction, Weapon selectedWeapon, Map<Color, Integer> firstOptionalModeCost) {
+    /**
+     * This constructor create the state of the player when he is paying to use a weapon mode
+     *
+     * @param selectedAggregateAction This is the aggregate action the player is executing
+     * @param selectedWeapon          This is the weapon selected in the action
+     * @param optionalModeCost        This is the cost of the selected optional mode of the weapon
+     */
+    public PendingPaymentWeaponOptionState(AggregateAction selectedAggregateAction, Weapon selectedWeapon, Map<Color, Integer> optionalModeCost) {
         super(selectedAggregateAction, selectedWeapon);
         pendingAmmo = new EnumMap<>(Color.class);
         pendingCardPayment = new ArrayList<>();
-        this.modeCost = firstOptionalModeCost;
+        this.modeCost = optionalModeCost;
     }
 
     /**
@@ -58,7 +74,7 @@ public class PendingPaymentWeaponOptionState extends SelectedWeaponState impleme
     public void removePendingCard(PowerUp powerUp) {
         if (!pendingCardPayment.contains(powerUp))
             throw new IllegalStateException();
-        pendingCardPayment.add(powerUp);
+        pendingCardPayment.remove(powerUp);
     }
 
     /**
@@ -83,9 +99,7 @@ public class PendingPaymentWeaponOptionState extends SelectedWeaponState impleme
     @Override
     public List<Command> getPossibleCommands(Player player) {
         List<Command> commands = new ArrayList<>();
-        Map<Color, Integer> totalPending = new EnumMap<>(Color.class);
-        pendingCardPayment.forEach(powerUp -> totalPending.put(powerUp.getColor(), totalPending.getOrDefault(powerUp.getColor(), 0) + 1));
-        pendingAmmo.forEach((color, integer) -> totalPending.put(color, totalPending.getOrDefault(color, 0) + integer));
+        Map<Color, Integer> totalPending = PendingPaymentState.getTotalPendingPayment(pendingCardPayment, pendingAmmo);
 
         if (modeCost.equals(totalPending)) {
             commands.add(new PayWeaponOptionCommand(player, this));
