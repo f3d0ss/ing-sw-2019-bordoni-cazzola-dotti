@@ -205,7 +205,7 @@ public class MainGuiController {
      */
     void updateMatchView(MatchView matchView) {
         printKillshotTrack(matchView.getKillshotTrack());
-        if (matchView.getLeaderBoard() == null && matchView.getPlayerOnDuty() != null){
+        if (matchView.getLeaderBoard() == null && matchView.getPlayerOnDuty() != null) {
             playerButtons.forEach((playerId, button) -> button.setBorder(Border.EMPTY));
             playerButtons.get(matchView.getPlayerOnDuty()).setBorder(new Border(new BorderStroke(javafx.scene.paint.Color.GREEN,
                     BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(5))));

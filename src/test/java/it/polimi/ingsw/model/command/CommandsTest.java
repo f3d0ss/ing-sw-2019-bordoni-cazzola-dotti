@@ -237,6 +237,7 @@ class CommandsTest {
         for (AggregateActionID aggregateActionID : AggregateActionID.values()) {
             player.changeState(currentPlayerState);
             SelectAggregateActionCommand command = new SelectAggregateActionCommand(player, aggregateActionID, currentPlayerState);
+            command.createCommandMessage();
             command.execute();
             assertTrue(player.getCurrentState() instanceof SelectedAggregateActionState);
             assertEquals(aggregateActionID.create().getMoveNumber(), ((SelectedAggregateActionState) player.getCurrentState()).getSelectedAggregateAction().getMoveNumber());
@@ -275,6 +276,7 @@ class CommandsTest {
             player.changeState((PlayerState) currentState);
             assertTrue(currentState.getPendingAmmoPayment().isEmpty());
             SelectAmmoPaymentCommand selectAmmoPaymentCommand = new SelectAmmoPaymentCommand(player, currentState, Color.BLUE);
+            selectAmmoPaymentCommand.createCommandMessage();
             selectAmmoPaymentCommand.execute();
             assertEquals(ammoSelectableInOneCommand, currentState.getPendingAmmoPayment().get(Color.BLUE));
             assertEquals(previousPlayerAmmo - ammoSelectableInOneCommand, player.getAmmo().get(Color.BLUE));
@@ -294,6 +296,7 @@ class CommandsTest {
             player.changeState((PlayerState) currentState);
             assertTrue(currentState.getPendingCardPayment().isEmpty());
             SelectPowerUpPaymentCommand selectAmmoPaymentCommand = new SelectPowerUpPaymentCommand(player, currentState, powerUpWantToPay);
+            selectAmmoPaymentCommand.createCommandMessage();
             selectAmmoPaymentCommand.execute();
             assertEquals(powerUpWantToPay, currentState.getPendingCardPayment().get(0));
             assertFalse(player.getPowerUps().contains(powerUpWantToPay));
@@ -313,6 +316,7 @@ class CommandsTest {
         spawnSquare.addWeapon(testWeapon);
         SelectedAggregateActionState currentPlayerState = new SelectedAggregateActionState(AggregateActionID.MOVE_GRAB.create());
         SelectBuyingWeaponCommand command = new SelectBuyingWeaponCommand(player, currentPlayerState, testWeapon, spawnSquare);
+        command.createCommandMessage();
         command.execute();
         assertTrue(spawnSquare.getWeapons().isEmpty());
         assertEquals(testWeapon, ((SelectedWeaponState) player.getCurrentState()).getSelectedWeapon());
@@ -324,7 +328,216 @@ class CommandsTest {
 
     @Test
     void testSelectDiscardedWeaponCommand() {
-
+        Match match = new Match();
+        Player player = new Player(match, PlayerId.BLUE, PlayerId.BLUE.playerIdName());
+        SpawnSquare spawnSquare = new SpawnSquare(Connection.DOOR, Connection.DOOR, Connection.DOOR, Connection.DOOR, 0, 0, Color.BLUE);
+        spawnSquare.setMatch(match);
+        Weapon testBuyingWeapon = new Weapon();
+        Weapon testDiscardWeapon = new Weapon();
+        player.addWeapon(testDiscardWeapon);
+        DiscardingWeaponState currentPlayerState = new DiscardingWeaponState(AggregateActionID.MOVE_GRAB.create(), testBuyingWeapon, spawnSquare);
+        SelectDiscardedWeaponCommand command = new SelectDiscardedWeaponCommand(player, currentPlayerState, testDiscardWeapon);
+        command.createCommandMessage();
+        command.execute();
+        assertTrue(player.getWeapons().isEmpty());
+        assertTrue(spawnSquare.getWeapons().contains(testDiscardWeapon));
+        assertTrue(command.isUndoable());
+        command.undo();
+        assertTrue(player.getWeapons().contains(testDiscardWeapon));
+        assertTrue(spawnSquare.getWeapons().isEmpty());
     }
+
+    @Test
+    void testSelectPowerUpCommand() {
+        Match match = new Match();
+        Player player = new Player(match, PlayerId.BLUE, PlayerId.BLUE.playerIdName());
+        PowerUp powerUpToUse = null;
+        while (powerUpToUse == null) {
+            player.addAmmoTile(new AmmoTile(3, new HashMap<>()));
+            for (int i = 0; i < player.getPowerUps().size(); i++) {
+                if (player.getPowerUps().get(i).getType().equals(PowerUpID.TELEPORTER) || player.getPowerUps().get(i).getType().equals(PowerUpID.NEWTON))
+                    powerUpToUse = player.getPowerUps().get(i);
+                else
+                    player.pay(player.getPowerUps().get(i));
+            }
+        }
+        ManageTurnState currentPlayerState = new ManageTurnState();
+        SelectPowerUpCommand command = new SelectPowerUpCommand(player, powerUpToUse, currentPlayerState);
+        assertTrue(player.getPowerUps().contains(powerUpToUse));
+        command.createCommandMessage();
+        command.execute();
+        assertFalse(player.getPowerUps().contains(powerUpToUse));
+        assertTrue(command.isUndoable());
+        command.undo();
+        assertTrue(player.getPowerUps().contains(powerUpToUse));
+    }
+
+    @Test
+    void testSelectReloadWeaponCommandFromManageTurn() {
+        Match match = new Match();
+        Player player = new Player(match, PlayerId.BLUE, PlayerId.BLUE.playerIdName());
+        Weapon testReloadingWeapon = new Weapon();
+        player.addWeapon(testReloadingWeapon);
+        ManageTurnState currentPlayerState = new ManageTurnState();
+        SelectReloadingWeaponCommand command = new SelectReloadingWeaponCommand(player, testReloadingWeapon, currentPlayerState);
+        command.createCommandMessage();
+        command.execute();
+        assertTrue(player.getCurrentState() instanceof PendingPaymentReloadWeaponState);
+        assertEquals(testReloadingWeapon, ((PendingPaymentReloadWeaponState) player.getCurrentState()).getSelectedReloadingWeapon());
+        assertTrue(command.isUndoable());
+        command.undo();
+        assertEquals(currentPlayerState, player.getCurrentState());
+    }
+
+    @Test
+    void testSelectReloadWeaponCommandFromChoosingWeaponState() {
+        Match match = new Match();
+        Player player = new Player(match, PlayerId.BLUE, PlayerId.BLUE.playerIdName());
+        Weapon testReloadingWeapon = new Weapon();
+        player.addWeapon(testReloadingWeapon);
+        ChoosingWeaponState currentPlayerState = new ChoosingWeaponState(AggregateActionID.MOVE_RELOAD_SHOOT.create());
+        SelectReloadingWeaponCommand command = new SelectReloadingWeaponCommand(player, testReloadingWeapon, currentPlayerState);
+        command.createCommandMessage();
+        command.execute();
+        assertTrue(player.getCurrentState() instanceof PendingPaymentReloadBeforeShotState);
+        assertEquals(testReloadingWeapon, ((PendingPaymentReloadBeforeShotState) player.getCurrentState()).getSelectedWeapon());
+        assertTrue(command.isUndoable());
+        command.undo();
+        assertEquals(currentPlayerState, player.getCurrentState());
+    }
+
+    @Test
+    void testSelectScopeCommand() {
+        Match match = new Match();
+        Player player = new Player(match, PlayerId.BLUE, PlayerId.BLUE.playerIdName());
+        Weapon testWeapon = new Weapon();
+        PowerUp powerUpToUse = null;
+        while (powerUpToUse == null) {
+            player.addAmmoTile(new AmmoTile(3, new HashMap<>()));
+            for (int i = 0; i < player.getPowerUps().size(); i++) {
+                if (player.getPowerUps().get(i).getType().equals(PowerUpID.TARGETING_SCOPE))
+                    powerUpToUse = player.getPowerUps().get(i);
+                else
+                    player.pay(player.getPowerUps().get(i));
+            }
+        }
+        ScopeState currentPlayerState = new ScopeState(AggregateActionID.SHOOT.create(), testWeapon, new ArrayList<>());
+        player.changeState(currentPlayerState);
+        SelectScopeCommand command = new SelectScopeCommand(player, currentPlayerState, powerUpToUse);
+        assertTrue(player.getPowerUps().contains(powerUpToUse));
+        command.createCommandMessage();
+        command.execute();
+        assertFalse(player.getPowerUps().contains(powerUpToUse));
+        assertTrue(command.isUndoable());
+        command.undo();
+        assertTrue(player.getPowerUps().contains(powerUpToUse));
+    }
+
+    @Test
+    void testSelectShootActionCommand() {
+        Match match = new Match();
+        Player player = new Player(match, PlayerId.BLUE, PlayerId.BLUE.playerIdName());
+        SelectedAggregateActionState currentPlayerState = new SelectedAggregateActionState(AggregateActionID.SHOOT.create());
+        player.changeState(currentPlayerState);
+        SelectShootActionCommand command = new SelectShootActionCommand(player, currentPlayerState);
+        assertEquals(currentPlayerState, player.getCurrentState());
+        command.createCommandMessage();
+        command.execute();
+        assertTrue(player.getCurrentState() instanceof ChoosingWeaponState);
+        assertTrue(command.isUndoable());
+        command.undo();
+        assertEquals(currentPlayerState, player.getCurrentState());
+    }
+
+    @Test
+    void testSelectWeaponCommand() {
+        Match match = new Match();
+        Player player = new Player(match, PlayerId.BLUE, PlayerId.BLUE.playerIdName());
+        Weapon testWeapon = new Weapon();
+        ChoosingWeaponState currentPlayerState = new ChoosingWeaponState(AggregateActionID.SHOOT.create());
+        player.changeState(currentPlayerState);
+        SelectWeaponCommand command = new SelectWeaponCommand(player, testWeapon, currentPlayerState);
+        assertEquals(currentPlayerState, player.getCurrentState());
+        command.createCommandMessage();
+        command.execute();
+        assertTrue(player.getCurrentState() instanceof ChoosingWeaponOptionState);
+        assertEquals(testWeapon, ((ChoosingWeaponOptionState) player.getCurrentState()).getSelectedWeapon());
+        assertTrue(command.isUndoable());
+        command.undo();
+        assertEquals(currentPlayerState, player.getCurrentState());
+    }
+
+    @Test
+    void testUseNewtonCommand() {
+        Match match = new Match();
+        Player player = new Player(match, PlayerId.BLUE, PlayerId.BLUE.playerIdName());
+        Player targetPlayer = new Player(match, PlayerId.YELLOW, PlayerId.YELLOW.playerIdName());
+        Square arrivalSquare = match.getBoard().getSpawn(Color.RED);
+        targetPlayer.respawn(Color.BLUE);
+        TargetingPlayerState currentPlayerState = new SelectedNewtonState();
+        player.changeState(currentPlayerState);
+        UseNewtonCommand command = new UseNewtonCommand(player, currentPlayerState, arrivalSquare, targetPlayer);
+        assertEquals(currentPlayerState, player.getCurrentState());
+        command.createCommandMessage();
+        command.execute();
+        assertTrue(player.getCurrentState() instanceof ManageTurnState);
+        assertEquals(arrivalSquare, targetPlayer.getPosition());
+        assertTrue(command.isUndoable());
+        command.undo();
+        assertEquals(currentPlayerState, player.getCurrentState());
+        assertEquals(match.getBoard().getSpawn(Color.BLUE), targetPlayer.getPosition());
+    }
+
+    @Test
+    void testUseScopeCommand() {
+        Match match = new Match();
+        Player player = new Player(match, PlayerId.BLUE, PlayerId.BLUE.playerIdName());
+        Player targetPlayer = new Player(match, PlayerId.YELLOW, PlayerId.YELLOW.playerIdName());
+        List<Player> targettablePlayer = new ArrayList<>();
+        targettablePlayer.add(targetPlayer);
+        Weapon testWeapon = new Weapon();
+
+        SelectScopeTargetState currentPlayerState = new SelectScopeTargetState(AggregateActionID.SHOOT.create(), testWeapon, targettablePlayer);
+        player.changeState(currentPlayerState);
+        currentPlayerState.getPossibleCommands(player).get(0).execute();
+        UseScopeCommand command = new UseScopeCommand(player, currentPlayerState);
+        assertEquals(currentPlayerState, player.getCurrentState());
+        command.createCommandMessage();
+        command.execute();
+        assertTrue(player.getCurrentState() instanceof ScopeState);
+        assertEquals(player.getId(), targetPlayer.getHealth().get(0));
+        assertFalse(command.isUndoable());
+        assertThrows(IllegalUndoException.class, command::undo);
+    }
+
+    @Test
+    void testUseTagbackCommand() {
+        Match match = new Match();
+        Player player = new Player(match, PlayerId.BLUE, PlayerId.BLUE.playerIdName());
+        Player shooterPlayer = new Player(match, PlayerId.YELLOW, PlayerId.YELLOW.playerIdName());
+        match.addPlayer(shooterPlayer);
+        player.addDamage(1, shooterPlayer.getId());
+        PowerUp powerUpToUse = null;
+        while (powerUpToUse == null) {
+            player.addAmmoTile(new AmmoTile(3, new HashMap<>()));
+            for (int i = 0; i < player.getPowerUps().size(); i++) {
+                if (player.getPowerUps().get(i).getType().equals(PowerUpID.TAGBACK_GRENADE))
+                    powerUpToUse = player.getPowerUps().get(i);
+                else
+                    player.pay(player.getPowerUps().get(i));
+            }
+        }
+        ShootedState currentPlayerState = new ShootedState();
+        player.changeState(currentPlayerState);
+        UseTagbackGrenadeCommand command = new UseTagbackGrenadeCommand(player, powerUpToUse);
+        assertTrue(shooterPlayer.getMarks().isEmpty());
+        command.createCommandMessage();
+        command.execute();
+        assertEquals(1, shooterPlayer.getMarks().get(player.getId()));
+        assertFalse(command.isUndoable());
+        assertThrows(IllegalUndoException.class, command::undo);
+    }
+
+
 }
 
