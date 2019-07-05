@@ -18,13 +18,37 @@ public class Weapon {
     private String description;
     private Map<Color, Integer> reloadingCost;
     private Map<Color, Integer> buyCost;
+    /**
+     * Weapon's fire options
+     */
     private List<WeaponMode> weaponModes;
+    /**
+     * True when weapon can move his owner
+     */
     private boolean extraMoveToDo = false;
+    /**
+     * True when the Weapon is loaded
+     */
     private boolean loaded = true;
+    /**
+     * Currently selected WeaponMode
+     */
     private WeaponMode selectedWeaponMode = null;
+    /**
+     * TargetPlayers that Shooter has selected
+     */
     private List<Player> targetPlayers = new ArrayList<>();
+    /**
+     * TargetSquares that Shooter has selected
+     */
     private List<Square> targetSquares = new ArrayList<>();
+    /**
+     * Number of available ShootActions
+     */
     private int damageToDo;
+    /**
+     * TargetPlayers that Shooter has selected in the last executed {@link SelectTargetPlayerCommand}
+     */
     private List<Player> lastAddedTargetPlayers = new ArrayList<>();
 
 
@@ -111,6 +135,14 @@ public class Weapon {
         return weaponModes;
     }
 
+    /**
+     * This method returns all the possibles {@link ShootCommand}
+     *
+     * @param gameboard Gameboard gameboard of the match
+     * @param shooter   Player who is using the weapon
+     * @param state     Shooter's state
+     * @return List of all possible commands to execute
+     */
     private List<WeaponCommand> getPossibleShootCommands(GameBoard gameboard, Player shooter, ReadyToShootState state) {
         List<WeaponCommand> possibleCommands = new ArrayList<>();
         if (selectedWeaponMode.isMoveTargetBeforeShoot())
@@ -547,7 +579,7 @@ public class Weapon {
      * SelectTargetsCommands {@link SelectTargetPlayerCommand} {@link SelectTargetSquareCommand},
      * ShootCommands {@link ShootCommand})
      *
-     * @param gameboard Gameboard
+     * @param gameboard Gameboard gameboard of the match
      * @param shooter   Player who is using the weapon
      * @param state     Shooter's state
      * @return List of all possible commands to execute
@@ -564,6 +596,14 @@ public class Weapon {
         return possibleCommands;
     }
 
+
+    /**
+     * This method returns the possible commands {@link MoveCommand}
+     *
+     * @param shooter Player who is using the weapon
+     * @param state   Shooter's state
+     * @return List of all possible commands to execute
+     */
     private List<MoveCommand> getPossibleExtraMoveCommands(GameBoard gameBoard, Player shooter, ReadyToShootState state) {
         Square currentPosition = shooter.getPosition();
         List<MoveCommand> list = new ArrayList<>();
