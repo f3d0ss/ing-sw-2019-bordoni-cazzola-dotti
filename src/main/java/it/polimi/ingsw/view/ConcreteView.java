@@ -22,6 +22,26 @@ public class ConcreteView implements ViewInterface {
     }
 
     /**
+     * Gets the name of horizontal coordinate, as a literal
+     *
+     * @param row is the number of the row
+     * @return a string containing the letter
+     */
+    public static String getHorizontalCoordinateName(int row) {
+        return "" + (char) (row + ASCII_A_CODE);
+    }
+
+    /**
+     * Gets the name of vertical coordinate, as a numerical
+     *
+     * @param column is the number of the column
+     * @return a string containing the number
+     */
+    public static String getVerticalCoordinateName(int column) {
+        return String.valueOf(column + FIRST_ROW_NUMBER);
+    }
+
+    /**
      * Updates the MatchView instance.
      *
      * @param mw is the instance of MatchView to be updated
@@ -75,31 +95,11 @@ public class ConcreteView implements ViewInterface {
      * Sends received commands to User Interface.
      *
      * @param commands is the list of commands
-     * @param undo tells if undo command has to be added to the possible choices
+     * @param undo     tells if undo command has to be added to the possible choices
      * @return the user's answer
      */
     @Override
     public int sendCommands(List<CommandMessage> commands, boolean undo) {
         return ui.manageCommandChoice(commands, undo);
-    }
-
-    /**
-     * Gets the name of horizontal coordinate, as a literal
-     *
-     * @param row is the number of the row
-     * @return a string containing the letter
-     */
-    public static String getHorizontalCoordinateName(int row) {
-        return "" + (char) (row + ASCII_A_CODE);
-    }
-
-    /**
-     * Gets the name of vertical coordinate, as a numerical
-     *
-     * @param column is the number of the column
-     * @return a string containing the number
-     */
-    public static String getVerticalCoordinateName(int column) {
-        return String.valueOf(column + FIRST_ROW_NUMBER);
     }
 }

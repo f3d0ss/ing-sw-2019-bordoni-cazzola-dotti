@@ -69,7 +69,7 @@ public class ModelView {
      * Adds an enemy of client.
      *
      * @param playerId is the id of enemy
-     * @param enemie is the player view of the enemy
+     * @param enemie   is the player view of the enemy
      */
     public void setEnemie(PlayerId playerId, PlayerView enemie) {
         this.enemies.put(playerId, enemie);
@@ -88,7 +88,7 @@ public class ModelView {
     /**
      * Sets the list of weapons on a given spawn.
      *
-     * @param color is the color of the spawn
+     * @param color          is the color of the spawn
      * @param weaponsOnSpawn is the list of weapons that are adding
      */
     public void setWeaponsOnSpawn(Color color, List<WeaponView> weaponsOnSpawn) {
@@ -107,8 +107,8 @@ public class ModelView {
     /**
      * Sets one square of the board.
      *
-     * @param row is the row number (starting from 0) of the square
-     * @param col is the column number (starting from 0) of the square
+     * @param row        is the row number (starting from 0) of the square
+     * @param col        is the column number (starting from 0) of the square
      * @param squareView is the square to be set
      */
     public void setSquareBoard(int row, int col, SquareView squareView) {
@@ -133,7 +133,7 @@ public class ModelView {
      * @return the player view
      */
     public PlayerView getPlayerView(PlayerId key) {
-        if(me.getId().playerId().equals(key.playerId()))
+        if (me.getId().playerId().equals(key.playerId()))
             return me;
         else
             return enemies.get(key);

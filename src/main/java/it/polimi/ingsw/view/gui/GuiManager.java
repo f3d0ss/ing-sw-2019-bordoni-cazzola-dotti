@@ -30,8 +30,8 @@ public class GuiManager extends Application {
     /**
      * Sets and shows the message on the window.
      *
-     * @param string is the message to be shown
-     * @param answers is the list of possible answers (it could be null if answer is open)
+     * @param string           is the message to be shown
+     * @param answers          is the list of possible answers (it could be null if answer is open)
      * @param isAnswerRequired tells if answer is required (message is a question) or not (message is a notification)
      */
     public static void setMessageAndShow(String string, List<String> answers, boolean isAnswerRequired) {
