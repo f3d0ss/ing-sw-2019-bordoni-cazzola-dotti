@@ -639,8 +639,6 @@ public class MainGuiController {
             Text leaderBoardText = new Text(playerRecord);
             if (i == 1)
                 leaderBoardText.setFont(Font.font("verdana", FontWeight.BOLD, FontPosture.REGULAR, 20));
-            if (modelView.getPlayerView(entry.getKey()).isDisconnected())
-                leaderBoardText.setStrikethrough(true);
             leaderBoardText.wrappingWidthProperty().bind(logContainer.widthProperty());
             logContainer.getChildren().add(leaderBoardText);
             i++;
