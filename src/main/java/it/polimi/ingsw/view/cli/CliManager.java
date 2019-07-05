@@ -6,6 +6,9 @@ import it.polimi.ingsw.model.Connection;
 import it.polimi.ingsw.model.PlayerId;
 import it.polimi.ingsw.view.*;
 
+/**
+ * This class manages the printing of game on command line interface.
+ */
 @SuppressWarnings("squid:S106")
 public class CliManager {
 
@@ -19,6 +22,7 @@ public class CliManager {
     private static final String CORNER_BOTTOM_LEFT = "╚";
     private static final String CORNER_TOP_RIGHT = "╗";
     private static final String CORNER_TOP_LEFT = "╔";
+    private static final String EMPTY_DAMAGE = "_";
     private static final String SPACE = " ";
     private static final int SQUARE_HEIGHT = 5;
     private static final String ANSI_RESET = "\u001B[0m";
@@ -27,6 +31,11 @@ public class CliManager {
     private static final String ANSI_YELLOW = "\u001B[93m";
     private static final String ANSI_BLUE = "\u001B[94m";
 
+    /**
+     * Shows all parts of game.
+     *
+     * @param modelView is the instance containing the actual match information
+     */
     public void displayAll(ModelView modelView) {
         for (int i = 0; i < SEPARATOR_LENGTH; i++)
             System.out.print(SEPARATOR);
@@ -44,6 +53,12 @@ public class CliManager {
             displayEnemiesInformation(player, player.getId() == modelView.getMatch().getPlayerOnDuty());
     }
 
+    /**
+     * Manages the printing of a single square of the board.
+     *
+     * @param square is the square to be shown
+     * @param printingRow is the cli's row of the single square that is being shown
+     */
     private void displaySquare(SquareView square, int printingRow) {
         if (square == null) {
             for (int i = 0; i < INNERWIDTH + 3; i++)
@@ -65,6 +80,11 @@ public class CliManager {
         }
     }
 
+    /**
+     * Manages the printing of the top-horizontal connection of a square.
+     *
+     * @param square is the square whose connection is being shown
+     */
     private void displayTopHorizontalConnection(SquareView square) {
         displayCorner(square.getConnection(CardinalDirection.WEST), square.getConnection(CardinalDirection.NORTH), CORNER_TOP_LEFT);
         displayHorizontalConnection(square.getConnection(CardinalDirection.NORTH), square.getCol());
@@ -72,6 +92,11 @@ public class CliManager {
         displayAdditionalSpace(square.getConnection(CardinalDirection.EAST), square.getConnection(CardinalDirection.NORTH));
     }
 
+    /**
+     * Manages the printing of the bottom-horizontal connection of a square.
+     *
+     * @param square is the square whose connection is being shown
+     */
     private void displayBottomHorizontalConnection(SquareView square) {
         displayCorner(square.getConnection(CardinalDirection.WEST), square.getConnection(CardinalDirection.SOUTH), CORNER_BOTTOM_LEFT);
         displayHorizontalConnection(square.getConnection(CardinalDirection.SOUTH), square.getCol());
@@ -79,6 +104,13 @@ public class CliManager {
         displayAdditionalSpace(square.getConnection(CardinalDirection.EAST), square.getConnection(CardinalDirection.SOUTH));
     }
 
+    /**
+     * Manages the printing of the corner of a square.
+     *
+     * @param vertical is the vertical connection consecutive to the corner
+     * @param horizontal is the horizontal connection consecutive to the corner
+     * @param corner is the default corner, printing if both vertical and horizontal connection are walls or doors
+     */
     private void displayCorner(Connection vertical, Connection horizontal, String corner) {
         if (vertical == Connection.SAME_ROOM) {
             if (horizontal == Connection.SAME_ROOM) System.out.print(SPACE);
@@ -89,10 +121,22 @@ public class CliManager {
         }
     }
 
+    /**
+     * Manages the printing of horizontal additional spaces between squares.
+     *
+     * @param vertical is the right-side connection of the square
+     * @param horizontal is the horizontal connection of the square
+     */
     private void displayAdditionalSpace(Connection vertical, Connection horizontal) {
         System.out.print((vertical == Connection.SAME_ROOM && horizontal != Connection.SAME_ROOM) ? HORIZONTAL_WALL : SPACE);
     }
 
+    /**
+     * Manages the printing of the horizontal connection of a square.
+     *
+     * @param side is the horizontal connection that is being shown
+     * @param column is the number of square's column on the board
+     */
     private void displayHorizontalConnection(Connection side, int column) {
         for (int i = 0; i < INNERWIDTH; i++)
             switch (side) {
@@ -110,6 +154,14 @@ public class CliManager {
             }
     }
 
+    /**
+     * Manages the printing of the vertical connection of a square.
+     *
+     * @param side is the vertical connection that is being shown
+     * @param isMiddle tells if the method is printing the middle-vertical segment of the connection
+     *                 (it is used for the printing of doors and board's coordinates)
+     * @param row is the number of square's row on the board
+     */
     private void displayVerticalConnection(Connection side, boolean isMiddle, int row) {
         switch (side) {
             case WALL:
@@ -126,6 +178,13 @@ public class CliManager {
         }
     }
 
+    /**
+     * Manages the building as a string of the various information about a square.
+     *
+     * @param square is the square whose information is being shown
+     * @param row is the cli's row that is being printed
+     * @return the string containing information about a given square
+     */
     private String displaySquareInformation(SquareView square, int row) {
         switch (row) {
             case 1:
@@ -143,7 +202,12 @@ public class CliManager {
         }
     }
 
-    //TODO: implement SpawnSquare.getWeapons
+    /**
+     * Manages the printing of all information at the right-side of board.
+     *
+     * @param row is the cli's row that is being printed
+     * @param modelView is the model from which information is taken
+     */
 
     private void displayRightSideInformation(int row, ModelView modelView) {
         switch (row) {
@@ -205,6 +269,13 @@ public class CliManager {
         }
     }
 
+
+    /**
+     * Manages the printing of all information at the bottom-side of board (about enemies).
+     *
+     * @param enemy is the enemy whom information is being shown
+     * @param isOnDuty tells if an enemy is on duty during match
+     */
     private void displayEnemiesInformation(PlayerView enemy, boolean isOnDuty) {
         System.out.print("\n" + getPlayerIdAndNickname(enemy, isOnDuty) + (enemy.isDisconnected() ? " - DISCONNESSO " : " ") + "has " + enemy.getPowerUps().size() + " powerups.");
         System.out.print(" Ammos: ");
@@ -221,6 +292,12 @@ public class CliManager {
         System.out.println("(dead " + enemy.getDeaths() + " times)");
     }
 
+    /**
+     * Gets the ANSI-code setter associated to a given colour.
+     *
+     * @param color is the color need to be set
+     * @return the ANSI code
+     */
     private String setDisplayColored(Color color) {
         switch (color) {
             case BLUE:
@@ -234,6 +311,12 @@ public class CliManager {
         }
     }
 
+    /**
+     * Manages the colouring of an ammotile's acronym
+     *
+     * @param ammoTile is the string representing an ammotile to be colored
+     * @return the string representing an ammotile with ANSI color setters
+     */
     private String displayColoredAmmoTile(String ammoTile) {
         StringBuilder out = new StringBuilder();
         for (int i = 0; i < ammoTile.length(); i++) {
@@ -248,13 +331,25 @@ public class CliManager {
         return out.toString();
     }
 
+    /**
+     * Gets player's id and nickname as a string and make it green coloured it if that player is on duty.
+     *
+     * @param player is the player whom id and nickname are requested
+     * @param isOnDuty tells if the player is on duty
+     * @return the (colored) string containing id and nickname of a given player
+     */
     private String getPlayerIdAndNickname(PlayerView player, boolean isOnDuty) {
         return (isOnDuty ? ANSI_GREEN : "") + player.getId().playerIdName().toUpperCase() + " (" + player.getNickname() + ")" + ANSI_RESET;
     }
 
+    /**
+     * Manages the printing of a player's damages.
+     *
+     * @param player is the player whom damages are being printed
+     */
     private void printDamages(PlayerView player) {
         player.getHealth().forEach(id -> System.out.print(id.playerIdName().substring(0, 1) + " "));
         for (int i = 0; i + player.getHealth().size() < MAX_DAMAGE_SHOWABLE; i++)
-            System.out.print("_ ");
+            System.out.print(EMPTY_DAMAGE + SPACE);
     }
 }

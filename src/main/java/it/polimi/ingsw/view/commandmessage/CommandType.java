@@ -1,5 +1,8 @@
 package it.polimi.ingsw.view.commandmessage;
 
+/**
+ * Contains all possible type of command message that server can send to client.
+ */
 public enum CommandType {
     DONE {
         public String getString() {
@@ -103,5 +106,10 @@ public enum CommandType {
         }
     };
 
+    /**
+     * Gets the string associated to a command type.
+     *
+     * @return the string associated to a command type
+     */
     public abstract String getString();
 }
