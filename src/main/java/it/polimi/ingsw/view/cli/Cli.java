@@ -191,8 +191,5 @@ public class Cli implements Ui {
             System.out.println(i + "° classificato: " + entry.getKey().playerIdName() + " con " + entry.getValue() + " punti");
             i++;
         }
-        System.out.println("Digita qualcosa per uscire:");
-        stdin.nextLine();
-        System.exit(0);
     }
 }

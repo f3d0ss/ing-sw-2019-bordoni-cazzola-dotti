@@ -290,6 +290,7 @@ public class Match {
      * @return true if the match is in the last turn
      */
     public boolean isLastTurn() {
+        update();
         return deathsCounter == 0;
     }
 
@@ -344,7 +345,7 @@ public class Match {
     }
 
     private void update() {
-        views.values().forEach(viewInterface -> viewInterface.update(new MatchView(killshotTrack, deathsCounter, gameBoardNumber, leaderBoard, isLastTurn(), playerOnDuty)));
+        views.values().forEach(viewInterface -> viewInterface.update(new MatchView(killshotTrack, deathsCounter, gameBoardNumber, leaderBoard, deathsCounter == 0, playerOnDuty)));
     }
 
     /**

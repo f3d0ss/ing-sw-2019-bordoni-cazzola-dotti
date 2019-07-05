@@ -48,6 +48,7 @@ public class MainGuiController {
     private static final int GAMEBOARD_V_GAP_RATIO = 40;
     private static final int MARING_FOR_TEXT_COMMAND = 5;
     private static final double OPACITY_FOR_DISCONNECTED_PLAYER = 0.5;
+    private static final double MAX_OPACITY = 1;
     @FXML
     private VBox logContainer;
     @FXML
@@ -191,6 +192,8 @@ public class MainGuiController {
         else {
             if (playerView.isDisconnected()) {
                 playerButtons.get(playerView.getId()).setOpacity(OPACITY_FOR_DISCONNECTED_PLAYER);
+            }else {
+                playerButtons.get(playerView.getId()).setOpacity(MAX_OPACITY);
             }
             if (otherPlayerBoardControllers.containsKey(playerView.getId())) {
                 otherPlayerBoardControllers.get(playerView.getId()).update(playerView);
@@ -205,7 +208,7 @@ public class MainGuiController {
      */
     void updateMatchView(MatchView matchView) {
         printKillshotTrack(matchView.getKillshotTrack());
-        if (matchView.getLeaderBoard() == null && matchView.getPlayerOnDuty() != null) {
+        if (matchView.getLeaderBoard() == null && matchView.getPlayerOnDuty() != null && modelView.getMe().getId() != matchView.getPlayerOnDuty()) {
             playerButtons.forEach((playerId, button) -> button.setBorder(Border.EMPTY));
             playerButtons.get(matchView.getPlayerOnDuty()).setBorder(new Border(new BorderStroke(javafx.scene.paint.Color.GREEN,
                     BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(5))));

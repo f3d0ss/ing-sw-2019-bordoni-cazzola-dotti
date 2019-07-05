@@ -19,7 +19,7 @@ import static java.lang.Thread.sleep;
 
 public class ServerManager implements Runnable {
 
-    public static final int MIN_PLAYERS = 2;
+    public static final int MIN_PLAYERS = 3;
     private static final int MAX_PLAYERS = 5;
     private static final int DEFAULT_BOARD = 1;
     private static final int MILLIS_TO_WAIT = 10;
