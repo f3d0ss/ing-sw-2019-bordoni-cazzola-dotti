@@ -34,6 +34,12 @@ public class MainGuiController {
 
     static final int WEAPON_HEIGHT = 406;
     static final int WEAPON_WIDTH = 240;
+    static final String SPACE = "_";
+    static final String IMAGE_EXTENSION = ".png";
+    static final String BACK = "back";
+    static final String AGGREGATE_ACTION_FILE_PATTERN = "_aggregate_action" + IMAGE_EXTENSION;
+    static final String AGGREGATE_ACTION_FLIPPED_FILE_PATTERN = "_aggregate_action_flipped" + IMAGE_EXTENSION;
+    static final String BOARD_FILE_PATTERN = "_board_without_aggregate_action" + IMAGE_EXTENSION;
     private static final int WEAPON_SPAWN_MARGIN_RATIO = 30;
     private static final double WEAPON_PREF_SPAWN_MARGIN_RATIO = 10;
     private static final int NUMBER_OF_STANDAR_SKULL = 8;
@@ -47,6 +53,21 @@ public class MainGuiController {
     private static final int GAMEBOARD_H_GAP_RATIO = 40;
     private static final int GAMEBOARD_V_GAP_RATIO = 40;
     private static final int MARING_FOR_TEXT_COMMAND = 5;
+    private static final String LANG = "IT";
+    private static final String IMAGES_DIR = "/images/";
+    static final String POWERUP_IMAGES_DIR = IMAGES_DIR + "cards/AD_powerups_" + LANG + SPACE;
+    static final String WEAPON_IMAGES_DIR = IMAGES_DIR + "cards/AD_weapons_" + LANG + SPACE;
+    static final String TOKEN_IMAGES_DIR = IMAGES_DIR + "tokens/";
+    static final String AMMO_IMAGES_DIR = IMAGES_DIR + "ammos/";
+    static final String SKULL_IMAGE_URI = IMAGES_DIR + "other/skull" + IMAGE_EXTENSION;
+    static final String PLAYERBOARD_IMAGES_DIR = IMAGES_DIR + "playerboards/";
+    private static final String GAMEBOARD_IMAGES_DIR = IMAGES_DIR + "gameboards/GameBoard00";
+    private static final String AMMO_TILE_IMAGES_DIR = IMAGES_DIR + "ammotiles/";
+    private static final String KILL_SHOT_TRACK_URI = IMAGES_DIR + "gameboards/killShootTrack" + IMAGE_EXTENSION;
+    private static final String BLUE_SPAWN_WEAPON_URI = IMAGES_DIR + "gameboards/blueSpawn" + IMAGE_EXTENSION;
+    private static final String RED_SPAWN_WEAPON_URI = IMAGES_DIR + "gameboards/redSpawn" + IMAGE_EXTENSION;
+    private static final String YELLOW_SPAWN_WEAPON_URI = IMAGES_DIR + "gameboards/yellowSpawn" + IMAGE_EXTENSION;
+    static String FLIPPED_BOARD_FILE_PATTERN = "_flipped_board_without_aggregate_action" + IMAGE_EXTENSION;
     @FXML
     private VBox logContainer;
     @FXML
@@ -71,30 +92,8 @@ public class MainGuiController {
     private HBox yellowSpawnWeapons;
     @FXML
     private HBox killShotTrackBox;
-
     private VBox[][] squareBoxes;
     private ModelView modelView;
-    private static final String LANG = "IT";
-    static final String SPACE = "_";
-    private static final String IMAGES_DIR = "/images/";
-    static final String IMAGE_EXTENSION = ".png";
-    private static final String GAMEBOARD_IMAGES_DIR = IMAGES_DIR + "gameboards/GameBoard00";
-    static final String POWERUP_IMAGES_DIR = IMAGES_DIR + "cards/AD_powerups_" + LANG + SPACE;
-    static final String WEAPON_IMAGES_DIR = IMAGES_DIR + "cards/AD_weapons_" + LANG + SPACE;
-    static final String TOKEN_IMAGES_DIR = IMAGES_DIR + "tokens/";
-    private static final String AMMO_TILE_IMAGES_DIR = IMAGES_DIR + "ammotiles/";
-    static final String AMMO_IMAGES_DIR = IMAGES_DIR + "ammos/";
-    static final String SKULL_IMAGE_URI = IMAGES_DIR + "other/skull" + IMAGE_EXTENSION;
-    static final String BACK = "back";
-    static final String PLAYERBOARD_IMAGES_DIR = IMAGES_DIR + "playerboards/";
-    static final String AGGREGATE_ACTION_FILE_PATTERN = "_aggregate_action" + IMAGE_EXTENSION;
-    static final String AGGREGATE_ACTION_FLIPPED_FILE_PATTERN = "_aggregate_action_flipped" + IMAGE_EXTENSION;
-    static final String BOARD_FILE_PATTERN = "_board_without_aggregate_action" + IMAGE_EXTENSION;
-    static String FLIPPED_BOARD_FILE_PATTERN = "_flipped_board_without_aggregate_action" + IMAGE_EXTENSION;
-    private static final String KILL_SHOT_TRACK_URI = IMAGES_DIR + "gameboards/killShootTrack" + IMAGE_EXTENSION;
-    private static final String BLUE_SPAWN_WEAPON_URI = IMAGES_DIR + "gameboards/blueSpawn" + IMAGE_EXTENSION;
-    private static final String RED_SPAWN_WEAPON_URI = IMAGES_DIR + "gameboards/redSpawn" + IMAGE_EXTENSION;
-    private static final String YELLOW_SPAWN_WEAPON_URI = IMAGES_DIR + "gameboards/yellowSpawn" + IMAGE_EXTENSION;
     private Map<PlayerId, PlayerBoardController> otherPlayerBoardControllers = new EnumMap<>(PlayerId.class);
     private List<HBox> clickableNode = new ArrayList<>();
     private List<HBox> clickableSquare = new ArrayList<>();
@@ -103,6 +102,106 @@ public class MainGuiController {
     private Map<String, HBox> weaponsOnSpawnBoxes = new HashMap<>();
     private Map<PlayerId, HBox> playerBoxes = new EnumMap<>(PlayerId.class);
     private Stage stage;
+
+    /**
+     * Return the instance of this controller
+     *
+     * @return The instance of this controller
+     */
+    static MainGuiController getInstance() {
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        fxmlLoader.setLocation(MainGuiController.class.getResource("/fx/MainGui.fxml"));
+        try {
+            fxmlLoader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return fxmlLoader.getController();
+    }
+
+    /**
+     * Bind the size of the child to the parent with the specified ratio
+     *
+     * @param child       The child
+     * @param parent      The parent
+     * @param heightRatio The ratio for the height
+     * @param widthRatio  The ratio for the width
+     */
+    static void bindToParent(Region child, Pane parent, int heightRatio, int widthRatio) {
+        child.maxHeightProperty().bind(parent.heightProperty().divide(heightRatio));
+        child.maxWidthProperty().bind(parent.widthProperty().divide(widthRatio));
+        HBox.setMargin(child, new Insets(0, 0, 1, 0));
+    }
+
+    /**
+     * Return an HBox with the skull image as background with height fixed to the parent and width fixed to the parent with a specified ratio
+     *
+     * @param parent     The parent of the HBox
+     * @param widthRatio The ratio of the width
+     * @return The HBox created
+     */
+    private static HBox getHBoxWithSkullBackground(Pane parent, int widthRatio) {
+        HBox tokenBox = new HBox();
+        tokenBox.setPrefHeight(parent.getPrefHeight());
+        tokenBox.maxWidthProperty().bind(parent.widthProperty().divide(widthRatio));
+        HBox.setMargin(tokenBox, new Insets(0, 0, 0, 1));
+        setBackgroundImageFromURI(tokenBox, SKULL_IMAGE_URI);
+        return tokenBox;
+    }
+
+    /**
+     * Return an HBox square with the height fixed to parent and background of player's token
+     *
+     * @param playerId The ID of the player
+     * @param parent   The parent of the HBox
+     * @return The HBox with the height fixed to parent and background of player's token
+     */
+    static HBox getHBoxWithTokenBackgroundWithHighFixedToParent(PlayerId playerId, Pane parent) {
+        HBox hbox = new HBox();
+        bindHeightToParent(hbox, parent);
+        String tokenImageURI = TOKEN_IMAGES_DIR
+                + playerId.playerId()
+                + IMAGE_EXTENSION;
+        setBackgroundImageFromURI(hbox, tokenImageURI);
+        return hbox;
+    }
+
+    /**
+     * Set the image pointed by the URI as background of the pane
+     *
+     * @param pane The pane
+     * @param uri  The URI
+     */
+    static void setBackgroundImageFromURI(Pane pane, String uri) {
+        Image image = ImageCache.getImage(uri);
+        pane.setBackground(new Background(new BackgroundFill(new ImagePattern(image), CornerRadii.EMPTY, Insets.EMPTY)));
+    }
+
+    /**
+     * Set the height of child as his parent and bind width to be the right ratio
+     *
+     * @param child       is the Pane that will be insert in the parent
+     * @param parent      is the parent Pane
+     * @param childHeight is the eight of the child
+     * @param childWidth  is the wanted width with the child childHeight
+     */
+    static void bindHeightToParent(Pane child, Pane parent, int childHeight, int childWidth) {
+        child.setPrefHeight(parent.getPrefHeight());
+        child.maxWidthProperty().bind(child.heightProperty().divide(childHeight).multiply(childWidth));
+        HBox.setMargin(child, new Insets(0, 0, 0, 1));
+    }
+
+    /**
+     * Set the height of child as his parent and fix width as height
+     *
+     * @param child  is the Pane that will be insert in the parent
+     * @param parent is the parent Pane
+     */
+    private static void bindHeightToParent(Pane child, Pane parent) {
+        child.setPrefHeight(parent.getPrefHeight());
+        child.maxWidthProperty().bind(child.heightProperty());
+        HBox.setMargin(child, new Insets(0, 0, 0, 1));
+    }
 
     /**
      * This method initialize the main content of the GUI
@@ -277,7 +376,7 @@ public class MainGuiController {
                     + weaponView.getID()
                     + IMAGE_EXTENSION;
             setBackgroundImageFromURI(weaponBox, weaponImageURI);
-            HBox.setMargin(weaponBox, new Insets(0, (finalSpawn.getWidth() != 0)? finalSpawn.getWidth() / WEAPON_SPAWN_MARGIN_RATIO: finalSpawn.getPrefWidth() / WEAPON_PREF_SPAWN_MARGIN_RATIO, 0, (finalSpawn.getWidth() != 0)? finalSpawn.getWidth() / WEAPON_SPAWN_MARGIN_RATIO: finalSpawn.getPrefWidth() / WEAPON_PREF_SPAWN_MARGIN_RATIO));
+            HBox.setMargin(weaponBox, new Insets(0, (finalSpawn.getWidth() != 0) ? finalSpawn.getWidth() / WEAPON_SPAWN_MARGIN_RATIO : finalSpawn.getPrefWidth() / WEAPON_PREF_SPAWN_MARGIN_RATIO, 0, (finalSpawn.getWidth() != 0) ? finalSpawn.getWidth() / WEAPON_SPAWN_MARGIN_RATIO : finalSpawn.getPrefWidth() / WEAPON_PREF_SPAWN_MARGIN_RATIO));
             finalSpawn.getChildren().add(weaponBox);
             HBox.setHgrow(weaponBox, Priority.ALWAYS);
             weaponsOnSpawnBoxes.put(weaponView.getName(), weaponBox);
@@ -509,106 +608,6 @@ public class MainGuiController {
         killShotTrackBoxStandard.setAlignment(Pos.CENTER_RIGHT);
 
         updateModelView(modelView);
-    }
-
-    /**
-     * Return the instance of this controller
-     *
-     * @return The instance of this controller
-     */
-    static MainGuiController getInstance() {
-        FXMLLoader fxmlLoader = new FXMLLoader();
-        fxmlLoader.setLocation(MainGuiController.class.getResource("/fx/MainGui.fxml"));
-        try {
-            fxmlLoader.load();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return fxmlLoader.getController();
-    }
-
-    /**
-     * Bind the size of the child to the parent with the specified ratio
-     *
-     * @param child       The child
-     * @param parent      The parent
-     * @param heightRatio The ratio for the height
-     * @param widthRatio  The ratio for the width
-     */
-    static void bindToParent(Region child, Pane parent, int heightRatio, int widthRatio) {
-        child.maxHeightProperty().bind(parent.heightProperty().divide(heightRatio));
-        child.maxWidthProperty().bind(parent.widthProperty().divide(widthRatio));
-        HBox.setMargin(child, new Insets(0, 0, 1, 0));
-    }
-
-    /**
-     * Return an HBox with the skull image as background with height fixed to the parent and width fixed to the parent with a specified ratio
-     *
-     * @param parent     The parent of the HBox
-     * @param widthRatio The ratio of the width
-     * @return The HBox created
-     */
-    private static HBox getHBoxWithSkullBackground(Pane parent, int widthRatio) {
-        HBox tokenBox = new HBox();
-        tokenBox.setPrefHeight(parent.getPrefHeight());
-        tokenBox.maxWidthProperty().bind(parent.widthProperty().divide(widthRatio));
-        HBox.setMargin(tokenBox, new Insets(0, 0, 0, 1));
-        setBackgroundImageFromURI(tokenBox, SKULL_IMAGE_URI);
-        return tokenBox;
-    }
-
-    /**
-     * Return an HBox square with the height fixed to parent and background of player's token
-     *
-     * @param playerId The ID of the player
-     * @param parent   The parent of the HBox
-     * @return The HBox with the height fixed to parent and background of player's token
-     */
-    static HBox getHBoxWithTokenBackgroundWithHighFixedToParent(PlayerId playerId, Pane parent) {
-        HBox hbox = new HBox();
-        bindHeightToParent(hbox, parent);
-        String tokenImageURI = TOKEN_IMAGES_DIR
-                + playerId.playerId()
-                + IMAGE_EXTENSION;
-        setBackgroundImageFromURI(hbox, tokenImageURI);
-        return hbox;
-    }
-
-    /**
-     * Set the image pointed by the URI as background of the pane
-     *
-     * @param pane The pane
-     * @param uri  The URI
-     */
-    static void setBackgroundImageFromURI(Pane pane, String uri) {
-        Image image = ImageCache.getImage(uri);
-        pane.setBackground(new Background(new BackgroundFill(new ImagePattern(image), CornerRadii.EMPTY, Insets.EMPTY)));
-    }
-
-    /**
-     * Set the height of child as his parent and bind width to be the right ratio
-     *
-     * @param child       is the Pane that will be insert in the parent
-     * @param parent      is the parent Pane
-     * @param childHeight is the eight of the child
-     * @param childWidth  is the wanted width with the child childHeight
-     */
-    static void bindHeightToParent(Pane child, Pane parent, int childHeight, int childWidth) {
-        child.setPrefHeight(parent.getPrefHeight());
-        child.maxWidthProperty().bind(child.heightProperty().divide(childHeight).multiply(childWidth));
-        HBox.setMargin(child, new Insets(0, 0, 0, 1));
-    }
-
-    /**
-     * Set the height of child as his parent and fix width as height
-     *
-     * @param child  is the Pane that will be insert in the parent
-     * @param parent is the parent Pane
-     */
-    private static void bindHeightToParent(Pane child, Pane parent) {
-        child.setPrefHeight(parent.getPrefHeight());
-        child.maxWidthProperty().bind(child.heightProperty());
-        HBox.setMargin(child, new Insets(0, 0, 0, 1));
     }
 
     /**

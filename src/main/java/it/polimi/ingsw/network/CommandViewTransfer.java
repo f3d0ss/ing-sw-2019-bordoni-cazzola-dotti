@@ -4,6 +4,9 @@ import it.polimi.ingsw.view.commandmessage.CommandMessage;
 
 import java.util.List;
 
+/**
+ * This class wraps a list of {@link CommandMessage} during transfer from server to client.
+ */
 public class CommandViewTransfer extends Message {
 
     private final List<CommandMessage> attachedCommand;
@@ -15,10 +18,20 @@ public class CommandViewTransfer extends Message {
         this.undo = undo;
     }
 
+    /**
+     * Gets the list of commands in attachment to the message.
+     *
+     * @return the list of commands in the message.
+     */
     public List<CommandMessage> getAttachment() {
         return attachedCommand;
     }
 
+    /**
+     * Returns true if 'undo' is enabled and can be chosen like a command.
+     *
+     * @return true if there is the 'undo' command
+     */
     public boolean isUndo() {
         return undo;
     }

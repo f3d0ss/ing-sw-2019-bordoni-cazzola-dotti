@@ -8,6 +8,9 @@ import it.polimi.ingsw.model.PlayerId;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * This class represent an {@link it.polimi.ingsw.model.SpawnSquare} on view side.
+ */
 public class SpawnSquareView extends SquareView {
     private List<WeaponView> weapons;
 
@@ -16,6 +19,11 @@ public class SpawnSquareView extends SquareView {
         this.weapons = weapons;
     }
 
+    /**
+     * Gets the weapons laying on the square.
+     *
+     * @return the list of weapons laying on the square
+     */
     public List<WeaponView> getWeapons() {
         return weapons;
     }

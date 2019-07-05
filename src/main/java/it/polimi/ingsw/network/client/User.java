@@ -53,13 +53,14 @@ class User {
                 try {
                     sleep(MILLIS_IN_SECOND);
                 } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
                 }
                 System.out.print(".");
             }
             client.setUi(gui);
             ui = gui;
         }
-        while(reconnect) {
+        while (reconnect) {
             keepAlive = true;
             connectionType = client.manageMessage(parser.serialize(new Message(Protocol.CHOOSE_CONNECTION, "", Arrays.asList(SOCKET, RMI))));
             if (connectionType.equals(SOCKET))
@@ -70,9 +71,10 @@ class User {
             new Thread(client).start();
             while (keepAlive) {
                 try {
-                    sleep(MILLIS_IN_SECOND * SECONDS_TO_PING_SERVER);
+                    sleep(MILLIS_IN_SECOND * (long)SECONDS_TO_PING_SERVER);
                 } catch (InterruptedException e) {
                     keepAlive = false;
+                    Thread.currentThread().interrupt();
                 }
                 if ((client.isClientReady() && !client.isServerReachable()))
                     keepAlive = false;

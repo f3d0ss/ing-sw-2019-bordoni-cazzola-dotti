@@ -5,6 +5,9 @@ import it.polimi.ingsw.view.ConcreteView;
 
 import java.util.List;
 
+/**
+ * This class wraps an list of of {@link EffectCommandMessage} during transfer from server to client.
+ */
 public class ShootCommandMessage extends CommandMessage {
 
     private final List<EffectCommandMessage> effectCommandMessageList;
@@ -14,11 +17,22 @@ public class ShootCommandMessage extends CommandMessage {
         this.effectCommandMessageList = effectCommandMessageList;
     }
 
+    /**
+     * Gets the list of EffectCommandMessage contained in attachment to the message.
+     *
+     * @return the list of EffectCommandMessage in attachment
+     */
     public List<EffectCommandMessage> getEffectCommandMessageList() {
         return effectCommandMessageList;
     }
 
-    public String printCommand(){
+
+    /**
+     * Composes a string with all effects contained in the list.
+     *
+     * @return the string with all effects
+     */
+    public String printCommand() {
         String shootString = "";
         for (int j = 0; j < effectCommandMessageList.size(); j++) {
             EffectCommandMessage effectCommandMessage = effectCommandMessageList.get(j);

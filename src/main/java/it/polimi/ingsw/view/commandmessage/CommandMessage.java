@@ -13,6 +13,11 @@ public abstract class CommandMessage {
         this.type = type;
     }
 
+    /**
+     * Gets the type of the command message.
+     *
+     * @return the type of the command message
+     */
     public CommandType getType() {
         return type;
     }

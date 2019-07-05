@@ -23,7 +23,7 @@ public class Cli implements Ui {
      * Prints a message coming from server.
      *
      * @param toBeShown        is a string represent a question or a statement
-     * @param possibleAnswers  is the list of the possibile answers that user can choose
+     * @param possibleAnswers  is the list of the possible answers that user can choose
      * @param isAnswerRequired specify if an answer is required (the message is a question)
      *                         or is not (the message is a notice)
      * @return the user's answer or a reception acknowledgement
@@ -39,23 +39,41 @@ public class Cli implements Ui {
         return possibleAnswers.get(askChoiceByNumber(possibleAnswers.size()) - FIRST_CHOICE_NUMBER);
     }
 
+    /**
+     * Does nothing: implemented only because needed by interface.
+     */
     @Override
     public void run() {
         // Do nothing (intentionally-blank override)
     }
 
+    /**
+     * Refreshes view after a PlayerView instance update.
+     *
+     * @param pw is the PlayerView instance to be updated then shown
+     */
     @Override
     public void refreshView(PlayerView pw) {
         modelView.setPlayerView(pw);
         refreshView(modelView);
     }
 
+    /**
+     * Refreshes view after a SquareView instance update.
+     *
+     * @param sw is the SquareView instance to be updated then shown
+     */
     @Override
     public void refreshView(SquareView sw) {
         modelView.setSquareBoard(sw.getRow(), sw.getCol(), sw);
         refreshView(modelView);
     }
 
+    /**
+     * Refreshes view after a MatchView instance update.
+     *
+     * @param mw is the MatchView instance to be updated then shown
+     */
     @Override
     public void refreshView(MatchView mw) {
         modelView.setMatch(mw);
@@ -72,18 +90,32 @@ public class Cli implements Ui {
         cliManager.displayAll(modelView);
     }
 
-    public void setViewInitializationDone(ModelView modelView) {
-        initializationDone = true;
-        this.modelView = modelView;
-        refreshView(modelView);
-    }
-
+    /**
+     * Sets that view initialization is not already done, which means that view-side model is not ready.
+     */
     public void setViewInitializationUndone() {
         initializationDone = false;
     }
 
+    /**
+     * Gets if the view initialization is done.
+     *
+     * @return true if the view initialization is done
+     */
     public boolean isViewInitializationDone() {
         return initializationDone;
+    }
+
+    /**
+     * Notify that the view initialization is done updating the instance of ModelView,
+     * then calls a refresh of entire view.
+     *
+     * @param modelView is the ModelView instance to be updated
+     */
+    public void setViewInitializationDone(ModelView modelView) {
+        initializationDone = true;
+        this.modelView = modelView;
+        refreshView(modelView);
     }
 
     /**

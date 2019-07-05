@@ -58,7 +58,7 @@ public class RmiClient extends Client implements RmiClientInterface {
     }
 
     /**
-     * This method is called by server in order to test client presence.
+     * Tests client presence calling a remote method of it.
      *
      * @return always true
      */

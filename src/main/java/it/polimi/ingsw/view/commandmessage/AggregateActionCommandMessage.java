@@ -2,6 +2,9 @@ package it.polimi.ingsw.view.commandmessage;
 
 import it.polimi.ingsw.model.AggregateActionID;
 
+/**
+ * This class wraps an instance of {@link AggregateActionID} during transfer from server to client.
+ */
 public class AggregateActionCommandMessage extends CommandMessage {
     private final AggregateActionID aggregateActionID;
 
@@ -10,6 +13,11 @@ public class AggregateActionCommandMessage extends CommandMessage {
         this.aggregateActionID = aggregateActionID;
     }
 
+    /**
+     * Gets the AggregateActionID contained in attachment to the message.
+     *
+     * @return the instance of AggregateActionID in attachment
+     */
     public AggregateActionID getAggregateActionID() {
         return aggregateActionID;
     }

@@ -7,6 +7,9 @@ import it.polimi.ingsw.model.PlayerId;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * This class represent an {@link it.polimi.ingsw.model.TurretSquare} on view side.
+ */
 public class TurretSquareView extends SquareView {
     private final AmmoTileView ammoTile;
 
@@ -15,6 +18,11 @@ public class TurretSquareView extends SquareView {
         this.ammoTile = ammoTile;
     }
 
+    /**
+     * Gets the ammotile laying on the square.
+     *
+     * @return the ammotile laying on the square
+     */
     public AmmoTileView getAmmoTile() {
         return ammoTile;
     }
