@@ -17,6 +17,9 @@ class SingleCommunication implements Runnable {
         this.message = message;
     }
 
+    /**
+     * Starts a single communication between server and client (override by subclasses).
+     */
     @Override
     public void run() {
         // Do nothing (intentionally-blank override)

@@ -18,6 +18,9 @@ import javafx.stage.Stage;
 
 import java.util.List;
 
+/**
+ * This class represents the window shown during login.
+ */
 public class LoginWindow extends GridPane {
 
     private static final String BUTTON_STYLE = "-fx-background-color: #222222; -fx-text-fill: white;";

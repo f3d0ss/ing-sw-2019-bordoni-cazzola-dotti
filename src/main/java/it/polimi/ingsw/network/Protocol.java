@@ -1,5 +1,8 @@
 package it.polimi.ingsw.network;
 
+/**
+ * Contains all possible type of message that server can send to client.
+ */
 public enum Protocol {
     CHOOSE_UI {
         public String getQuestion() {
@@ -95,7 +98,7 @@ public enum Protocol {
         }
 
         public boolean requiresAnswer() {
-            return false;
+            return true;
         }
     }, WELCOME {
         public String getQuestion() {
@@ -195,7 +198,7 @@ public enum Protocol {
         }
     }, CHOOSE_BOARD {
         public String getQuestion() {
-            return "Sei il primo giocagore: scegli l'arena di gioco.";
+            return "Sei il primo giocatore: scegli l'arena di gioco.";
         }
 
         public boolean requiresAnswer() {
@@ -252,10 +255,19 @@ public enum Protocol {
     };
 
     public static final String ACK = (char) 3 + "ack";
-    public static final String AFK = (char) 4 + "afk";
     public static final String ERR = (char) 5 + "err";
 
+    /**
+     * Gets the question associated to a type of message. It could be an empty string.
+     *
+     * @return the string containing the question
+     */
     public abstract String getQuestion();
 
+    /**
+     * Gets if an answer is required (message is a question) or not (message is a notification).
+     *
+     * @return true if the client's answer is required, false otherwise
+     */
     public abstract boolean requiresAnswer();
 }

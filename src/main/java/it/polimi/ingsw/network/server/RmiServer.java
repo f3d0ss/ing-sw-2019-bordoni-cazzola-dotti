@@ -49,7 +49,7 @@ public class RmiServer implements Runnable, RmiServerInterface {
     }
 
     /**
-     * This method is called by client in order to test server presence.
+     * Tests server presence invoking a method of it.
      *
      * @return always true
      */

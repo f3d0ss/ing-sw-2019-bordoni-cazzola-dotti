@@ -14,9 +14,9 @@ public class Client implements Runnable {
     final Parser parser = new Parser();
     String ip;
     int port;
+    boolean clientReady = false;
     boolean keepAlive = true;
     private ConcreteView view;
-    private String type;
     private Ui ui;
 
     Client(Ui ui) {
@@ -53,10 +53,18 @@ public class Client implements Runnable {
         return number;
     }
 
+    /**
+     * Sets the user interface.
+     *
+     * @param ui user interface to set
+     */
     void setUi(Ui ui) {
         this.ui = ui;
     }
 
+    /**
+     * Runs the client. It is override by subclasses.
+     */
     @Override
     public void run() {
         // Do nothing (intentionally-blank override)
@@ -70,7 +78,7 @@ public class Client implements Runnable {
      * @return the answer to be sent to server
      */
 
-    String manageMessage(String gsonCoded) {
+    synchronized String manageMessage(String gsonCoded) {
         Message fromServer = parser.deserialize(gsonCoded, Message.class);
         if (fromServer.type == Protocol.UPDATE_MATCH) {
             view.update(((MatchViewTransfer) fromServer).getAttachment());
@@ -100,14 +108,6 @@ public class Client implements Runnable {
         return ui.showMessage(String.format(fromServer.type.getQuestion(), fromServer.getStringInQuestion()), fromServer.getPossibleAnswer(), fromServer.type.requiresAnswer());
     }
 
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
     /**
      * Manages when user types ip and port number, checking if they are valid values.
      */
@@ -123,5 +123,33 @@ public class Client implements Runnable {
             portString = manageMessage(parser.serialize(new Message(Protocol.INSERT_PORT_AGAIN, "", null)));
             port = isValidPort(portString);
         }
+    }
+
+    /**
+     * Says is the server is reachable. Because this class cannot manage communication until the
+     * technology is chosen (rmi or socket), it returns always false.
+     *
+     * @return false because no server is reachable from this class
+     */
+
+    boolean isServerReachable(){
+        return false;
+    }
+
+    /**
+     * Returns true if the client is ready to manage communication.
+     *
+     * @return true if the client is ready
+     */
+    boolean isClientReady() {
+        return clientReady;
+    }
+
+    /**
+     * It is override by subclasses.
+     */
+    public void stop(){
+        // Do nothing (intentionally-blank override)
+
     }
 }

@@ -17,6 +17,10 @@ import java.util.Scanner;
 public class SocketClient extends Client {
 
     private static final String TYPE = "Socket";
+    private static final int SOCKET_TEST_TIMEOUT = 1000;
+    private Socket socket;
+    private Scanner fromServer;
+    private PrintWriter toServer;
 
     SocketClient(Ui ui) {
         super(ui);
@@ -24,15 +28,10 @@ public class SocketClient extends Client {
 
     /**
      * Starts a client according to the socket communication and keeps listening to server.
-     * When a problem occurs or connection goes down,
-     * it closes the process after having notified the disconnection.
      */
 
     @Override
     public void run() {
-        Socket socket;
-        Scanner fromServer;
-        PrintWriter toServer;
         String input;
         manageIpAndPortInsertion();
         while (true) {
@@ -47,6 +46,7 @@ public class SocketClient extends Client {
                 manageIpAndPortInsertion();
             }
         }
+        clientReady = true;
         while (keepAlive) {
             try {
                 input = fromServer.nextLine();
@@ -55,7 +55,30 @@ public class SocketClient extends Client {
             }
             toServer.println(manageMessage(input));
         }
-        manageMessage(parser.serialize(new Message(Protocol.UNREACHABLE_SERVER, "", null)));
+    }
+
+    /**
+     * Detects if the socket server is reachable.
+     *
+     * @return true if is reachable, false otherwise
+     */
+
+    @Override
+    boolean isServerReachable() {
+        try {
+            return socket.getInetAddress().isReachable(SOCKET_TEST_TIMEOUT);
+        } catch (IOException e){
+            return false;
+        }
+    }
+
+    /**
+     * Closes the socket client.
+     */
+
+    @Override
+    public void stop() {
+        keepAlive = false;
         toServer.close();
         fromServer.close();
         try {
