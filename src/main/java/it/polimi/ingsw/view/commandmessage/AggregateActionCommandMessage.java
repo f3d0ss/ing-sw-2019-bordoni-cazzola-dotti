@@ -16,7 +16,7 @@ public class AggregateActionCommandMessage extends CommandMessage {
     /**
      * Gets the AggregateActionID contained in attachment to the message.
      *
-     * @return the instance of PlayerView in attachment
+     * @return the instance of AggregateActionID in attachment
      */
     public AggregateActionID getAggregateActionID() {
         return aggregateActionID;

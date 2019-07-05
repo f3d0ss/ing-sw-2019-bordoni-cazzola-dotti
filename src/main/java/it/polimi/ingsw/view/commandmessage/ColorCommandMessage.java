@@ -3,7 +3,7 @@ package it.polimi.ingsw.view.commandmessage;
 import it.polimi.ingsw.model.Color;
 
 /**
- * This class wraps an instance of {@link ColorCommandMessage} during transfer from server to client.
+ * This class wraps an instance of {@link Color} during transfer from server to client.
  */
 public class ColorCommandMessage extends CommandMessage {
     private final Color color;
