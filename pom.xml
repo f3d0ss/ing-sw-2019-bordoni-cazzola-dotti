@@ -155,8 +155,6 @@
                                     <artifact>it.polimi.ingsw:AM44</artifact>
                                     <excludes>
                                         <exclude>images/</exclude>
-                                        <exclude>it/polimi/ingsw/view/gui/</exclude>
-                                        <exclude>it/polimi/ingsw/view/cli/</exclude>
                                     </excludes>
                                 </filter>
                             </filters>
@@ -178,7 +176,7 @@
                         <configuration>
                             <artifactSet>
                                 <excludes>
-                                    <!--exclude>org.openjfx:*</exclude-->
+                                    <exclude>org.openjfx:*</exclude>
                                 </excludes>
                             </artifactSet>
                             <filters>
