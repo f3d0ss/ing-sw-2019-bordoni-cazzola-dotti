@@ -151,7 +151,7 @@ public class ServerManager implements Runnable {
         }
         if (isAwayFromKeyboardOrDisconnected(oldId))
             return true;
-        if (!answerReady.get(oldId))
+        if (!answerReady.getOrDefault(oldId, false))
             return false;
         sendMessageAndWaitForAnswer(oldId, new Message(Protocol.ARE_YOU_ALIVE, "", null));
         return isAwayFromKeyboardOrDisconnected(oldId);
