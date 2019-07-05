@@ -32,7 +32,7 @@ public class ShootCommandMessage extends CommandMessage {
      *
      * @return the string with all effects
      */
-    public String printCommand(){
+    public String printCommand() {
         String shootString = "";
         for (int j = 0; j < effectCommandMessageList.size(); j++) {
             EffectCommandMessage effectCommandMessage = effectCommandMessageList.get(j);

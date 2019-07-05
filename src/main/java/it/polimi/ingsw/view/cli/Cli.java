@@ -91,18 +91,6 @@ public class Cli implements Ui {
     }
 
     /**
-     * Notify that the view initialization is done updating the instance of ModelView,
-     * then calls a refresh of entire view.
-     *
-     * @param modelView is the ModelView instance to be updated
-     */
-    public void setViewInitializationDone(ModelView modelView) {
-        initializationDone = true;
-        this.modelView = modelView;
-        refreshView(modelView);
-    }
-
-    /**
      * Sets that view initialization is not already done, which means that view-side model is not ready.
      */
     public void setViewInitializationUndone() {
@@ -116,6 +104,18 @@ public class Cli implements Ui {
      */
     public boolean isViewInitializationDone() {
         return initializationDone;
+    }
+
+    /**
+     * Notify that the view initialization is done updating the instance of ModelView,
+     * then calls a refresh of entire view.
+     *
+     * @param modelView is the ModelView instance to be updated
+     */
+    public void setViewInitializationDone(ModelView modelView) {
+        initializationDone = true;
+        this.modelView = modelView;
+        refreshView(modelView);
     }
 
     /**
