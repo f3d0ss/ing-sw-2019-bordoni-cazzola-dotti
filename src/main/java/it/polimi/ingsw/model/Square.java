@@ -19,6 +19,9 @@ public abstract class Square {
     private final Color color;
     Match match;
     private List<Player> hostedPlayers;
+    /**
+     * Used for (de)serialization by {@link it.polimi.ingsw.utils.Parser}
+     */
     @SuppressWarnings("squid:S1068")
     private String type;
 
