@@ -3,7 +3,7 @@
 
 - ###   10534736    Paolo Bordoni ([@supernivem](https://github.com/supernivem))<br>paolo1.bordoni@mail.polimi.it
 - ###   10530016    Federico Cazzola ([@f-cazzola](https://github.com/f-cazzola))<br>federico.cazzola@mail.polimi.it
-- ###   10530612    Francesco Dotti ([@xX-1337-Xx](https://github.com/xX-1337-Xx))<br>francesco3.dotti@mail.polimi.it
+- ###   10530612    Francesco Dotti ([@dottif](https://github.com/xX-1337-Xx))<br>francesco3.dotti@mail.polimi.it
 
 | Functionality | State |
 |:-----------------------|:------------------------------------:|
